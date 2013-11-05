@@ -1,0 +1,340 @@
+\documentclass[12pt]{article}
+
+\usepackage[left = 1in, right = 1in, top = 1in, bottom = 1in]{geometry}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\headheight 35pt 
+
+\rhead{Correct Decision Rate Comparisons (\%)}
+\lhead{Simulation Results: $N=50$}
+
+
+\begin{document}
+
+
+
+
+
+
+% latex.default(correct.vs.J.90, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(FMSC)-Correct(J 90)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&-11&-12&-13&-18&-20&21&22& 22&19\tabularnewline
+0.1& -8& -8& -8&-11&-14&18&19& 21&22\tabularnewline
+0.2& -7& -5& -3& -5& -7&12&16& 20&24\tabularnewline
+0.3& -6& -2&  0&  1& -2&-5&11&-16&21\tabularnewline
+0.4& -5& -1&  2&  3&  3&-1&-4&-11&16\tabularnewline
+0.5& -5& -1&  2&  4&  4& 2&-1& -5&10\tabularnewline
+0.6& -4& -1&  2&  4&  5& 3& 1& -1&-6\tabularnewline
+0.7& -4& -1&  2&  4&  4& 4& 3&  1&-4\tabularnewline
+0.8& -4&  0&  2&  4&  5& 5& 3&  1&-2\tabularnewline
+0.9& -2&  0&  2&  3&  5& 6& 4&  2&-1\tabularnewline
+1.0& -2&  0&  3&  4&  6& 6& 4&  3& 1\tabularnewline
+1.1& -2&  0&  2&  5&  5& 6& 4&  3& 1\tabularnewline
+1.2&  0&  2&  4&  5&  5& 6& 5&  3& 1\tabularnewline
+1.3& -1&  2&  4&  5&  6& 5& 5&  4& 2\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.vs.J.95, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(FMSC)-Correct(J 95)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&-16&-18&-20&-25&-29& 32& 34& 33& 29\tabularnewline
+0.1&-14&-14&-15&-19&-23& 28& 31& 33& 33\tabularnewline
+0.2&-13&-11& -9&-12&-15& 20& 26& 31& 35\tabularnewline
+0.3&-12& -8& -6& -6& -9&-13& 19&-26& 32\tabularnewline
+0.4&-12& -7& -4& -4& -4& -9&-13&-19& 26\tabularnewline
+0.5&-12& -7& -4& -2& -3& -5& -9&-13& 19\tabularnewline
+0.6&-11& -7& -4& -3& -1& -4& -6& -9&-14\tabularnewline
+0.7&-11& -7& -5& -3& -2& -3& -5& -7&-12\tabularnewline
+0.8&-11& -7& -5& -2& -2& -2& -3& -6& -9\tabularnewline
+0.9& -9& -6& -4& -3& -2& -1& -2& -5& -8\tabularnewline
+1.0& -8& -6& -4& -3& -1& -1& -3& -4& -7\tabularnewline
+1.1& -9& -6& -4& -2& -2& -1& -3& -3& -6\tabularnewline
+1.2& -7& -5& -3& -1& -1& -1& -2& -3& -6\tabularnewline
+1.3& -7& -4& -3& -2& -1& -2& -2& -3& -6\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.vs.gmm.bic, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(FMSC)-Correct(BIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&-15&-16&-16&-19&-19&19&20& 18&16\tabularnewline
+0.1&-13&-12&-12&-14&-16&17&17& 18&18\tabularnewline
+0.2&-10& -8& -7& -8&-10&12&15& 18&21\tabularnewline
+0.3& -8& -5& -3& -2& -4&-6&10&-15&19\tabularnewline
+0.4& -7& -3&  0& -1&  0&-3&-5&-10&15\tabularnewline
+0.5& -7& -3&  0&  1&  2& 1&-2& -6&10\tabularnewline
+0.6& -6& -2&  0&  2&  3& 2& 0& -2&-6\tabularnewline
+0.7& -5& -2&  0&  2&  3& 3& 1& -1&-4\tabularnewline
+0.8& -5& -2&  1&  3&  4& 3& 2&  0&-2\tabularnewline
+0.9& -4& -1&  1&  2&  4& 4& 3&  1&-1\tabularnewline
+1.0& -2& -1&  1&  3&  4& 4& 3&  2& 0\tabularnewline
+1.1& -3&  0&  1&  3&  4& 4& 4&  2& 0\tabularnewline
+1.2& -1&  1&  2&  4&  5& 5& 4&  3& 1\tabularnewline
+1.3& -1&  1&  3&  4&  5& 4& 4&  3& 1\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.vs.gmm.aic, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(FMSC)-Correct(AIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&-1&-2& 0&-1& 0&-1& 0& 1&  1\tabularnewline
+0.1& 1& 2& 3& 4& 4&-3&-3&-1&  1\tabularnewline
+0.2& 6& 7& 9& 9& 9&-8&-6&-2&  2\tabularnewline
+0.3& 8&10&13&14&13&13&-9& 5& -1\tabularnewline
+0.4&10&13&16&16&17&16&14&10& -5\tabularnewline
+0.5&10&13&16&18&19&18&16&14&-10\tabularnewline
+0.6&11&14&17&19&20&20&19&16& 13\tabularnewline
+0.7&11&15&17&19&20&20&20&18& 15\tabularnewline
+0.8&12&15&17&20&21&21&20&18& 16\tabularnewline
+0.9&14&16&19&20&21&22&21&19& 17\tabularnewline
+1.0&15&17&19&20&22&23&21&20& 18\tabularnewline
+1.1&14&17&19&22&22&22&21&20& 19\tabularnewline
+1.2&16&18&20&22&22&22&22&21& 19\tabularnewline
+1.3&17&19&20&22&23&22&22&20& 19\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.vs.gmm.hq, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(FMSC)-Correct(HQ)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&-8&-9&-8&-9&-9& 7& 8& 8& 7\tabularnewline
+0.1&-6&-5&-5&-5&-5& 6& 5& 7& 8\tabularnewline
+0.2&-2&-1& 1& 1& 0& 1& 3& 7&10\tabularnewline
+0.3& 0& 3& 5& 5& 5& 4& 0&-4& 8\tabularnewline
+0.4& 1& 5& 8& 8& 9& 6& 5& 0& 4\tabularnewline
+0.5& 1& 5& 8&10&11&10& 8& 5& 0\tabularnewline
+0.6& 2& 6& 8&11&12&11&10& 8& 4\tabularnewline
+0.7& 3& 7& 9&11&12&12&11& 9& 6\tabularnewline
+0.8& 4& 7&10&11&12&12&11& 9& 7\tabularnewline
+0.9& 5& 7&10&11&12&13&12&11& 9\tabularnewline
+1.0& 7& 8&10&12&13&14&13&11& 9\tabularnewline
+1.1& 6& 8&10&13&13&13&13&12&10\tabularnewline
+1.2& 8& 9&11&12&13&13&13&12&10\tabularnewline
+1.3& 8&10&11&13&14&13&13&12&10\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.vs.cc.bic, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(FMSC)-Correct(CC-BIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0& 71& 69& 65& 57& 48&-38&-29&-21&-15\tabularnewline
+0.1& 66& 67& 66& 59& 52&-41&-32&-21&-14\tabularnewline
+0.2& 50& 53& 54& 50& 45&-35&-25&-15& -4\tabularnewline
+0.3& 25& 31& 32& 32& 27& 21&-12&  2&  8\tabularnewline
+0.4&  1&  8& 11& 11& 10&  4& -1&-11& 20\tabularnewline
+0.5&-11& -7& -4& -2& -3& -5&-11&-16& 24\tabularnewline
+0.6&-17&-12&-10& -8& -7&-10&-13&-17&-23\tabularnewline
+0.7&-18&-15&-12&-10&-10&-11&-13&-16&-22\tabularnewline
+0.8&-18&-15&-12&-10& -9&-11&-12&-15&-19\tabularnewline
+0.9&-17&-15&-12&-11&-10&-10&-11&-14&-18\tabularnewline
+1.0&-17&-14&-12&-10& -9& -9&-11&-13&-17\tabularnewline
+1.1&-16&-14&-11&-10&-10& -9&-11&-12&-15\tabularnewline
+1.2&-15&-13&-11&-10& -9& -9&-10&-12&-15\tabularnewline
+1.3&-15&-12&-10&-10& -9&-10&-10&-11&-14\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.vs.cc.aic, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(FMSC)-Correct(CC-AIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0& 60& 57& 53& 45& 36&-26&-17& -9& -3\tabularnewline
+0.1& 51& 52& 50& 44& 36&-27&-17& -5&  2\tabularnewline
+0.2& 30& 32& 33& 29& 24&-15& -4&  6& 17\tabularnewline
+0.3&  6& 10& 12& 12&  7&  1&  8&-19& 29\tabularnewline
+0.4&-11& -5& -1& -2& -3& -9&-15&-24& 33\tabularnewline
+0.5&-17&-12& -9& -8& -9&-11&-17&-22& 30\tabularnewline
+0.6&-19&-14&-11&-10& -9&-12&-15&-18&-25\tabularnewline
+0.7&-19&-15&-12&-10&-10&-11&-13&-17&-22\tabularnewline
+0.8&-18&-15&-13&-10&-10&-11&-12&-16&-19\tabularnewline
+0.9&-17&-15&-12&-11&-10&-10&-11&-14&-18\tabularnewline
+1.0&-17&-14&-12&-10& -9& -9&-11&-13&-17\tabularnewline
+1.1&-16&-14&-11&-10&-10& -9&-11&-12&-15\tabularnewline
+1.2&-15&-13&-11&-10& -9& -9&-10&-12&-15\tabularnewline
+1.3&-15&-12&-10&-10& -9&-10&-10&-11&-14\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.vs.cc.hq, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(FMSC)-Correct(CC-HQ)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0& 66& 64& 60& 51& 42&-32&-23&-15&-10\tabularnewline
+0.1& 58& 60& 58& 51& 44&-34&-24&-13& -7\tabularnewline
+0.2& 39& 41& 42& 38& 33&-24&-13& -4&  7\tabularnewline
+0.3& 14& 18& 20& 19& 15&  9&  0&-11& 21\tabularnewline
+0.4& -6&  0&  3&  3&  2& -4&-10&-19& 29\tabularnewline
+0.5&-15&-11& -8& -6& -7& -9&-15&-20& 28\tabularnewline
+0.6&-18&-14&-11&-10& -8&-11&-15&-18&-25\tabularnewline
+0.7&-19&-15&-12&-10&-10&-11&-13&-17&-22\tabularnewline
+0.8&-18&-15&-13&-10&-10&-11&-12&-16&-19\tabularnewline
+0.9&-17&-15&-12&-11&-10&-10&-11&-14&-18\tabularnewline
+1.0&-17&-14&-12&-10& -9& -9&-11&-13&-17\tabularnewline
+1.1&-16&-14&-11&-10&-10& -9&-11&-12&-15\tabularnewline
+1.2&-15&-13&-11&-10& -9& -9&-10&-12&-15\tabularnewline
+1.3&-15&-12&-10&-10& -9&-10&-10&-11&-14\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.vs.cc.msc.bic, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(FMSC)-Correct(CC-MSC-BIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&72&70&66&58&49&-40&-31&-23&-18\tabularnewline
+0.1&68&69&67&62&54&-44&-36&-26&-19\tabularnewline
+0.2&53&56&58&54&50&-42&-33&-24&-15\tabularnewline
+0.3&32&37&39&39&36& 31&-25& 17& -8\tabularnewline
+0.4&11&17&20&20&21& 16& 13&  7& -1\tabularnewline
+0.5& 0& 4& 8& 9&10&  8&  5&  2&  4\tabularnewline
+0.6&-4& 0& 3& 4& 5&  4&  2&  0& -4\tabularnewline
+0.7&-5&-2& 1& 3& 3&  3&  2&  0& -4\tabularnewline
+0.8&-5&-2& 1& 3& 4&  3&  2&  1& -2\tabularnewline
+0.9&-4&-1& 1& 2& 4&  4&  3&  1& -1\tabularnewline
+1.0&-2&-1& 1& 3& 4&  4&  3&  2&  0\tabularnewline
+1.1&-3& 0& 1& 3& 4&  4&  4&  2&  0\tabularnewline
+1.2&-1& 1& 2& 4& 5&  5&  4&  3&  1\tabularnewline
+1.3&-1& 1& 3& 4& 5&  4&  4&  3&  1\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.vs.cc.msc.aic, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(FMSC)-Correct(CC-MSC-AIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&64&62&59&51&43&-34&-26&-19&-14\tabularnewline
+0.1&58&60&59&54&48&-39&-31&-22&-15\tabularnewline
+0.2&43&45&47&45&42&-36&-29&-21&-13\tabularnewline
+0.3&26&30&33&34&32& 30&-23& 17&-10\tabularnewline
+0.4&16&21&24&24&24& 23& 20& 15& -9\tabularnewline
+0.5&12&15&19&20&22& 20& 18& 16&-11\tabularnewline
+0.6&11&15&17&19&21& 20& 19& 17& 13\tabularnewline
+0.7&11&15&17&19&20& 20& 20& 18& 15\tabularnewline
+0.8&12&15&17&20&21& 21& 20& 18& 16\tabularnewline
+0.9&14&16&19&20&21& 22& 21& 19& 17\tabularnewline
+1.0&15&17&19&20&22& 23& 21& 20& 18\tabularnewline
+1.1&14&17&19&22&22& 22& 21& 20& 19\tabularnewline
+1.2&16&18&20&22&22& 22& 22& 21& 19\tabularnewline
+1.3&17&19&20&22&23& 22& 22& 20& 19\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.vs.cc.msc.hq, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(FMSC)-Correct(CC-MSC-HQ)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&68&66&62&54&46&-37&-28&-20&-15\tabularnewline
+0.1&62&64&63&57&50&-41&-33&-23&-17\tabularnewline
+0.2&46&48&51&48&45&-38&-29&-22&-13\tabularnewline
+0.3&27&31&34&34&32& 28&-22& 15& -8\tabularnewline
+0.4&12&17&20&20&21& 18& 15&  9& -3\tabularnewline
+0.5& 5& 8&12&13&15& 14& 11&  8& -3\tabularnewline
+0.6& 3& 7& 9&12&13& 12& 11&  8&  5\tabularnewline
+0.7& 3& 7& 9&11&12& 12& 11& 10&  6\tabularnewline
+0.8& 4& 7&10&11&12& 12& 11&  9&  7\tabularnewline
+0.9& 5& 7&10&11&12& 13& 12& 11&  9\tabularnewline
+1.0& 7& 8&10&12&13& 14& 13& 11&  9\tabularnewline
+1.1& 6& 8&10&13&13& 13& 13& 12& 10\tabularnewline
+1.2& 8& 9&11&12&13& 13& 13& 12& 10\tabularnewline
+1.3& 8&10&11&13&14& 13& 13& 12& 10\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+
+
+\end{document}

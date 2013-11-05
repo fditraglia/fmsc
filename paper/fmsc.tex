@@ -1,0 +1,1102 @@
+\documentclass[12pt]{article}
+\usepackage{rotating}
+\usepackage{amssymb, amsmath, amsthm, graphicx} 
+\usepackage{multirow}
+\usepackage{setspace}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{threeparttable}
+\usepackage{caption}
+\usepackage{subcaption}
+
+
+\RequirePackage{natbib}
+\RequirePackage[colorlinks]{hyperref}
+\RequirePackage{hypernat}
+
+
+\newcommand{\p}{\mathbb{P}}
+\newcommand{\expect}{\mathbb{E}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newtheorem{assump}{Assumption}[section]
+\newtheorem{pro}{Proposition}[section]
+\newtheorem{lem}{Lemma}[section]
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}{Corollary}[section]
+\newtheorem{ineq}{Inequality}[section]
+\newtheorem{defn}{Definition}[section]
+\newtheorem{rem}{Remark}[section]
+\newtheorem{ex}{Example}[section]
+\theoremstyle{definition}
+\newtheorem{alg}{Algorithm}[section]
+
+
+\begin{document}
+
+\title{Using Invalid Instruments on Purpose: Focused Moment Selection and Averaging for GMM\footnote{I thank Gerda Claeskens, Bruce Hansen, Byunghoon Kang, Toru Kitagawa, Hannes Leeb, Serena Ng, Alexei Onatski, Hashem Pesaran, Benedikt P\"{o}tscher, Neil Shephard,  Richard J.\ Smith, Stephen Thiele, Melvyn Weeks, as well as seminar participants at Cambridge, the University of Vienna, Queen Mary, St Andrews, George Washington, UPenn, Columbia, Oxford, and the 2011 Econometric Society European Meetings for their many helpful comments and suggestions. I thank Kai Carstensen for providing data for my empirical example.}}
+
+\author{Francis J.\ DiTraglia \\ University of Pennsylvania}
+
+\maketitle 
+\begin{abstract}
+In finite samples, the use of a slightly endogenous but highly relevant instrument can reduce mean-squared error (MSE). Building on this observation, I propose a moment selection criterion for GMM in which over-identifying restrictions are chosen based on the MSE of their associated estimators rather than their validity: the focused moment selection criterion (FMSC). I then show how the framework used to derive the FMSC can address the problem of inference post-moment selection. Treating post-selection estimators as a special case of moment-averaging, in which estimators based on different moment sets are given data-dependent weights, I propose a simulation-based procedure to construct valid confidence intervals. In a Monte Carlo experiment, the FMSC outperforms alternatives suggested in the literature, and the simulation-based procedure achieves its stated minimum coverage. I conclude with an empirical example examining the effect of instrument selection on the estimated relationship between malaria transmission and economic development.
+\end{abstract}
+%Wordcount: 148
+
+
+
+
+
+\section{Introduction}
+%For consistent estimates, instrumental variables must be exogenous and relevant: correlated with the endogenous regressors but uncorrelated with the error term.
+
+In finite samples, the use of an endogenous but sufficiently relevant instrument can improve inference, reducing estimator variance by far more than bias is increased. Building on this observation, I propose a new moment selection criterion for generalized method of moments (GMM) estimation: the focused moment selection criterion (FMSC). Rather than selecting only valid moment conditions, the FMSC chooses from a set of potentially mis-specified moment conditions to yield the smallest mean squared error (MSE) GMM estimator of a user-specified target parameter. I derive FMSC using asymptotic mean squared error (AMSE) to approximate finite-sample MSE. To ensure that AMSE remains finite, I employ a drifting asymptotic framework in which mis-specification, while present for any fixed sample size, vanishes in the limit. In the presence of such \emph{locally mis-specified} moment conditions, GMM remains consistent although, centered and rescaled, its limiting distribution displays an asymptotic bias. Adding an additional mis-specified moment condition introduces a further source of bias while reducing asymptotic variance. The idea behind FMSC is to trade off these two effects in the limit as an approximation to finite sample behavior. %While estimating asymptotic variance is straightforward, even under local mis-specification, estimating asymptotic bias requires over-identifying information. 
+I consider a setting in which two blocks of moment conditions are available: one that is assumed correctly specified, and another that may not be. When the correctly specified block identifies the model, I derive an asymptotically unbiased estimator of AMSE: the FMSC. When this is not the case, it remains possible to use the AMSE framework to carry out a sensitivity analysis. 
+
+Continuing under the local mis-specification assumption, I show how the ideas used to derive FMSC can be applied to the important problem of inference post-moment selection. Because they use the same data twice, first to choose a moment set and then to carry out estimation, post-selection estimators are randomly weighted averages of many individual estimators. While this is typically ignored in practice, its effects can be dramatic: coverage probabilities of traditional confidence intervals are generally far too low, even for consistent moment selection. I treat post-selection estimators as a special case of moment averaging: combining estimators based on different moment sets with data-dependent weights. By deriving the limiting distribution of moment average estimators, I propose a simulation-based procedure for constructing valid confidence intervals. This technique can be applied to moment averaging and post-selection estimators based on a variety of criteria including FMSC. 
+
+While the methods described here apply to any model estimated by GMM, subject to standard regularity conditions, I focus on their application to linear instrumental variables (IV) models. In simulations for two-stage least squares (2SLS), FMSC performs well relative to alternatives suggested in the literature. Further, the procedure for constructing valid confidence intervals achieves its stated minimum coverage, even in situations where instrument selection leads to highly non-normal sampling distributions. I conclude with an empirical application from development economics, exploring the effect of instrument selection on the estimated relationship between malaria transmission and income. 
+
+My approach to moment selection under mis-specification is inspired by the focused information criterion of \citet{ClaeskensHjort2003}, a model selection criterion for models estimated by maximum likelihood. Like them, I allow for mis-specification and use AMSE to approximate small-sample MSE in a drifting asymptotic framework. In contradistinction, however, I consider moment rather than model selection, and general GMM estimation rather than maximum likelihood.
+ 
+The existing literature on moment selection under mis-specification is comparatively small. \cite{Andrews1999} proposes a family of moment selection criteria for GMM by adding a penalty term to the J-test statistic. Under an identification assumption and certain restrictions on the form of the penalty, these criteria consistently select all correctly specified moment conditions in the limit. \cite{AndrewsLu} extend this work to allow simultaneous GMM moment and model selection, while \cite{HongPrestonShum} derive analogous results for generalized empirical likelihood. More recently, \cite{Liao2010} proposes a shrinkage procedure for simultaneous GMM moment selection and estimation. Given a set of correctly specified moment conditions that identifies the model, this method consistently chooses all valid conditions from a second set of potentially mis-specified conditions. In contrast to these proposals, which examine only the validity of the moment conditions under consideration, the FMSC balances validity against relevance to minimize MSE. The only other proposal from the literature to consider both validity and relevance in moment selection is a suggestion by \cite{HallPeixe2003} to combine their canonical correlations information criterion (CCIC) -- a relevance criterion that seeks to avoid including redundant instruments -- with Andrews' GMM moment selection criteria. This procedure, however, merely seeks to avoid including redundant instruments after eliminating invalid ones: it does not allow for the intentional inclusion of a slightly invalid but highly relevant instrument to reduce MSE. 
+
+
+The idea of choosing instruments to minimize MSE is shared by the procedures in \cite{DonaldNewey2001} and \cite{DonaldImbensNewey2009}. \cite{KuersteinerOkui2010} also aim to minimize MSE but, rather than choosing a particular instrument set, suggest averaging over the first-stage predictions implied by many instrument sets and using this average in the second stage. Unlike FMSC, these papers consider the higher-order bias that arises from including many valid instruments rather than the first-order bias that arises from the use of invalid instruments.
+
+The literature on post-selection, or ``pre-test'' estimators is vast. \citet{LeebPoetscher2005, LeebPoetscher2009}  give a theoretical overview, while \cite{Demetrescu} illustrate the practical consequences via a simulation experiment. There are several proposals to construct valid confidence intervals post-model selection, including \cite{Kabaila1998}, \cite{HjortClaeskens} and \cite{KabailaLeeb2006}. To my knowledge, however, this is the first paper to examine the problem specifically from the perspective of moment selection. The approach adopted here, treating post-moment selection estimators as a specific example of moment averaging, is adapted from the frequentist model average estimators of \cite{HjortClaeskens}. Another paper that considers weighting GMM estimators based on different moment sets is \cite{Xiao}. While Xiao combines estimators based on valid moment conditions to achieve a minimum variance estimator, I combine estimators based on potentially invalid conditions to minimize MSE. A similar idea underlies the combined moments (CM) estimator of \cite{Judge2007}, who emphasize that incorporating the information from an incorrect specification could lead to favorable bias-variance tradeoff. %Their proposal uses a Cressie-Read divergence measure to combine the information from competing moment specifications, for example OLS versus two-stage least squares (2SLS), yielding a data-driven compromise estimator. Unlike the FMSC, however, the CM estimator is not targeted to a particular research goal and does not explicitly aim to minimize MSE.
+
+
+The remainder of the paper is organized as follows. Section \ref{sec:asymp} describes the local mis-specification framework and gives the main limiting results used later in the paper. Section \ref{sec:FMSC} derives FMSC as an asymptotically unbiased estimator of AMSE, presents specialized results for 2SLS, and examines their performance in a Monte Carlo experiment. Section \ref{sec:avg} describes a simulation-based procedure to construct valid confidence intervals for moment average estimators and examines its performance in a Monte Carlo experiment. Section \ref{sec:application} presents the empirical application and Section \ref{sec:conclude} concludes. Proofs appear in the Appendix.
+
+
+\section{Notation and Asymptotic Framework}\label{sec:asymp}
+Let $f(\cdot,\cdot)$ be a $(p+q)$-vector of moment functions of a random vector $Z$ and $r$-dimensional parameter vector $\theta$, partitioned according to $f(\cdot,\cdot) = \left(g(\cdot,\cdot)', h(\cdot,\cdot)'  \right)'$ where $g(\cdot,\cdot)$ and $h(\cdot,\cdot)$ are $p$- and $q$-vectors of moment functions. The moment condition associated with $g(\cdot,\cdot)$ is assumed to be correct whereas that associated with $h(\cdot,\cdot)$ is locally mis-specified. More precisely,
+\begin{assump}[Local Mis-Specification]
+\label{assump:drift}
+Let $\{Z_{ni}\colon 1\leq i \leq n, n =1, 2, \hdots\}$ be a triangular array of random vectors defined on a probability space $(\Upsilon, \mathcal{F}, \p)$ satisfying
+	\begin{enumerate}[(a)]
+		\item $\expect[g(Z_{ni},\theta_0)] = 0$,
+		\item $\expect[h(Z_{ni},\theta_0)] = n^{-1/2}\tau$, where $\tau$ is an unknown constant vector, 
+		\item $\{f(Z_{ni},\theta_0)\colon 1\leq i \leq n, n = 1, 2, \hdots\}$ is uniformly integrable, and
+		\item $Z_{ni} \rightarrow_dZ_i$, where the $Z_i$ are identically distributed.
+	\end{enumerate}
+\end{assump}
+For any fixed sample size $n$, the expectation of $h$ evaluated at the true parameter value value $\theta_0$ depends on the unknown constant vector $\tau$. Unless all components of $\tau$ are zero, some of the moment conditions contained in $h$ are mis-specified. In the limit however, this mis-specification vanishes, as $\tau/\sqrt{n}$ converges to zero. Uniform integrability combined with weak convergence implies convergence of expectations, so that $\expect[g(Z_i, \theta_0)]=0$ and $\expect[h(Z_i, \theta_0)]=0$. Because the limiting random vectors $Z_i$ are identically distributed, we suppress the $i$ subscript and simply write $Z$ to denote their common marginal law, e.g.\ $\expect[h(Z,\theta_0)]=0$. It is important to note that local mis-specification is used here merely as a device to ensure that squared asymptotic bias is of the same order as asymptotic variance. This assumption is \emph{not} meant as a literal description of real-world datasets: it is merely a device that gives asymptotic bias-variance trade-off that mimics the finite-sample intuition.
+
+Define the sample analogue of the expectations in Assumption \ref{assump:drift} as follows:
+$$f_n(\theta) = \frac{1}{n}\sum_{i=1}^n f(Z_{ni},\theta) = \left[\begin{array}{c} g_n(\theta)\\ h_n(\theta) \end{array} \right]=\left[\begin{array}{c}n^{-1}\sum_{i=1}^n g(Z_{ni},\theta) \\ n^{-1}\sum_{i=1}^n h(Z_{ni},\theta) \end{array}\right]$$
+where $g_n$ is the sample analogue of the correctly specified moment conditions and $h_n$ is that of the mis-specified moment conditions. Let $\widetilde{W}$ be a $(q+p)\times(q+p)$, positive semi-definite weight matrix partitioned into blocks $\widetilde{W}_{gg}$, $\widetilde{W}_{gh}$, $\widetilde{W}_{hg}$, and $\widetilde{W}_{hh}$ conformably to the partition of $f$ by $g$ and $h$.
+
+
+The \emph{valid} estimator uses only those moment conditions known to be correctly specified, that is $\widehat{\theta}_v = \argmin_{\theta \in \Theta}\; g_n(\theta)' \widetilde{W}_{gg} \; g_n(\theta)$.
+For estimation based on $g$ alone to be possible, we must have $p \geq r$. With the exception of Section \ref{subsec:digress}, this assumption is maintained throughout.
+
+The \emph{full} estimator uses all moment functions, including the possibly invalid ones contained in $h$, namely $\widehat{\theta}_f = \argmin_{\theta \in \Theta}\; f_n(\theta)' \widetilde{W} \; f_n(\theta)$. For this estimator to be feasible, we must have $(p+q)\geq r$. Note that the same weights are used for $g$ in both the valid and full estimation criteria. Although not strictly necessary, this simplifies the notation and is appropriate for the efficient GMM estimator.
+
+To consider the limit distributions of $\widehat{\theta}_{f}$ and $\widehat{\theta}_{v}$ we require some further notation. Let $G = \expect\left[\nabla_{\theta} \; g(Z,\theta_0)\right]$, $H = \expect\left[\nabla_{\theta} \; h(Z,\theta_0)\right]$, and $F = (G', H')'$. Similarly, let $\Omega = Var\left[ f(Z,\theta_0) \right]$ where $\Omega$ is partitioned into blocks $\Omega_{gg}$, $\Omega_{gh}$, $\Omega_{hg}$, and $\Omega_{hh}$ conformably with the partition of $f$ by $g$ and $h$. Notice that each of these expressions involves the limit random variable $Z$ rather than $Z_{ni}$, so that the corresponding expectations are taken with respect to a distribution for which all moment conditions are correctly specified. The following high level assumptions are sufficient for the consistency and asymptotic normality of the full and valid estimators. 
+\begin{assump}[High Level Sufficient Conditions]
+\label{assump:highlevel} 
+\mbox{}
+	\begin{enumerate}[(a)]
+		\item $\theta_0$ lies in the interior of $\Theta$, a compact set
+		\item $\widetilde{W} \rightarrow_{p} W$, a positive definite matrix partitioned in the same way as $\widetilde{W}$
+		\item $W\expect[f(Z,\theta)]=0$ and $W_{gg}\expect[g(Z,\theta)]=0$  if and only if $\theta = \theta_0$
+		\item $\expect[f(Z,\theta)]$ is continuous on $\Theta$
+		\item $\sup_{\theta \in \Theta}\| f_n(\theta)- \expect[f(Z,\theta)]\|\rightarrow_{p} 0$
+		\item $f$ is Z-almost surely differentiable in an open neighborhood $\mathcal{B}$ of $\theta_0$
+		\item $\sup_{\theta \in \Theta} \|\nabla_{\theta}f_n(\theta) - F(\theta)\|\rightarrow_{p} 0$
+		\item $\sqrt{n}f_n(\theta_0) \rightarrow_d\mathcal{N}_{p+q}\left( \left[\begin{array}{c}0\\ \tau \end{array} \right], \Omega \right)$
+		\item $F'WF$ and $G'W_{gg}G$ are invertible
+	\end{enumerate}
+\end{assump}
+Although Assumption \ref{assump:highlevel} closely approximates the standard regularity conditions for GMM estimation, establishing primitive conditions for Assumptions \ref{assump:highlevel} (d), (e), (g) and (h) is somewhat more involved under local mis-specification. For more details, see \cite{Andrews1988} Theorem 2 and \cite{Andrews1992} Theorem 4.  Notice that identification, (c), and continuity, (d), are conditions on the distribution of $Z$, the marginal law to which each $Z_{ni}$ converges. 
+%%%%%%%%%%%%%%%
+%Need to put together an appendix explaining the regularity conditions in more detail!
+%%%%%%%%%%%%%%%
+
+Under Assumptions \ref{assump:drift} and \ref{assump:highlevel} both the valid and full estimators are consistent and asymptotically normal. The full estimator, however, shows an asymptotic bias. Let
+\begin{equation}
+	\label{eq:M}
+	M = \left[\begin{array}{c} M_g \\ M_h\end{array} \right] \sim \mathcal{N}_{p+q}\left( \left[\begin{array}{c}0\\ \tau \end{array} \right], \Omega \right)
+\end{equation}
+
+\begin{thm}[Consistency]
+\label{pro:consist}
+Under Assumptions \ref{assump:drift} and \ref{assump:highlevel} (a)--(e), $\widehat{\theta}_f \rightarrow_{p} \theta_0$ and $\widehat{\theta}_v\rightarrow_{p} \theta_0$.
+\end{thm}
+
+\begin{thm}[Asymptotic Normality]
+\label{pro:normality}
+Under Assumptions \ref{assump:drift} and \ref{assump:highlevel}
+	\begin{eqnarray*}
+	\sqrt{n}\left(\widehat{\theta}_v - \theta_0 \right) &\rightarrow_d&-[G' W_{gg}G]^{-1}G' W_{gg} M_h\\
+	\sqrt{n}\left(\widehat{\theta}_f - \theta_0 \right) &\rightarrow_d&-[F'WF]^{-1} F'W M
+	\end{eqnarray*}
+\end{thm}
+
+To study moment selection generally, we need to describe the limit behavior of estimators based on any subset of the moment conditions contained in $h$. Define an arbitrary moment set $S$ by the components of $h$ that it includes. We will always include the moment conditions contained in $g$. Since $h$ is $q$-dimensional, $S\subseteq \{1,2,\hdots,q\}$. For $S=\emptyset$, we have the valid moment set; for $S=\{1,2,\hdots,q\}$, the full moment set. Denote the number of components from $h$ included in $S$ by $|S|$. Let $\Xi_S$ be the $(p+|S|)\times (p+q)$ selection matrix that 
+extracts those elements of a $(p+q)$-vector corresponding to the moment set $S$: all $p$ of the first $1,\hdots, p$ components and the specified subset of the $p+1, \hdots, p+q$ remaining components. Accordingly, define the GMM estimator based on moment set $S$ by
+$\widehat{\theta}_S = \argmin_{\theta \in \Theta}\; \left[\Xi_S f_n(\theta)\right]' \left[ \Xi_S \widetilde{W} \Xi_S'\right] \; \left[ \Xi_S f_n(\theta)\right]$. To simplify the notation let $F_S = \Xi_S F$, $W_S = \Xi_S W\Xi_S'$, $M_S = \Xi_S M$, $\Omega_S = \Xi_S \Omega\Xi_S'$, and define $K_S  = [F_S'W_SF_S]^{-1} F_S'W_S$. By an argument nearly identical to the proof of Theorem \ref{pro:normality}, we have the following.
+\begin{cor}[Estimators for Arbitrary Moment Sets] 
+\label{cor:submodel}
+Assume that $W_S \Xi_S \expect[f(Z,\theta)]=0$ if and only if $\theta = \theta_0$, and
+$F_S'W_SF_S$ is invertible. Then, under Assumptions \ref{assump:drift} and \ref{assump:highlevel}, $\sqrt{n}(\widehat{\theta}_S - \theta_0 ) \rightarrow_d-K_S  M_S$.
+\end{cor}
+The conditions of Corollary  \ref{cor:submodel} are analogous to Assumption \ref{assump:highlevel} (c), (i).
+
+
+
+
+\section{The Focused Moment Selection Criterion}\label{sec:FMSC}
+
+\subsection{The General Case}
+FMSC chooses among the potentially invalid moment conditions contained in $h$ to minimize estimator AMSE for a target parameter. Denote this target parameter by $\mu$, a real-valued, $Z$-almost continuous function of the parameter vector $\theta$ that is differentiable in a neighborhood of $\theta_0$. Further, define the GMM estimator of $\mu$ based on $\widehat{\theta}_S$ by $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ and the true value of $\mu$ by $\mu_0 = \mu(\theta_0)$. Applying the delta method to Corollary \ref{cor:submodel} gives the AMSE of $\widehat{\mu}_S$.
+
+\begin{cor}[AMSE of Target Parameter]
+\label{cor:target}
+Under the hypotheses of Corollary \ref{cor:submodel}, $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S M_S$.
+In particular
+	$$\mbox{AMSE}\left(\widehat{\mu}_S\right) = \nabla_\theta\mu(\theta_0)'K_S \Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\tau\tau'\end{array}\right] + \Omega\right\}\Xi_S'K_S'\nabla_\theta\mu(\theta_0).$$
+\end{cor}
+For the full moment set, $K_f = [F'WF]^{-1} F'W$ and $\Xi_f = \mathbf{I}_{p+q}$. For the valid moment set, $K_v = \left[G'W_{gg}G\right]^{-1}G' W_{gg}$ and $\Xi_v =\left[\begin{array}{cc} \mathbf{I}_p& \mathbf{0}_{p\times q} \end{array} \right]$. Thus, the valid estimator $\widehat{\mu}_v$ of $\mu$ has zero asymptotic bias while the full estimator, $\widehat{\mu}_f$, inherits a bias from each component of $\tau$. Typically, however, $\widehat{\mu}_f$ has the smallest asymptotic variance. In particular, the usual proof that adding moment conditions cannot increase asymptotic variance under efficient GMM continues to hold under local mis-specification, because all moment conditions are correctly specified in the limit.\footnote{See, for example \citet[chapter 6]{Hallbook}.} Estimators based on other moment sets lie between these two extremes: the precise nature of the bias-variance tradeoff is governed by the size of the respective components of $\tau$ and the action of the matrix $K_S$. Thus, local mis-specification gives an asymptotic analogue of the finite-sample observation that adding a slightly invalid but highly relevant instrument can decrease MSE.
+
+To use this framework for moment selection, we need to construct estimators of the unknown quantities: $\theta_0$, $K_S$, $\Omega$, and $\tau$. Under local mis-specification, the estimator of $\theta$ under \emph{any} moment set is consistent. In particular, Theorem \ref{pro:consist} establishes that both the valid and full estimators yield a consistent estimate of $\theta_0$. 
+Recall that $K_S = [F_S'W_SF_S]^{-1} F_S'W_S \Xi_S$. Now, $\Xi_S$ is known because it is simply the selection matrix defining moment set $S$. The remaining quantities $F_S$ and $W_S$ that make up $K_S$ are consistently estimated by their sample analogues under Assumption \ref{assump:highlevel}. Similarly, consistent estimators of $\Omega$ are readily available under local mis-specification, although the precise form depends on the situation. Section \ref{sec:2sls} considers this point in more detail for 2SLS and the case of micro-data.
+
+The only remaining unknown is $\tau$. Local mis-specification is essential for making meaningful comparisons of AMSE, but prevents us from consistently estimating this asymptotic bias parameter. When the correctly specified moment conditions in $g$ identify $\theta$, however, we can construct an asymptotically unbiased estimator $\widehat{\tau}$ of $\tau$ by substituting $\widehat{\theta}_v$, the estimator of $\theta_0$ that uses only correctly specified moment conditions, into $h_n$, the sample analogue of the mis-specified moment conditions. That is,  $\widehat{\tau} = \sqrt{n} h_n(\widehat{\theta}_v)$. Returning to Corollary $\ref{cor:target}$, we see that it is $\tau \tau'$ rather than $\tau$ that enters the expression for AMSE. Although $\widehat{\tau}$ is an asymptotically unbiased estimator of $\tau$, the limiting expectation of $\widehat{\tau} \widehat{\tau}'$ is not $\tau\tau'$ because $\widehat{\tau}$ has an asymptotic variance.  To obtain an asymptotically unbiased estimator of $\tau\tau'$ we proceed as follows, subtracting a consistent estimate of the asymptotic variance.
+
+\begin{thm}[Asymptotic Distribution of $\widehat{\tau}$] 
+\label{pro:tau}
+Suppose that $p\geq r$. Then, $\widehat{\tau} = \sqrt{n} h_n(\widehat{\theta}_v) \rightarrow_d\Psi M$ where $\Psi = \left[\begin{array}{cc} -HK_v & \mathbf{I}_q \end{array}\right]$. Therefore, we have $\Psi M \sim \mathcal{N}_q(\tau, \Psi \Omega \Psi')$.
+\end{thm}
+
+\begin{cor}[Asymptotically Unbiased Estimator of $\tau \tau'$]
+\label{cor:tautau}
+Let $\widehat{\Omega}$ and $\widehat{\Psi}$ be consistent estimators of $\Omega$ and $\Psi$. Then, $ \widehat{\tau}\widehat{\tau}' - \widehat{\Psi}\widehat{\Omega}\widehat{\Psi}' \rightarrow_d\Psi \left(MM' - \Omega\right)\Psi' $. That is, $\widehat{\tau}\widehat{\tau}' - \ \widehat{\Psi}\widehat{\Omega}\widehat{\Psi}' $ provides an asymptotically unbiased estimator of $\tau\tau'$.
+\end{cor}
+It follows that
+\begin{equation}
+\label{eq:fmsc}
+	\mbox{FMSC}_n(S) = \nabla_\theta\mu(\widehat{\theta})'\widehat{K}_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\widehat{\tau}\widehat{\tau}' - \widehat{\Psi}\widehat{\Omega}\widehat{\Psi}'\end{array}\right] + \widehat{\Omega}\right\}\Xi_S'\widehat{K}_S' \nabla_\theta\mu(\widehat{\theta})
+\end{equation}
+provides an asymptotically unbiased estimator of AMSE.
+
+%At least comment somewhere on how we could use risk measures other that MSE and give an idea of how this would work. If there's time, perhaps go back and re-do everything with MAE. Different risk measure may suggest using a different estimator for tau.
+
+\subsection{Digression: The Case of $r > p$}
+\label{subsec:digress}
+When $r > p$,  $\theta_0$ is not estimable by $\widehat{\theta}_v$ so $\widehat{\tau}$ is an infeasible estimator of $\tau$. A na\"{i}ve approach to this problem would be to substitute another consistent estimator of $\theta_0$, e.g.\ $\widehat{\theta}_f$, and proceed analogously. Unfortunately, this approach fails. To understand why, consider the case in which all moment conditions are potentially invalid so the full moment set is $h$. By an argument similar to that used in the proof of Theorem \ref{pro:tau}, $\sqrt{n}h_n(\widehat{\theta}_f) \rightarrow_d\Gamma  \mathcal{N}_q(\tau, \Omega)$ where $\Gamma = \mathbf{I}_q - H \left(H'WH\right)^{-1}H'W$. The mean, $\Gamma \tau$, of the resulting limit distribution does not equal $\tau$, and because $\Gamma$ has rank $q-r$ we cannot pre-multiply by its inverse to extract an estimate of $\tau$. Intuitively, $q-r$ over-identifying restrictions are insufficient to estimate a $q$-vector: $\tau$ is not identified unless we have a minimum of $r$ valid moment conditions. However, the limiting distribution of $\sqrt{n}h_n(\widehat{\theta}_f)$ partially identifies $\tau$ even when we have no valid moment conditions at our disposal. A combination of this information with prior restrictions on the magnitude of the components of $\tau$ allows the use of the FMSC framework to carry out a sensitivity analysis when $r>p$. For example, the worst-case estimate of AMSE over values of $\tau$ in the identified region could still allow certain moment sets to be ruled out. This idea shares certain similarities with \citet{Kraay} and \citet{Conleyetal}.%, two recent papers that suggest methods for evaluating the robustness of conclusions drawn from IV regressions when the instruments used may be invalid.
+
+\subsection{The FMSC for 2SLS Instrument Selection}\label{sec:2sls}
+This section specializes FMSC to a case of particular applied interest: instrument selection for 2SLS in a micro-data setting. The expressions given here are used in the simulation studies and empirical example that appear later in the paper. Consider a linear IV regression model with response variable $y_{ni}$, regressors $\mathbf{x}_{ni}$, valid instruments $\mathbf{z}^{(1)}_{ni}$ and potentially invalid instruments $\mathbf{z}^{(2)}_{ni}$. Define $\mathbf{z}_{ni} = (\mathbf{z}^{(1)}_{ni},\mathbf{z}^{(2)}_{ni})'$. We assume that $\{(y_{ni}, \mathbf{x}_{ni}',\mathbf{z}_{ni}')'\}_{i=1}^n$ is iid across $i$ for fixed sample size $n$, but allow the distribution to change with $n$.
+In this case Assumption \ref{assump:drift} becomes
+\begin{equation}
+\label{eq:linear}
+	\expect\left[\begin{array}{c} \mathbf{z}^{(1)}_{ni} \left(y_{ni} - \mathbf{x}_{ni}' \theta_0  \right)  \\ \mathbf{z}^{(2)}_{ni} \left(y_{ni} - \mathbf{x}_{ni}' \theta_0  \right) \end{array}  \right] = \left[\begin{array}{c} \mathbf{0}\\ \tau/\sqrt{n}  \end{array}\right]
+\end{equation}
+where $(y_{ni},\mathbf{x}_{ni}',\mathbf{z}_{ni}')\rightarrow_d(y_i,\mathbf{x}_{i}',\mathbf{z}_{i}')$ for each $i$, and the $(y_i,\mathbf{x}_{i}',\mathbf{z}_{i}')$ are iid. Stacking observations, let $X = \left(\mathbf{x}_{n1}, \hdots, \mathbf{x}_{nn} \right)'$, $y = \left( y_{n1}, \hdots, y_{nn}\right)'$, $Z_1 = (\mathbf{z}^{(1)}_{n1}, \hdots, \mathbf{z}^{(1)}_{nn} )'$, $Z_2 = (\mathbf{z}^{(2)}_{n1}, \hdots, \mathbf{z}^{(2)}_{nn})'$, and $Z = (Z_1, Z_2)$. Further define $u_{ni}(\theta) = y_{ni} - \mathbf{x}_{ni}'\theta$ and $u(\theta) = y - X\theta$. The 2SLS estimator of $\theta_0$ under instrument set $S$ is given by $\widehat{\theta}_{S} = \left[X'P_SX\right]^{-1} X'P_S y$ where $Z_S = Z\Xi_S'$ and $P_S = Z_S(Z_S'Z_S)^{-1}Z_S'$. Similarly, the full estimator is $\widehat{\theta}_{f} = \left[X' P_Z X\right]^{-1} X' P_Z y$ while the valid estimator is $\widehat{\theta}_{v} = \left[X' P_{Z_1} X\right]^{-1} X' P_{Z_1}y$. Let $\mathbf{z}_S = \Xi_S \mathbf{z}$. Then, the matrix $K_S$ becomes
+\begin{equation}
+	K_S = - \left( \expect\left[\mathbf{x}\mathbf{z}'_S\right]\left(\expect[\mathbf{z}_S\mathbf{z}'_S] \right)^{-1} \expect\left[\mathbf{z}'_S \mathbf{x}\right]\right)^{-1} \expect\left[\mathbf{x}\mathbf{z}'_S\right]\left(\expect[\mathbf{z}_S\mathbf{z}'_S]\right)^{-1}. 
+\end{equation}
+where $\left(\mathbf{x}', \mathbf{z}'\right)$ is shorthand for $\left(\mathbf{x}_i', \mathbf{z}_i'\right)$, the limiting law of  $\left(\mathbf{x}_{ni}', \mathbf{z}_{ni}'\right)$. Because the observations are iid for fixed $n$, $\Omega = \lim_{n\rightarrow \infty} Var\left[\mathbf{z}_{ni}u_{ni}(\theta_0)  \right]$. This allows for conditional but not unconditional heteroscedasticity.
+
+To use the FMSC for instrument selection, we first need an estimator of $K_S$ for each moment set under consideration, e.g.\
+\begin{equation}
+	\widehat{K}_S = n \left[X' Z_S\left(Z_S'Z_S\right)^{-1}Z_S' X\right]^{-1} X' Z_S\left(Z_S'Z_S\right)^{-1} 
+\end{equation}
+which is consistent for $K_S$ under Assumption \ref{assump:highlevel}. To estimate $\Omega$ for all but the valid instrument set, I employ the centered, heteroscedasticity-consistent estimator
+	$$\widehat{\Omega}= \frac{1}{n}\sum_{i=1}^n \mathbf{z}_i \mathbf{z}_i' u_i(\widehat{\theta}_f)^2 - \left(\frac{1}{n}\sum_{i=1}^n \mathbf{z}_i u_i(\widehat{\theta}_f)  \right)\left(\frac{1}{n}\sum_{i=1}^n  u_i(\widehat{\theta}_f)\mathbf{z}_i'  \right).$$
+Centering allows moment functions to have non-zero means. While the local mis-specification framework implies that these means tend to zero in the limit, they are non-zero for any fixed sample size. Centering accounts for this fact, and thus provides added robustness. Since the valid estimator $\widehat{\theta}_v$ has no asymptotic bias, the AMSE of any target parameter based on this estimator equals its asymptotic variance. I use $\widetilde{\Omega}_{11}= n^{-1}\sum_{i=1}^n \mathbf{z}_{1i}\mathbf{z}_{1i}'u_i(\widehat{\theta}_v)^2$ rather than the $(p\times p)$ upper left sub-matrix of $\widehat{\Omega}$ to estimate this quantity. This imposes the assumption that all instruments in $Z_1$ are valid so that no centering is needed, providing greater precision. A robust estimator of $\nabla_{\theta}\mu(\theta_0)$ is provided by $\nabla_{\theta}\mu(\widehat{\theta}_{Valid})$. For 2SLS the asymptotically unbiased estimator $\widehat{\tau}\widehat{\tau} - \widehat{\Psi}\widehat{\Omega}\widehat{\Psi}$ of $\tau\tau'$ described in Corollary \ref{cor:tautau} is constructed from $\widehat{\tau} = n^{-1/2} \; Z_2' \; u(\hat{\theta}_{v})$ and $\widehat{\Psi} =  \left[ \begin{array}{cc} -n^{-1}Z_2'X \widehat{K}_{v} & \mathbf{I}\end{array}\right].$
+
+
+\subsection{Simulation Study}\label{sec:fmscsim}
+This section evaluates the performance of FMSC in a simple 2SLS instrument selection problem. The simulation setup is as follows:
+\begin{eqnarray}
+		\label{eq:secondstage}
+		y_i &=& 0.5 x_i + u_i\\ 
+		x_i &=& 0.1 (z_{1i} + z_{2i} + z_{3i}) + \gamma w_i + \epsilon_i 
+		\label{eq:firststage}
+	\end{eqnarray}
+for $i=1, 2, \hdots, n$ where $(u_i, \epsilon_i, w_i)' \sim \mbox{ iid  } \mathcal{N}(0,\mathcal{V})$ with	
+\begin{equation}
+			\label{eq:varmatrix}
+			\mathcal{V} = \left[  
+				\begin{array}{cccc}
+					1 & 0.5 - \gamma\rho & \rho\\
+					0.5 - \gamma \rho & 1 & 0\\
+					\rho & 0 & 1 \\
+				\end{array}
+		\right]
+\end{equation}	
+independently of $(z_{1i}, z_{2i}, z_{3i})\sim \mathcal{N}(0, \mathbf{I})$. This design keeps the endogeneity of $x$ fixed, $Cov(x,u) = 0.5$, while allowing the validity and relevance of $w$ to vary according to $Cov(w,u) =\rho$, $Cov(w,x) = \gamma$. The instruments $z_1, z_2, z_3$ are valid and relevant: they have first-stage coefficients of $0.1$ and are uncorrelated with the second stage error $u$. 
+
+Our goal is to estimate the effect of $x$ on $y$ with minimum MSE by choosing between two estimators: the valid estimator that uses only $z_1, z_2,$ and $z_3$ as instruments, and the full estimator that uses $z_1, z_2, z_3,$ and $w$. The inclusion of $z_1, z_2$ and $z_3$ in both moment sets means that the order of over-identification is two for the valid estimator and three for the full estimator. Because the moments of the 2SLS estimator only exist up to the order of over-identification \citep{Phillips1980}, this ensures that the small-sample MSE is well-defined. All simulations are carried out over a grid of values for $(\gamma, \rho)$ with $10,000$ replications at each point. Estimation is by 2SLS without a constant term, using the expressions from Section \ref{sec:2sls}.
+
+Table \ref{tab:trueRMSE} gives the difference in small-sample root mean squared error (RMSE) between the full and valid estimators for a sample size of 500. Negative values indicate parameter values at which the full instrument set has a lower RMSE. We see that even if $Cov(w,u)\neq 0$, so that $w$ is invalid, including it in the instrument set can dramatically lower RMSE provided that $Cov(w,x)$ is high. In other words, using an invalid but sufficiently relevant instrument can improve our estimates. Because a sample size of 500 effectively divides the parameter space into two halves, one where the full estimator has the advantage and one where the valid estimator does, I concentrate on this case. Summary results for smaller sample sizes appear in Table \ref{tab:summary}. (Details for sample sizes of 50 and 100 are available upon request.)
+\begin{table}[!tbp]
+\caption{Difference in RMSE between full and valid estimators.}
+
+\label{tab:trueRMSE}
+
+ \begin{center}
+ \small
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
+\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&-0.01& 0.00& 0.02& 0.07& 0.13& 0.18& 0.25& 0.31&0.39\tabularnewline
+0.1&-0.06& 0.00& 0.09& 0.19& 0.30& 0.42& 0.53& 0.65&0.79\tabularnewline
+0.2&-0.10&-0.04& 0.07& 0.19& 0.32& 0.46& 0.58& 0.72&0.86\tabularnewline
+0.3&-0.14&-0.09& 0.01& 0.12& 0.24& 0.36& 0.48& 0.61&0.72\tabularnewline
+0.4&-0.17&-0.12&-0.03& 0.06& 0.16& 0.26& 0.36& 0.46&0.57\tabularnewline
+0.5&-0.19&-0.15&-0.07& 0.01& 0.10& 0.19& 0.27& 0.34&0.45\tabularnewline
+0.6&-0.20&-0.17&-0.10&-0.03& 0.04& 0.11& 0.19& 0.26&0.34\tabularnewline
+\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
+0.7&-0.21&-0.18&-0.13&-0.07&-0.01& 0.07& 0.14& 0.20&0.26\tabularnewline
+0.8&-0.22&-0.20&-0.15&-0.09&-0.04& 0.03& 0.09& 0.15&0.20\tabularnewline
+0.9&-0.23&-0.21&-0.16&-0.12&-0.07&-0.01& 0.04& 0.10&0.14\tabularnewline
+1.0&-0.25&-0.22&-0.19&-0.13&-0.08&-0.04& 0.01& 0.06&0.11\tabularnewline
+1.1&-0.24&-0.22&-0.20&-0.16&-0.10&-0.07&-0.02& 0.03&0.07\tabularnewline
+1.2&-0.26&-0.22&-0.19&-0.16&-0.12&-0.07&-0.05&-0.01&0.03\tabularnewline
+1.3&-0.29&-0.24&-0.20&-0.17&-0.14&-0.09&-0.06&-0.01&0.02\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+\footnotesize
+\begin{tablenotes}
+	\item Negative values indicate that including $w$ gives a smaller RMSE. Results are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
+\end{tablenotes}
+\end{table}
+
+The FMSC chooses moment conditions to minimize an asymptotic approximation to small-sample MSE in the hope that this will provide reasonable performance in practice. The first question is how often the FMSC succeeds in identifying the instrument set that minimizes small sample MSE. Table \ref{tab:correctFMSC} gives the frequency of correct decisions made by the FMSC in percentage points for a sample size of 500. A correct decision is defined as an instance in which the FMSC selects the moment set that minimizes finite-sample MSE as indicated by Table \ref{tab:trueRMSE}. We see that the FMSC performs best when there are large differences in MSE between the full and valid estimators: in the top right and bottom left of the parameter space. The criterion performs less well in the borderline cases along the main diagonal.
+% latex.default(correct.FMSC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct decision rates for the FMSC in percentage points.}
+\label{tab:correctFMSC}
+\small
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
+\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&79&61&69&85&91&94& 94& 95& 96\tabularnewline
+0.1&82&25&62&91&98&99& 99&100&100\tabularnewline
+0.2&84&82&46&80&96&99&100&100&100\tabularnewline
+0.3&85&85&31&60&82&94& 98& 99&100\tabularnewline
+0.4&84&86&77&42&65&82& 92& 96& 98\tabularnewline
+0.5&84&87&82&31&49&68& 81& 90& 95\tabularnewline
+0.6&84&88&84&75&38&54& 68& 80& 87\tabularnewline
+\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
+0.7&85&87&86&80&69&44& 57& 69& 79\tabularnewline
+0.8&84&87&86&82&74&36& 48& 60& 71\tabularnewline
+0.9&85&87&87&84&78&69& 41& 52& 61\tabularnewline
+1.0&85&88&87&85&79&74& 35& 45& 53\tabularnewline
+1.1&85&88&88&86&82&76& 68& 39& 48\tabularnewline
+1.2&85&88&88&87&84&79& 72& 65& 43\tabularnewline
+1.3&86&87&88&88&84&80& 75& 69& 39\tabularnewline
+\hline
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item A correct decision is an instance in which the FMSC identifies the estimator that minimizes small sample MSE (see Table \ref{tab:trueRMSE}). Values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
+\end{tablenotes}
+\end{center}
+
+\end{table}
+
+Ultimately, the goal of the FMSC is to produce estimators with low MSE. Because the FMSC is itself random, however, using it introduces an additional source of variation. Table \ref{tab:rmseFMSC} accounts for this fact by presenting the RMSE that results from using the estimator chosen by the FMSC. Because these values are difficult to interpret on their own, Tables \ref{tab:rmsevsVALID} and \ref{tab:rmsevsFULL} compare the realized RMSE of the FMSC to those of the valid and full estimators. Negative values indicate that the RMSE of the FMSC is lower. As we see from Table \ref{tab:rmsevsVALID}, the valid estimator outperforms the FMSC in the upper right region of the parameter space, the region where the valid estimator has a lower RMSE than the full. This is because the FMSC sometimes chooses the wrong instrument set, as indicated by Table \ref{tab:correctFMSC}. Accordingly, the FMSC performs substantially better in the bottom left of the parameter space, the region where the full estimator has a lower RMSE than the valid. Taken on the whole, however, the potential advantage of using the valid estimator is small: at best it yields an RMSE $0.06$ smaller than that of the FMSC. Indeed, many of the values in the top right of the parameter space are zero, indicating that the FMSC performs no worse than the valid estimator. In contrast, the potential advantage of using the FMSC is large: it can yield an RMSE $0.16$ smaller than the valid model. The situation is similar for the full estimator only in reverse, as shown in Table \ref{tab:rmsevsFULL}. The full estimator outperforms the FMSC in the bottom left of the parameter space, while the FMSC outperforms the full estimator in the top right. Again, the potential gains from using the FMSC are large compared to those of the full instrument set: a $0.86$ reduction in RMSE versus a $0.14$ reduction. Average and worst-case RMSE comparisons between the FMSC and the full and valid estimators appear in Table \ref{tab:summary}.
+% latex.default(rmse.FMSC, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{RMSE of the estimator selected by the FMSC.}
+\label{tab:rmseFMSC}
+\small
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
+\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&0.26&0.27&0.27&0.27&0.27&0.27&0.27&0.27&0.27\tabularnewline
+0.1&0.24&0.26&0.28&0.27&0.27&0.27&0.27&0.27&0.27\tabularnewline
+0.2&0.22&0.25&0.30&0.31&0.28&0.27&0.28&0.27&0.27\tabularnewline
+0.3&0.20&0.23&0.29&0.32&0.31&0.29&0.28&0.27&0.28\tabularnewline
+0.4&0.20&0.22&0.27&0.31&0.32&0.31&0.30&0.30&0.28\tabularnewline
+0.5&0.20&0.20&0.25&0.29&0.32&0.32&0.32&0.31&0.29\tabularnewline
+0.6&0.19&0.19&0.23&0.27&0.30&0.33&0.33&0.32&0.31\tabularnewline
+\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
+0.7&0.18&0.19&0.22&0.25&0.28&0.31&0.32&0.33&0.32\tabularnewline
+0.8&0.18&0.19&0.21&0.24&0.27&0.30&0.31&0.32&0.32\tabularnewline
+0.9&0.18&0.19&0.20&0.23&0.26&0.28&0.30&0.32&0.33\tabularnewline
+1.0&0.18&0.18&0.19&0.22&0.25&0.27&0.29&0.30&0.32\tabularnewline
+1.1&0.17&0.17&0.19&0.21&0.23&0.25&0.28&0.29&0.31\tabularnewline
+1.2&0.17&0.17&0.18&0.20&0.22&0.24&0.26&0.28&0.29\tabularnewline
+1.3&0.17&0.17&0.17&0.19&0.21&0.23&0.25&0.27&0.28\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+\footnotesize
+\begin{tablenotes}
+ \item Values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications..
+\end{tablenotes}
+\end{table}
+
+
+
+
+% latex.default(rmse.vs.valid, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Difference in RMSE between FMSC and valid estimator.}
+\label{tab:rmsevsVALID}
+\small
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
+\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&-0.01&-0.01&-0.01& 0.00& 0.00& 0.00& 0.00& 0.00&0.00\tabularnewline
+0.1&-0.04&-0.01& 0.01& 0.01& 0.00& 0.00& 0.00& 0.00&0.00\tabularnewline
+0.2&-0.05&-0.02& 0.03& 0.03& 0.00& 0.00& 0.00& 0.00&0.00\tabularnewline
+0.3&-0.07&-0.04& 0.02& 0.04& 0.04& 0.01& 0.01& 0.00&0.00\tabularnewline
+0.4&-0.08&-0.05& 0.00& 0.04& 0.05& 0.04& 0.03& 0.02&0.01\tabularnewline
+0.5&-0.08&-0.07&-0.02& 0.02& 0.05& 0.06& 0.05& 0.02&0.02\tabularnewline
+0.6&-0.09&-0.08&-0.04& 0.00& 0.03& 0.04& 0.05& 0.04&0.04\tabularnewline
+\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
+0.7&-0.09&-0.08&-0.06&-0.03& 0.00& 0.04& 0.05& 0.06&0.05\tabularnewline
+0.8&-0.10&-0.09&-0.07&-0.03&-0.01& 0.02& 0.04& 0.05&0.04\tabularnewline
+0.9&-0.10&-0.09&-0.08&-0.06&-0.03& 0.00& 0.02& 0.04&0.04\tabularnewline
+1.0&-0.12&-0.11&-0.10&-0.06&-0.04&-0.02& 0.00& 0.02&0.04\tabularnewline
+1.1&-0.11&-0.11&-0.11&-0.09&-0.05&-0.04&-0.02& 0.01&0.02\tabularnewline
+1.2&-0.13&-0.11&-0.11&-0.09&-0.07&-0.04&-0.04&-0.01&0.00\tabularnewline
+1.3&-0.16&-0.12&-0.11&-0.10&-0.09&-0.05&-0.04&-0.01&0.00\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+\footnotesize
+\begin{tablenotes}
+\item Negative values indicate that the FMSC gives a lower realized RMSE. Results are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
+\end{tablenotes}
+\end{table}
+
+% latex.default(rmse.vs.full, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Difference in RMSE between FMSC and full estimator.}
+\label{tab:rmsevsFULL}
+\small
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
+\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&0.00&-0.01&-0.03&-0.07&-0.13&-0.18&-0.25&-0.31&-0.39\tabularnewline
+0.1&0.02&-0.01&-0.07&-0.18&-0.30&-0.42&-0.53&-0.65&-0.78\tabularnewline
+0.2&0.05& 0.02&-0.04&-0.16&-0.31&-0.46&-0.58&-0.72&-0.86\tabularnewline
+0.3&0.07& 0.05& 0.01&-0.08&-0.20&-0.34&-0.47&-0.61&-0.71\tabularnewline
+0.4&0.09& 0.07& 0.03&-0.02&-0.11&-0.22&-0.33&-0.44&-0.56\tabularnewline
+0.5&0.11& 0.08& 0.05& 0.01&-0.05&-0.13&-0.22&-0.32&-0.42\tabularnewline
+0.6&0.11& 0.09& 0.07& 0.03&-0.01&-0.06&-0.14&-0.22&-0.30\tabularnewline
+\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
+0.7&0.12& 0.10& 0.07& 0.04& 0.01&-0.03&-0.08&-0.14&-0.22\tabularnewline
+0.8&0.13& 0.11& 0.08& 0.05& 0.03& 0.00&-0.05&-0.10&-0.15\tabularnewline
+0.9&0.13& 0.11& 0.08& 0.06& 0.04& 0.01&-0.02&-0.06&-0.10\tabularnewline
+1.0&0.13& 0.11& 0.09& 0.07& 0.05& 0.02&-0.01&-0.04&-0.07\tabularnewline
+1.1&0.13& 0.11& 0.09& 0.07& 0.05& 0.03& 0.01&-0.02&-0.05\tabularnewline
+1.2&0.14& 0.11& 0.09& 0.07& 0.05& 0.03& 0.02& 0.00&-0.03\tabularnewline
+1.3&0.13& 0.12& 0.09& 0.07& 0.05& 0.04& 0.02& 0.00&-0.02\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+\footnotesize
+\begin{tablenotes}
+\item Negative values indicate that the FMSC gives a lower realized RMSE. Results are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
+\end{tablenotes}
+\end{table}
+
+I now compare the FMSC to a number of alternative procedures from the literature. \cite{Andrews1999} considers a family of moment selection critera that take the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $J_n(S)$ is the $J$-test statistic under moment set $S$ and we choose the moment set that \emph{minimizes} the criterion. If we take $h(|S|) = (p + |S| - r)$, then $\kappa_n = \log{n}$ gives a GMM analogue of Schwarz's Bayesian Information Criterion (GMM-BIC) while $\kappa_n = 2.01 \log{\log{n}}$ gives an analogue of the Hannan-Quinn Information Criterion (GMM-HQ), and $\kappa_n = 2$ gives an analogue of Akaike's Information Criterion (GMM-AIC). Under certain assumptions, the HQ and BIC-type criteria are consistent: they select any and all valid moment conditions with probability approaching one in the limit (w.p.a.1). When calculating the $J$-test statistic under potential mis-specification, Andrews recommends using a centered covariance matrix estimator and basing estimation on the weighting matrix that would be efficient under the assumption of correct specification. Accordingly, I calculate
+	\begin{eqnarray}
+		J_{Full} &=&n^{-1}\; u( \widehat{\theta}_{f})'\;Z \; \widehat{\Omega}^{-1} \;Z' \;u( \widehat{\theta}_{f})\\
+		J_{Valid} &=&n^{-1}\; u( \widehat{\theta}_{v})'\;Z_1 \;\widetilde{\Omega}_{11}^{-1} \;Z_1'\;u( \widehat{\theta}_{v})
+	\end{eqnarray}
+for the full and valid instrument sets using the formulas from Section \ref{sec:2sls}. 
+
+Because the Andrews-type criteria only take account of instrument validity, not relevance, \cite{HallPeixe2003} suggest combining them with their canonical correlations information criterion (CCIC). The CCIC aims to detect and eliminate redundant instruments, those that add no further information beyond that contained in the other instruments. While including such instruments has no effect on the asymptotic distribution of the estimator, it could lead to poor finite-sample performance. By combining the CCIC with an Andrews-type criterion, the idea is to eliminate invalid instruments and then redundant ones. For the present simulation example, with a single endogenous regressor and no constant term, 
+	\begin{equation}
+	\mbox{CCIC}(S) = n \log\left[1 - R_n^2(S) \right] + h(p + |S|)\kappa_n
+	\end{equation}
+where $R_n^2(S)$ is the first-stage $R^2$ based on instrument set $S$ and $h(p + |S|)\mu_n$ is a penalty term \citep{Jana2005}. If we take $h(p + |S|) = (p + |S| - r)$, setting $\kappa_n = \log{n}$ gives the CCIC-BIC, while $\kappa_n = 2.01 \log{\log{n}}$ gives the CCIC-HQ  and $\kappa_n = 2$ gives the CCIC-AIC. I consider procedures that combine CCIC criteria with the \emph{corresponding} criterion of \cite{Andrews1999}. For example, CC-MSC-BIC is shorthand for the rule ``include $w$ iff it minimizes both  GMM-BIC \emph{and} CCIC-BIC.'' I define CC-MSC-AIC and CC-MSC-HQ analogously.
+
+A less formal but fairly common procedure for moment selection in practice is the downward $J$-test. In the present context this takes a particularly simple form: if the $J$-test fails to reject the null hypothesis of correct specification for the full instrument set, use this set for estimation; otherwise, use the valid instrument set. In addition to the moment selection criteria given above, I compare the FMSC to selection by a downward $J$-test at the 90\% and 95\% significance levels. 
+
+Table \ref{tab:summary} compares average and worst-case RMSE over the parameter space given in Table \ref{tab:trueRMSE} for sample sizes of 50, 100, and 500 observations. (Pointwise RMSE comparisons are available upon request.) For each sample size the FMSC outperforms all other moment selection procedures in both average and worst-case RMSE. The gains are particularly large for smaller sample sizes. The results given here suggest that the FMSC may be of considerable value for instrument selection in practice.
+
+% latex.default(out.table, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = row.names(out.table),      append = FALSE) 
+%
+\begin{table}[!tbp]
+\caption{Summary of Simulation Results.}
+\label{tab:summary}
+ \begin{center}
+ \begin{tabular}{rlrrr}\hline\hline
+\multicolumn{2}{l}{Average RMSE}&\multicolumn{1}{c}{$N=50$}&\multicolumn{1}{c}{$N=100$}&\multicolumn{1}{c}{$N=500$}\tabularnewline
+\hline
+&Valid Estimator&0.69&0.59&0.28\tabularnewline
+&Full Estimator&0.44&0.40&0.34\tabularnewline
+&FMSC&0.47&0.41&0.26\tabularnewline
+&GMM-BIC&0.61&0.52&0.29\tabularnewline
+&GMM-HQ&0.64&0.56&0.29\tabularnewline
+&GMM-AIC&0.67&0.58&0.28\tabularnewline
+&Downward J-test 90\%&0.55&0.50&0.28\tabularnewline
+&Downward J-test 95\%&0.51&0.47&0.28\tabularnewline
+&CC-MSC-BIC&0.61&0.51&0.28\tabularnewline
+&CC-MSC-HQ&0.64&0.55&0.28\tabularnewline
+&CC-MSC-AIC&0.66&0.57&0.28\tabularnewline
+\hline\hline
+\multicolumn{2}{l}{Worst-case RMSE}&\multicolumn{1}{c}{$N=50$}&\multicolumn{1}{c}{$N=100$}&\multicolumn{1}{c}{$N=500$}\tabularnewline
+\hline
+&Valid Estimator&0.84&1.06&0.32\tabularnewline
+&Full Estimator&1.04&1.12&1.14\tabularnewline
+&FMSC&0.81&0.74&0.33\tabularnewline
+&GMM-BIC&0.99&0.99&0.47\tabularnewline
+&GMM-HQ&0.97&1.03&0.39\tabularnewline
+&GMM-AIC&0.95&1.04&0.35\tabularnewline
+&Downward J-test 90\%&0.99&0.98&0.41\tabularnewline
+&Downward J-test 95\%&1.01&1.00&0.46\tabularnewline
+&CC-MSC-BIC&0.86&0.99&0.47\tabularnewline
+&CC-MSC-HQ&0.87&1.03&0.39\tabularnewline
+&CC-MSC-AIC&0.87&1.04&0.35\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+\footnotesize
+\begin{tablenotes}
+	\item Average and worst-case RMSE are calculated over the simulation grid from Table \ref{tab:trueRMSE}. All values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications at each point on the grid.
+\end{tablenotes}
+\end{table}
+
+
+
+
+
+
+
+\section{Estimators Post-Selection and Moment Averaging}
+\label{sec:avg}
+
+\subsection{The Effects of Moment Selection on Inference}
+The usual approach to inference post-selection is to state conditions under which traditional distribution theory continues to hold, typically involving an appeal to Lemma 1.1 of \citet[p.\ 168]{Poetscher1991}, which states that the limit distributions of an estimator pre- and post-consistent selection are identical. \citet[pp.\ 179--180]{Poetscher1991}, however, also states that this result does not hold uniformly over the parameter space. 
+Accordingly, \citet[p.\ 22]{LeebPoetscher2005} emphasize that a reliance on the lemma ``only creates an illusion of conducting valid inference.'' In this section I briefly illustrate the problem using the simulation experiment from Section \ref{sec:fmscsim}.
+
+Figure \ref{fig:consist} gives the distributions of the valid and full estimators alongside the post-selection distributions of estimators chosen by the GMM-BIC and HQ criteria. The distributions are computed by kernel density estimation using $10,000$ replications of the simulation described in Equations \ref{eq:secondstage} and \ref{eq:firststage}, each with a sample size of $500$ and $\gamma = 0.4$, $\rho= 0.2$. For these parameter values the instrument $w$ is relevant but sufficiently invalid that, based on the results of Table \ref{tab:trueRMSE}, we should exclude it. Because GMM-BIC and HQ are consistent procedures, they will exclude any invalid instruments w.p.a.1. A na\"{i}ve reading of P\"{o}tscher's Lemma 1.1 suggests that consistent instrument selection is innocuous, and thus that the post-selection distributions of GMM-BIC and HQ should be close to that of the valid estimator, indicated by dashed lines. This is emphatically not the case: the post-selection distributions are highly non-normal mixtures of the distributions of the valid and full estimators. 
+\begin{figure}[htbp]
+\begin{center}
+	\includegraphics[scale = 0.48]{GMM_BIC}
+	\includegraphics[scale = 0.48]{GMM_HQ}
+\caption{ \small Post-selection distributions for the estimated effect of $x$ on $y$ in Equation \ref{eq:secondstage} with $\gamma = 0.4$, $\rho = 0.2$, $N=500$. The distribution post-GMM-BIC selection appears in the top panel, while the distribution post-GMM-HQ selection appears in the bottom panel. The distribution of the full estimator is given in dotted lines while that of the valid estimator is given in dashed lines in each panel. All distributions are calculated by kernel density estimation based on 10,000 simulation replications generated from Equations \ref{eq:secondstage}--\ref{eq:varmatrix}.}
+\label{fig:consist}
+\end{center}
+\end{figure}
+While Figure \ref{fig:consist} pertains to only one point in the parameter space, the problem is more general. Table \ref{tab:BICcov} gives the empirical coverage probabilities of traditional $95\%$ confidence intervals over the full simulation grid for the GMM-BIC. Over the vast majority of the parameter space, empirical coverage probabilities are far lower than the nominal level 0.95. The lack of uniformity is particularly striking. When $w$ is irrelevant, $\gamma = 0$, or valid $\rho = 0$, empirical coverage probabilities are only slightly below 0.95. Relatively small changes in either $\rho$ or $\gamma$, however, lead to a large deterioration in coverage. Results for the GMM-HQ (available upon request) are similar.
+
+
+Because FMSC, GMM-AIC and selection based on a downward $J$-test at a fixed significance level are not consistent procedures, Lemma 1.1 of \citet{Poetscher1991} is inapplicable. Their behavior, however, is similar to that of the GMM-BIC. Results for FMSC appear in Table \ref{tab:FMSCconf}. (Details for the other procedures are available upon request.) As this example illustrates, ignoring the effects of moment selection can lead to highly misleading inferences.
+% latex.default(cover.BIC, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage post-GMM-BIC moment selection (nominal 95\%).}
+\label{tab:BICcov}
+\small
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
+\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&0.92&0.92&0.92&0.93&0.92&0.92&0.92&0.92&0.93\tabularnewline
+0.1&0.92&0.83&0.77&0.83&0.90&0.92&0.93&0.92&0.92\tabularnewline
+0.2&0.93&0.76&0.55&0.57&0.74&0.86&0.89&0.90&0.91\tabularnewline
+0.3&0.93&0.75&0.45&0.35&0.50&0.69&0.80&0.85&0.88\tabularnewline
+0.4&0.93&0.75&0.40&0.22&0.31&0.48&0.63&0.74&0.80\tabularnewline
+0.5&0.93&0.75&0.38&0.18&0.20&0.32&0.46&0.59&0.68\tabularnewline
+0.6&0.94&0.76&0.38&0.14&0.14&0.23&0.32&0.43&0.53\tabularnewline
+\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
+0.7&0.94&0.76&0.37&0.12&0.11&0.16&0.24&0.32&0.42\tabularnewline
+0.8&0.93&0.76&0.37&0.11&0.08&0.12&0.18&0.25&0.33\tabularnewline
+0.9&0.94&0.75&0.37&0.11&0.07&0.10&0.14&0.19&0.25\tabularnewline
+1.0&0.93&0.76&0.37&0.10&0.06&0.08&0.11&0.16&0.20\tabularnewline
+1.1&0.93&0.77&0.37&0.10&0.06&0.07&0.10&0.13&0.16\tabularnewline
+1.2&0.94&0.77&0.38&0.10&0.05&0.06&0.08&0.11&0.14\tabularnewline
+1.3&0.94&0.77&0.38&0.10&0.04&0.05&0.07&0.09&0.12\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+\footnotesize
+\begin{tablenotes}
+\item Values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
+\end{tablenotes}
+\end{table}
+
+
+\subsection{Moment Average Estimators}
+To account for the effects of moment selection on inference, I extend a framework developed by \cite{HjortClaeskens} for frequentist model averaging. I treat post-selection estimators as a special case of moment-averaging: combining estimators based on different moment sets using data-dependent weights. Consider an estimator of the form,
+\begin{equation}
+	\label{eq:avg}
+	\widehat{\mu}=\sum_{S \in \mathcal{A}} \widehat{\omega}_S\widehat{\mu}_S
+\end{equation}
+where $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ is an estimator of the target parameter $\mu$ under moment set $S$, $\mathcal{A}$ is the collection of all moment sets under consideration, and $\widehat{\omega}_S$ is shorthand for the value of a data-dependent weight function  $\widehat{\omega}_S=\omega(\cdot| \cdot)$ evaluated at moment set $S$ and the sample observations $Z_{n1}, \hdots, Z_{nn}$.  As above $\mu(\cdot)$ is a $\mathbb{R}$-valued, $Z$-almost surely continuous function of $\theta$ that is differentiable in an open neighborhood of $\theta_0$. When $\widehat{\omega}_S$ is an indicator, taking on the value one at the moment set moment set that minimizes some moment selection criterion, $\widehat{\mu}$ is a post-moment selection estimator. More generally, $\widehat{\mu}$ is a moment average estimator.
+
+The limiting behavior of $\widehat{\mu}$ follows almost immediately from Corollary \ref{cor:submodel}, which states that asymptotic distribution of $\widehat{\theta}_S$ depends only on $K_S$ and $M$. Because $K_S$ is a matrix of constants, the random variable $M$ governs the joint limiting behavior of $\widehat{\theta}_S$, $S\in \mathcal{A}$. Under certain conditions on the $\widehat{\omega}_S$, we can fully characterize the limit distribution of $\widehat{\mu}$.
+\begin{assump}[Conditions on the Weights]\mbox{}
+\label{assump:weights}
+\begin{enumerate}[(a)]
+	\item $\sum_{S \in \mathcal{A}} \widehat{\omega}_S = 1$ 
+	\item For each $S\in \mathcal{A}$, $\widehat{\omega}_S \rightarrow_d\varphi(M|S)$, a function of $M$ (the normal random vector defined in Theorem \ref{pro:normality}) and constants only.
+\end{enumerate}
+\end{assump}
+
+\begin{cor}[Asymptotic Distribution of Moment-Average Estimators]
+\label{cor:momentavg}
+Under Assumption \ref{assump:weights} and the conditions of Corollary \ref{cor:submodel},
+	$$\sqrt{n}\left(\widehat{\mu} -  \mu_0\right) \rightarrow_{d}\Lambda(\tau) =  -\nabla_\theta\mu(\theta_0)'\left[\sum_{S \in \mathcal{A}} \varphi(M|S) K_S\Xi_S\right] M.$$
+\end{cor}
+Notice that the limit random variable, denoted $\Lambda(\tau)$, is a randomly weighted average of the multivariate normal vector $M$. Hence, $\Lambda(\tau)$ is non-normal. 
+
+Although it restricts the convergence of the weight functions, Assumption \ref{assump:weights} is satisfied by weighting schemes based on a number of familiar moment selection criteria. Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} shows that the FMSC converges in distribution to a function of $M$ and constants only. In particular, we have $FMSC_n(S) \rightarrow_dFMSC(M|S)$ where
+\begin{equation}
+\label{eq:FMSClimit}
+	\mbox{FMSC}(M|S) = \nabla_\theta\mu(\theta_0)'K_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\Psi \left(MM' - \Omega\right)\Psi' \end{array}\right] + \Omega\right\}\Xi_S'K_S'\nabla_\theta\mu(\theta_0)
+\end{equation}
+Under local mis-specification, the $J$-test statistic converges to a non-central $\chi^2$ distribution. This limit distribution, too, can be expressed in terms of $M$ and constants only, as the following result shows.
+\begin{thm}[Distribution of $J$-Statistic under Local Mis-Specification] 
+\label{pro:jstat}
+	Let $J_n(S)  = n \left[\Xi_S f_n(\widehat{\theta}_S)\right]' \widehat{\Omega}^{-1}\left[\Xi_S f_n(\widehat{\theta}_S)\right]$ where $\widehat{\Omega}^{-1}_S$ is a consistent estimator of $\Omega_S^{-1}$. Then, under the conditions of Corollary \ref{cor:submodel}, $J_n(S) \rightarrow_dJ(M|S)$, where
+		$$J(M|S)=(\Omega_S^{-1/2}M_S)' (I - P_S)(\Omega_S^{-1/2}M_S),$$
+$P_S$ is the projection matrix formed from the GMM the identifying restrictions $\Omega^{-1/2}_S F_S$, and $M_S = \Xi_S M$.
+\end{thm}
+To connect these results to estimators post-selection, consider the weight function $\widehat{\omega}_S^{MSC} = \mathbf{1}\left\{\mbox{MSC}_n(S) = \min_{S'\in \mathcal{A}} \mbox{MSC}_n(S')\right\}$ where $\mbox{MSC}_n(S)$ is the value of some moment selection criterion evaluated at the sample observations $Z_{n1}\hdots, Z_{nn}$. Now suppose $\mbox{MSC}_n(S) \rightarrow_d\mbox{MSC}(M|S)$, a function of $M$ and constants only. Then, so long as the probability of ties, $\p\left\{\mbox{MSC}(M|S) = \mbox{MSC}(M|S') \right\}$, is zero for all $S\neq S'$, the continuous mapping theorem gives 
+	$$\widehat{\omega}_S^{MSC} \rightarrow_d \mathbf{1}\left\{\mbox{MSC}(M|S) = \min_{S'\in \mathcal{A}} \mbox{MSC}(M|S')\right\}$$ 
+satisfying Assumption \ref{assump:weights} (b). Thus, post-selection estimators based on the FMSC, the downward $J$-test procedure, GMM-BIC, GMM-HQ, and GMM-AIC all fall within the ambit of \ref{cor:momentavg}. GMM-BIC and GMM-HQ, however, are not particularly interesting under local mis-specification. Intuitively, because they aim to select all valid moment conditions w.p.a.1, we would expect that under Assumption \ref{assump:drift} they simply choose the full moment set in the limit. The following result states that this intuition is correct. Because moment selection using the GMM-BIC or HQ leads to weights with a degenerate asymptotic distribution, these  are not considered further below. 
+\begin{thm}[Consistent Criteria under Local Mis-Specification]
+\label{pro:andrews}
+Consider a moment selection criterion of the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $h$ is strictly increasing,  $\lim_{n\rightarrow \infty}\kappa_n = \infty$, and $\kappa_n = o(n)$. Under the conditions of Corollary \ref{cor:submodel}, $MSC(S)$ selects the full moment set w.p.a.1.
+\end{thm}
+
+
+\subsection{Valid Confidence Intervals}
+While Corollary \ref{cor:momentavg} characterizes the limiting behavior of moment-average, and hence post-selection estimators, the limiting random variable $\Lambda(\tau)$ is a complicated function of the normal random vector $M$. Because this distribution is analytically intractable, I adapt a suggestion from \cite{ClaeskensHjortbook} and approximate it by simulation. The result is a conservative procedure that provides asymptotically valid confidence intervals.\footnote{Although I originally developed this procedure by analogy to \cite{ClaeskensHjortbook}, \cite{Leeb} kindly pointed out that constructions of the kind given here have appeared elsewhere in the statistics literature, notably in \cite{Loh1985}, \cite{Berger1994}, and \cite{Silvapulle1996}. More recently, \cite{McCloskey} uses a similar approach to study non-standard testing problems.}
+ 
+First, suppose that $K_S$, $\varphi(\cdot|S)$, $\theta_0$, $\Omega$ and $\tau$ were known. Then, by simulating from $M$, as defined in Theorem \ref{pro:normality}, the distribution of $\Lambda(\tau)$, defined in Corollary \ref{eq:avg}, could be approximated to arbitrary precision. To operationalize this procedure, substitute consistent estimators of $K_S$, $\theta_0$, and $\Omega$, e.g.\ those used to calculate FMSC. To estimate $\varphi(\cdot|S)$, we first need to derive the limit distribution of $\widehat{\omega}_S$, the data-based weights specified by the user. As an example, consider the case of moment selection based on the FMSC. Here $\widehat{\omega}_S$ is simply the indicator function
+\begin{equation}
+	\label{eq:FMSCindicate}
+	\widehat{\omega}_S = \mathbf{1}\left\{\mbox{FMSC}_n(S) = \min_{S'\in \mathcal{A}} \mbox{FMSC}_n(S')\right\}
+\end{equation}
+To estimate $\varphi(\cdot|S)$, we first substitute consistent estimators of $\Omega$, $K_S$ and $\theta_0$ into $\mbox{FMSC}(M|S)$, defined in Equation \ref{eq:FMSClimit}, yielding,
+\begin{equation}
+	\widehat{\mbox{FMSC}}(M|S) = \nabla_\theta\mu(\widehat{\theta})'\widehat{K}_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\widehat{\Psi} \left(MM' - \widehat{\Omega}\right)\widehat{\Psi}' \end{array}\right] + \Omega\right\}\Xi_S'\widehat{K}_S'\nabla_\theta\mu(\widehat{\theta}).
+\end{equation}
+Combining this with Equation \ref{eq:FMSCindicate},
+\begin{equation}
+\label{eq:omegahat}
+	\widehat{\varphi}(\cdot|S) = \mathbf{1}\left\{\widehat{\mbox{FMSC}}(\cdot|S) = \min_{S'\in \mathcal{A}} \widehat{\mbox{FMSC}}(\cdot|S')\right\}
+\end{equation}
+For GMM-AIC moment selection or selection based on a downward $J$-test, $\varphi(\cdot|S)$ may be estimated analogously, following  Theorem \ref{pro:jstat}. 
+
+Simulating from $M$, defined in Equation \ref{eq:M}, requires estimates of $\Omega$ and $\tau$. Recall that no consistent estimator of $\tau$ is available under local mis-specification; the estimator $\widehat{\tau}$ has a non-degenerate limit distribution (see Theorem \ref{cor:tautau}). Thus, simulation from a $\mathcal{N}_{p+q}((0', \widehat{\tau}')',\widehat{\Omega} )$ distribution may lead to erroneous results by failing to account for the uncertainty that enters through $\widehat{\tau}$. The solution is to use a two-stage procedure. First construct a  $100(1-\delta)\%$ confidence region $T(\widehat{\tau})$ for $\tau$ using Theorem \ref{cor:tautau}. Then simulate from the distribution of $\Lambda(\tau)$, defined in Corollary \ref{cor:momentavg}, for each $\tau \in T(\widehat{\tau})$. Taking the lower and upper bounds of the resulting intervals, centering and rescaling yields a conservative interval for $\widehat{\mu}$, as defined in defined in Equation \ref{eq:avg}. The precise algorithm is as follows.
+
+\begin{alg}[Simulation-based Confidence Interval for $\widehat{\mu}$]
+\label{alg:conf}
+\mbox{}
+\begin{enumerate}
+	\item For each $\tau \in T(\widehat{\tau})$ 
+		\begin{enumerate}[(i)]
+			\item Generate $M_j(\tau) \sim \mathcal{N}_{p+q}\left( (0', \tau')', \widehat{\Omega}  \right)$, $j = 1, 2, \hdots, B$ 
+			\item Set $\Lambda_j(\tau) = -\nabla_\theta\mu(\widehat{\theta})'\left[\sum_{S \in \mathcal{A}} \widehat{\varphi}(M_j(\tau)|S) \widehat{K}_S\Xi_S\right] M_j(\tau)$
+			\item Using $\{\Lambda_j(\tau)\}_{j=1}^B$, calculate $\widehat{a}(\tau)$, $\widehat{b}(\tau)$ such that
+		$$\p\left\{ \widehat{a}(\tau) \leq\Lambda(\tau)\leq \widehat{b}(\tau) \right\} = 1 - \alpha$$
+		\end{enumerate}
+	\item Set $\displaystyle \widehat{a}_{min}(\widehat{\tau})=\min_{\tau \in T(\widehat{\tau})} \widehat{a}(\tau)$ and $\displaystyle \widehat{b}_{max}(\widehat{\tau})= \max_{\tau \in T(\widehat{\tau})} \widehat{b}(\tau)$ \vspace{0.5em}
+	\item The confidence interval for $\mu$ is
+				$\displaystyle \mbox{CI}_{sim}=\left[ \widehat{\mu} - \frac{\widehat{b}_{max}(\widehat{\tau})}{\sqrt{n}}, \;\;\; \widehat{\mu} - \frac{\widehat{a}_{min}(\widehat{\tau})}{\sqrt{n}} \right]$
+\end{enumerate}
+\end{alg}
+
+\begin{thm}[Simulation-based Confidence Interval for $\widehat{\mu}$]
+\label{pro:sim}
+If
+\begin{enumerate}[(a)]
+	\item $\widehat{\Psi}$, $\widehat{\Omega}$, $\widehat{\theta}$ and $\widehat{K}_S$ are consistent estimators of $\Psi$, $\Omega$, $\theta_0$ and $K_S$;
+	\item $\widehat{\varphi}(M|S) = \varphi(M|S)+ o_p(1)$;
+	\item $\widehat{\Delta}(\widehat{\tau},\tau) = \left(\widehat{\tau} - \tau\right)' \left(\widehat{\Psi}\widehat{\Omega}\widehat{\Psi}'\right)^{-1} \left(\widehat{\tau} - \tau\right)$ and
+	\item $T(\widehat{\tau}) = \left\{\tau \colon  \Delta_n(\widehat{\tau},\tau) \leq \chi^2_q(\delta)\right\}$ where $\chi^2_q(\delta)$ denotes the $1-\delta$ quantile of a $\chi^2$ distribution with $q$ degrees of freedom
+\end{enumerate}
+then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asymptotic coverage probability no less than $1-(\alpha + \delta)$ as $B,n\rightarrow \infty$.
+\end{thm}
+
+To evaluate the performance of the procedure given in Algorithm \ref{alg:conf}, we revisit the simulation experiment described in Section \ref{sec:fmscsim}, considering FMSC moment selection. The following results are based on 10,000 replications, each with a sample size of 500. Table \ref{tab:FMSCconf} gives the empirical coverage probabilities of traditional 95\% confidence intervals post-FMSC selection. These are far below the nominal level over the vast majority of the parameter space. Table \ref{tab:FMSCcorrect} presents the empirical coverage of conservative 90\% confidence intervals constructed according to Algorithm \ref{alg:conf}, with $B=1000$.\footnote{Because this simulation is computationally intensive, I use a reduced grid of parameter values.} The two-stage simulation procedure performs remarkably well, achieving a minimum coverage probability of $0.89$ relative to its nominal level of $0.9$. Moreover, a na\"{i}ve one-step procedure that omits the first-stage and simply simulates from $M$ based on $\widehat{\tau}$ performs surprisingly well; see Table \ref{tab:FMSCnaive}. While the empirical coverage probabilities of the one-step procedure are generally lower than the nominal level of $0.95$, they represent a substantial improvement over the traditional intervals given in Table \ref{tab:FMSCconf}, with a worst-case coverage of $0.72$ compared to $0.15$. This suggests that the one-step intervals might be used as a rough but useful approximation to the correct but more computationally intensive intervals constructed according to Algorithm \ref{alg:conf}.
+
+% latex.default(cover.FMSC, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+ \begin{center}
+ \caption{Coverage post-FMSC moment selection (nominal 95\%).}
+\label{tab:FMSCconf}
+\small
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
+\multicolumn{1}{c|}{$N=500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&0.92&0.93&0.93&0.93&0.93&0.93&0.93&0.93&0.93\tabularnewline
+0.1&0.91&0.87&0.88&0.91&0.93&0.93&0.93&0.93&0.93\tabularnewline
+0.2&0.90&0.79&0.72&0.82&0.90&0.93&0.92&0.93&0.93\tabularnewline
+0.3&0.90&0.76&0.58&0.64&0.80&0.90&0.92&0.93&0.93\tabularnewline
+0.4&0.89&0.75&0.50&0.47&0.64&0.80&0.88&0.91&0.92\tabularnewline
+0.5&0.89&0.74&0.45&0.36&0.50&0.67&0.79&0.87&0.91\tabularnewline
+0.6&0.89&0.74&0.43&0.30&0.38&0.54&0.68&0.78&0.85\tabularnewline
+\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
+0.7&0.90&0.74&0.41&0.24&0.31&0.44&0.57&0.68&0.78\tabularnewline
+0.8&0.89&0.74&0.41&0.22&0.25&0.36&0.48&0.59&0.70\tabularnewline
+0.9&0.91&0.74&0.41&0.20&0.21&0.31&0.41&0.52&0.61\tabularnewline
+1.0&0.90&0.75&0.40&0.18&0.19&0.25&0.35&0.45&0.53\tabularnewline
+1.1&0.90&0.76&0.40&0.17&0.17&0.23&0.32&0.39&0.47\tabularnewline
+1.2&0.91&0.76&0.41&0.17&0.15&0.20&0.27&0.34&0.42\tabularnewline
+1.3&0.92&0.77&0.41&0.16&0.15&0.19&0.24&0.31&0.39\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+\footnotesize
+\begin{tablenotes}
+\item Values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
+\end{tablenotes}
+\end{table}
+
+
+
+% latex.default(conf.refined, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = FALSE) 
+%
+\begin{table}[!tbp]
+ \begin{center}
+\caption{Coverage of conservative two-step interval post-FMSC (nominal >90\%)}
+\label{tab:FMSCcorrect}
+\small
+ \begin{tabular}{r|rrrrr}\hline\hline
+&\multicolumn{5}{c}{$\rho = Cov(w,u)$}\\
+\multicolumn{1}{c|}{$N=500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.1}&\multicolumn{1}{c}{0.2}&\multicolumn{1}{c}{0.3}&\multicolumn{1}{c}{0.4}\tabularnewline
+\hline
+0.0&0.92&0.93&0.93&0.93&0.94\tabularnewline
+0.2&0.95&0.91&0.93&0.95&0.97\tabularnewline
+0.4&0.95&0.95&0.90&0.93&0.97\tabularnewline
+0.6&0.95&0.95&0.92&0.90&0.92\tabularnewline
+\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
+0.8&0.94&0.95&0.96&0.90&0.89\tabularnewline
+1.0&0.94&0.94&0.96&0.93&0.90\tabularnewline
+1.2&0.94&0.94&0.96&0.95&0.92\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+\footnotesize
+\begin{tablenotes}
+	\item Intervals are calculated using Algorithm \ref{alg:conf} with $B = 1000$. Simulations are generated from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
+\end{tablenotes}
+\end{table}
+
+
+% latex.default(conf.naive, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = FALSE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage of na\"{i}ve one-step interval post-FMSC (nominal 95\%)}
+\label{tab:FMSCnaive}
+\small
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
+\multicolumn{1}{c|}{$N=500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&0.93&0.92&0.93&0.93&0.93&0.93&0.93&0.93&0.94\tabularnewline
+0.1&0.93&0.91&0.91&0.92&0.92&0.92&0.93&0.94&0.95\tabularnewline
+0.2&0.94&0.91&0.86&0.87&0.92&0.93&0.94&0.95&0.96\tabularnewline
+0.3&0.95&0.94&0.87&0.81&0.85&0.91&0.94&0.96&0.96\tabularnewline
+0.4&0.95&0.95&0.91&0.82&0.77&0.84&0.90&0.94&0.95\tabularnewline
+0.5&0.95&0.95&0.93&0.86&0.76&0.76&0.82&0.88&0.92\tabularnewline
+0.6&0.94&0.94&0.94&0.90&0.80&0.74&0.75&0.81&0.87\tabularnewline
+\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
+0.7&0.94&0.94&0.95&0.93&0.85&0.74&0.73&0.75&0.81\tabularnewline
+0.8&0.94&0.94&0.95&0.94&0.88&0.79&0.73&0.73&0.76\tabularnewline
+0.9&0.95&0.94&0.94&0.94&0.91&0.83&0.76&0.72&0.73\tabularnewline
+1.0&0.95&0.94&0.94&0.94&0.92&0.86&0.78&0.73&0.73\tabularnewline
+1.1&0.95&0.94&0.94&0.95&0.94&0.89&0.81&0.76&0.73\tabularnewline
+1.2&0.95&0.94&0.94&0.95&0.94&0.90&0.85&0.79&0.75\tabularnewline
+1.3&0.95&0.94&0.94&0.95&0.95&0.92&0.87&0.81&0.78\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+\footnotesize
+	\begin{tablenotes}
+		\item Intervals are calculated by simulation with $B=1000$ using $\widehat{\tau}$ rather than constructing a confidence interval for $\tau$ (c.f.\ Algorithm \ref{alg:conf}). Simulations are generated from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
+	\end{tablenotes}
+\end{table}
+
+
+\subsection{Moment Averaging}
+%The moment average estimators of the previous section were derived primarily to provide valid confidence intervals post-moment selection, but in fact allow us to carry out inference for a wider class of estimators. 
+Viewed as a special case of Equation \ref{eq:avg}, moment selection is in fact a fairly crude procedure, giving full weight to the minimizer of the criterion no matter how close its nearest competitor lies. Under moment selection, when competing moment sets have similar criterion values in the population, random variation in the sample will be magnified in the selected estimator. Thus, it may be possible to achieve better performance by using smooth weights rather than discrete selection. %In this section, I briefly examine a proposal based on exponential weighting.
+
+In the context of maximum likelihood estimation, \cite{Burnhametal} suggest averaging the estimators resulting from a number of competing models using exponential weights of the form $w_k = \exp(-I_k/2)/\sum_{i=1}^K \exp(-I_i/2)$ where $I_k$ is an information criterion evaluated for model $k$, and $i$ indexes the set of $K$ candidate models. This expression, constructed by an analogy with Bayesian model averaging, gives more weight to models with lower values of the information criterion but non-zero weight to all models. Applying this idea to the moment selection criteria given above, consider
+	\begin{equation}	
+		\widehat{\omega}_S = \left.\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S)\right\}\right/\sum_{S' \in \mathcal{A}}\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S')\right\}
+		\label{eq:expweight}
+\end{equation}
+where MSC$(\cdot)$ is a moment selection criterion and the parameter $\kappa$ varies the uniformity of the weighting. As $\kappa \rightarrow 0$ the weights become more uniform; as $\kappa \rightarrow \infty$ they approach the moment selection procedure given by minimizing the corresponding criterion. Table \ref{tab:avg} compares moment averaging against moment selection by substituting FMSC, GMM-AIC, BIC and HQ into Equation \ref{eq:expweight} using the simulation experiment described in Section \ref{sec:fmscsim}. Calculations are based on 10,000 replications, each with a sample size of 500. For FMSC averaging $\kappa = 1/100$ to account for the fact that the FMSC is generally more variable than criteria based on the $J$-test. Weights for GMM-BIC, HQ, and AIC averaging set $\kappa = 1$. Both in terms of average and worst-case RMSE, moment selection is inferior to moment averaging. The only exception is worst-case RMSE for the FMSC. (Pointwise comparisons are available upon request.) If our goal is estimators with low RMSE, moment averaging may be preferable to moment selection. 
+
+
+% latex.default(RMSE.average.vs.select, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      append = TRUE) 
+%
+\begin{table}[!tbp]
+ \begin{center}
+\caption{Average and worst-case RMSE of moment averaging versus selection.}
+\label{tab:avg}
+\small
+ \begin{tabular}{lrr}\hline\hline
+\multicolumn{1}{l}{Average RMSE}&\multicolumn{1}{c}{Averaging}&\multicolumn{1}{c}{Selection}\tabularnewline
+\hline
+FMSC&0.24&0.26\tabularnewline
+GMM-BIC&0.26&0.29\tabularnewline
+GMM-HQ&0.26&0.29\tabularnewline
+GMM-AIC&0.26&0.28\tabularnewline
+\hline
+\multicolumn{1}{l}{Worst-Case RMSE}&\multicolumn{1}{c}{Averaging}&\multicolumn{1}{c}{Selection}\tabularnewline
+\hline
+FMSC&0.36&0.33\tabularnewline
+GMM-BIC&0.41&0.47\tabularnewline
+GMM-HQ&0.36&0.39\tabularnewline
+GMM-AIC&0.33&0.35\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+\footnotesize
+\begin{tablenotes}
+	\item  Averaging is based on $\kappa = 1/100$ for FMSC weights and $\kappa = 1$ for all other weights. Values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications at each combination of parameter values from Table \ref{tab:trueRMSE} and a sample size of $500$.
+\end{tablenotes}
+\end{table}
+
+
+
+
+
+\section{Empirical Example: Geography or Institutions?}
+\label{sec:application}
+\cite{Carstensen2006} address a controversial question from the development literature: does geography directly effect income after controlling for institutions? A number of well-known studies find little or no direct effect of geographic endowments. \cite{Acemoglu}, for example, find that countries nearer to the equator do not have lower incomes after controlling for institutions. \cite{Rodrik} report that geographic variables have only small direct effects on income, affecting development mainly through their influence on institutions. Similarly, \cite{Easterly} find no effect of ``tropics, germs and crops'' except through institutions. \cite{Sachs} responds directly to these three papers by showing that malaria transmission, a variable largely driven by ecological conditions, directly influences the level of per capita income, even after controlling for institutions. Because malaria transmission  is very likely endogenous, Sachs uses a measure of ``malaria ecology,'' constructed to be exogenous both to present economic conditions and public health interventions, as an instrument. \cite{Carstensen2006} address the robustness of Sachs's results using the following baseline regression for a sample of 45 countries:
+\begin{equation}
+	\mbox{ln\emph{gdpc}}_i = \beta_1 + \beta_2 \cdot \mbox{\emph{institutions}}_i + \beta_3 \cdot \mbox{\emph{malaria}}_i + \epsilon_i
+\end{equation}
+Treating both institutions and malaria transmission as endogenous, they consider a variety of measures of each and a number of instrument sets. In each case, they find large negative effects of malaria transmission, lending further support to Sach's conclusion. In this section, I expand on the instrument selection exercise given in Table 2 of \cite{Carstensen2006} using the FMSC and corrected confidence intervals described above. I consider two questions. First, based on the FMSC methodology, which instruments should we choose to produce the best estimate of $\beta_3$, the effect of malaria transmission on per capita income? Second, after correcting confidence intervals for instrument selection, do we still find evidence of large and negative effects of malaria transmission on income? All results given here are calculated by 2SLS using the formulas from Section \ref{sec:2sls} and the variables described in Table \ref{tab:desc}. In keeping with Table 2 of \cite{Carstensen2006}, I use ln\emph{gdpc} as the dependent variable and \emph{rule} and \emph{malfal} as measures of institutions and malaria transmission throughout. 
+
+
+\begin{table}[!tbp]
+\caption{Description of Variables}
+\small
+\label{tab:desc}
+\begin{center}
+\begin{tabular}{lll}
+\hline \hline
+Name& Description &\\
+\hline
+ln\emph{gdpc}&Real GDP/capita at PPP, 1995 International Dollars &Outcome\\
+\emph{rule}&Institutional quality (Average Governance Indicator)&Regressor\\
+\emph{malfal}&Fraction of population at risk of malaria transmission, 1994&Regressor\\
+ln\emph{mort}&Log settler mortality (per 1000 settlers), early 19th century&Baseline\\
+\emph{maleco}&Index of stability of malaria transmission&Baseline\\
+\emph{frost}&Prop.\ of land receiving at least 5 days of frost in winter&Climate\\
+\emph{humid}&Highest temp. in month with highest avg.\ afternoon humidity&Climate\\
+\emph{latitude}&Distance from equator (absolute value of latitude in degrees)&Climate \\
+\emph{eurfrac}&Fraction of pop.\ that speaks major West.\ European Language&Europe \\
+\emph{engfrac}&Fraction of pop.\ that speaks English&Europe\\
+\emph{coast}&Proportion of land area within 100km of sea coast&Openness\\
+\emph{trade}&Log Frankel-Romer predicted trade share&Openness\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+To apply the FMSC to the present example, we need a minimum of two valid instruments besides the constant term. Based on the arguments given in \cite{Acemoglu}, \cite{Carstensen2006} and \cite{Sachs}, I proceed under the assumption that ln\emph{mort} and \emph{maleco}, measures of early settler mortality and malaria ecology, are exogenous. Rather than selecting over every possible subset of instruments, I consider a number of instrument blocks defined in \cite{Carstensen2006}. The baseline block contains ln\emph{mort}, \emph{maleco} and a constant; the climate block contains \emph{frost}, \emph{humid}, and \emph{latitude}; the Europe block contains \emph{eurfrac} and \emph{engfrac}; and the openness block contains \emph{coast} and \emph{trade}. Full descriptions of these variables appear in Table \ref{tab:desc}. Table \ref{tab:fullresults} gives 2SLS results and traditional 95\% confidence intervals for all instrument sets considered here.
+
+% latex.default(Part1, file = "Output_Tables.tex", greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      append = FALSE) 
+%
+\begin{sidewaystable}[!tbp]
+\caption{2SLS Results for all Instrument Sets}
+\label{tab:fullresults}
+ \begin{center}
+ \begin{tabular}{lrrrrrrrrrrrr}\hline\hline
+&\multicolumn{2}{c}{1}&
+\multicolumn{2}{c}{2}&
+\multicolumn{2}{c}{3}&
+\multicolumn{2}{c}{4}&
+\multicolumn{2}{c}{5}&
+\multicolumn{2}{c}{6}\tabularnewline
+&\multicolumn{1}{c}{\emph{rule}}&\multicolumn{1}{c}{\emph{malfal}}&
+\multicolumn{1}{c}{\emph{rule}}&\multicolumn{1}{c}{\emph{malfal}}&
+\multicolumn{1}{c}{\emph{rule}}&\multicolumn{1}{c}{\emph{malfal}}&
+\multicolumn{1}{c}{\emph{rule}}&\multicolumn{1}{c}{\emph{malfal}}&
+\multicolumn{1}{c}{\emph{rule}}&\multicolumn{1}{c}{\emph{malfal}}&
+\multicolumn{1}{c}{\emph{rule}}&\multicolumn{1}{c}{\emph{malfal}}\tabularnewline
+\hline
+coeff.&0.89&-1.04&0.97&-0.90&0.81&-1.09&0.86&-1.14&0.93&-1.02&0.86&-0.98\tabularnewline
+SE&0.18& 0.30&0.16& 0.29&0.16& 0.29&0.16& 0.27&0.15& 0.26&0.14& 0.27\tabularnewline
+lower&0.53&-1.65&0.65&-1.48&0.49&-1.67&0.55&-1.69&0.63&-1.54&0.59&-1.53\tabularnewline
+upper&1.25&-0.43&1.30&-0.32&1.13&-0.51&1.18&-0.59&1.22&-0.49&1.14&-0.43\tabularnewline
+&\multicolumn{2}{c}{Baseline}&\multicolumn{2}{c}{Baseline}&\multicolumn{2}{c}{Baseline}&\multicolumn{2}{c}{Baseline}&\multicolumn{2}{c}{Baseline}&\multicolumn{2}{c}{Baseline}\tabularnewline
+&&&\multicolumn{2}{c}{Climate}&&&&&\multicolumn{2}{c}{Climate}&\multicolumn{2}{c}{Climate}\tabularnewline
+&&&&&\multicolumn{2}{c}{Openness}&&&&&\multicolumn{2}{c}{Openness}\tabularnewline
+&&&&&&&\multicolumn{2}{c}{Europe}&\multicolumn{2}{c}{Europe}&&\tabularnewline
+\hline
+\\ \\
+\hline\hline
+&\multicolumn{2}{c}{7}&
+\multicolumn{2}{c}{8}&
+\multicolumn{2}{c}{9}&
+\multicolumn{2}{c}{10}&
+\multicolumn{2}{c}{11}&
+\multicolumn{2}{c}{12}\tabularnewline
+&\multicolumn{1}{c}{\emph{rule}}&\multicolumn{1}{c}{\emph{malfal}}&
+\multicolumn{1}{c}{\emph{rule}}&\multicolumn{1}{c}{\emph{malfal}}&
+\multicolumn{1}{c}{\emph{rule}}&\multicolumn{1}{c}{\emph{malfal}}&
+\multicolumn{1}{c}{\emph{rule}}&\multicolumn{1}{c}{\emph{malfal}}&
+\multicolumn{1}{c}{\emph{rule}}&\multicolumn{1}{c}{\emph{malfal}}&
+\multicolumn{1}{c}{\emph{rule}}&\multicolumn{1}{c}{\emph{malfal}}\tabularnewline
+\hline
+coeff.&0.81&-1.16&0.84&-1.08&0.93&-0.93&1.02&-0.85&1.02&-0.86&0.88&-1.00\tabularnewline
+SE&0.15& 0.27&0.13& 0.25&0.16& 0.23&0.15& 0.27&0.15& 0.23&0.12& 0.21\tabularnewline
+lower&0.51&-1.70&0.57&-1.58&0.61&-1.39&0.71&-1.39&0.72&-1.32&0.63&-1.42\tabularnewline
+upper&1.11&-0.62&1.10&-0.58&1.26&-0.46&1.33&-0.30&1.32&-0.40&1.12&-0.57\tabularnewline
+&\multicolumn{2}{c}{Baseline}&\multicolumn{2}{c}{Baseline}&\multicolumn{2}{c}{Baseline}&\multicolumn{2}{c}{Baseline}&\multicolumn{2}{c}{Baseline}&\multicolumn{2}{c}{Baseline}\tabularnewline
+&&&\multicolumn{2}{c}{Climate}&&&&&&&\multicolumn{2}{c}{Climate}\tabularnewline
+&\multicolumn{2}{c}{Openness}&\multicolumn{2}{c}{Openness}&& &&&&&\multicolumn{2}{c}{Openness}\tabularnewline
+&\multicolumn{2}{c}{Europe}&\multicolumn{2}{c}{Europe}&& &&&&&\multicolumn{2}{c}{Europe}\tabularnewline
+&&&&&\multicolumn{2}{c}{\emph{malfal}$^2$}&& &\multicolumn{2}{c}{\emph{malfal}$^2$}&\multicolumn{2}{c}{\emph{malfal}$^2$}\tabularnewline
+&&&&&&&\multicolumn{2}{c}{\emph{rule}$^2$}&\multicolumn{2}{c}{\emph{rule}$^2$}&\multicolumn{2}{c}{\emph{rule}$^2$}\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{sidewaystable}
+
+
+Table \ref{tab:replicate} presents FMSC results for instrument sets 1--8  as defined in Table \ref{tab:fullresults}. Results are presented for two cases: the first takes the effect of \emph{malfal}, a measure of malaria transmission, as the target parameter while the second uses the effect of \emph{rule}, a measure of institutions. In each case, the FMSC selects instrument set 8: the full instrument set containing the baseline, climate, Europe and openness blocks. The rankings, however, differ depending on the target parameter.  When the target is \emph{rule} instrument sets 8 and 5 are virtually identical in terms of FMSC: 0.26 versus 0.23. In Table 2 of their paper, \cite{Carstensen2006} report GMM-BIC and HQ results for selection over instrument sets 2--4 and 8 that also favor instrument set 8. However, the authors do not consider instrument sets 5--7. Although the FMSC also selects instrument set 8, the FMSC values of instrument set 5 are small enough to suggest that including the openness block does little to reduce MSE.
+
+The bottom panel of Table \ref{tab:replicate} presents a number of alternative 95\% confidence intervals for the effects of \emph{malfal} and \emph{rule}, respectively. The first row gives the traditional asymptotic confidence interval from Table \ref{tab:fullresults}, while the following three give simulation-based intervals accounting for the effects of instrument selection. I do not present intervals for the conservative procedure given in Algorithm \ref{alg:conf} because the results in this example are so insensitive to the value of $\tau$ that the minimization and maximization problems given in Step 2 of the Algorithm are badly behaved. To illustrate this, I instead present intervals that use the same simulation procedure as Algorithm \ref{alg:conf} but treat $\tau$ as fixed. I consider four possible values of the bias parameter. When $\tau = \widehat{\tau}$, we have the one-step corrected interval considered in Table \ref{tab:FMSCnaive}. When $\tau = 0$, we have an interval that assumes all instruments are valid. The remaining two values $\widehat{\tau}_{min}$ and $\widehat{\tau}_{max}$ correspond to the lower and upper bounds of \emph{elementwise} 95\% confidence intervals for $\tau$ based on the distributional result given in Theorem \ref{pro:tau}. These result in a region with greater than 95\% coverage for $\tau$ considered jointly. Corrected 95\% intervals for the effect of \emph{malfal} are similar regardless of the value of $\tau$ used in the simulation, and the same is true for \emph{rule}. We find no evidence that accounting for the effects of instrument selection changes our conclusions about the sign or significance of \emph{malfal} or \emph{rule}.
+
+\begin{table}[htbp]
+\caption{FMSC values and confidence intervals for instrument sets 1--8.}
+\label{tab:replicate}
+\small
+ \begin{center}
+ \begin{tabular}{lcccc}\hline\hline
+ & \multicolumn{2}{c}{$\mu=$\emph{malfal}}& \multicolumn{2}{c}{$\mu=$\emph{rule}}\\
+&\multicolumn{1}{c}{FMSC}&\multicolumn{1}{c}{$\widehat{\mu}$}&\multicolumn{1}{c}{FMSC}&\multicolumn{1}{c}{$\widehat{\mu}$}\tabularnewline
+\hline
+Valid (1)&3.03&-1.04&1.27&0.89\tabularnewline
+Climate (2)&2.67&-0.90&0.92&0.97\tabularnewline   
+Openness (3)&2.31&-1.09&1.23&0.81\tabularnewline  
+Europe (4)&1.83&-1.14&0.55&0.86\tabularnewline
+Openness, Europe (7)&1.72&-1.16&0.77&0.81\tabularnewline  
+Climate, Openness (6)&1.65&-0.98&0.43&0.86\tabularnewline
+Climate, Europe (5)&0.71&-1.02&0.26&0.93\tabularnewline
+Full (8)&0.53&-1.08&0.23&0.84\tabularnewline
+\hline 
+Traditional&\multicolumn{2}{c}{(-1.58, -0.58)}&\multicolumn{2}{c}{(0.57, 1.10)}\\
+$\tau = \widehat{\tau}$&\multicolumn{2}{c}{(-1.54, -0.61)}&\multicolumn{2}{c}{(0.55, 1.13)}\\
+$\tau = 0$&\multicolumn{2}{c}{(-1.53, -0.64)}&\multicolumn{2}{c}{(0.55, 1.12)}\\
+$\tau = \widehat{\tau}_{max}$&\multicolumn{2}{c}{(-1.51, -0.55)}&\multicolumn{2}{c}{(0.55, 1.17)}\\
+$\tau = \widehat{\tau}_{min}$&\multicolumn{2}{c}{(-1.61, -0.58)}&\multicolumn{2}{c}{(0.49, 1.15)}\\
+\hline
+
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
+FMSC is designed to include invalid instruments when doing so will reduce AMSE. Table \ref{tab:endog} considers adding two almost certainly invalid instruments to the baseline instrument set: \emph{rule}$^2$ and \emph{malfal}$^2$. Because they are constructed from the endogenous regressors, these instruments are likely to be highly relevant. Unless the effect of institutions and malaria transmission on GDP per capita is exactly linear, however, they are invalid. When the target is \emph{malfal}, we see that the FMSC selects an instrument set including \emph{malfal}$^2$ and the baseline instruments. FMSC is negative in this case. Although it provides an asymptotically unbiased estimator of AMSE, the FMSC may be negative because it subtracts $\widehat{\Psi}\widehat{\Omega}\widehat{\Psi}'$ from $\widehat{\tau}\widehat{\tau}'$ to estimate squared bias. When the target is \emph{rule}, FMSC chooses the full instrument set, including the baseline instruments along with \emph{rule}$^2$ and \emph{malfal}$^2$. While these instruments are likely invalid, FMSC chooses to include them because its estimate of the bias they induce is small compared to the reduction in variance they provide. Table \ref{tab:all} further expands the instrument sets under consideration to include 1--4 and 9--12. In this case, the FMSC chooses instrument set 12 for both target parameters. However, we see from the FMSC rankings that most of the reduction in MSE achieved by instrument set 12 comes from the inclusion of the squared endogenous regressors in the instrument set. Turning our attention to the confidence intervals in Tables \ref{tab:endog} and \ref{tab:all}, we again see that the simulation-based intervals are extremely insensitive to the value of $\tau$ used. Again, the sign and significance of \emph{malfal} and \emph{rule} is insensitive to the effects of instrument selection. These results lend support to the view of \cite{Carstensen2006} and \cite{Sachs} that malaria transmission has a direct effect on development.
+
+\begin{table}[htbp]
+\caption{FMSC values and confidence intervals for instrument sets 1 and 9--11}
+\label{tab:endog}
+\small
+\centering
+ \begin{tabular}{lrrrr}\hline\hline
+ & \multicolumn{2}{c}{$\mu=$\emph{malfal}}& \multicolumn{2}{c}{$\mu=$\emph{rule}}\\
+&\multicolumn{1}{c}{FMSC}&\multicolumn{1}{c}{$\widehat{\mu}$}&\multicolumn{1}{c}{FMSC}&\multicolumn{1}{c}{$\widehat{\mu}$}\tabularnewline
+\hline
+Valid (1)& 3.03&-1.04& 1.27&0.89\tabularnewline
+\emph{rule}$^2$ (10)& 2.05&-0.84& 0.28&1.02\tabularnewline
+Full (11)&-0.20&-0.85& -0.06&1.02\tabularnewline
+\emph{malfal}$^2$ (9)&-0.41&-0.92&0.18&0.93\tabularnewline
+\hline
+Traditional&\multicolumn{2}{r}{(-1.39, -0.46)}&\multicolumn{2}{r}{(0.72, 1.32)}\\
+$\tau = \widehat{\tau}$&\multicolumn{2}{r}{(-1.49, -0.38)}&\multicolumn{2}{r}{(0.68, 1.36)}\\
+$\tau = 0$&\multicolumn{2}{r}{(-1.46, -0.38)}&\multicolumn{2}{r}{(0.71, 1.32)}\\
+$\tau = \widehat{\tau}_{max}$&\multicolumn{2}{r}{(-1.51, -0.38)}&\multicolumn{2}{r}{(0.66, 1.37)}\\
+$\tau = \widehat{\tau}_{min}$&\multicolumn{2}{r}{(-1.49, -0.38)}&\multicolumn{2}{r}{(0.71, 1.35)}\\
+\hline
+\end{tabular}
+
+
+\footnotesize
+\end{table}
+
+
+
+
+
+
+\begin{table}[htbp]
+\caption{FMSC values and confidence intervals for instrument sets 1--4 and 9--12}
+\label{tab:all}
+\small
+\centering
+ \begin{tabular}{lcccc}\hline\hline
+ & \multicolumn{2}{c}{$\mu=$\emph{malfal}}& \multicolumn{2}{c}{$\mu=$\emph{rule}}\\
+&\multicolumn{1}{c}{FMSC}&\multicolumn{1}{c}{$\widehat{\mu}$}&\multicolumn{1}{c}{FMSC}&\multicolumn{1}{c}{$\widehat{\mu}$}\tabularnewline
+\hline
+Valid (1)& 3.03&-1.04& 1.27&0.89\tabularnewline
+Climate (2)& 2.85&-0.90& 0.95&0.97\tabularnewline
+Openness (3)& 2.51&-1.09& 1.26&0.81\tabularnewline
+Europe (4)& 1.94&-1.14& 0.58&0.86\tabularnewline
+\emph{rule}$^2$ (10)& 1.88&-0.84& 0.25&1.02\tabularnewline
+\emph{malfal}$^2$, \emph{rule}$^2$ (11)& 0.06&-0.85&-0.03&1.02\tabularnewline
+\emph{malfal}$^2$ (9)&-0.20&-0.92& 0.15&0.93\tabularnewline
+Full (12)&-1.38&-1.00&-0.61&0.88\tabularnewline
+\hline
+Traditional&\multicolumn{2}{c}{(-1.42, -0.57)}&\multicolumn{2}{c}{(0.63, 1.12)}\\
+$\tau = \widehat{\tau}$&\multicolumn{2}{c}{(-1.51, -0.51)}&\multicolumn{2}{c}{(0.57, 1.17)}\\
+$\tau = 0$&\multicolumn{2}{c}{(-1.48, -0.52)}&\multicolumn{2}{c}{(0.60, 1.15)}\\
+$\tau = \widehat{\tau}_{max}$&\multicolumn{2}{c}{(-1.50, -0.50)}&\multicolumn{2}{c}{(0.55, 1.17)}\\
+$\tau = \widehat{\tau}_{min}$&\multicolumn{2}{c}{(-1.50, -0.49)}&\multicolumn{2}{c}{(0.59, 1.18)}\\
+\hline
+\end{tabular}
+
+
+\footnotesize
+\end{table}
+
+
+
+
+
+\section{Conclusion}
+\label{sec:conclude}
+This paper has introduced the FMSC, a proposal to choose moment conditions using AMSE. The criterion performs well in simulations, and the framework used to derive it allows us to construct valid confidence intervals for moment average and post-selection estimators.  While I focus here on an cross-section application, the FMSC could prove useful in any context in which moment conditions arise from more than one source. In a panel model, for example, the assumption of contemporaneously exogenous instruments may be plausible while that of predetermined instruments is more dubious. Using the FMSC, we could assess whether the extra information contained in the lagged instruments outweighs their potential invalidity. In a macro model, measurement error could be present in the intra--Euler equation but not the \emph{inter}--Euler equation, as considered by \cite{Eichenbaum}. The FMSC could be used to select over the intra-Euler moment conditions.
+
+
+
+
+\bibliographystyle{elsarticle-harv}
+
+
+\bibliography{fmsc_refs}
+
+
+\appendix
+
+%--------------------------------------------------------------------------%
+%--------------------APPENDIX: PROOFS-------------------------%
+%--------------------------------------------------------------------------%
+
+
+\section{Proofs}
+
+
+
+\begin{proof}[Proof of Theorems \ref{pro:consist},\ref{pro:normality}]
+Essentially identical to the proofs of \cite{NeweyMcFadden1994} Theorems 2.6 and 3.1.
+\end{proof}
+
+
+
+\begin{proof}[Proof of Theorem \ref{pro:tau}]
+By a mean-value expansion:
+	\begin{eqnarray*}
+	\widehat{\tau} &=& \sqrt{n} h_n\left(\widehat{\theta}_{valid}\right) = \sqrt{n}h_n(\theta_0) + H \sqrt{n}\left(\widehat{\theta}_{valid} - \theta_0\right) + o_p(1)\\
+		&=&-HK_{v} \sqrt{n}f_n(\theta_0) + \mathbf{I}_q\sqrt{n}h_n(\theta_0) +o_p(1)\\
+		&=& \Psi \sqrt{n}f_n(\theta_0) + o_p(1) \rightarrow_d\Psi M
+\end{eqnarray*}
+Multiplying through, $\expect\left[\Psi M\right] = \tau$ and $Var\left[\Psi M\right] = \Psi \Omega \Psi'$.
+\end{proof}
+
+
+
+
+\begin{proof}[Proof of Corollary \ref{cor:tautau}]
+By Theorem \ref{pro:tau} and the Continuous Mapping Theorem, 	$\widehat{\tau}\widehat{\tau}' \rightarrow_d\Psi MM'\Psi'$. Since $ Var[\Psi M] = \expect[\Psi MM' \Psi'] - \tau \tau'$, we have
+$\expect[\Psi MM' \Psi']  =\Psi \Omega \Psi'  + \tau \tau'$. 
+\end{proof}
+
+
+
+\begin{proof}[Proof of Corollary \ref{cor:momentavg}]
+Because the weights sum to one
+		$$\sqrt{n}\left(\widehat{\mu} - \mu_0\right) = \sqrt{n} \left[\left(\sum_{S \in \mathcal{A}} \widehat{\omega}_S \widehat{\mu}_S\right) - \mu_0\right]= \sum_{S \in \mathcal{A}}\left[ \widehat{\omega}_S \sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\right].$$
+By Corollary \ref{cor:target}, $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S M_S$ and by assumption $\widehat{\omega}_S \rightarrow_d\varphi(M|S)$ for each $S\in \mathcal{A}$, where $\varphi(M|S)$ is a function of $M$ and constants only. Hence $\widehat{\omega}_S$ and $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)$ converge jointly in distribution to their respective functions of $M$, for all $S \in \mathcal{A}$. The result follows by application of the Continuous Mapping Theorem.
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{pro:jstat}]
+By a mean-value expansion,
+	$$\sqrt{n}\left[\Xi_S f_n(\theta)\right]  = \sqrt{n}\left[\Xi_S f_n(\theta_0)\right] + F_S  \sqrt{n}\left(\widehat{\theta}_S - \theta_0\right) + o_p(1).$$
+Since $\sqrt{n}\left(\widehat{\theta}_S - \theta_0\right) \rightarrow_p -\left(F_S' W_S F_S  \right)^{-1}F_S'W_S\sqrt{n}\left[\Xi_S f_n(\theta_0)\right]$, we have
+	$$\sqrt{n}\left[\Xi_S f_n(\widehat{\theta}_S)\right] = \left[I - F_S\left(F_S' W_S F_S  \right)^{-1}F_S'W_S\right] \sqrt{n}\left[\Xi_S f_n(\theta_0)\right] + o_p(1).$$
+By Assumption \ref{assump:highlevel} (viii), $\sqrt{n}\left[\Xi_S f_n(\theta_0)\right] \rightarrow_dM_S$. Thus, for estimation using the efficient weighting matrix $\widehat{\Omega}^{-1/2}_S \sqrt{n}\left[\Xi_S f_n(\theta_0)\right] \rightarrow_d\left[I - P_S\right] \Omega_S^{-1/2}M_S$ where $\widehat{\Omega}^{-1/2}_S$ is a consistent estimator of $\Omega_S^{-1/2}$ and $P_S$ is the projection matrix based on $\Omega^{-1/2}_S F_S$, the identifying restrictions.\footnote{See \cite{Hallbook}, Chapter 3.} Combining and rearranging, we have $J_n(S)  \rightarrow_{d}\left(\Omega_S^{-1/2}M_S\right)' \left(I - P_S\right)\left(\Omega_S^{-1/2}M_S\right)$.
+\end{proof}
+
+
+
+\begin{proof}[Proof of Theorem \ref{pro:andrews}]
+Let $S_1$ and $S_2$ be arbitrary moment sets in $\mathcal{A}$ and let $|S|$ denote the cardinality of $S$. Further, define $\Delta_n(S_1, S_2) = MSC(S_1) - MSC(S_2)$. By Theorem \ref{pro:jstat}, $J_n(S) = O_p(1)$, $S \in \mathcal{A}$, thus
+	\begin{eqnarray*}
+			\Delta_n(S_1, S_2)	&=&   \left[J_{n}(S_1) - J_{n}(S_2)\right] - \left[h\left(p+|S_1|\right) - h\left(p+|S_2|\right)\right]\kappa_n\\
+				&=& O_p(1) - C\kappa_n
+	\end{eqnarray*}
+where $C = \left[h\left(p+|S_1|\right) - h\left(p+|S_2|\right)\right]$. Since $h$ is strictly increasing, $C$ is positive for $|S_1|>|S_2|$, negative for $|S_1|<|S_2|$, and zero for $|S_1|=|S_2|$. Hence:
+	\begin{eqnarray*}
+		|S_1|>|S_2|&\implies& \Delta_n(S_1, S_2)  \rightarrow -\infty\\
+		|S_1|=|S_2|&\implies&\Delta_n(S_1, S_2)  = O_p(1)\\
+		|S_1|<|S_2|&\implies& \Delta_n(S_1, S_2)  \rightarrow \infty
+\end{eqnarray*}
+The result follows because $|S_{full}|>|S|$ for any $S \neq S_{full}$.
+\end{proof}
+
+
+\begin{proof}[Proof of Theorem \ref{pro:sim}]
+Rearranging,
+	\begin{eqnarray*}	
+		\p\left\{\mu_{true} \in \mbox{CI}_{sim} \right\} %&=& \p\left\{ \widehat{\mu} - \widehat{b}_0(\widehat{\tau})/\sqrt{n}\leq \mu_{true}\leq \widehat{\mu} - \widehat{a}_0(\widehat{\tau})/\sqrt{n} \right\}\\
+		&=& \p\left\{\widehat{a}_0(\widehat{\tau}) \leq  \sqrt{n}\left(\widehat{\mu} - \mu_{true}\right) \leq \widehat{b}_0(\widehat{\tau}) \right\}
+\end{eqnarray*}
+By Theorem \ref{pro:tau} and Corollary \ref{cor:momentavg}, we have \emph{joint} convergence in distribution of $\sqrt{n}(\hat{\mu} - \mu_{true})$ to $\Lambda(\tau)$, $\widehat{\Delta}(\widehat{\tau},\tau)$ to $\Delta(\Psi M,\tau)$, $\widehat{a}_{min}(\widehat{\tau})$ to $a_{min}(\Psi M)$ and $\widehat{b}_{max}(\widehat{\tau})$ to $b_{max}(\Psi M)$ where
+$a_{min}(\Psi M)=\min \left\{a(\tau)\colon \tau \in T(\delta)\right\}$, $b_{max}(\Psi M)=\max \left\{b(\tau)\colon \tau \in T(\delta)\right\}$, $T(\delta) = \left\{\tau \colon  \Delta(\Psi M, \tau) \leq \chi^2_q(\delta) \right\}$ and $\Delta(\Psi M, \tau)=\left(\Psi M - \tau \right)'\left(\Psi \Omega \Psi'\right)^{-1}\left(\Psi M - \tau \right)$.
+By the Continuous Mapping Theorem,
+	$$\p\left[  \widehat{a}_{min}(\widehat{\tau}) \leq \sqrt{n}\left( \widehat{\mu}-\mu_{true}\right)\leq  \widehat{b}_{max}(\widehat{\tau}) \right] \rightarrow\p \left[ a_{min}(\Psi M) \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right]$$
+so it suffices to show that $\p \left[ a_{min}(\Psi M) \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right]\geq 1 - (\alpha + \delta).$
+Define the event $A = \left\{ \Delta(\Psi M, \tau) \leq \chi^2_q(\delta) \right\}$, so that $\p(A) = 1-\delta$. Then,
+	\begin{eqnarray*}
+		1-\alpha %&=& \p\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\\
+			&=& \p\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \right] + \p\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A^c \right] 
+\end{eqnarray*}
+Now, $\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A$ is a subset of $\left\{a_0(\Psi M)  \leq \Lambda(\tau) \leq b_0(\Psi M)\right\}$ and  $\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A^c$ is a subset of $A^c$. Thus, 
+\begin{eqnarray*}
+\p\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \right]  &\leq& \p \left\{a_{min}(\Psi M)  \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right\}\\
+\p\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A^c \right]  &\leq& \p(A^c) = \delta.
+\end{eqnarray*}
+Combining these, the result follows.
+\end{proof}
+
+
+
+
+
+\end{document}
+

@@ -1,0 +1,368 @@
+\documentclass[12pt]{article}
+
+\usepackage[left = 1in, right = 1in, top = 1in, bottom = 1in]{geometry}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\headheight 35pt 
+
+\rhead{Correct Decision Rates (\%)}
+\lhead{Simulation Results: $N=50$}
+
+
+\begin{document}
+
+
+
+
+
+% latex.default(correct.FMSC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(FMSC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&77&75&71&62&54&56&65&73&78\tabularnewline
+0.1&78&79&77&71&63&47&57&67&74\tabularnewline
+0.2&79&82&83&80&74&35&45&57&66\tabularnewline
+0.3&80&84&87&86&82&76&34&56&54\tabularnewline
+0.4&79&85&88&89&87&82&76&67&42\tabularnewline
+0.5&80&85&88&89&89&86&81&75&33\tabularnewline
+0.6&80&85&88&89&90&88&84&81&74\tabularnewline
+0.7&81&85&87&90&90&89&86&83&77\tabularnewline
+0.8&82&85&87&90&90&89&88&84&81\tabularnewline
+0.9&83&85&88&89&90&90&89&86&82\tabularnewline
+1.0&83&86&88&90&91&91&89&87&83\tabularnewline
+1.1&84&86&89&90&90&91&89&88&85\tabularnewline
+1.2&85&87&89&90&91&91&90&88&85\tabularnewline
+1.3&85&88&90&90&91&90&90&89&86\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.BIC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(BIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&92&91&88&81&73&37&45&55&63\tabularnewline
+0.1&91&91&89&85&79&30&40&49&56\tabularnewline
+0.2&90&91&90&88&84&22&30&39&45\tabularnewline
+0.3&88&89&89&88&86&82&24&70&35\tabularnewline
+0.4&87&88&89&89&87&85&81&77&27\tabularnewline
+0.5&87&88&88&88&86&85&83&81&23\tabularnewline
+0.6&86&87&88&87&87&86&84&83&80\tabularnewline
+0.7&86&87&87&88&87&86&85&84&82\tabularnewline
+0.8&86&87&87&87&87&86&85&84&83\tabularnewline
+0.9&86&86&87&87&86&86&85&85&83\tabularnewline
+1.0&85&86&87&86&87&86&86&85&84\tabularnewline
+1.1&87&87&87&86&87&87&86&86&84\tabularnewline
+1.2&86&87&86&86&86&86&86&86&85\tabularnewline
+1.3&86&87&87&87&86&86&85&85&85\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.AIC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(AIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&78&77&71&63&53&57&65&72&77\tabularnewline
+0.1&77&77&74&67&60&50&60&68&73\tabularnewline
+0.2&74&76&74&71&65&42&52&59&65\tabularnewline
+0.3&72&74&74&72&68&63&43&51&55\tabularnewline
+0.4&70&72&73&73&70&66&62&57&47\tabularnewline
+0.5&70&72&72&71&69&68&65&62&42\tabularnewline
+0.6&70&71&71&70&70&68&66&65&61\tabularnewline
+0.7&70&70&70&71&70&68&67&65&62\tabularnewline
+0.8&69&70&70&70&70&68&67&66&65\tabularnewline
+0.9&69&70&69&70&69&69&68&67&65\tabularnewline
+1.0&69&69&70&69&69&68&68&67&65\tabularnewline
+1.1&70&69&70&68&68&69&68&68&66\tabularnewline
+1.2&69&69&69&68&69&69&68&67&66\tabularnewline
+1.3&67&69&69&69&68&68&67&68&66\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.HQ, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(HQ)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&86&84&80&72&62&49&57&65&71\tabularnewline
+0.1&84&85&82&76&69&41&51&60&66\tabularnewline
+0.2&82&84&82&79&74&33&42&50&57\tabularnewline
+0.3&80&82&82&81&77&72&34&59&46\tabularnewline
+0.4&78&80&81&81&79&75&71&67&38\tabularnewline
+0.5&79&80&80&80&77&76&73&71&33\tabularnewline
+0.6&78&79&80&79&79&77&74&73&70\tabularnewline
+0.7&78&78&79&79&78&77&76&74&71\tabularnewline
+0.8&78&78&78&78&78&77&76&75&73\tabularnewline
+0.9&78&78&78&78&78&77&77&75&74\tabularnewline
+1.0&77&77&78&78&78&77&76&76&74\tabularnewline
+1.1&78&78&78&77&77&78&77&76&75\tabularnewline
+1.2&77&78&77&78&78&78&77&76&75\tabularnewline
+1.3&76&78&78&77&77&77&77&77&75\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.CC.BIC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(CC-BIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&  6&  6&  6&  6&  6& 94& 94& 95& 94\tabularnewline
+0.1& 12& 12& 11& 12& 12& 88& 89& 88& 88\tabularnewline
+0.2& 29& 30& 29& 30& 29& 70& 70& 72& 71\tabularnewline
+0.3& 55& 54& 54& 54& 55& 55& 46& 54& 46\tabularnewline
+0.4& 78& 77& 77& 78& 77& 78& 77& 78& 22\tabularnewline
+0.5& 91& 92& 92& 92& 91& 92& 92& 91&  9\tabularnewline
+0.6& 98& 98& 98& 98& 98& 98& 98& 98& 97\tabularnewline
+0.7& 99& 99&100& 99& 99& 99& 99& 99& 99\tabularnewline
+0.8&100&100&100&100&100&100&100&100&100\tabularnewline
+0.9&100&100&100&100&100&100&100&100&100\tabularnewline
+1.0&100&100&100&100&100&100&100&100&100\tabularnewline
+1.1&100&100&100&100&100&100&100&100&100\tabularnewline
+1.2&100&100&100&100&100&100&100&100&100\tabularnewline
+1.3&100&100&100&100&100&100&100&100&100\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.CC.AIC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(CC-AIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0& 18& 18& 18& 18& 17& 82& 82& 83& 81\tabularnewline
+0.1& 28& 27& 26& 27& 28& 73& 73& 72& 72\tabularnewline
+0.2& 50& 51& 50& 51& 50& 49& 50& 51& 50\tabularnewline
+0.3& 74& 74& 75& 74& 75& 75& 26& 75& 25\tabularnewline
+0.4& 90& 90& 90& 91& 90& 90& 90& 91& 10\tabularnewline
+0.5& 97& 97& 97& 97& 97& 97& 98& 97&  3\tabularnewline
+0.6& 99& 99& 99& 99& 99&100& 99& 99& 99\tabularnewline
+0.7&100&100&100&100&100&100&100&100&100\tabularnewline
+0.8&100&100&100&100&100&100&100&100&100\tabularnewline
+0.9&100&100&100&100&100&100&100&100&100\tabularnewline
+1.0&100&100&100&100&100&100&100&100&100\tabularnewline
+1.1&100&100&100&100&100&100&100&100&100\tabularnewline
+1.2&100&100&100&100&100&100&100&100&100\tabularnewline
+1.3&100&100&100&100&100&100&100&100&100\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.CC.HQ, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(CC-HQ)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0& 11& 11& 12& 11& 11& 88& 88& 88& 88\tabularnewline
+0.1& 20& 19& 19& 20& 20& 81& 81& 80& 81\tabularnewline
+0.2& 41& 42& 41& 42& 41& 59& 59& 60& 59\tabularnewline
+0.3& 66& 66& 67& 67& 67& 67& 34& 66& 33\tabularnewline
+0.4& 86& 85& 85& 86& 86& 86& 85& 86& 14\tabularnewline
+0.5& 95& 95& 95& 95& 95& 95& 96& 95&  5\tabularnewline
+0.6& 99& 99& 99& 99& 99& 99& 99& 99& 99\tabularnewline
+0.7&100&100&100&100&100&100&100&100&100\tabularnewline
+0.8&100&100&100&100&100&100&100&100&100\tabularnewline
+0.9&100&100&100&100&100&100&100&100&100\tabularnewline
+1.0&100&100&100&100&100&100&100&100&100\tabularnewline
+1.1&100&100&100&100&100&100&100&100&100\tabularnewline
+1.2&100&100&100&100&100&100&100&100&100\tabularnewline
+1.3&100&100&100&100&100&100&100&100&100\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.J.90, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(J 90)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&88&88&84&80&74&35&43&52&59\tabularnewline
+0.1&87&88&85&83&78&29&38&46&52\tabularnewline
+0.2&86&87&87&85&81&23&29&37&43\tabularnewline
+0.3&86&87&86&85&84&81&23&71&33\tabularnewline
+0.4&85&86&86&86&85&83&80&77&26\tabularnewline
+0.5&85&86&86&85&84&84&82&80&22\tabularnewline
+0.6&85&86&86&85&85&85&83&82&80\tabularnewline
+0.7&85&85&85&86&86&85&84&82&81\tabularnewline
+0.8&86&85&86&86&85&84&84&84&82\tabularnewline
+0.9&85&85&86&86&85&84&84&84&83\tabularnewline
+1.0&85&86&86&86&85&85&85&84&83\tabularnewline
+1.1&85&86&86&85&85&85&85&84&83\tabularnewline
+1.2&85&86&85&85&86&85&85&85&84\tabularnewline
+1.3&85&86&85&86&85&85&84&85&84\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.J.95, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(J 95)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&93&93&91&88&83&24&31&40&49\tabularnewline
+0.1&93&94&92&90&86&19&26&34&41\tabularnewline
+0.2&92&93&93&92&89&14&19&26&31\tabularnewline
+0.3&92&93&93&92&91&89&15&81&22\tabularnewline
+0.4&91&92&93&92&92&90&88&86&17\tabularnewline
+0.5&92&92&92&92&91&91&90&88&14\tabularnewline
+0.6&91&92&92&92&92&92&90&90&88\tabularnewline
+0.7&92&92&92&92&92&91&91&90&89\tabularnewline
+0.8&92&92&92&92&92&92&91&91&90\tabularnewline
+0.9&92&92&92&92&92&91&91&91&90\tabularnewline
+1.0&92&92&92&92&92&92&92&91&90\tabularnewline
+1.1&92&92&93&92&92&92&92&91&91\tabularnewline
+1.2&92&92&92&91&92&92&92&92&91\tabularnewline
+1.3&92&92&92&92&92&92&92&92&91\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.CC.MSC.BIC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(CC-MSC-BIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0& 5& 5& 5& 4& 5&95&96&96&96\tabularnewline
+0.1&11&10&10& 9& 9&91&93&93&93\tabularnewline
+0.2&26&26&25&26&24&77&79&81&82\tabularnewline
+0.3&48&48&48&47&46&44&58&39&62\tabularnewline
+0.4&68&68&68&69&67&65&62&60&43\tabularnewline
+0.5&80&81&80&80&78&78&76&73&29\tabularnewline
+0.6&84&86&85&85&85&84&82&81&78\tabularnewline
+0.7&86&87&87&87&86&86&85&83&81\tabularnewline
+0.8&86&87&87&87&86&86&85&84&83\tabularnewline
+0.9&86&86&87&87&86&86&85&85&83\tabularnewline
+1.0&85&86&87&86&87&86&86&85&84\tabularnewline
+1.1&87&87&87&86&87&87&86&86&84\tabularnewline
+1.2&86&87&86&86&86&86&86&86&85\tabularnewline
+1.3&86&87&87&87&86&86&85&85&85\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.CC.MSC.AIC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(CC-MSC-AIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&13&13&13&11&10&90&91&92&92\tabularnewline
+0.1&21&19&18&17&16&86&88&89&90\tabularnewline
+0.2&37&37&36&34&32&71&74&78&79\tabularnewline
+0.3&54&54&53&52&50&46&57&39&64\tabularnewline
+0.4&63&64&65&65&63&59&55&52&51\tabularnewline
+0.5&68&70&69&69&67&66&63&60&44\tabularnewline
+0.6&69&71&71&70&70&68&65&64&61\tabularnewline
+0.7&70&70&70&71&69&68&67&65&62\tabularnewline
+0.8&69&70&70&70&70&68&67&66&65\tabularnewline
+0.9&69&70&69&70&69&69&68&67&65\tabularnewline
+1.0&69&69&70&69&69&68&68&67&65\tabularnewline
+1.1&70&69&70&68&68&69&68&68&66\tabularnewline
+1.2&69&69&69&68&69&69&68&67&66\tabularnewline
+1.3&67&69&69&69&68&68&67&68&66\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(correct.CC.MSC.HQ, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Correct(CC-MSC-HQ)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0& 9& 9& 9& 8& 8&93&93&94&94\tabularnewline
+0.1&16&15&14&14&13&88&90&90&91\tabularnewline
+0.2&33&34&32&32&29&73&75&79&79\tabularnewline
+0.3&53&54&53&52&50&48&56&41&62\tabularnewline
+0.4&68&68&68&69&67&64&61&57&46\tabularnewline
+0.5&75&77&76&76&74&73&70&67&36\tabularnewline
+0.6&77&79&79&78&78&76&74&73&70\tabularnewline
+0.7&78&78&79&79&78&77&75&73&71\tabularnewline
+0.8&78&78&78&78&78&77&76&75&73\tabularnewline
+0.9&78&78&78&78&78&77&77&75&74\tabularnewline
+1.0&77&77&78&78&78&77&76&76&74\tabularnewline
+1.1&78&78&78&77&77&78&77&76&75\tabularnewline
+1.2&77&78&77&78&78&78&77&76&75\tabularnewline
+1.3&76&78&78&77&77&77&77&77&75\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+
+
+\end{document}

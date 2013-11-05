@@ -1,0 +1,444 @@
+\documentclass[12pt]{article}
+
+\usepackage[left = 1in, right = 1in, top = 1in, bottom = 1in]{geometry}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\headheight 35pt 
+
+\rhead{Actual Coverage of Naive 95\% Confidence Interval}
+\lhead{Simulation Results: $N=500$}
+
+
+\begin{document}
+
+
+
+
+
+% latex.default(cover.valid, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(Valid)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.1&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.2&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.3&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.4&0.96&0.95&0.95&0.95&0.95&0.96&0.95&0.95&0.95\tabularnewline
+0.5&0.95&0.95&0.96&0.95&0.96&0.95&0.95&0.95&0.96\tabularnewline
+0.6&0.95&0.96&0.96&0.96&0.96&0.96&0.96&0.96&0.96\tabularnewline
+0.7&0.96&0.96&0.96&0.96&0.96&0.96&0.96&0.96&0.96\tabularnewline
+0.8&0.96&0.96&0.96&0.96&0.96&0.96&0.96&0.96&0.97\tabularnewline
+0.9&0.97&0.97&0.97&0.97&0.96&0.96&0.97&0.97&0.97\tabularnewline
+1.0&0.97&0.97&0.97&0.97&0.97&0.97&0.97&0.97&0.97\tabularnewline
+1.1&0.97&0.97&0.98&0.97&0.98&0.97&0.97&0.97&0.97\tabularnewline
+1.2&0.98&0.98&0.98&0.98&0.98&0.98&0.98&0.98&0.98\tabularnewline
+1.3&0.98&0.98&0.98&0.98&0.98&0.98&0.98&0.98&0.98\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.full, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(Full)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.93&0.89&0.85&0.80&0.75&0.71&0.66\tabularnewline
+0.1&0.95&0.95&0.94&0.93&0.88&0.85&0.79&0.77&0.74\tabularnewline
+0.2&0.95&0.95&0.95&0.94&0.93&0.91&0.90&0.88&0.87\tabularnewline
+0.3&0.95&0.95&0.95&0.95&0.94&0.94&0.93&0.92&0.91\tabularnewline
+0.4&0.95&0.95&0.95&0.95&0.95&0.94&0.94&0.94&0.94\tabularnewline
+0.5&0.95&0.95&0.95&0.95&0.94&0.95&0.95&0.95&0.94\tabularnewline
+0.6&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.94&0.95\tabularnewline
+0.7&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.8&0.94&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.9&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.0&0.94&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.1&0.94&0.94&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.2&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.3&0.95&0.95&0.95&0.95&0.95&0.95&0.94&0.94&0.95\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.FMSC, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(FMSC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.1&0.95&0.94&0.93&0.94&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.2&0.94&0.92&0.86&0.86&0.93&0.95&0.95&0.95&0.95\tabularnewline
+0.3&0.93&0.91&0.82&0.73&0.82&0.92&0.95&0.95&0.95\tabularnewline
+0.4&0.92&0.92&0.84&0.66&0.67&0.82&0.90&0.93&0.94\tabularnewline
+0.5&0.91&0.92&0.85&0.66&0.56&0.68&0.80&0.88&0.93\tabularnewline
+0.6&0.90&0.93&0.86&0.69&0.51&0.54&0.68&0.79&0.87\tabularnewline
+0.7&0.90&0.93&0.89&0.73&0.50&0.46&0.57&0.68&0.79\tabularnewline
+0.8&0.88&0.93&0.89&0.76&0.54&0.41&0.48&0.59&0.70\tabularnewline
+0.9&0.87&0.93&0.91&0.77&0.56&0.39&0.41&0.51&0.60\tabularnewline
+1.0&0.86&0.93&0.92&0.84&0.60&0.40&0.36&0.45&0.53\tabularnewline
+1.1&0.84&0.93&0.93&0.84&0.63&0.43&0.34&0.38&0.47\tabularnewline
+1.2&0.83&0.93&0.94&0.87&0.72&0.48&0.33&0.34&0.42\tabularnewline
+1.3&0.82&0.91&0.94&0.89&0.68&0.49&0.34&0.31&0.38\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.BIC, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(BIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.94&0.93&0.93&0.93&0.93&0.93&0.94&0.94\tabularnewline
+0.1&0.95&0.94&0.90&0.89&0.93&0.95&0.95&0.95&0.95\tabularnewline
+0.2&0.94&0.94&0.89&0.75&0.78&0.89&0.92&0.94&0.94\tabularnewline
+0.3&0.94&0.94&0.89&0.74&0.59&0.70&0.82&0.88&0.91\tabularnewline
+0.4&0.94&0.94&0.91&0.81&0.58&0.50&0.63&0.75&0.82\tabularnewline
+0.5&0.94&0.94&0.92&0.85&0.65&0.43&0.45&0.57&0.67\tabularnewline
+0.6&0.94&0.94&0.92&0.87&0.74&0.48&0.35&0.39&0.50\tabularnewline
+0.7&0.94&0.94&0.92&0.90&0.78&0.58&0.37&0.29&0.37\tabularnewline
+0.8&0.93&0.94&0.92&0.89&0.82&0.65&0.45&0.27&0.27\tabularnewline
+0.9&0.94&0.94&0.93&0.89&0.83&0.69&0.51&0.33&0.22\tabularnewline
+1.0&0.93&0.93&0.93&0.91&0.85&0.76&0.62&0.40&0.25\tabularnewline
+1.1&0.94&0.93&0.93&0.91&0.86&0.78&0.64&0.50&0.30\tabularnewline
+1.2&0.94&0.94&0.93&0.91&0.89&0.83&0.69&0.51&0.39\tabularnewline
+1.3&0.94&0.94&0.93&0.92&0.86&0.83&0.72&0.59&0.43\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.AIC, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(AIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.94&0.94&0.94&0.94&0.95&0.95&0.95\tabularnewline
+0.1&0.94&0.93&0.92&0.94&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.2&0.92&0.90&0.85&0.87&0.93&0.95&0.94&0.95&0.95\tabularnewline
+0.3&0.91&0.88&0.79&0.75&0.84&0.91&0.94&0.94&0.95\tabularnewline
+0.4&0.91&0.88&0.77&0.65&0.71&0.83&0.90&0.92&0.94\tabularnewline
+0.5&0.90&0.88&0.76&0.60&0.60&0.72&0.81&0.88&0.91\tabularnewline
+0.6&0.91&0.88&0.76&0.59&0.52&0.60&0.70&0.80&0.85\tabularnewline
+0.7&0.91&0.87&0.77&0.59&0.47&0.52&0.62&0.70&0.78\tabularnewline
+0.8&0.90&0.87&0.76&0.59&0.46&0.45&0.55&0.62&0.71\tabularnewline
+0.9&0.92&0.90&0.77&0.57&0.43&0.41&0.48&0.56&0.62\tabularnewline
+1.0&0.91&0.89&0.79&0.68&0.45&0.39&0.43&0.50&0.56\tabularnewline
+1.1&0.92&0.90&0.83&0.65&0.45&0.37&0.41&0.45&0.51\tabularnewline
+1.2&0.92&0.92&0.86&0.67&0.49&0.38&0.37&0.41&0.47\tabularnewline
+1.3&0.92&0.93&0.83&0.72&0.44&0.37&0.35&0.38&0.44\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.HQ, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(HQ)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.94&0.94&0.94&0.94&0.94&0.94&0.94\tabularnewline
+0.1&0.94&0.93&0.91&0.92&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.2&0.93&0.92&0.85&0.79&0.89&0.93&0.94&0.94&0.95\tabularnewline
+0.3&0.93&0.91&0.83&0.68&0.72&0.85&0.91&0.93&0.94\tabularnewline
+0.4&0.92&0.92&0.84&0.67&0.58&0.69&0.81&0.87&0.91\tabularnewline
+0.5&0.91&0.91&0.84&0.68&0.52&0.55&0.67&0.77&0.84\tabularnewline
+0.6&0.92&0.91&0.85&0.71&0.52&0.44&0.53&0.63&0.73\tabularnewline
+0.7&0.92&0.91&0.86&0.74&0.53&0.40&0.43&0.53&0.63\tabularnewline
+0.8&0.91&0.90&0.84&0.75&0.56&0.39&0.36&0.44&0.52\tabularnewline
+0.9&0.92&0.92&0.86&0.73&0.56&0.39&0.32&0.37&0.43\tabularnewline
+1.0&0.91&0.91&0.87&0.80&0.61&0.43&0.32&0.32&0.37\tabularnewline
+1.1&0.92&0.91&0.89&0.80&0.63&0.44&0.31&0.29&0.32\tabularnewline
+1.2&0.92&0.92&0.90&0.81&0.69&0.51&0.34&0.27&0.28\tabularnewline
+1.3&0.92&0.93&0.89&0.84&0.63&0.52&0.37&0.27&0.26\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.CC.BIC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(CC-BIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.95&0.95&0.94&0.94&0.94&0.94&0.94\tabularnewline
+0.1&0.95&0.94&0.90&0.83&0.76&0.67&0.59&0.49&0.40\tabularnewline
+0.2&0.95&0.95&0.95&0.94&0.92&0.90&0.89&0.87&0.86\tabularnewline
+0.3&0.95&0.95&0.95&0.95&0.94&0.94&0.93&0.92&0.91\tabularnewline
+0.4&0.95&0.95&0.95&0.95&0.95&0.94&0.94&0.94&0.94\tabularnewline
+0.5&0.95&0.95&0.95&0.95&0.94&0.95&0.95&0.95&0.94\tabularnewline
+0.6&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.94&0.95\tabularnewline
+0.7&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.8&0.94&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.9&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.0&0.94&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.1&0.94&0.94&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.2&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.3&0.95&0.95&0.95&0.95&0.95&0.95&0.94&0.94&0.95\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.CC.AIC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(CC-AIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.93&0.92&0.89&0.87&0.86&0.85&0.83\tabularnewline
+0.1&0.95&0.95&0.94&0.91&0.84&0.78&0.71&0.67&0.65\tabularnewline
+0.2&0.95&0.95&0.95&0.94&0.93&0.91&0.89&0.88&0.87\tabularnewline
+0.3&0.95&0.95&0.95&0.95&0.94&0.94&0.93&0.92&0.91\tabularnewline
+0.4&0.95&0.95&0.95&0.95&0.95&0.94&0.94&0.94&0.94\tabularnewline
+0.5&0.95&0.95&0.95&0.95&0.94&0.95&0.95&0.95&0.94\tabularnewline
+0.6&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.94&0.95\tabularnewline
+0.7&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.8&0.94&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.9&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.0&0.94&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.1&0.94&0.94&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.2&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.3&0.95&0.95&0.95&0.95&0.95&0.95&0.94&0.94&0.95\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.CC.HQ, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(CC-HQ)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.94&0.94&0.93&0.92&0.91&0.91&0.91\tabularnewline
+0.1&0.95&0.94&0.92&0.88&0.79&0.69&0.58&0.50&0.43\tabularnewline
+0.2&0.95&0.95&0.95&0.94&0.93&0.91&0.89&0.88&0.87\tabularnewline
+0.3&0.95&0.95&0.95&0.95&0.94&0.94&0.93&0.92&0.91\tabularnewline
+0.4&0.95&0.95&0.95&0.95&0.95&0.94&0.94&0.94&0.94\tabularnewline
+0.5&0.95&0.95&0.95&0.95&0.94&0.95&0.95&0.95&0.94\tabularnewline
+0.6&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.94&0.95\tabularnewline
+0.7&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.8&0.94&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.9&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.0&0.94&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.1&0.94&0.94&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.2&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+1.3&0.95&0.95&0.95&0.95&0.95&0.95&0.94&0.94&0.95\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.J.90, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(J 90)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.94&0.94&0.93&0.94&0.94&0.94&0.94\tabularnewline
+0.1&0.95&0.94&0.91&0.92&0.94&0.95&0.95&0.95&0.95\tabularnewline
+0.2&0.94&0.93&0.87&0.79&0.86&0.93&0.94&0.94&0.95\tabularnewline
+0.3&0.94&0.93&0.87&0.71&0.69&0.82&0.89&0.92&0.94\tabularnewline
+0.4&0.93&0.94&0.89&0.74&0.59&0.65&0.77&0.85&0.89\tabularnewline
+0.5&0.93&0.93&0.89&0.77&0.57&0.51&0.62&0.74&0.81\tabularnewline
+0.6&0.93&0.93&0.91&0.80&0.62&0.45&0.48&0.58&0.68\tabularnewline
+0.7&0.93&0.93&0.90&0.83&0.66&0.45&0.41&0.48&0.57\tabularnewline
+0.8&0.92&0.93&0.90&0.83&0.70&0.50&0.38&0.39&0.47\tabularnewline
+0.9&0.93&0.94&0.92&0.84&0.71&0.51&0.37&0.34&0.38\tabularnewline
+1.0&0.92&0.93&0.92&0.88&0.75&0.59&0.42&0.32&0.32\tabularnewline
+1.1&0.92&0.93&0.93&0.88&0.77&0.61&0.42&0.33&0.29\tabularnewline
+1.2&0.92&0.94&0.93&0.89&0.81&0.68&0.49&0.32&0.27\tabularnewline
+1.3&0.93&0.94&0.93&0.91&0.77&0.70&0.52&0.36&0.27\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.J.95, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(J 95)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.94&0.93&0.93&0.93&0.93&0.94&0.94\tabularnewline
+0.1&0.95&0.95&0.91&0.90&0.93&0.95&0.95&0.95&0.95\tabularnewline
+0.2&0.94&0.94&0.89&0.76&0.80&0.90&0.93&0.94&0.95\tabularnewline
+0.3&0.94&0.94&0.90&0.74&0.62&0.73&0.84&0.90&0.92\tabularnewline
+0.4&0.94&0.94&0.91&0.81&0.59&0.54&0.66&0.77&0.84\tabularnewline
+0.5&0.93&0.94&0.92&0.84&0.65&0.46&0.49&0.61&0.70\tabularnewline
+0.6&0.94&0.94&0.92&0.87&0.74&0.49&0.38&0.43&0.54\tabularnewline
+0.7&0.94&0.94&0.92&0.89&0.78&0.58&0.38&0.33&0.42\tabularnewline
+0.8&0.93&0.94&0.93&0.89&0.81&0.64&0.45&0.29&0.32\tabularnewline
+0.9&0.94&0.94&0.93&0.90&0.83&0.69&0.50&0.34&0.25\tabularnewline
+1.0&0.93&0.94&0.94&0.91&0.86&0.74&0.60&0.39&0.26\tabularnewline
+1.1&0.93&0.94&0.94&0.92&0.86&0.78&0.64&0.48&0.29\tabularnewline
+1.2&0.94&0.94&0.94&0.92&0.89&0.84&0.67&0.50&0.38\tabularnewline
+1.3&0.94&0.94&0.94&0.92&0.87&0.84&0.73&0.57&0.42\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.CC.MSC.BIC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(CC-MSC-BIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.1&0.95&0.93&0.90&0.90&0.94&0.95&0.95&0.95&0.95\tabularnewline
+0.2&0.94&0.94&0.89&0.75&0.78&0.89&0.92&0.93&0.94\tabularnewline
+0.3&0.94&0.94&0.89&0.74&0.59&0.70&0.82&0.88&0.91\tabularnewline
+0.4&0.94&0.94&0.91&0.81&0.58&0.50&0.63&0.75&0.82\tabularnewline
+0.5&0.94&0.94&0.92&0.85&0.65&0.43&0.45&0.57&0.67\tabularnewline
+0.6&0.94&0.94&0.92&0.87&0.74&0.48&0.35&0.39&0.50\tabularnewline
+0.7&0.94&0.94&0.92&0.90&0.78&0.58&0.37&0.29&0.37\tabularnewline
+0.8&0.93&0.94&0.92&0.89&0.82&0.65&0.45&0.27&0.27\tabularnewline
+0.9&0.94&0.94&0.93&0.89&0.83&0.69&0.51&0.33&0.22\tabularnewline
+1.0&0.93&0.93&0.93&0.91&0.85&0.76&0.62&0.40&0.25\tabularnewline
+1.1&0.94&0.93&0.93&0.91&0.86&0.78&0.64&0.50&0.30\tabularnewline
+1.2&0.94&0.94&0.93&0.91&0.89&0.83&0.69&0.51&0.39\tabularnewline
+1.3&0.94&0.94&0.93&0.92&0.86&0.83&0.72&0.59&0.43\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.CC.MSC.AIC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(CC-MSC-AIC)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.1&0.94&0.93&0.92&0.94&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.2&0.92&0.90&0.85&0.87&0.93&0.95&0.94&0.95&0.95\tabularnewline
+0.3&0.91&0.88&0.79&0.75&0.84&0.91&0.94&0.94&0.95\tabularnewline
+0.4&0.91&0.88&0.77&0.65&0.71&0.83&0.90&0.92&0.94\tabularnewline
+0.5&0.90&0.88&0.76&0.60&0.60&0.72&0.81&0.88&0.91\tabularnewline
+0.6&0.91&0.88&0.76&0.59&0.52&0.60&0.70&0.80&0.85\tabularnewline
+0.7&0.91&0.87&0.77&0.59&0.47&0.52&0.62&0.70&0.78\tabularnewline
+0.8&0.90&0.87&0.76&0.59&0.46&0.45&0.55&0.62&0.71\tabularnewline
+0.9&0.92&0.90&0.77&0.57&0.43&0.41&0.48&0.56&0.62\tabularnewline
+1.0&0.91&0.89&0.79&0.68&0.45&0.39&0.43&0.50&0.56\tabularnewline
+1.1&0.92&0.90&0.83&0.65&0.45&0.37&0.41&0.45&0.51\tabularnewline
+1.2&0.92&0.92&0.86&0.67&0.49&0.38&0.37&0.41&0.47\tabularnewline
+1.3&0.92&0.93&0.83&0.72&0.44&0.37&0.35&0.38&0.44\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+% latex.default(cover.CC.MSC.HQ, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage(CC-MSC-HQ)}
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+\multicolumn{1}{c|}{$\gamma\backslash\rho$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+
+0.0&0.95&0.95&0.95&0.95&0.95&0.94&0.95&0.95&0.95\tabularnewline
+0.1&0.95&0.93&0.91&0.92&0.95&0.95&0.95&0.95&0.95\tabularnewline
+0.2&0.93&0.92&0.85&0.79&0.89&0.93&0.94&0.94&0.95\tabularnewline
+0.3&0.93&0.91&0.83&0.68&0.72&0.85&0.91&0.93&0.94\tabularnewline
+0.4&0.92&0.92&0.84&0.67&0.58&0.69&0.81&0.87&0.91\tabularnewline
+0.5&0.91&0.91&0.84&0.68&0.52&0.55&0.67&0.77&0.84\tabularnewline
+0.6&0.92&0.91&0.85&0.71&0.52&0.44&0.53&0.63&0.73\tabularnewline
+0.7&0.92&0.91&0.86&0.74&0.53&0.40&0.43&0.53&0.63\tabularnewline
+0.8&0.91&0.90&0.84&0.75&0.56&0.39&0.36&0.44&0.52\tabularnewline
+0.9&0.92&0.92&0.86&0.73&0.56&0.39&0.32&0.37&0.43\tabularnewline
+1.0&0.91&0.91&0.87&0.80&0.61&0.43&0.32&0.32&0.37\tabularnewline
+1.1&0.92&0.91&0.89&0.80&0.63&0.44&0.31&0.29&0.32\tabularnewline
+1.2&0.92&0.92&0.90&0.81&0.69&0.51&0.34&0.27&0.28\tabularnewline
+1.3&0.92&0.93&0.89&0.84&0.63&0.52&0.37&0.27&0.26\tabularnewline
+\hline
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+
+
+
+
+
+
+\end{document}
