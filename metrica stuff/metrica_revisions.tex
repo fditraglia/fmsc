@@ -1,4 +1,53 @@
-\documentclass[12pt]{article}
+\documentclass[12pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
 \usepackage{todonotes}
 \usepackage[margin=1.2in]{geometry}
 \usepackage{amssymb,amsmath,amsthm,graphicx}
@@ -20,6 +69,7 @@
 
 \title{JMP Revisions Following Econometrica Comments}
 \author{Francis J.\ DiTraglia}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
 \maketitle
@@ -402,25 +452,12 @@ where $\rho$ is the finite sample correlation between $v_i$ and $\epsilon_i$. Th
 % text(.5,c(.8,.5,.2), c('\\texttt{lm(y \\textasciitilde{} x)}', '$\\hat{\\beta}=(X^{\\prime}X)^{-1}X^{\\prime}y$',  '$(\\Omega,\\mathcal{F},\\mu)$'))
 % @
 
-<<OLSboundary, dev = "tikz", echo=FALSE, cache=TRUE>>=
-boundary.plot <- function(n, xlabel = "", ylabel = ""){
-  x <- seq(from = 0.001, to = 0.999, by = 0.001)
-  y <- sqrt((1/n) * (1/x))
-  plot(x,y, type = 'l', xlim = c(0,1), ylim = c(0,1) ,xaxs = "i", yaxs = "i", pty = "s", xlab = xlabel, ylab = ylabel)
-  
-  poly <- cbind(c(0, x, 1), c(0, y, 0))
-  polygon(poly, density = 20)
-          
-  text(0.5, 0.8, cex = 1.75, bquote(n == .(n)))
-}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+\includegraphics[width=\maxwidth]{figure/OLSboundary} 
 
-par(mfrow = c(2,2))
+\end{knitrout}
 
-boundary.plot(10, ylabel = "Absolute Correlation")
-boundary.plot(100)
-boundary.plot(500, ylabel = "Absolute Correlation", xlabel = "R-squared")
-boundary.plot(1000, xlabel = "R-squared")
-@
 
 \paragraph{Comparison to Earlier Version:} Notice that these figures look a bit different from the simple example I made earlier for just-identified IV. The difference is the behavior of the boundary near $R^2 = 1$. In the present version the boundary simple asymptotes out of the frame. In the previous version it ``bent inwards'' and intersected the horizontal axis at $R^2 = 1$. (In the earlier version I called this $\rho_{xz}^2$ which is of course equivalent since the first-stage in just-indentified IV is a univariate linear regression.) \emph{So what's going on here?} This boils down to the question of whether the vertical axis should be $\rho_{v\epsilon}$ or $\rho_{x\epsilon}$. In the third line of derivation of the boundary above, we had
   $$\tau^2 < \sigma_x^2 \sigma_\epsilon^2 \left(\frac{\sigma_x^2}{\gamma^2} - 1\right) $$

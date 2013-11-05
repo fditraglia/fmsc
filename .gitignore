@@ -24,3 +24,5 @@
 *fdb_latexmk
 *.Rhistory
 *.Rdata
+*.rdb
+*.rdx
