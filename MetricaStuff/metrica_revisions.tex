@@ -503,7 +503,24 @@ But selection is a blunt instrument. A better idea is to \emph{combine} the OLS 
   \end{eqnarray*}
   and accordingly
     \begin{eqnarray*}
-      \mbox{AMSE}\left(\widehat{\beta}(\omega)\right) &=& 
+      \mbox{AMSE}\left(\widehat{\beta}(\omega)\right) &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left( 1 - \frac{\sigma_x^2}{\gamma^2}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
+      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left(\frac{\gamma^2 - \sigma_x^2}{\gamma^2}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
+      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left(\frac{\sigma_v^2}{\mathbf{\pi}'Q_z\mathbf{\pi}}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
+      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2\kappa^2}\right)+ \frac{\sigma_\epsilon^2}{\gamma^2}\\
+        &=& a\omega^2 + b(2\omega - \omega^2) + c
+    \end{eqnarray*}
+  so the first order condition for a minimum is
+    \begin{eqnarray*}
+      2a\omega + b(2 - 2\omega) &=&0\\
+      2(a-b) \omega + 2b &=& 0\\
+      \omega^* &=& b/(b-a)\\
+      \omega^* &=& \frac{1}{1 - a/b}
+    \end{eqnarray*}
+  Substituting the definitions of $a$ and $b$ we have
+    \begin{eqnarray*}
+      \omega^* &=& \left[ 1 - \frac{a}{b}\right]^{-1}\\
+          &=& \left[ 1 - \left(\frac{\tau^2}{\sigma_x^4}\right)\left(\frac{\kappa^2 \sigma_x^2}{\sigma_\epsilon^2}\right)\right]^{-1}\\
+          &=& \left[ 1 - \kappa^2 \left(\frac{\tau^2}{\sigma_x^2\sigma_\epsilon^2}\right)\right]^{-1}
     \end{eqnarray*}
 % subsection amse_optimal_averaging (end)
 
