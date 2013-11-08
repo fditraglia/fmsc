@@ -458,12 +458,54 @@ where $\rho$ is the finite sample correlation between $v_i$ and $\epsilon_i$. Th
 
 \end{knitrout}
 
+As the sample size grows, the boundary moves towards the origin, meaning that we are more likely to use 2SLS. However, each of regions asymptotes at the origin so that when instruments are weak, we choose OLS. This makes intuitive sense. Notice that we change the horizontal axis limits to make it easier to see the threshold for weak instruments depending on sample size.
 
-% \paragraph{Comparison to Earlier Version:} Notice that these figures look a bit different from the simple example I made earlier for just-identified IV. The difference is the behavior of the boundary near $R^2 = 1$. In the present version the boundary simple asymptotes out of the frame. In the previous version it ``bent inwards'' and intersected the horizontal axis at $R^2 = 1$. (In the earlier version I called this $\rho_{xz}^2$ which is of course equivalent since the first-stage in just-indentified IV is a univariate linear regression.) \emph{So what's going on here?} This boils down to the question of whether the vertical axis should be $\rho_{v\epsilon}$ or $\rho_{x\epsilon}$. In the third line of derivation of the boundary above, we had
-  % $$\tau^2 < \sigma_x^2 \sigma_\epsilon^2 \left(\frac{\sigma_x^2}{\gamma^2} - 1\right) $$
-% which is the same as
-  % $$|\tau|< \sigma_x \sigma_\epsilon \sqrt{\frac{1}{R^2} - 1}$$
-% The earlier version used \emph{this} inequality to get the finite-sample rule by working in terms of $\rho_{x\epsilon}$ using $\tau = \sqrt{n} E_n[x_i \epsilon_i] = \sqrt{n} Corr_n(x_i,\epsilon_i) \sigma_x \sigma_\epsilon$. \emph{So what's wrong with that?}. In order for this plot to make sense as a finite-sample interpretation of the FMSC, it needs to be conceptually possible to vary the quantity on the horizontal axis independently of that on the vertical axis. Both the present and earlier versions had the same quantity on the vertical axis: $R^2$. The earlier version had $\rho_{x\epsilon}$ on the vertical axis while the present version has $\rho_{\epsilon v}$. Now, conceptually we're thinking about holding $\sigma_\epsilon$ and $\sigma_v$ fixed. This is what would make the most sense, for example in a simulation study. What we would vary to change the endogeneity of $x$ is the \emph{correlation between} $\epsilon$ and $v$. This much is fine since we can certainly change this correlation without changing the respective variances. The complication comes from $R^2 = (\boldsymbol{\pi}'Q_z \boldsymbol{\pi})/(\boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2)$. Again, it makes sense to hold $\sigma_v$ fixed, so to change $R^2$ it would make most sense to vary $\mathbf{\pi}$ as, for example, we'd typically think about doing in a simulation. The problem with the earlier version is that changing $\mathbf{\pi}$ \emph{also changes} $\sigma^2_x = \boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2$ which  \emph{in turn} changes $\rho_{x\epsilon}$. 
+\subsection{AMSE-Optimal Averaging} % (fold)
+\label{sub:amse_optimal_averaging}
+We showed above that the infeasible version of the FMSC selects OLS when 
+  $$|\tau|  < \sigma_v \sigma_\epsilon\sqrt{\frac{\mathbf{\pi}'Q_z \mathbf{\pi} + \sigma_v^2}{\mathbf{\pi}'Q_z \mathbf{\pi}}}$$
+But selection is a blunt instrument. A better idea is to \emph{combine} the OLS and 2SLS estimator by taking a weighted average and choose the weights to minimize AMSE. The problem is 
+  $$\omega^* = \underset{\omega \in [0,1]}{\mbox{argmin }} \mbox{AMSE}\left(\omega \widehat{\beta} + (1-\omega)\widetilde{\beta}\right)  $$
+  Let $\widehat{\beta}(\omega) = \omega \widehat{\beta} + (1-\omega) \widetilde{\beta}$. Then,
+    \begin{eqnarray*}
+      \mbox{Bias}\left(\widehat{\beta}(\omega)\right) &=& \mbox{Bias}(\widehat{\beta}) + \mbox{Bias}(\widetilde{\beta})=\omega\left( \frac{\tau}{\sigma_x^2}\right)
+    \end{eqnarray*}
+  and
+  \begin{eqnarray*}
+    Var\left(\widehat{\beta}(\omega)\right) &=& 
+      \left[ \begin{array}{cc}
+        \omega & 1-\omega
+      \end{array}\right]
+       \sigma_\epsilon^2 \left[
+      \begin{array}{cc}
+       1/\sigma_x^2 & 1/\sigma_x^2 \\
+       1/\sigma_x^2 & 1/\gamma^2 
+      \end{array}\right]\left[
+      \begin{array}{c}
+          \omega \\ 1- \omega
+      \end{array}\right]\\
+      &=& \sigma_\epsilon^2/\sigma_x^2 
+      \left[ \begin{array}{cc}
+        \omega & 1-\omega
+      \end{array}\right]
+          \left[\begin{array}{cc} 
+          1& 1\\ 1& \sigma_x^2/\gamma^2
+          \end{array} \right]
+      \left[
+      \begin{array}{c}
+          \omega \\ 1- \omega
+      \end{array}\right]\\
+        &=&\frac{\sigma_\epsilon^2}{\sigma_x^2}\left\{ \omega + (1- \omega)\left[\omega + (1-\omega)\sigma_x^2/\gamma^2 \right]\right\} \\
+        &=&\frac{\sigma_\epsilon^2}{\sigma_x^2}\left[ \omega + (1- \omega)\omega + (1-\omega)^2\sigma_x^2/\gamma^2 \right] \\
+          &=& \frac{\sigma_\epsilon^2}{\sigma_x^2}\left[2\omega - \omega^2 + \frac{\sigma_x^2}{\gamma^2} \left(1 - 2\omega + \omega^2 \right) \right]\\
+          &=& \frac{\sigma_\epsilon^2}{\sigma_x^2} \left[(2\omega - \omega^2)\left( 1 - \frac{\sigma_x^2}{\gamma^2}\right)+\frac{\sigma_x^2}{\gamma^2} \right]\\
+          &=& \frac{\sigma_\epsilon^2}{\sigma_x^2} \left[(2\omega - \omega^2)\left( 1 - \frac{\sigma_x^2}{\gamma^2}\right)+\frac{\sigma_x^2}{\gamma^2} \right]\\
+  \end{eqnarray*}
+  and accordingly
+    \begin{eqnarray*}
+      \mbox{AMSE}\left(\widehat{\beta}(\omega)\right) &=& 
+    \end{eqnarray*}
+% subsection amse_optimal_averaging (end)
 
 
 
