@@ -385,14 +385,14 @@ where $\sigma_x^2 = \gamma^2 + \sigma_v^2$ and $\gamma^2 = \boldsymbol{\pi}'Q_z 
         \tau^2  &<& \sigma_x^2 \sigma_\epsilon^2\left(\frac{\sigma_x^2 - \gamma^2}{\gamma^2}\right)\\
         \tau^2  &<& \sigma_x^2 \sigma_\epsilon^2\left(\frac{\sigma_v^2}{\gamma^2}\right)\\
                 \tau^2  &<& \sigma_v^2 \sigma_\epsilon^2\left(\frac{\sigma_x^2}{\gamma^2}\right)\\
-              |\tau|  &<& \sigma_v \sigma_\epsilon\sqrt{\frac{\mathbf{\pi}'Q_z \mathbf{\pi} + \sigma_v^2}{\mathbf{\pi}'Q_z \mathbf{\pi}}}\\
+              |\tau|  &<& \sigma_v \sigma_\epsilon\sqrt{\frac{\boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}}\\
               |\tau|  &<& \sigma_v \sigma_\epsilon \sqrt{1+ \frac{1}{\kappa^2}}
   \end{eqnarray*}
 where $\kappa^2 = (\boldsymbol{\pi}'Q_z \boldsymbol{\pi})/\sigma_v^2$, is the signal-to-noise ratio in the first stage. We see that the FMSC trades the endogeneity of $x$, as measured by $\tau$, against the strength of the instruments, as measured by the concentration parameter $\kappa^2$. 
 
 
 To get a better sense of the form of this trade-off, we can ``re-interpret'' this cutoff \emph{as though} it were finite-sample rule. Recall that we defined $E_n[x_i\epsilon_i]= \tau/\sqrt{n}$. Hence,
-  $$\tau = \sqrt{n} E_n[x_i \epsilon_i] = \sqrt{n}E_n\left[\left(\mathbf{z}_i' \mathbf{\pi} + v_i\right)\epsilon_i \right] = \sqrt{n} E_n[v_i\epsilon_i] = \sqrt{n} Cor_n(v_i, \epsilon_i) \sigma_v \sigma_\epsilon$$
+  $$\tau = \sqrt{n} E_n[x_i \epsilon_i] = \sqrt{n}E_n\left[\left(\mathbf{z}_i' \boldsymbol{\pi} + v_i\right)\epsilon_i \right] = \sqrt{n} E_n[v_i\epsilon_i] = \sqrt{n} Cor_n(v_i, \epsilon_i) \sigma_v \sigma_\epsilon$$
 provided that we do not envision $\sigma_v$ and $\sigma_\epsilon$ changing with sample size. Thus, for a \emph{fixed} sample size $n$, we can think of $\tau$ as the correlation between $\epsilon_i$ and $v_i$ scaled by $\sqrt{n}$ and their respective standard deviations. Dropping the $n$ subscript on the correlation and substituting into the preceding inequality, we have
   $$|\rho|  < \sqrt{\frac{1}{n}\left(1 + \frac{1}{\kappa^2}\right)}$$
 where $\rho$ is the finite sample correlation between $v_i$ and $\epsilon_i$. Thus, interpreted as a finite sample rule, the FMSC tells us to weigh the endogeneity of $x_i$ as measured by $\rho$ against the sample size and the concentration parameter $\kappa^2$. We should only use the 2SLS estimator when the concentration parameter is sufficiently large, the sample size is sufficiently large, or $x$ is sufficiently endogenous. The following figure depicts the region in which OLS is favored for different sample sizes.
@@ -425,10 +425,47 @@ where $\rho$ is the finite sample correlation between $v_i$ and $\epsilon_i$. Th
 
 As the sample size grows, the boundary moves towards the origin, meaning that we are more likely to use 2SLS. However, each of regions asymptotes at the origin so that when instruments are weak, we choose OLS. This makes intuitive sense. Notice that we change the horizontal axis limits to make it easier to see the threshold for weak instruments depending on sample size.
 
+\paragraph{Alternative Parameterization}
+Above we used $\kappa^2 = (\boldsymbol{\pi}'Q_z \boldsymbol{\pi})/\sigma_v^2$ to encode the strength of the instruments. The boundary region between OLS and IV turned out to depend on $1 + 1/\kappa^2$. Another way to express this is as follows:
+  \begin{eqnarray*}
+    1 + \frac{1}{\kappa^2} &=& 1 + \frac{\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}} = \frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}{\boldsymbol{\pi}Q_z \boldsymbol{\pi}} = \frac{1}{R^2}
+  \end{eqnarray*}
+where $R^2$ is the population coefficient of determination in the first-stage regression. Using this convention, the finite-sample version of the boundary from above becomes
+    $$|\rho|  < \sqrt{\frac{1}{nR^2} }$$
+which is a much simpler expression. The only potential problem with expressing things in this fashion is that we cannot really vary the population $R^2$ completely independently from the correlation between first and second stage errors. I have to think about this some more...
+
+\paragraph{Yet Another Parameterization} Should we parameterize things in terms of the correlation between $x$ and $\epsilon$ or in terms of $\epsilon$ and $v$ as above?
+
+\todo[inline]{Need to think carefully about the finite sample version of this.}
+
+
+\subsection{Feasible FMSC} % (fold)
+\label{sub:feasible_fmsc}
+In the previous section we found that, under local mis-specification, the AMSE of the OLS estimator is lower than that of the IV estimator whenever 
+    $$\frac{\tau^2}{\sigma_v^2 \sigma_\epsilon^2}  < \frac{\boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}} $$
+% subsection feasible_fmsc (end)
+To use the FMSC we substitute estimators of all the quantities in the preceding expression. For the right-hand side we use the familiar estimators which remain consistent under local mis-specification
+  \begin{eqnarray*}
+      n^{-1}\mathbf{x}' \mathbf{x} &\overset{p}{\rightarrow}& \boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2\\
+      n^{-1}\mathbf{x}' Z (Z'Z)^{-1}Z' \mathbf{x} &\overset{p}{\rightarrow}& \boldsymbol{\pi}'Q_z \boldsymbol{\pi} 
+  \end{eqnarray*}
+as we saw in the proofs above. The difference of the two provides a consistent estimator of $\sigma_v^2$ and we see that this is equivalent to using the residuals from the first-stage regression:
+  \begin{eqnarray*}
+    n^{-1}\mathbf{x}' \mathbf{x}  - n^{-1}\mathbf{x}' Z (Z'Z)^{-1}Z' \mathbf{x} &=& n^{-1} \mathbf{x}' \left(I - Z(Z'Z)^{-1}Z' \right)\mathbf{x}\\
+    &=& n^{-1} \mathbf{x}' (I - P_Z)\mathbf{x}\\
+    &=& n^{-1} \mathbf{x}' (I-P_Z)'(I - P_Z)\mathbf{x}\\
+    &=& (M_Z \mathbf{x})'(M_Z \mathbf{x})/n\\
+    &=& \widehat{v}'\widehat{v}/n \overset{p}{\rightarrow} \sigma_v^2
+ \end{eqnarray*}
+ since $P_Z$ is an orthogonal projection, hence symmetric and idempotent. (Remember that we're talking about the first-stage here: $\mathbf{x}$ is the dependent variable.) We could also divide by $(n - p)$ rather than $n$ where $p$ is the number of instrumental variables. 
+
+ There are two possible ways to estimate $\sigma_\epsilon^2$: we can either use the redsiduals from the OLS estimator or those from the IV estimator. Under local mis-specification, either choice gives a consistent estimator. Unless the instruments are extremely weak, however, we would expect the IV residuals to be more robust. (We could always try both and see if it makes a difference.)  
+
+
 \subsection{AMSE-Optimal Averaging} % (fold)
 \label{sub:amse_optimal_averaging}
 We showed above that the infeasible version of the FMSC selects OLS when 
-  $$|\tau|  < \sigma_v \sigma_\epsilon\sqrt{\frac{\mathbf{\pi}'Q_z \mathbf{\pi} + \sigma_v^2}{\mathbf{\pi}'Q_z \mathbf{\pi}}}$$
+  $$|\tau|  < \sigma_v \sigma_\epsilon\sqrt{\frac{\boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}}$$
 But selection is a blunt instrument. A better idea is to \emph{combine} the OLS and 2SLS estimator by taking a weighted average and choose the weights to minimize AMSE. The problem is 
   $$\omega^* = \underset{\omega \in [0,1]}{\mbox{argmin }} \mbox{AMSE}\left(\omega \widehat{\beta} + (1-\omega)\widetilde{\beta}\right)  $$
   Let $\widehat{\beta}(\omega) = \omega \widehat{\beta} + (1-\omega) \widetilde{\beta}$. Then,
@@ -470,7 +507,7 @@ But selection is a blunt instrument. A better idea is to \emph{combine} the OLS 
     \begin{eqnarray*}
       \mbox{AMSE}\left(\widehat{\beta}(\omega)\right) &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left( 1 - \frac{\sigma_x^2}{\gamma^2}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
       &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left(\frac{\gamma^2 - \sigma_x^2}{\gamma^2}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
-      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left(\frac{\sigma_v^2}{\mathbf{\pi}'Q_z\mathbf{\pi}}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
+      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left(\frac{\sigma_v^2}{\boldsymbol{\pi}'Q_z\boldsymbol{\pi}}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
       &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2\kappa^2}\right)+ \frac{\sigma_\epsilon^2}{\gamma^2}\\
         &=& a\omega^2 + b(2\omega - \omega^2) + c
     \end{eqnarray*}
@@ -486,10 +523,13 @@ But selection is a blunt instrument. A better idea is to \emph{combine} the OLS 
       \omega^* &=& \left[ 1 - \frac{a}{b}\right]^{-1}\\
           &=& \left[ 1 - \left(\frac{\tau^2}{\sigma_x^4}\right)\left(\frac{\kappa^2 \sigma_x^2}{\sigma_\epsilon^2}\right)\right]^{-1}\\
           &=& \left[ 1 - \kappa^2 \left(\frac{\tau^2}{\sigma_x^2\sigma_\epsilon^2}\right)\right]^{-1}\\
-          &=& \left[ 1 - \left(\frac{ \mathbf{\pi}'Q_z \mathbf{\pi} }{\sigma_v^2}\right) \left(\frac{\tau^2}{\sigma_x^2\sigma_\epsilon^2}\right)\right]^{-1}\\
-          &=& \left[ 1 - \left(\frac{ \mathbf{\pi}'Q_z \mathbf{\pi} }{\sigma_x^2}\right) \left(\frac{\tau^2}{\sigma_v^2\sigma_\epsilon^2}\right)\right]^{-1}\\
-          &=& \left[ 1 - \left(\frac{ \mathbf{\pi}'Q_z \mathbf{\pi} }{\mathbf{\pi}'Q_z \mathbf{\pi}}\right) \left(\frac{\tau^2}{\sigma_v^2\sigma_\epsilon^2}\right)\right]^{-1}
+          &=& \left[ 1 - \left(\frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} }{\sigma_v^2}\right) \left(\frac{\tau^2}{\sigma_x^2\sigma_\epsilon^2}\right)\right]^{-1}\\
+          &=& \left[ 1 - \left(\frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} }{\sigma_x^2}\right) \left(\frac{\tau^2}{\sigma_v^2\sigma_\epsilon^2}\right)\right]^{-1}\\
+          &=& \left[ 1 - \left(\frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} }{\boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}\right) \left(\frac{\tau^2}{\sigma_v^2\sigma_\epsilon^2}\right)\right]^{-1}\\
+          &=& \left[1 - \left(1 + \frac{1}{\kappa^2} \right)\left(\frac{\tau^2}{\sigma_v^2 \sigma_\epsilon^2}
+          \right) \right]^{-1}
     \end{eqnarray*}
+  \todo[inline]{Need to think about the finite sample version of this.}
 % subsection amse_optimal_averaging (end)
 
 
