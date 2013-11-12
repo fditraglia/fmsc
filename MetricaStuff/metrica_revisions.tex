@@ -486,12 +486,48 @@ Hence, if $\tau = 0$ then $\widehat{T}_{FMSC} \overset{d}{\rightarrow} \chi^2(1)
 \paragraph{Relationship to Durbin-Hausman-Wu Test} In applied work researchers often use a Hausman test to choose between OLS and IV. The test is based on a quadratic form in the difference between the OLS and IV estimators. Using the notation of the present example, 
   \begin{eqnarray*}
     \sqrt{n}\left(\widehat{\beta} - \widetilde{\beta}\right) &=&\left[\begin{array}{cc}
-    -1 & 1
+    1 & -1
     \end{array}\right] \sqrt{n} \left(\begin{array}{c}
     \widehat{\beta} - \beta  \\ \widetilde{\beta} - \beta
     \end{array} \right)\\
-     &\overset{d}{\rightarrow}&
+     &\overset{d}{\rightarrow}& \left[\begin{array}{cc}
+    1 & -1
+    \end{array}\right]
+    N\left(\left[
+      \begin{array}{c}
+        \tau/\sigma_x^2 \\ 0
+      \end{array}\right],\sigma_\epsilon^2\left[
+        \begin{array}{cc}
+          1/\sigma_x^2 & 1/\sigma_x^2 \\
+          1/\sigma_x^2 & 1/\gamma^2
+        \end{array}
+      \right]
+    \right)\\
+    &\sim& N\left(\tau/\sigma_x^2, V
+    \right)
   \end{eqnarray*}
+where
+    \begin{eqnarray*}
+      V &=& (\sigma_\epsilon^2/\sigma_x^2) \left[\begin{array}{cc}
+    1 & -1
+    \end{array}\right]
+      \left[
+        \begin{array}{cc}
+          1&1\\
+          1&\sigma_x^2/\gamma^2
+        \end{array}
+      \right]
+    \left[\begin{array}{c}
+    1 \\ -1
+    \end{array}\right]\\
+        &=& (\sigma_\epsilon^2/\sigma_x^2)(\sigma_x^2/\gamma^2 - 1)  \\
+        &=&(\sigma_\epsilon^2/\sigma_x^2)(\sigma_v^2/\gamma^2) = (\sigma_\epsilon^2 \sigma_v^2)/(\sigma_x^2\gamma^2)
+    \end{eqnarray*}
+Hence,
+  \begin{eqnarray*}
+    \widehat{T}_{Hausman} = \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{V}} &=& \frac{n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} \overset{d}{\rightarrow} \chi^2(1)
+  \end{eqnarray*}
+under $H_0\colon \tau = 0$. Notice that we are working under a set of assumptions such that OLs and IV are both consistent under the null and OLS is efficient under the null. This simplifies the asymptotic variance considerably.
 
 \subsection{AMSE-Optimal Averaging} % (fold)
 \label{sub:amse_optimal_averaging}
