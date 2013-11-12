@@ -1,53 +1,4 @@
-\documentclass[12pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
-%% maxwidth is the original width if it is less than linewidth
-%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
-\makeatletter
-\def\maxwidth{ %
-  \ifdim\Gin@nat@width>\linewidth
-    \linewidth
-  \else
-    \Gin@nat@width
-  \fi
-}
-\makeatother
-
-\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
-\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
-\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
-\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
-\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
-\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
-\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
-\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
-\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
-\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
-
-\usepackage{framed}
-\makeatletter
-\newenvironment{kframe}{%
- \def\at@end@of@kframe{}%
- \ifinner\ifhmode%
-  \def\at@end@of@kframe{\end{minipage}}%
-  \begin{minipage}{\columnwidth}%
- \fi\fi%
- \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
- \colorbox{shadecolor}{##1}\hskip-\fboxsep
-     % There is no \\@totalrightmargin, so:
-     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
- \MakeFramed {\advance\hsize-\width
-   \@totalleftmargin\z@ \linewidth\hsize
-   \@setminipage}}%
- {\par\unskip\endMakeFramed%
- \at@end@of@kframe}
-\makeatother
-
-\definecolor{shadecolor}{rgb}{.97, .97, .97}
-\definecolor{messagecolor}{rgb}{0, 0, 0}
-\definecolor{warningcolor}{rgb}{1, 0, 1}
-\definecolor{errorcolor}{rgb}{1, 0, 0}
-\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
-
-\usepackage{alltt}
+\documentclass[12pt]{article}
 \usepackage{todonotes}
 \usepackage[margin=1.2in]{geometry}
 \usepackage{amssymb,amsmath,amsthm,graphicx}
@@ -69,7 +20,6 @@
 
 \title{JMP Revisions Following Econometrica Comments}
 \author{Francis J.\ DiTraglia}
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
 \maketitle
@@ -447,16 +397,31 @@ provided that we do not envision $\sigma_v$ and $\sigma_\epsilon$ changing with 
   $$|\rho|  < \sqrt{\frac{1}{n}\left(1 + \frac{1}{\kappa^2}\right)}$$
 where $\rho$ is the finite sample correlation between $v_i$ and $\epsilon_i$. Thus, interpreted as a finite sample rule, the FMSC tells us to weigh the endogeneity of $x_i$ as measured by $\rho$ against the sample size and the concentration parameter $\kappa^2$. We should only use the 2SLS estimator when the concentration parameter is sufficiently large, the sample size is sufficiently large, or $x$ is sufficiently endogenous. The following figure depicts the region in which OLS is favored for different sample sizes.
 
-% <<tikzplot, dev ='tikz'>>=
-% plot(0:1,0:1,type='n', ylab='origin of statistics', xlab='statistical presentation rocks with \\LaTeX{}')
-% text(.5,c(.8,.5,.2), c('\\texttt{lm(y \\textasciitilde{} x)}', '$\\hat{\\beta}=(X^{\\prime}X)^{-1}X^{\\prime}y$',  '$(\\Omega,\\mathcal{F},\\mu)$'))
+\begin{figure}
+  \caption{OLS and IV Figure goes here. R code commented out in this document.}
+\end{figure}
+% <<OLSboundary, dev = "tikz", echo=FALSE, cache=TRUE, fig.width=5, fig.height=5>>=
+% boundary.plot <- function(n, x.max = 2, y.max = 1){
+%   step <- x.max/400
+%   start <- 0 + step
+%   x <- seq(from = start, to = x.max, by = step)
+%   y <- sqrt((1/n) * (1 + 1/x))
+%   plot(x,y, type = 'l', xlim = c(0,x.max), ylim = c(0, y.max) ,xaxs = "i", yaxs = "i", pty = "s", ylab = "$|\\rho_{\\epsilon v}|$", xlab =  "$\\kappa^2$")
+  
+%   poly <- cbind(c(0, x, x.max), c(0, y, 0))
+%   polygon(poly, density = 20)
+          
+%   text(x.max/2, 0.8 * y.max, cex = 1.5, bquote("$n$" == .(n)))
+% }
+
+% par(mfrow = c(2,2), mgp=c(2.2,0.45,0), tcl=-0.4, mar=c(3.3,3.6,1.1,1.1))
+
+% boundary.plot(10, x.max = 2, y.max = 1)
+% boundary.plot(100, x.max = 1, y.max = 1)
+% boundary.plot(500, x.max = 0.5, y.max = 1)
+% boundary.plot(1000, x.max = 0.25, y.max = 1)
 % @
 
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-\includegraphics[width=\maxwidth]{figure/OLSboundary} 
-
-\end{knitrout}
 
 As the sample size grows, the boundary moves towards the origin, meaning that we are more likely to use 2SLS. However, each of regions asymptotes at the origin so that when instruments are weak, we choose OLS. This makes intuitive sense. Notice that we change the horizontal axis limits to make it easier to see the threshold for weak instruments depending on sample size.
 
@@ -520,7 +485,10 @@ But selection is a blunt instrument. A better idea is to \emph{combine} the OLS 
     \begin{eqnarray*}
       \omega^* &=& \left[ 1 - \frac{a}{b}\right]^{-1}\\
           &=& \left[ 1 - \left(\frac{\tau^2}{\sigma_x^4}\right)\left(\frac{\kappa^2 \sigma_x^2}{\sigma_\epsilon^2}\right)\right]^{-1}\\
-          &=& \left[ 1 - \kappa^2 \left(\frac{\tau^2}{\sigma_x^2\sigma_\epsilon^2}\right)\right]^{-1}
+          &=& \left[ 1 - \kappa^2 \left(\frac{\tau^2}{\sigma_x^2\sigma_\epsilon^2}\right)\right]^{-1}\\
+          &=& \left[ 1 - \left(\frac{ \mathbf{\pi}'Q_z \mathbf{\pi} }{\sigma_v^2}\right) \left(\frac{\tau^2}{\sigma_x^2\sigma_\epsilon^2}\right)\right]^{-1}\\
+          &=& \left[ 1 - \left(\frac{ \mathbf{\pi}'Q_z \mathbf{\pi} }{\sigma_x^2}\right) \left(\frac{\tau^2}{\sigma_v^2\sigma_\epsilon^2}\right)\right]^{-1}\\
+          &=& \left[ 1 - \left(\frac{ \mathbf{\pi}'Q_z \mathbf{\pi} }{\mathbf{\pi}'Q_z \mathbf{\pi}}\right) \left(\frac{\tau^2}{\sigma_v^2\sigma_\epsilon^2}\right)\right]^{-1}
     \end{eqnarray*}
 % subsection amse_optimal_averaging (end)
 
