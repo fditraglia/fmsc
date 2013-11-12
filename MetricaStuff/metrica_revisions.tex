@@ -442,16 +442,16 @@ which is a much simpler expression. The only potential problem with expressing t
 \subsection{Feasible FMSC} % (fold)
 \label{sub:feasible_fmsc}
 In the previous section we found that, under local mis-specification, the AMSE of the OLS estimator is lower than that of the IV estimator whenever 
-    $$\frac{\tau^2}{\sigma_v^2 \sigma_\epsilon^2}  < \frac{\boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}} $$
+    $$\frac{\tau^2}{\sigma_v^2 \sigma_\epsilon^2}  < \frac{\boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}} = \frac{\sigma_x^2}{\gamma^2} $$
 % subsection feasible_fmsc (end)
 To use the FMSC we substitute estimators of all the quantities in the preceding expression. For the right-hand side we use the familiar estimators which remain consistent under local mis-specification
   \begin{eqnarray*}
-      n^{-1}\mathbf{x}' \mathbf{x} &\overset{p}{\rightarrow}& \boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2\\
-      n^{-1}\mathbf{x}' Z (Z'Z)^{-1}Z' \mathbf{x} &\overset{p}{\rightarrow}& \boldsymbol{\pi}'Q_z \boldsymbol{\pi} 
+     \widehat{\sigma}_x^2 &=& n^{-1}\mathbf{x}' \mathbf{x} \overset{p}{\rightarrow} \boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2\\
+      \widehat{\gamma}^2 &=& n^{-1}\mathbf{x}' Z (Z'Z)^{-1}Z' \mathbf{x} \overset{p}{\rightarrow} \boldsymbol{\pi}'Q_z \boldsymbol{\pi} 
   \end{eqnarray*}
 as we saw in the proofs above. The difference of the two provides a consistent estimator of $\sigma_v^2$ and we see that this is equivalent to using the residuals from the first-stage regression:
   \begin{eqnarray*}
-    n^{-1}\mathbf{x}' \mathbf{x}  - n^{-1}\mathbf{x}' Z (Z'Z)^{-1}Z' \mathbf{x} &=& n^{-1} \mathbf{x}' \left(I - Z(Z'Z)^{-1}Z' \right)\mathbf{x}\\
+     \widehat{\sigma}_v^2 = n^{-1}\mathbf{x}' \mathbf{x}  - n^{-1}\mathbf{x}' Z (Z'Z)^{-1}Z' \mathbf{x} &=& n^{-1} \mathbf{x}' \left(I - Z(Z'Z)^{-1}Z' \right)\mathbf{x}\\
     &=& n^{-1} \mathbf{x}' (I - P_Z)\mathbf{x}\\
     &=& n^{-1} \mathbf{x}' (I-P_Z)'(I - P_Z)\mathbf{x}\\
     &=& (M_Z \mathbf{x})'(M_Z \mathbf{x})/n\\
@@ -459,8 +459,39 @@ as we saw in the proofs above. The difference of the two provides a consistent e
  \end{eqnarray*}
  since $P_Z$ is an orthogonal projection, hence symmetric and idempotent. (Remember that we're talking about the first-stage here: $\mathbf{x}$ is the dependent variable.) We could also divide by $(n - p)$ rather than $n$ where $p$ is the number of instrumental variables. 
 
- There are two possible ways to estimate $\sigma_\epsilon^2$: we can either use the redsiduals from the OLS estimator or those from the IV estimator. Under local mis-specification, either choice gives a consistent estimator. Unless the instruments are extremely weak, however, we would expect the IV residuals to be more robust. (We could always try both and see if it makes a difference.)  
+ There are two possible ways to estimate $\sigma_\epsilon^2$. We can either use the redsiduals from the OLS estimator or those from the IV estimator. Under local mis-specification, either choice gives a consistent estimator. Unless the instruments are extremely weak, however, we would expect the IV residuals to be more robust. (We could always try both and see if it makes a difference.)  
 
+ The only remaining quantity to be estimated is $\tau^2$. From above we know that 
+    $$\widehat{\tau} \overset{d}{\rightarrow} N\left(\tau,\sigma_\epsilon^2 \frac{\sigma_x^2\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right)$$
+since
+  $$\sigma_x^2 \left(\frac{\sigma_x^2}{\gamma^2} - 1 \right) = \sigma_x^2 \left(\frac{\sigma_x^2 - \gamma^2}{\gamma^2} \right) = \sigma_x^2 \left(\frac{\sigma_v^2}{\gamma^2}\right)$$
+Therefore,
+  $$\widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2 \widehat{\sigma}_v^2/\widehat{\gamma}^2$$
+is an asymptotically unbiased estimator of $\tau^2$ and accordingly
+  $$\frac{\widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2 \widehat{\sigma}_v^2/\widehat{\gamma}^2}{\widehat{\sigma}_\epsilon^2 \widehat{\sigma}_v^2} = \frac{\widehat{\tau}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} - \frac{\widehat{\sigma}_x^2}{\widehat{\gamma}^2}$$
+is an asymptotically unbiased estimator of $\tau^2/(\sigma_\epsilon^2 \sigma_v^2)$.
+
+Now we can construct the FMSC for the OLS versus IV example. From above we know that the AMSE of OLS is lower than that of IV whenever $\tau^2/(\sigma_\epsilon^2 \sigma_v^2)$ is less than $\sigma_x^2/\gamma^2$. Substituting our estimators of these quantities into the inequality, the FMSC tells us to use OLS whenever
+  \begin{eqnarray*}
+       \frac{\widehat{\tau}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} - \frac{\widehat{\sigma}_x^2}{\widehat{\gamma}^2} &<& \frac{\widehat{\sigma}_x^2}{\widehat{\gamma}^2}\\
+       \frac{\widehat{\tau}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} &<& 2 \frac{\widehat{\sigma}_x^2}{\widehat{\gamma}^2} \\
+        \widehat{T}_{FMSC} = \frac{\widehat{\tau}^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2} &<& 2
+  \end{eqnarray*}
+Now, the question is what is the limiting behavior of $\widehat{T}_{FMSC}$? Note that
+  \begin{eqnarray*}
+    \widehat{T}_{FMSC} &=& \frac{\widehat{\tau}^2 }{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2/\widehat{\gamma}^2} = \left(\frac{\widehat{\tau}}{\widehat{SD}(\widehat{\tau})}\right)^2
+  \end{eqnarray*}
+Hence, if $\tau = 0$ then $\widehat{T}_{FMSC} \overset{d}{\rightarrow} \chi^2(1)$. This means that we can interpret the FMSC as a test of the null hypothesis $H\colon \tau = 0$ against the two-sided alternative based on a critical value of $2$. This corresponds to a test with size  \texttt{1 - pchisq(2, df = 1)}$\approx 0.16$. Rather than leaving us free to choose the size of our test, the FMSC tells us precisely what size to use to obtain a favorable bias-variance tradeoff. We should use IV only when we reject $H_0\colon \tau = 0$ at the 16\% level. 
+
+\paragraph{Relationship to Durbin-Hausman-Wu Test} In applied work researchers often use a Hausman test to choose between OLS and IV. The test is based on a quadratic form in the difference between the OLS and IV estimators. Using the notation of the present example, 
+  \begin{eqnarray*}
+    \sqrt{n}\left(\widehat{\beta} - \widetilde{\beta}\right) &=&\left[\begin{array}{cc}
+    -1 & 1
+    \end{array}\right] \sqrt{n} \left(\begin{array}{c}
+    \widehat{\beta} - \beta  \\ \widetilde{\beta} - \beta
+    \end{array} \right)\\
+     &\overset{d}{\rightarrow}&
+  \end{eqnarray*}
 
 \subsection{AMSE-Optimal Averaging} % (fold)
 \label{sub:amse_optimal_averaging}
