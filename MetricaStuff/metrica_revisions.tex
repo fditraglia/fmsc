@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{todonotes}
-\usepackage[margin=1.2in]{geometry}
+\usepackage[margin=1.5in]{geometry}
 \usepackage{amssymb,amsmath,amsthm,graphicx}
 \usepackage{enumerate}
 
@@ -428,7 +428,7 @@ As the sample size grows, the boundary moves towards the origin, meaning that we
 \paragraph{Alternative Parameterization}
 Above we used $\kappa^2 = (\boldsymbol{\pi}'Q_z \boldsymbol{\pi})/\sigma_v^2$ to encode the strength of the instruments. The boundary region between OLS and IV turned out to depend on $1 + 1/\kappa^2$. Another way to express this is as follows:
   \begin{eqnarray*}
-    1 + \frac{1}{\kappa^2} &=& 1 + \frac{\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}} = \frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}{\boldsymbol{\pi}Q_z \boldsymbol{\pi}} = \frac{1}{R^2}
+    1 + \frac{1}{\kappa^2} &=& 1 + \frac{\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}} = \frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}{\boldsymbol{\pi'}Q_z \boldsymbol{\pi}} = \frac{1}{R^2}
   \end{eqnarray*}
 where $R^2$ is the population coefficient of determination in the first-stage regression. Using this convention, the finite-sample version of the boundary from above becomes
     $$|\rho|  < \sqrt{\frac{1}{nR^2} }$$
@@ -527,7 +527,12 @@ Hence,
   \begin{eqnarray*}
     \widehat{T}_{Hausman} = \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{V}} &=& \frac{n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} \overset{d}{\rightarrow} \chi^2(1)
   \end{eqnarray*}
-under $H_0\colon \tau = 0$. Notice that we are working under a set of assumptions such that OLs and IV are both consistent under the null and OLS is efficient under the null. This simplifies the asymptotic variance considerably.
+under $H_0\colon \tau = 0$. Notice that we are working under a set of assumptions such that OLS and IV are both consistent under the null and OLS is efficient under the null. This simplifies the asymptotic variance considerably.
+
+
+Now we will show that the test statistic for the Durbin-Hausman-Wu test is \emph{numerically identical} to the ``test statistic'' view of the FMSC for this problem.
+
+
 
 \subsection{AMSE-Optimal Averaging} % (fold)
 \label{sub:amse_optimal_averaging}
@@ -585,6 +590,14 @@ But selection is a blunt instrument. A better idea is to \emph{combine} the OLS 
       \omega^* &=& b/(b-a)\\
       \omega^* &=& \frac{1}{1 - a/b}
     \end{eqnarray*}
+    The second order condition for a minimum is is $2(a-b) > 0$ which is equivalent to $a > b$. Now, 
+    \begin{eqnarray*}
+       a &=&\frac{\tau^2}{\sigma_x^4} = \mbox{ABIAS(OLS)}^2 \\
+       b &=& \frac{\sigma_\epsilon^2}{\kappa^2 \sigma_x^2} = \sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{1}{\kappa^2}\right)\right] = \sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right)\right] \\
+          &=&  \sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{\sigma_x^2 - \boldsymbol{\pi}'Q_z \boldsymbol{\pi}}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right)\right]=\sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{\sigma_x^2 }{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}-1\right)\right]\\
+          &=&\sigma_\epsilon^2\left[ \frac{1}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}- \frac{1}{\sigma_x^2}\right] = \frac{\sigma_\epsilon^2}{\gamma} - \frac{\sigma_\epsilon^2}{\sigma_x^2} = \mbox{AVAR(2SLS) - AVAR(OLS)}
+     \end{eqnarray*} 
+
   Substituting the definitions of $a$ and $b$ we have
     \begin{eqnarray*}
       \omega^* &=& \left[ 1 - \frac{a}{b}\right]^{-1}\\
@@ -593,10 +606,10 @@ But selection is a blunt instrument. A better idea is to \emph{combine} the OLS 
           &=& \left[ 1 - \left(\frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} }{\sigma_v^2}\right) \left(\frac{\tau^2}{\sigma_x^2\sigma_\epsilon^2}\right)\right]^{-1}\\
           &=& \left[ 1 - \left(\frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} }{\sigma_x^2}\right) \left(\frac{\tau^2}{\sigma_v^2\sigma_\epsilon^2}\right)\right]^{-1}\\
           &=& \left[ 1 - \left(\frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} }{\boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}\right) \left(\frac{\tau^2}{\sigma_v^2\sigma_\epsilon^2}\right)\right]^{-1}\\
-          &=& \left[1 - \left(1 + \frac{1}{\kappa^2} \right)\left(\frac{\tau^2}{\sigma_v^2 \sigma_\epsilon^2}
-          \right) \right]^{-1}
+          &=& \left[ 1 - R^2 \left(\frac{\tau^2}{\sigma_v^2\sigma_\epsilon^2}\right)\right]^{-1}\\
+          &=& \left[1 - \left(\frac{\kappa^2}{1 + \kappa^2} \right)\left(\frac{\tau^2}{\sigma_v^2 \sigma_\epsilon^2}\right) \right]^{-1}
     \end{eqnarray*}
-  \todo[inline]{Need to think about the finite sample version of this.}
+  \todo[inline]{The finite sample version of this equates $\tau^2/(\sigma_v^2 \sigma_\epsilon^2)$ with $\rho_{\epsilon v}^2$. There remains the question of which parameters can be varied independently and hence what the best way to express this is.}
 % subsection amse_optimal_averaging (end)
 
 
