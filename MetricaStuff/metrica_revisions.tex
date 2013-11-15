@@ -573,14 +573,14 @@ But selection is a blunt instrument. A better idea is to \emph{combine} the OLS 
         &=&\frac{\sigma_\epsilon^2}{\sigma_x^2}\left[ \omega + (1- \omega)\omega + (1-\omega)^2\sigma_x^2/\gamma^2 \right] \\
           &=& \frac{\sigma_\epsilon^2}{\sigma_x^2}\left[2\omega - \omega^2 + \frac{\sigma_x^2}{\gamma^2} \left(1 - 2\omega + \omega^2 \right) \right]\\
           &=& \frac{\sigma_\epsilon^2}{\sigma_x^2} \left[(2\omega - \omega^2)\left( 1 - \frac{\sigma_x^2}{\gamma^2}\right)+\frac{\sigma_x^2}{\gamma^2} \right]\\
-          &=& \frac{\sigma_\epsilon^2}{\sigma_x^2} \left[(2\omega - \omega^2)\left( 1 - \frac{\sigma_x^2}{\gamma^2}\right)+\frac{\sigma_x^2}{\gamma^2} \right]\\
+          &=& \frac{\sigma_\epsilon^2}{\sigma_x^2} \left[(2\omega - \omega^2)\left( 1 - \frac{\sigma_x^2}{\gamma^2}\right)+\frac{\sigma_x^2}{\gamma^2} \right]
   \end{eqnarray*}
   and accordingly
     \begin{eqnarray*}
       \mbox{AMSE}\left(\widehat{\beta}(\omega)\right) &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left( 1 - \frac{\sigma_x^2}{\gamma^2}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
       &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left(\frac{\gamma^2 - \sigma_x^2}{\gamma^2}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
-      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left(\frac{\sigma_v^2}{\boldsymbol{\pi}'Q_z\boldsymbol{\pi}}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
-      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2\kappa^2}\right)+ \frac{\sigma_\epsilon^2}{\gamma^2}\\
+      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left(\frac{-\sigma_v^2}{\boldsymbol{\pi}'Q_z\boldsymbol{\pi}}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
+      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{-\sigma_\epsilon^2}{\sigma_x^2\kappa^2}\right)+ \frac{\sigma_\epsilon^2}{\gamma^2}\\
         &=& a\omega^2 + b(2\omega - \omega^2) + c
     \end{eqnarray*}
   so the first order condition for a minimum is
@@ -593,9 +593,9 @@ But selection is a blunt instrument. A better idea is to \emph{combine} the OLS 
     The second order condition for a minimum is is $2(a-b) > 0$ which is equivalent to $a > b$. Now, 
     \begin{eqnarray*}
        a &=&\frac{\tau^2}{\sigma_x^4} = \mbox{ABIAS(OLS)}^2 \\
-       b &=& \frac{\sigma_\epsilon^2}{\kappa^2 \sigma_x^2} = \sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{1}{\kappa^2}\right)\right] = \sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right)\right] \\
-          &=&  \sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{\sigma_x^2 - \boldsymbol{\pi}'Q_z \boldsymbol{\pi}}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right)\right]=\sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{\sigma_x^2 }{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}-1\right)\right]\\
-          &=&\sigma_\epsilon^2\left[ \frac{1}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}- \frac{1}{\sigma_x^2}\right] = \frac{\sigma_\epsilon^2}{\gamma} - \frac{\sigma_\epsilon^2}{\sigma_x^2} = \mbox{AVAR(2SLS) - AVAR(OLS)}
+       b &=& \frac{-\sigma_\epsilon^2}{\kappa^2 \sigma_x^2} = \sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{1}{\kappa^2}\right)\right] = - \sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right)\right] \\
+          &=& - \sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{\sigma_x^2 - \boldsymbol{\pi}'Q_z \boldsymbol{\pi}}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right)\right]=-\sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{\sigma_x^2 }{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}-1\right)\right]\\
+          &=&\sigma_\epsilon^2\left[  \frac{1}{\sigma_x^2}-\frac{1}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right] =  \frac{\sigma_\epsilon^2}{\sigma_x^2}-\frac{\sigma_\epsilon^2}{\gamma}  = \mbox{AVAR(OLS)-AVAR(2SLS) }
      \end{eqnarray*} 
 
   Substituting the definitions of $a$ and $b$ we have
