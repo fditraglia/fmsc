@@ -454,7 +454,9 @@ To use the FMSC we substitute estimators of all the quantities in the preceding 
   \end{eqnarray*}
 as we saw in the proofs above. The difference of the two provides a consistent estimator of $\sigma_v^2$ and we see that this is equivalent to using the residuals from the first-stage regression:
   \begin{eqnarray*}
-     \widehat{\sigma}_v^2 = n^{-1}\mathbf{x}' \mathbf{x}  - n^{-1}\mathbf{x}' Z (Z'Z)^{-1}Z' \mathbf{x} &=& n^{-1} \mathbf{x}' \left(I - Z(Z'Z)^{-1}Z' \right)\mathbf{x}\\
+     \widehat{\sigma}_v^2 &=& \widehat{\sigma}_x^2 - \widehat{\gamma}^2 \\
+     &=&n^{-1}\mathbf{x}' \mathbf{x}  - n^{-1}\mathbf{x}' Z (Z'Z)^{-1}Z' \mathbf{x}\\
+      &=& n^{-1} \mathbf{x}' \left(I - Z(Z'Z)^{-1}Z' \right)\mathbf{x}\\
     &=& n^{-1} \mathbf{x}' (I - P_Z)\mathbf{x}\\
     &=& n^{-1} \mathbf{x}' (I-P_Z)'(I - P_Z)\mathbf{x}\\
     &=& (M_Z \mathbf{x})'(M_Z \mathbf{x})/n\\
@@ -525,13 +527,16 @@ where
     \end{array}\right]\\
         &=& (\sigma_\epsilon^2/\sigma_x^2)(\sigma_x^2/\gamma^2 - 1) = \sigma_\epsilon^2/\gamma^2 - \sigma_\epsilon^2/\sigma_x^2 \\
         &=& \mbox{AVAR(2SLS)} - \mbox{AVAR(OLS)}\\
-        &=& \sigma_\epsilon^2 \left(1/\gamma^2 - 1/\sigma_x^2 \right) = \sigma_\epsilon^2 \left(\frac{\sigma_x^2 - \gamma^2}{\sigma_x^2 \gamma^2}\right) = (\sigma_\epsilon^2 \sigma_v^2)/(\sigma_x^2\gamma^2)
+        &=& \sigma_\epsilon^2 \left(1/\gamma^2 - 1/\sigma_x^2 \right)
     \end{eqnarray*}
 which agrees with the standard textbook formula in the case where OLS is efficient under the null (see e.g.\ Cameron \& Trivedi). Hence,
   \begin{eqnarray*}
-    \widehat{T}_{Hausman} = \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{V}} &=& \frac{n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} \overset{d}{\rightarrow} \chi^2(1)
+    \widehat{T}_{Hausman} &=& \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{V}} = \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{\sigma}_\epsilon^2\left(1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2\right)}= \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{\sigma}_\epsilon^2\left(\displaystyle \frac{\widehat{\sigma}_x^2 - \widehat{\gamma}^2}{\widehat{\gamma}^2 \widehat{\sigma}_x^2}\right)}\\
+     &=& \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{\sigma}_\epsilon^2\left(\displaystyle \frac{\widehat{\sigma}_v^2}{\widehat{\gamma}^2 \widehat{\sigma}_x^2}\right)}
+     =\frac{n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2}
+     \overset{d}{\rightarrow} \chi^2(1)
   \end{eqnarray*}
-under $H_0\colon \tau = 0$. Notice that we are working under a set of assumptions such that OLS and IV are both consistent under the null and OLS is efficient under the null. This simplifies the asymptotic variance considerably.
+under $H_0\colon \tau = 0$, where we have used the fact that $\widehat{\sigma}_x^2 = \widehat{\gamma}^2 + \widehat{\sigma}_v^2$ from above. So long as we use the same estimator of $\sigma_\epsilon^2$ for each term in the denominator, as we have here, we can be sure that the difference is positive since $\widehat{\sigma}_x^2 = \widehat{\gamma}^2 + \widehat{\sigma}_v^2$ and we showed above that $\widehat{\sigma}_v^2 = (M_Z \mathbf{x})'(M_Z \mathbf{x})/n$.
 
 
 Now we will show that the test statistic for the Durbin-Hausman-Wu test is \emph{numerically identical} to the ``test statistic'' view of the FMSC for this problem. From above,
@@ -551,10 +556,21 @@ so we have,
       &=& n^{-1}\left[n \widehat{\sigma}_x^2 \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2  = n\widehat{\sigma}_x^4 \left( \widehat{\beta} - \widetilde{\beta}\right) ^2
   \end{eqnarray*}
   Therefore $\widehat{T}_{FMSC} = \widehat{T}_{Hausman}$ as claimed. In other words, using the FMSC to choose between OLS and 2SLS is numerically equivalent to carrying out a DHW test at the 16\% level.
-\todo[inline]{Only thing we need to be careful about here is making sure that the estimated quantities used are identical. Specifically, to implement the DHW test, all we need is the output of OLS and the output of 2SLS. Need to make sure that this gives us something reasonable for the FMSC. (I think the only concern is which estimator of $\sigma_\epsilon^2$ we're using.)}
+
 
 \paragraph{Implementing the FMSC via a Hausman Test}
-We can use the relationship from above to implement the FMSC for this example directly. We just need to be careful about which estimators we use for the unknowns.
+We can use the relationship from above to implement the FMSC for this example directly. There is a potential issue involving the denominator, since this is a difference of asymptotic variance estimators. As formulated above, it is guaranteed to be positive since we use the sample estimator of the error variance for each piece. (See 8.3.2 of Cameron \& Trivedi for more on this). 
+
+There are several possible estimators for $\sigma_\epsilon^2$ as mentioned above. One is to use the OLS estimator, another is to use the 2SLS estimator. (See Dufour et al. for more possibilities.) It seems like the easiest thing to do would be to use the 2SLS estimator. I could also try the OLS estimator. Another idea would be to take the average of the two. It seems like much ink has been spilled on this topic but it's a bit of a distraction from this paper so I shouldn't spend too much time on it.
+
+The point is this: once we have chosen an estimator of $\sigma_\epsilon^2$ we only need the following quantities to construct the DHW test statistic:
+  \begin{eqnarray*}
+    \widehat{\beta} &=& (\mathbf{x}'\mathbf{x})^{-1}\mathbf{x}'\mathbf{y}\\
+    \widehat{\sigma}_x^2 &=& n^{-1}\mathbf{x}'\mathbf{x} \\
+    \widetilde{\beta} &=& (\mathbf{x}'Z(Z'Z)^{-1} Z'\mathbf{x})^{-1}\mathbf{x}'Z (Z'Z)^{-1} Z'\mathbf{y}\\
+    \widehat{\gamma}^2 &=& n^{-1} \mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x}
+  \end{eqnarray*}
+The FMSC is equivalent to carrying out this test at a particular significance level. Thus, we can easily compare it to some other significance levels and see how the performance differs. Coding this will be very straightforward: we don't even need to calculate $\widehat{\tau}$ explicitly.
 
 \subsection{Robust Version of FMSC and Hausman Test?} % (fold)
 \label{sub:robust_version_of_fmsc_and_hausman_test_}
