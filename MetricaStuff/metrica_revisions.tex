@@ -570,7 +570,9 @@ The point is this: once we have chosen an estimator of $\sigma_\epsilon^2$ we on
     \widetilde{\beta} &=& (\mathbf{x}'Z(Z'Z)^{-1} Z'\mathbf{x})^{-1}\mathbf{x}'Z (Z'Z)^{-1} Z'\mathbf{y}\\
     \widehat{\gamma}^2 &=& n^{-1} \mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x}
   \end{eqnarray*}
-The FMSC is equivalent to carrying out this test at a particular significance level. Thus, we can easily compare it to some other significance levels and see how the performance differs. Coding this will be very straightforward: we don't even need to calculate $\widehat{\tau}$ explicitly.
+The FMSC is equivalent to carrying out this test at a particular significance level. Thus, we can easily compare it to some other significance levels and see how the performance differs. Coding this will be very straightforward: we don't even need to calculate $\widehat{\tau}$ explicitly. 
+
+\todo[inline]{Should be fairly easy to write a function to implement this, along with the corrected confidence interval. Could give option to use various estimators for $\sigma_\epsilon^2$. Implement via model interface in R? Compare to \texttt{sem} or something like that? Just need to be careful about projecting out any exogenous regressors. This is numerically equivalent to doing things the hard way.}
 
 \subsection{Robust Version of FMSC and Hausman Test?} % (fold)
 \label{sub:robust_version_of_fmsc_and_hausman_test_}
