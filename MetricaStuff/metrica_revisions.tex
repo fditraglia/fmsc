@@ -192,7 +192,10 @@ where $Z' = (\mathbf{z}_{1}, \hdots, \mathbf{z}_{n}), \mathbf{x}' = (x_{1}, \hdo
 		\widehat{\beta} &=& \left(\mathbf{x}'\mathbf{x}\right)^{-1}\mathbf{x}'\mathbf{y}\\
 		\widetilde{\beta} &=& \left(\mathbf{x}'Z W_n Z'\mathbf{x}\right)^{-1}\mathbf{x}'Z W_nZ'\mathbf{y}
 	\end{eqnarray}
-where $W_n$ is a positive definite weighting matrix. 
+where $W_n$ is a positive definite weighting matrix. To estimate $\tau$, we plug the GIV estimator into the OLS moment conditions and multiply by $\sqrt{n}$ as follows:
+  \begin{equation}
+     \widehat{\tau} = \sqrt{n} \left[\mathbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})/n\right] = n^{-1/2}\mathbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})
+   \end{equation} 
 
 
 \begin{thm}
@@ -520,19 +523,43 @@ where
     \left[\begin{array}{c}
     1 \\ -1
     \end{array}\right]\\
-        &=& (\sigma_\epsilon^2/\sigma_x^2)(\sigma_x^2/\gamma^2 - 1)  \\
-        &=&(\sigma_\epsilon^2/\sigma_x^2)(\sigma_v^2/\gamma^2) = (\sigma_\epsilon^2 \sigma_v^2)/(\sigma_x^2\gamma^2)
+        &=& (\sigma_\epsilon^2/\sigma_x^2)(\sigma_x^2/\gamma^2 - 1) = \sigma_\epsilon^2/\gamma^2 - \sigma_\epsilon^2/\sigma_x^2 \\
+        &=& \mbox{AVAR(2SLS)} - \mbox{AVAR(OLS)}\\
+        &=& \sigma_\epsilon^2 \left(1/\gamma^2 - 1/\sigma_x^2 \right) = \sigma_\epsilon^2 \left(\frac{\sigma_x^2 - \gamma^2}{\sigma_x^2 \gamma^2}\right) = (\sigma_\epsilon^2 \sigma_v^2)/(\sigma_x^2\gamma^2)
     \end{eqnarray*}
-Hence,
+which agrees with the standard textbook formula in the case where OLS is efficient under the null (see e.g.\ Cameron \& Trivedi). Hence,
   \begin{eqnarray*}
     \widehat{T}_{Hausman} = \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{V}} &=& \frac{n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} \overset{d}{\rightarrow} \chi^2(1)
   \end{eqnarray*}
 under $H_0\colon \tau = 0$. Notice that we are working under a set of assumptions such that OLS and IV are both consistent under the null and OLS is efficient under the null. This simplifies the asymptotic variance considerably.
 
 
-Now we will show that the test statistic for the Durbin-Hausman-Wu test is \emph{numerically identical} to the ``test statistic'' view of the FMSC for this problem.
+Now we will show that the test statistic for the Durbin-Hausman-Wu test is \emph{numerically identical} to the ``test statistic'' view of the FMSC for this problem. From above,
+  $$\widehat{T}_{FMSC} = \frac{\widehat{\tau}^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2} = \left(\frac{ \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2}\right)\left(\frac{\widehat{\tau}^2}{\widehat{\sigma}_x^2}\right)$$
+whereas,
+  $$\widehat{T}_{Hausman} = \frac{n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} = \left(\frac{ \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2}\right)n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2$$
+  Thus, we only need to show that $\widehat{\tau}^2 = n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^4$. First notice that
+\begin{eqnarray*}
+   \mathbf{x}' \left(\mathbf{y} - \mathbf{x}\widetilde{\beta}\right)&=& \mathbf{x}'\mathbf{y} - \mathbf{x}'\mathbf{x}\widetilde{\beta} =\mathbf{x}'\mathbf{x}\left(\mathbf{x}'\mathbf{x}\right)^{-1} \mathbf{x}'\mathbf{y} - \mathbf{x}'\mathbf{x}\widetilde{\beta}\\
+    &=&\mathbf{x}'\mathbf{x}\left[\left(\mathbf{x}'\mathbf{x}\right)^{-1} \mathbf{x}'\mathbf{y} -  \widetilde{\beta}\right] = \mathbf{x}'\mathbf{x} \left( \widehat{\beta} - \widetilde{\beta}\right)
+\end{eqnarray*}
+Now, from above
+  $$\widehat{\tau} = \sqrt{n} \left[\mathbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})/n\right] = n^{-1/2} \textbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})$$
+so we have,
+  \begin{eqnarray*}
+    \widehat{\tau}^2 &=&  \left[n^{-1/2} \textbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})\right]^2 = n^{-1}\left[\mathbf{x}'\mathbf{x} \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2 \\
+      &=& n^{-1}\left[n \widehat{\sigma}_x^2 \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2  = n\widehat{\sigma}_x^4 \left( \widehat{\beta} - \widetilde{\beta}\right) ^2
+  \end{eqnarray*}
+  Therefore $\widehat{T}_{FMSC} = \widehat{T}_{Hausman}$ as claimed. In other words, using the FMSC to choose between OLS and 2SLS is numerically equivalent to carrying out a DHW test at the 16\% level.
+\todo[inline]{Only thing we need to be careful about here is making sure that the estimated quantities used are identical. Specifically, to implement the DHW test, all we need is the output of OLS and the output of 2SLS. Need to make sure that this gives us something reasonable for the FMSC. (I think the only concern is which estimator of $\sigma_\epsilon^2$ we're using.)}
 
+\paragraph{Implementing the FMSC via a Hausman Test}
+We can use the relationship from above to implement the FMSC for this example directly. We just need to be careful about which estimators we use for the unknowns.
 
+\subsection{Robust Version of FMSC and Hausman Test?} % (fold)
+\label{sub:robust_version_of_fmsc_and_hausman_test_}
+\todo[inline]{Does the relationship continue to hold without the simplifying assumptions we used for the variance matrix?}
+% subsection robust_version_of_fmsc_and_hausman_test_ (end)
 
 \subsection{AMSE-Optimal Averaging} % (fold)
 \label{sub:amse_optimal_averaging}
@@ -630,7 +657,7 @@ Differentiating,
 
 \subsection{Feasible AMSE-Optimal Weighting} % (fold)
 \label{sub:feasible_amse_optimal_weighting}
-We need to substitute estimators. Difficulty with handling $\tau^2$ since we only have an asymptotically unbiased estimator of this. Can't get an asymptotically unbiased estimator of the optimal weight and it's not clear that this is what we'd want in any case. Bootstrap the limit distribution? Something else? 
+We need to substitute estimators. Difficulty with handling $\tau^2$ since we only have an asymptotically unbiased estimator of this. Can't get an asymptotically unbiased estimator of the optimal weight and it's not clear that this is what we'd want in any case. Bootstrap the limit distribution? Something else? If possible, relate directly to the Durbin-Hausman-Wu (DHW) test statistic. This would make it very easy to implement.
 % subsection feasible_amse_optimal_weighting (end)
 
 
