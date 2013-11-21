@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{todonotes}
-\usepackage[margin=1.2in]{geometry}
+\usepackage[margin=1.5in]{geometry}
 \usepackage{amssymb,amsmath,amsthm,graphicx}
 \usepackage{enumerate}
 
@@ -192,7 +192,10 @@ where $Z' = (\mathbf{z}_{1}, \hdots, \mathbf{z}_{n}), \mathbf{x}' = (x_{1}, \hdo
 		\widehat{\beta} &=& \left(\mathbf{x}'\mathbf{x}\right)^{-1}\mathbf{x}'\mathbf{y}\\
 		\widetilde{\beta} &=& \left(\mathbf{x}'Z W_n Z'\mathbf{x}\right)^{-1}\mathbf{x}'Z W_nZ'\mathbf{y}
 	\end{eqnarray}
-where $W_n$ is a positive definite weighting matrix. 
+where $W_n$ is a positive definite weighting matrix. To estimate $\tau$, we plug the GIV estimator into the OLS moment conditions and multiply by $\sqrt{n}$ as follows:
+  \begin{equation}
+     \widehat{\tau} = \sqrt{n} \left[\mathbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})/n\right] = n^{-1/2}\mathbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})
+   \end{equation} 
 
 
 \begin{thm}
@@ -428,7 +431,7 @@ As the sample size grows, the boundary moves towards the origin, meaning that we
 \paragraph{Alternative Parameterization}
 Above we used $\kappa^2 = (\boldsymbol{\pi}'Q_z \boldsymbol{\pi})/\sigma_v^2$ to encode the strength of the instruments. The boundary region between OLS and IV turned out to depend on $1 + 1/\kappa^2$. Another way to express this is as follows:
   \begin{eqnarray*}
-    1 + \frac{1}{\kappa^2} &=& 1 + \frac{\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}} = \frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}{\boldsymbol{\pi}Q_z \boldsymbol{\pi}} = \frac{1}{R^2}
+    1 + \frac{1}{\kappa^2} &=& 1 + \frac{\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}} = \frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}{\boldsymbol{\pi'}Q_z \boldsymbol{\pi}} = \frac{1}{R^2}
   \end{eqnarray*}
 where $R^2$ is the population coefficient of determination in the first-stage regression. Using this convention, the finite-sample version of the boundary from above becomes
     $$|\rho|  < \sqrt{\frac{1}{nR^2} }$$
@@ -451,7 +454,9 @@ To use the FMSC we substitute estimators of all the quantities in the preceding 
   \end{eqnarray*}
 as we saw in the proofs above. The difference of the two provides a consistent estimator of $\sigma_v^2$ and we see that this is equivalent to using the residuals from the first-stage regression:
   \begin{eqnarray*}
-     \widehat{\sigma}_v^2 = n^{-1}\mathbf{x}' \mathbf{x}  - n^{-1}\mathbf{x}' Z (Z'Z)^{-1}Z' \mathbf{x} &=& n^{-1} \mathbf{x}' \left(I - Z(Z'Z)^{-1}Z' \right)\mathbf{x}\\
+     \widehat{\sigma}_v^2 &=& \widehat{\sigma}_x^2 - \widehat{\gamma}^2 \\
+     &=&n^{-1}\mathbf{x}' \mathbf{x}  - n^{-1}\mathbf{x}' Z (Z'Z)^{-1}Z' \mathbf{x}\\
+      &=& n^{-1} \mathbf{x}' \left(I - Z(Z'Z)^{-1}Z' \right)\mathbf{x}\\
     &=& n^{-1} \mathbf{x}' (I - P_Z)\mathbf{x}\\
     &=& n^{-1} \mathbf{x}' (I-P_Z)'(I - P_Z)\mathbf{x}\\
     &=& (M_Z \mathbf{x})'(M_Z \mathbf{x})/n\\
@@ -520,14 +525,101 @@ where
     \left[\begin{array}{c}
     1 \\ -1
     \end{array}\right]\\
-        &=& (\sigma_\epsilon^2/\sigma_x^2)(\sigma_x^2/\gamma^2 - 1)  \\
-        &=&(\sigma_\epsilon^2/\sigma_x^2)(\sigma_v^2/\gamma^2) = (\sigma_\epsilon^2 \sigma_v^2)/(\sigma_x^2\gamma^2)
+        &=& (\sigma_\epsilon^2/\sigma_x^2)(\sigma_x^2/\gamma^2 - 1) = \sigma_\epsilon^2/\gamma^2 - \sigma_\epsilon^2/\sigma_x^2 \\
+        &=& \mbox{AVAR(2SLS)} - \mbox{AVAR(OLS)}\\
+        &=& \sigma_\epsilon^2 \left(1/\gamma^2 - 1/\sigma_x^2 \right)
     \end{eqnarray*}
-Hence,
+which agrees with the standard textbook formula in the case where OLS is efficient under the null (see e.g.\ Cameron \& Trivedi). Hence,
   \begin{eqnarray*}
-    \widehat{T}_{Hausman} = \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{V}} &=& \frac{n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} \overset{d}{\rightarrow} \chi^2(1)
+    \widehat{T}_{Hausman} &=& \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{V}} = \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{\sigma}_\epsilon^2\left(1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2\right)}= \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{\sigma}_\epsilon^2\left(\displaystyle \frac{\widehat{\sigma}_x^2 - \widehat{\gamma}^2}{\widehat{\gamma}^2 \widehat{\sigma}_x^2}\right)}\\
+     &=& \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{\sigma}_\epsilon^2\left(\displaystyle \frac{\widehat{\sigma}_v^2}{\widehat{\gamma}^2 \widehat{\sigma}_x^2}\right)}
+     =\frac{n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2}
+     \overset{d}{\rightarrow} \chi^2(1)
   \end{eqnarray*}
-under $H_0\colon \tau = 0$. Notice that we are working under a set of assumptions such that OLs and IV are both consistent under the null and OLS is efficient under the null. This simplifies the asymptotic variance considerably.
+under $H_0\colon \tau = 0$, where we have used the fact that $\widehat{\sigma}_x^2 = \widehat{\gamma}^2 + \widehat{\sigma}_v^2$ from above. So long as we use the same estimator of $\sigma_\epsilon^2$ for each term in the denominator, as we have here, we can be sure that the difference is positive since $\widehat{\sigma}_x^2 = \widehat{\gamma}^2 + \widehat{\sigma}_v^2$ and we showed above that $\widehat{\sigma}_v^2 = (M_Z \mathbf{x})'(M_Z \mathbf{x})/n$.
+
+
+Now we will show that the test statistic for the Durbin-Hausman-Wu test is \emph{numerically identical} to the ``test statistic'' view of the FMSC for this problem. From above,
+  $$\widehat{T}_{FMSC} = \frac{\widehat{\tau}^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2} = \left(\frac{ \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2}\right)\left(\frac{\widehat{\tau}^2}{\widehat{\sigma}_x^2}\right)$$
+whereas,
+  $$\widehat{T}_{Hausman} = \frac{n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} = \left(\frac{ \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2}\right)n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2$$
+  Thus, we only need to show that $\widehat{\tau}^2 = n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^4$. First notice that
+\begin{eqnarray*}
+   \mathbf{x}' \left(\mathbf{y} - \mathbf{x}\widetilde{\beta}\right)&=& \mathbf{x}'\mathbf{y} - \mathbf{x}'\mathbf{x}\widetilde{\beta} =\mathbf{x}'\mathbf{x}\left(\mathbf{x}'\mathbf{x}\right)^{-1} \mathbf{x}'\mathbf{y} - \mathbf{x}'\mathbf{x}\widetilde{\beta}\\
+    &=&\mathbf{x}'\mathbf{x}\left[\left(\mathbf{x}'\mathbf{x}\right)^{-1} \mathbf{x}'\mathbf{y} -  \widetilde{\beta}\right] = \mathbf{x}'\mathbf{x} \left( \widehat{\beta} - \widetilde{\beta}\right)
+\end{eqnarray*}
+Now, from above
+  $$\widehat{\tau} = \sqrt{n} \left[\mathbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})/n\right] = n^{-1/2} \textbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})$$
+so we have,
+  \begin{eqnarray*}
+    \widehat{\tau}^2 &=&  \left[n^{-1/2} \textbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})\right]^2 = n^{-1}\left[\mathbf{x}'\mathbf{x} \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2 \\
+      &=& n^{-1}\left[n \widehat{\sigma}_x^2 \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2  = n\widehat{\sigma}_x^4 \left( \widehat{\beta} - \widetilde{\beta}\right) ^2
+  \end{eqnarray*}
+  Therefore $\widehat{T}_{FMSC} = \widehat{T}_{Hausman}$ as claimed. In other words, using the FMSC to choose between OLS and 2SLS is numerically equivalent to carrying out a DHW test at the 16\% level.
+
+
+\paragraph{Implementing the FMSC via a Hausman Test}
+We can use the relationship from above to implement the FMSC for this example directly. There is a potential issue involving the denominator, since this is a difference of asymptotic variance estimators. As formulated above, it is guaranteed to be positive since we use the sample estimator of the error variance for each piece. (See 8.3.2 of Cameron \& Trivedi for more on this). 
+
+There are several possible estimators for $\sigma_\epsilon^2$ as mentioned above. One is to use the OLS estimator, another is to use the 2SLS estimator. (See Dufour et al. for more possibilities.) It seems like the easiest thing to do would be to use the 2SLS estimator. I could also try the OLS estimator. Another idea would be to take the average of the two. It seems like much ink has been spilled on this topic but it's a bit of a distraction from this paper so I shouldn't spend too much time on it.
+
+The point is this: once we have chosen an estimator of $\sigma_\epsilon^2$ we only need the following quantities to construct the DHW test statistic:
+  \begin{eqnarray*}
+    \widehat{\beta} &=& (\mathbf{x}'\mathbf{x})^{-1}\mathbf{x}'\mathbf{y}\\
+    \widehat{\sigma}_x^2 &=& n^{-1}\mathbf{x}'\mathbf{x} \\
+    \widetilde{\beta} &=& (\mathbf{x}'Z(Z'Z)^{-1} Z'\mathbf{x})^{-1}\mathbf{x}'Z (Z'Z)^{-1} Z'\mathbf{y}\\
+    \widehat{\gamma}^2 &=& n^{-1} \mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x}
+  \end{eqnarray*}
+The FMSC is equivalent to carrying out this test at a particular significance level. Thus, we can easily compare it to some other significance levels and see how the performance differs. Coding this will be very straightforward: we don't even need to calculate $\widehat{\tau}$ explicitly. 
+
+\todo[inline]{Should be fairly easy to write a function to implement this, along with the corrected confidence interval. Could give option to use various estimators for $\sigma_\epsilon^2$. Implement via model interface in R? Compare to \texttt{sem} or something like that? Just need to be careful about projecting out any exogenous regressors. This is numerically equivalent to doing things the hard way.}
+
+\subsection{Robust Version of FMSC and Hausman Test?} % (fold)
+\label{sub:robust_version_of_fmsc_and_hausman_test_}
+\todo[inline]{Does the relationship continue to hold without the simplifying assumptions we used for the variance matrix?}
+% subsection robust_version_of_fmsc_and_hausman_test_ (end)
+
+
+\subsection{Valid Confidence Interval for OLS vs 2SLS Example} % (fold)
+\label{sub:valid_confidence_interval_for_ols_vs_2sls_example}
+
+\todo[inline]{Bootstrap the limit experiment using the asymptotic normality of the estimators. Start with the situation where we assume $\tau$ is known. Then take the supremum over all possible $\tau$ within a particular confidence interval.}
+
+There doesn't seem to be a shortcut that makes this any cleaner, so we'll just have to write it out from first principles. The post-FMSC estimator is
+  $$\beta^*_{FMSC} = \textbf{1}\left\{\widehat{T}_{FMSC} < 2 \right\} \widehat{\beta} + \textbf{1}\left\{\widehat{T}_{FMSC} \geq 2 \right\} \widetilde{\beta}$$
+where
+  $$\widehat{T}_{FMSC} = \frac{\widehat{\tau}^2 }{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2/\widehat{\gamma}^2}$$    
+Since the weights sum to one, we can write
+  $$\sqrt{n}(\beta^*_{FMSC} - \beta) = \textbf{1}\left\{\widehat{T}_{FMSC} < 2 \right\} \sqrt{n}(\widehat{\beta} - \beta) + \textbf{1}\left\{\widehat{T}_{FMSC} \geq 2 \right\}\sqrt{n}( \widetilde{\beta}-\beta)$$
+The limit of $\sqrt{n}(\beta^*_{FMSC} - \beta)$ is $\Lambda(\tau)$ in the notation of the paper. From above we have
+  $$
+\left[
+\begin{array}{c}
+  \sqrt{n}\left(\widehat{\beta} - \beta\right) \\
+  \sqrt{n}\left(\widetilde{\beta} - \beta\right)\\
+  \widehat{\tau}
+\end{array}
+\right] \overset{d}{\rightarrow} 
+\left[\begin{array}{cc}
+\widehat{K} & \mathbf{0}'\\
+  0 & \widetilde{K}\\
+  1 & -\widehat{K}^{-1} \widetilde{K}
+  \end{array}
+  \right]\left( \left[\begin{array}{c} \tau \\ \mathbf{0}  \end{array} \right] + M\right)
+$$
+where $M \sim \mathcal{N}(0, \Omega)$ and
+  \begin{eqnarray}
+ \widehat{K}&=&   \left(\boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2\right)^{-1}\\
+    \widetilde{K} &=& \left(\boldsymbol{\pi}'Q_z \boldsymbol{\pi}\right)^{-1}\boldsymbol{\pi}'\\
+    \Omega &=& \sigma_\epsilon^2\left[ \begin{array}{cc}
+\boldsymbol{\pi}'Q_z \boldsymbol{\pi}  +\sigma^2_v 
+&\boldsymbol{\pi}'Q_z\\
+  Q_z \boldsymbol{\pi}&Q_z
+  \end{array}\right]
+  \end{eqnarray}
+Following the general procedure from the paper, we'll simulate draws $M_j$, substituting consistent estimators of all unknowns except for $\tau$, for which we'll construct a confidence interval.
+% subsection valid_confidence_interval_for_ols_vs_2sls_example (end)
+
 
 \subsection{AMSE-Optimal Averaging} % (fold)
 \label{sub:amse_optimal_averaging}
@@ -568,14 +660,14 @@ But selection is a blunt instrument. A better idea is to \emph{combine} the OLS 
         &=&\frac{\sigma_\epsilon^2}{\sigma_x^2}\left[ \omega + (1- \omega)\omega + (1-\omega)^2\sigma_x^2/\gamma^2 \right] \\
           &=& \frac{\sigma_\epsilon^2}{\sigma_x^2}\left[2\omega - \omega^2 + \frac{\sigma_x^2}{\gamma^2} \left(1 - 2\omega + \omega^2 \right) \right]\\
           &=& \frac{\sigma_\epsilon^2}{\sigma_x^2} \left[(2\omega - \omega^2)\left( 1 - \frac{\sigma_x^2}{\gamma^2}\right)+\frac{\sigma_x^2}{\gamma^2} \right]\\
-          &=& \frac{\sigma_\epsilon^2}{\sigma_x^2} \left[(2\omega - \omega^2)\left( 1 - \frac{\sigma_x^2}{\gamma^2}\right)+\frac{\sigma_x^2}{\gamma^2} \right]\\
+          &=& \frac{\sigma_\epsilon^2}{\sigma_x^2} \left[(2\omega - \omega^2)\left( 1 - \frac{\sigma_x^2}{\gamma^2}\right)+\frac{\sigma_x^2}{\gamma^2} \right]
   \end{eqnarray*}
   and accordingly
     \begin{eqnarray*}
       \mbox{AMSE}\left(\widehat{\beta}(\omega)\right) &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left( 1 - \frac{\sigma_x^2}{\gamma^2}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
       &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left(\frac{\gamma^2 - \sigma_x^2}{\gamma^2}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
-      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left(\frac{\sigma_v^2}{\boldsymbol{\pi}'Q_z\boldsymbol{\pi}}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
-      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2\kappa^2}\right)+ \frac{\sigma_\epsilon^2}{\gamma^2}\\
+      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left(\frac{-\sigma_v^2}{\boldsymbol{\pi}'Q_z\boldsymbol{\pi}}\right) + \frac{\sigma_\epsilon^2}{\gamma^2}\\
+      &=& \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (2\omega - \omega^2)\left(\frac{-\sigma_\epsilon^2}{\sigma_x^2\kappa^2}\right)+ \frac{\sigma_\epsilon^2}{\gamma^2}\\
         &=& a\omega^2 + b(2\omega - \omega^2) + c
     \end{eqnarray*}
   so the first order condition for a minimum is
@@ -585,20 +677,48 @@ But selection is a blunt instrument. A better idea is to \emph{combine} the OLS 
       \omega^* &=& b/(b-a)\\
       \omega^* &=& \frac{1}{1 - a/b}
     \end{eqnarray*}
+    Now, 
+    \begin{eqnarray*}
+       a &=&\frac{\tau^2}{\sigma_x^4} = \mbox{ABIAS(OLS)}^2 \\
+       b &=& \frac{-\sigma_\epsilon^2}{\kappa^2 \sigma_x^2} = \sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{1}{\kappa^2}\right)\right] = - \sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right)\right] \\
+          &=& - \sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{\sigma_x^2 - \boldsymbol{\pi}'Q_z \boldsymbol{\pi}}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right)\right]=-\sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(\frac{\sigma_x^2 }{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}-1\right)\right]=\sigma_\epsilon^2\left[ \frac{1}{\sigma_x^2} \left(1-\frac{\sigma_x^2 }{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right)\right]\\
+          &=&\sigma_\epsilon^2\left[  \frac{1}{\sigma_x^2}-\frac{1}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right] =  \frac{\sigma_\epsilon^2}{\sigma_x^2}-\frac{\sigma_\epsilon^2}{\gamma^2}  = \mbox{AVAR(OLS)}-\mbox{AVAR(2SLS)}
+     \end{eqnarray*} 
+
   Substituting the definitions of $a$ and $b$ we have
     \begin{eqnarray*}
       \omega^* &=& \left[ 1 - \frac{a}{b}\right]^{-1}\\
-          &=& \left[ 1 - \left(\frac{\tau^2}{\sigma_x^4}\right)\left(\frac{\kappa^2 \sigma_x^2}{\sigma_\epsilon^2}\right)\right]^{-1}\\
-          &=& \left[ 1 - \kappa^2 \left(\frac{\tau^2}{\sigma_x^2\sigma_\epsilon^2}\right)\right]^{-1}\\
-          &=& \left[ 1 - \left(\frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} }{\sigma_v^2}\right) \left(\frac{\tau^2}{\sigma_x^2\sigma_\epsilon^2}\right)\right]^{-1}\\
-          &=& \left[ 1 - \left(\frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} }{\sigma_x^2}\right) \left(\frac{\tau^2}{\sigma_v^2\sigma_\epsilon^2}\right)\right]^{-1}\\
-          &=& \left[ 1 - \left(\frac{ \boldsymbol{\pi}'Q_z \boldsymbol{\pi} }{\boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2}\right) \left(\frac{\tau^2}{\sigma_v^2\sigma_\epsilon^2}\right)\right]^{-1}\\
-          &=& \left[1 - \left(1 + \frac{1}{\kappa^2} \right)\left(\frac{\tau^2}{\sigma_v^2 \sigma_\epsilon^2}
-          \right) \right]^{-1}
+      &=&\left[1 - \frac{\mbox{ABIAS(OLS)}^2}{\mbox{AVAR(OLS)}- \mbox{AVAR(2SLS)}} \right]^{-1}\\
+      &=&\left[1 + \frac{\mbox{ABIAS(OLS)}^2}{\mbox{AVAR(2SLS)}-\mbox{AVAR(OLS)}} \right]^{-1}\\
+      &=& \left[1 + \frac{\tau^2/\sigma_x^4}{\sigma_\epsilon^2(1/\gamma^2 - 1/\sigma_x^2)}\right]^{-1}
+      = \left[1 + \frac{\tau^2}{\sigma_\epsilon^2 \sigma_x^4 (1/\gamma^2 - 1/\sigma_x^2)}\right]^{-1}\\
+      &=& \left[1 + \frac{\tau^2}{\sigma_\epsilon^2 \sigma_x^2}\left( \frac{1}{\sigma_x^2(1/\gamma^2 - 1/\sigma_x^2)}\right)\right]^{-1}
+      = \left[1 + \frac{\tau^2}{\sigma_\epsilon^2 \sigma_x^2}\left( \frac{1}{\sigma_x^2/\gamma^2 - 1}\right)\right]^{-1}\\
+      &=& \left[1 + \frac{\tau^2}{\sigma_\epsilon^2 \sigma_x^2}\left( \frac{\gamma^2}{\sigma_x^2 - \gamma^2}\right)\right]^{-1}
+      = \left[1 + \left|\frac{\tau}{\sigma_\epsilon \sigma_x}\right|^2\left( \frac{\gamma^2}{\sigma_v^2}\right)\right]^{-1}
+      = \left[1 +\kappa^2 \left|\frac{\tau}{\sigma_\epsilon \sigma_x}\right|^2\right]^{-1}\\
+      &=& \left[1 + \left|\frac{\tau}{\sigma_\epsilon \sigma_v}\right|^2\left( \frac{\gamma^2}{\sigma_x^2}\right)\right]^{-1}
+      = \left[1 + R^2 \left|\frac{\tau}{\sigma_\epsilon \sigma_v}\right|^2\right]^{-1} = \frac{1}{1 + R^2 \rho_{\epsilon v}^2}\\
+      &=& \left[1 + \left(\frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2}\right)\left( \frac{\kappa^2}{1 + \kappa^2}\right)\right]^{-1}
     \end{eqnarray*}
-  \todo[inline]{Need to think about the finite sample version of this.}
+    Notice that this agrees with my earlier derivations for the special case in which there is only one instrument since $\kappa^2 = R^2/(1 - R^2)$. The second order condition for a minimum is is $2(a-b) > 0$ which is equivalent to $a > b$. From above, $a$ is the squared asymptotic bias of the OLS estimator: $\tau^2/\sigma_x^4$. This is strictly postitive so long as $\tau \neq 0$. Also from above, $b$ is the difference between the asymptotic variance of the OLS estimator and the 2SLS estimator: $\sigma_\epsilon^2(1/\sigma_x^2 - 1/\gamma^2)$. Since $\sigma_x^2 = \gamma^2 + \sigma_v^2$, this quantity is strictly negative so long as $\sigma_v^2 \neq 0$. Thus, the second order condition holds except in the trivial case where the instruments are perfect predictors of $x$.
+  \todo[inline]{The finite sample version of this equates $\tau^2/(\sigma_v^2 \sigma_\epsilon^2)$ with $\rho_{\epsilon v}^2$. There remains the question of which parameters can be varied independently and hence what the best way to express this is.}
+
+Differentiating,
+  \begin{eqnarray*}
+    \frac{\partial \omega^*}{\partial \kappa^2} &=& -\left[1 + \left(\frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2}\right)\left( \frac{\kappa^2}{1 + \kappa^2}\right)\right]^{-2} \left( \frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2} \right) \frac{d}{d\kappa^2} \left(\frac{\kappa^2}{1 + \kappa^2} \right)\\
+      &=&  -\left[1 + \left(\frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2}\right)\left( \frac{\kappa^2}{1 + \kappa^2}\right)\right]^{-2} \left( \frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2} \right)  \left(\frac{(1+ \kappa^2) - \kappa^2}{(1 + \kappa^2)^2} \right)\\
+      &=& -\left[1 + \left(\frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2}\right)\left( \frac{\kappa^2}{1 + \kappa^2}\right)\right]^{-2} \left( \frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2} \right)  \left(\frac{1}{(1 + \kappa^2)^2} \right) < 0\\
+    \frac{\partial \omega^*}{\partial \tau^2} &=&-\left[1 + \left(\frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2}\right)\left( \frac{\kappa^2}{1 + \kappa^2}\right)\right]^{-2}\left(\frac{\kappa^2}{1 + \kappa^2} \right)\frac{d}{d\tau^2}\left( \frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2} \right) \\
+    &=&-\left[1 + \left(\frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2}\right)\left( \frac{\kappa^2}{1 + \kappa^2}\right)\right]^{-2}\left(\frac{\kappa^2}{1 + \kappa^2} \right)\left( \frac{1}{\sigma_\epsilon^2 \sigma_v^2} \right) < 0 
+  \end{eqnarray*}
+  The result makes intuitive sense. As $\kappa^2$ increases, the instruments $z$ become stronger so we give \emph{less} weight to OLS and more to 2SLS. As the $\kappa^2$ decreases, the instruments become weaker so we give \emph{more} weight to OLS and less to 2SLS. Similarly, as $\tau^2$ increases the regressor $x$ becomes more endogenous so we give \emph{less} weight to OLS and more to 2SLS. As $\tau^2$ decreases the regressor $x$ becomes less endogenous, so we give \emph{more} weight to OLS and less to 2SLS.
 % subsection amse_optimal_averaging (end)
 
+\subsection{Feasible AMSE-Optimal Weighting} % (fold)
+\label{sub:feasible_amse_optimal_weighting}
+\todo[inline]{We need to substitute estimators. Difficulty with handling $\tau^2$ since we only have an asymptotically unbiased estimator of this. Can't get an asymptotically unbiased estimator of the optimal weight in this case. I don't want to get side-tracked on this so perhaps just try the simplest thing: substitute the asymptotically unbiased estimator of $\tau^2$. This will be a short section in any case and is intended to be illustrative more than anything else.}
+% subsection feasible_amse_optimal_weighting (end)
 
 
 \newpage
