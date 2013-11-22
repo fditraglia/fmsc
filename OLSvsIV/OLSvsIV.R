@@ -169,12 +169,18 @@ mse.compare.cpp(0.2, 0.1, 500)
 
 
 #Example of the kind of plot I'll use in the paper
-# r.seq <- seq(0, 0.2, 0.01)
-# mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
-# matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
-# legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
-# 
-# 
+r.seq <- seq(0, 0.2, 0.01)
+mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
+mse.values.cpp <- t(mapply(mse.compare.cpp, p = 0.1, r = r.seq, n = 250))
+mse.values - mse.values.cpp
+
+matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
+ 
+matplot(r.seq, apply(mse.values.cpp, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
+
+#Why are the results from the cpp version of the code so much smoother? Does it have to do with how we set the seed?
 
 
 
