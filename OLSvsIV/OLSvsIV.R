@@ -1,7 +1,7 @@
 #Filename:        OLSvsIV.R
 #Author:          Frank DiTraglia
 #First Version:   2013-21-11
-#This Version:    2013-21-11
+#This Version:    2013-22-11
 
 #This script is a preliminary implementation of the OLS versus IV example that I am adding to the fmsc paper.
 
@@ -119,16 +119,27 @@ mse <- function(x, truth){mean((x - truth)^2)}
 
 mse.compare <- function(p, r, n){
   
-  sim.results <- replicate(5000, simple.sim(p, r, n))
+  sim.results <- replicate(10000, simple.sim(p, r, n))
   out <- apply(sim.results, 1, mse, truth = 1)
   return(out)
 }
 
+#Parallel version using multicore package (assumes this has already been loaded)
+pmse.compare <- function(p, r, n){
+  
+  sim.results <- mclapply(X = 1:5000, FUN = function(.){simple.sim(p, r, n)}) 
+  sim.results <- do.call(rbind, sim.results) #mclapply outputs a list of vectors. Combine them into a matrix.
+  out <- apply(sim.results, 2, mse, truth = 1) #sim.results in this function is the transpose of sim.results in the non-parallel version of this function. Hence apply by columns, 2, rather than rows. 
+  return(out)
+}
 
-r.seq <- seq(0, 0.2, 0.01)
-mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
-matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
-legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
+system.time(pmse.compare(0.2, 0.1, 500))
+system.time(mse.compare(0.2, 0.1, 500))
+
+#r.seq <- seq(0, 0.2, 0.01)
+#mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
+#matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+#legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
 
 #sim.results <- t(replicate(1000, simple.sim(p = 0.4, r = 0, 100)))
 
