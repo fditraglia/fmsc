@@ -84,17 +84,17 @@ fmsc.ols.iv <- function(x, y, z){
   b.fmsc <- ifelse(Tfmsc < 2, b.ols, b.tsls)
   
   #Estimated Optimal Weight for OLS
-  tau.squared.est <- tau^2 - s.e.squared * s.x.squared * s.v.squared / g.squared
-  abias.squared.est.ols <- tau.squared.est / s.x.squared^2
-  numerator <- max(0, abias.squared.est.ols)
-  avar.est.tsls <- s.e.squared / g.squared
-  avar.est.ols <- s.e.squared / s.x.squared
-  denominator <- avar.est.ols - avar.est.tsls
-  omega.star <- 1 / (1 - (numerator / denominator))
-  b.star <- omega.star * b.ols + (1 - omega.star) * b.tsls
+  #tau.squared.est <- tau^2 - s.e.squared * s.x.squared * s.v.squared / g.squared
+  #abias.squared.est.ols <- tau.squared.est / s.x.squared^2
+  #numerator <- max(0, abias.squared.est.ols)
+  #avar.est.tsls <- s.e.squared / g.squared
+  #avar.est.ols <- s.e.squared / s.x.squared
+  #denominator <- avar.est.ols - avar.est.tsls
+  #omega.star <- 1 / (1 - (numerator / denominator))
+  #b.star <- omega.star * b.ols + (1 - omega.star) * b.tsls
   
-  out <- c(b.fmsc, b.star, b.ols, b.tsls, omega.star)
-  names(out) <- c('b.fmsc', 'b.star', 'b.ols', 'b.tsls', 'omega.star')
+  out <- c(b.fmsc, b.star, b.ols, b.tsls) 
+  names(out) <- c('b.fmsc', 'b.star', 'b.ols', 'b.tsls')
   return(out)
   
 }
@@ -125,10 +125,7 @@ mse.compare <- function(p, r, n){
   return(out)
 }
 
-#mse.compare(0.2, 0, 100)
 
 
-sim.results <- replicate(1000, simple.sim(0.4, 0.4, 100))
-
-
+sim.results <- t(replicate(10000, simple.sim(p = 0.4, r = 0, 100)))
 
