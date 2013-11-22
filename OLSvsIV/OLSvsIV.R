@@ -53,6 +53,8 @@ fmsc.ols.iv <- function(x, y, z){
   # z       matrix of observations for the instruments
   #------------------------------------------------------------------
   
+  n <- length(y)
+  
   xx <- crossprod(x)
   b.ols <- crossprod(x,y) / xx
   #lm(y ~ x - 1)
