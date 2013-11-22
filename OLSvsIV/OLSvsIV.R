@@ -53,40 +53,46 @@ fmsc.ols.iv <- function(x, y, z){
   # z       matrix of observations for the instruments
   #------------------------------------------------------------------
   
-  ols.fit <- lm(y ~ x - 1) 
-  b.ols <- ols.fit$coefficients
-
-  tsls.fit <-  tsls(y ~ x - 1, ~ z)
-  b.tsls <- tsls.fit$coefficients
+  xx <- crossprod(x)
+  b.ols <- crossprod(x,y) / xx
+  #lm(y ~ x - 1)
   
-  s.e.squared <- crossprod(tsls.fit$residuals) / n
+  zx <- crossprod(z, x)
+  zz.inv <- chol2inv(qr.R(qr(z))) 
+  x.hat <- z %*% (zz.inv %*% zx)
+  b.tsls <- crossprod(x.hat, y) / crossprod(x.hat)
+  #tsls.fit <- tsls(y ~ x - 1, ~ z - 1)
   
-  tau <- crossprod(x, y - b.tsls * x) / sqrt(n)
-  s.x.squared <- crossprod(x) / n
+  tsls.residuals <- y - x %*% b.tsls
+  s.e.squared <- crossprod(tsls.residuals) / n
+  #crossprod(tsls.fit$residuals) / n
   
-  #The following line is neither efficient nor robust: it simply follows the formula exactly. I'll replace it with something better soon.
-  g.squared <- crossprod(x, z) %*% solve(crossprod(z)) %*% crossprod(z, x) / n
+  tau <- crossprod(x, tsls.residuals) / sqrt(n)
+  #tau <- crossprod(x, y - x %*% b.tsls) / sqrt(n)
+  
+  s.x.squared <- xx / n
+  g.squared <- t(zx) %*% zz.inv %*% zx / n
   s.v.squared <- s.x.squared - g.squared
   
   Tfmsc <- tau^2 * g.squared / (s.v.squared * s.e.squared * s.x.squared)
+  #This is numerically equivalent to a Durbin-Hausman-Wu Test Statistic
+  #n * (b.ols - b.tsls)^2 / (s.e.squared * (1 / g.squared - 1 / s.x.squared))
+  
+  #Estimated chosen by FMSC
   b.fmsc <- ifelse(Tfmsc < 2, b.ols, b.tsls)
   
-  #Tdhw <- n * (b.ols - b.tsls)^2 / (s.e.squared * (1 / g.squared - 1 / s.x.squared))
-  
+  #Estimated Optimal Weight for OLS
   tau.squared.est <- tau^2 - s.e.squared * s.x.squared * s.v.squared / g.squared
-  
+  abias.squared.est.ols <- tau.squared.est / s.x.squared^2
+  numerator <- max(0, abias.squared.est.ols)
   avar.est.tsls <- s.e.squared / g.squared
   avar.est.ols <- s.e.squared / s.x.squared
-  abias.squared.est.ols <- tau.squared.est / s.x.squared^2
-  
-  
-  a <- max(0, abias.squared.est.ols)
-  b <- avar.est.ols - avar.est.tsls
-  omega.star <- 1 / (1 - (a / b))
+  denominator <- avar.est.ols - avar.est.tsls
+  omega.star <- 1 / (1 - (numerator / denominator))
   b.star <- omega.star * b.ols + (1 - omega.star) * b.tsls
   
   out <- c(b.fmsc, b.star, b.ols, b.tsls, omega.star)
-  names(out) <- c('b.fmsc', 'b.star', 'b.ols', 'b.tsls', omega.star)
+  names(out) <- c('b.fmsc', 'b.star', 'b.ols', 'b.tsls', 'omega.star')
   return(out)
   
 }
