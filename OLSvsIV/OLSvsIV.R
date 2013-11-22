@@ -114,6 +114,7 @@ simple.sim <- function(p, r, n){
   
 }
 
+
 mse <- function(x, truth){mean((x - truth)^2)}
 
 
@@ -128,13 +129,52 @@ mse.compare <- function(p, r, n, n.reps = 10000){
 }
 
 
+#(Potentially) Faster C++ version of dgp. Load Rcpp and RcppArmadillo first. Also set the appropriate directory: "~/fmsc/OLSvsIV"
+sourceCpp("dgp.cpp")
+
+#Corresponding version of simple.sim
+simple.sim.cpp <- function(p, r, n){
+  
+  PI <- p * rep(1, 3)
+  V.z <- diag(rep(1, 3))
+  V.e <- diag(rep(1, 2)) + matrix(c(0, r, r, 0), 2, 2)
+  
+  sim.data <- dgp_cpp(1, PI, V.e, V.z, n)
+  x <- sim.data$x
+  y <- sim.data$y
+  z <- sim.data$z
+  b <- fmsc.ols.iv(x, y, z)
+  return(b)
+  
+}
+
+#Corresponding version of mse.compare
+mse.compare.cpp <- function(p, r, n, n.reps = 10000){
+  
+  sim.results <- mclapply(X = 1:n.reps, FUN = function(.){simple.sim.cpp(p, r, n)}) 
+  sim.results <- do.call(rbind, sim.results) #mclapply outputs a list of vectors. Combine them into a matrix.
+  out <- apply(sim.results, 2, mse, truth = 1)  
+  return(out)
+}
+
+
+microbenchmark(simple.sim(0.2, 0.1, 500), simple.sim.cpp(0.2, 0.1, 500))
+
+microbenchmark(mse.compare(0.2, 0.1, 500, 100), mse.compare.cpp(0.2, 0.1, 500, 100))
+
+
+
+mse.compare(0.2, 0.1, 500)
+mse.compare.cpp(0.2, 0.1, 500)
+
+
 #Example of the kind of plot I'll use in the paper
-r.seq <- seq(0, 0.2, 0.01)
-mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
-matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
-legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
-
-
+# r.seq <- seq(0, 0.2, 0.01)
+# mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
+# matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+# legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
+# 
+# 
 
 
 
