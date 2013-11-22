@@ -119,24 +119,22 @@ mse <- function(x, truth){mean((x - truth)^2)}
 
 
 #This function runs in parallel on Linux/Mac machines with more than one core using mclapply. It assumes that the library multicore has been loaded.
-mse.compare <- function(p, r, n){
+mse.compare <- function(p, r, n, n.reps = 10000){
   
-  sim.results <- mclapply(X = 1:5000, FUN = function(.){simple.sim(p, r, n)}) 
+  sim.results <- mclapply(X = 1:n.reps, FUN = function(.){simple.sim(p, r, n)}) 
   sim.results <- do.call(rbind, sim.results) #mclapply outputs a list of vectors. Combine them into a matrix.
   out <- apply(sim.results, 2, mse, truth = 1)  
   return(out)
 }
 
 
+#Example of the kind of plot I'll use in the paper
+r.seq <- seq(0, 0.2, 0.01)
+mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
+matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
 
-#r.seq <- seq(0, 0.2, 0.01)
-#mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
-#matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
-#legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
 
-#sim.results <- t(replicate(1000, simple.sim(p = 0.4, r = 0, 100)))
 
-#mse.compare(p = 0.3, r = 0.1, n = 500)
-#mse.compare(p = 0.3, r = 0.2, n = 100)
 
 
