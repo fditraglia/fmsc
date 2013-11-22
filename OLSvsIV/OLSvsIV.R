@@ -93,8 +93,8 @@ fmsc.ols.iv <- function(x, y, z){
   #omega.star <- 1 / (1 - (numerator / denominator))
   #b.star <- omega.star * b.ols + (1 - omega.star) * b.tsls
   
-  out <- c(b.fmsc, b.star, b.ols, b.tsls) 
-  names(out) <- c('b.fmsc', 'b.star', 'b.ols', 'b.tsls')
+  out <- c(b.fmsc, b.ols, b.tsls) 
+  names(out) <- c('b.fmsc', 'b.ols', 'b.tsls')
   return(out)
   
 }
