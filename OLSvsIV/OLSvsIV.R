@@ -41,11 +41,10 @@ dgp <- function(b, PI, V.e, V.z, n){
 fmsc.ols.iv <- function(x, y, z){
   
   #------------------------------------------------------------------
-  #NOTE: This function assumes that the library sem has been loaded
-  #      and that x is a column of observations for a single 
-  #      endogenous regressor. In other words, it assumes that all
-  #      exogenous regressors, including the constant, have been
-  #      "projected out" of the system.
+  #NOTE: This function assumes that x is a column of observations for 
+  #      a single endogenous regressor. In other words, it assumes 
+  #      that all exogenous regressors, including the constant, have 
+  #      been "projected out" of the system.
   #------------------------------------------------------------------
   #Arguments:
   # x       matrix of observations of single endogenous regressor
@@ -120,12 +119,20 @@ mse <- function(x, truth){mean((x - truth)^2)}
 
 mse.compare <- function(p, r, n){
   
-  sim.results <- replicate(1000, simple.sim(p, r, n))
+  sim.results <- replicate(5000, simple.sim(p, r, n))
   out <- apply(sim.results, 1, mse, truth = 1)
   return(out)
 }
 
 
+r.seq <- seq(0, 0.2, 0.01)
+mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
+matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
 
-sim.results <- t(replicate(10000, simple.sim(p = 0.4, r = 0, 100)))
+#sim.results <- t(replicate(1000, simple.sim(p = 0.4, r = 0, 100)))
+
+#mse.compare(p = 0.3, r = 0.1, n = 500)
+#mse.compare(p = 0.3, r = 0.2, n = 100)
+
 
