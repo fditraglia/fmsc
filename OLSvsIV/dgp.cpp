@@ -1,4 +1,12 @@
-//Generate simulated data for the OLS versus IV FMSC example.
+/*------------------------------------------------------------
+Filename:        dgp.cpp
+Author:          Frank DiTraglia
+First Version:   2013-22-11
+This Version:    2013-22-11
+--------------------------------------------------------------
+Generates simulated data for the OLS versus IV FMSC example.
+------------------------------------------------------------*/
+  
 // [[Rcpp::depends(RcppArmadillo)]]
 
 #include <RcppArmadillo.h>
