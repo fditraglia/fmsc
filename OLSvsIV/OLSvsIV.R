@@ -118,7 +118,7 @@ mse <- function(x, truth){mean((x - truth)^2)}
 #This function runs in parallel on Linux/Mac machines with more than one core using mclapply. It assumes that the library multicore has been loaded.
 mse.compare <- function(p, r, n, n.reps = 10000){
   
-  sim.results <- lapply(X = 1:n.reps, FUN = function(.){simple.sim(p, r, n)}) 
+  sim.results <- mclapply(X = 1:n.reps, FUN = function(.){simple.sim(p, r, n)}) 
   sim.results <- do.call(rbind, sim.results) #mclapply outputs a list of vectors. Combine them into a matrix.
   out <- apply(sim.results, 2, mse, truth = 1)  
   return(out)
@@ -147,86 +147,13 @@ simple.sim.cpp <- function(p, r, n){
 #Corresponding version of mse.compare
 mse.compare.cpp <- function(p, r, n, n.reps = 10000){
   
-  sim.results <- lapply(X = 1:n.reps, FUN = function(.){simple.sim.cpp(p, r, n)}) 
+  sim.results <- mclapply(X = 1:n.reps, FUN = function(.){simple.sim.cpp(p, r, n)}) 
   sim.results <- do.call(rbind, sim.results) #mclapply outputs a list of vectors. Combine them into a matrix.
   out <- apply(sim.results, 2, mse, truth = 1)  
   return(out)
 }
 
 
-
-#Versions of the C++ functions based on dgp_alt.cpp rather than dgp.cpp
-sourceCpp("dgp_alt.cpp")
-
-#Corresponding version of simple.sim
-simple.sim.alt.cpp <- function(p, r, n){
-  
-  PI <- p * rep(1, 3)
-  V.z <- diag(rep(1, 3))
-  V.e <- diag(rep(1, 2)) + matrix(c(0, r, r, 0), 2, 2)
-  
-  sim.data <- dgp_alt_cpp(1, PI, V.e, V.z, n)
-  x <- sim.data$x
-  y <- sim.data$y
-  z <- sim.data$z
-  b <- fmsc.ols.iv(x, y, z)
-  return(b)
-  
-}
-
-#Corresponding version of mse.compare
-mse.compare.cpp.alt <- function(p, r, n, n.reps = 10000){
-  
-  sim.results <- lapply(X = 1:n.reps, FUN = function(.){simple.sim.alt.cpp(p, r, n)}) 
-  sim.results <- do.call(rbind, sim.results) #mclapply outputs a list of vectors. Combine them into a matrix.
-  out <- apply(sim.results, 2, mse, truth = 1)  
-  return(out)
-}
-
-
-V.e <- matrix(c(1, 0, 0, 1), 2, 2)
-V.z <- matrix(c(1, 0, 0, 1), 2, 2)
-PI <- 0 * c(1, 1)
-b <- 0
-
-set.seed(1827)
-simsR <- dgp(b, PI, V.e, V.z, 10)
-set.seed(1827)
-simsCpp <- dgp_cpp(b, PI, V.e, V.z, 10)
-set.seed(1827)
-altsimsCpp <- dgp_alt_cpp(b, PI, V.e, V.z, 10)
-
-all.equal(simsR, simsCpp)
-all.equal(simsR, altsimsCpp)
-
-set.seed(1827)
-simple.sim(0.4, 0.4, 200)
-set.seed(1827)
-simple.sim.alt.cpp(0.4, 0.4, 200)
-
-
-microbenchmark(simple.sim(0.2, 0.1, 500), simple.sim.cpp(0.2, 0.1, 500), simple.sim.alt.cpp(0.2, 0.1, 500))
-
-set.seed(3728)
-simple.sim(0.2, 0.1, 500)
-set.seed(3728)
-simple.sim.cpp(0.2, 0.1, 500)
-set.seed(3728)
-simple.sim.alt.cpp(0.2, 0.1, 500)
-
-
-set.seed(3728)
-mse.compare(p = 0.4, r = 0.2, n = 100, n.reps = 100)
-set.seed(3728)
-mse.compare.cpp.alt(p = 0.4, r = 0.2, n = 100, n.reps = 100)
-
-
-#microbenchmark(mse.compare(0.2, 0.1, 500, 100), mse.compare.cpp(0.2, 0.1, 500, 100))
-
-
-
-#mse.compare(0.2, 0.1, 500)
-#mse.compare.cpp(0.2, 0.1, 500)
 
 
 #Example of the kind of plot I'll use in the paper
