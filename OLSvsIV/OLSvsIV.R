@@ -155,28 +155,34 @@ mse.compare.cpp <- function(p, r, n, n.reps = 10000){
 
 
 set.seed(3029)
-mse.compare.cpp(0.1, 0.2, 100, 10000)
+mse.compare(0.1, 0.2, 1000, 1000)
 set.seed(3029)
-mse.compare.cpp(0.1, 0.2, 1000, 10000)
-
-#Example of the kind of plot I'll use in the paper
-#r.seq <- seq(0, 0.2, 0.01)
-#set.seed(3728)
-#mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
-#set.seed(3728)
-#mse.values.cpp <- t(mapply(mse.compare.cpp, p = 0.1, r = r.seq, n = 250))
-#set.seed(3728)
-#mse.values.cpp.alt <- t(mapply(mse.compare.cpp.alt, p = 0.1, r = r.seq, n = 250))
+mse.compare.cpp(0.1, 0.2, 1000, 1000)
 
 
-# 
-# matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+r.seq <- seq(0, 0.2, 0.01)
+set.seed(3728)
+mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250, 1000))
+set.seed(3728)
+mse.values.cpp <- t(mapply(mse.compare.cpp, p = 0.1, r = r.seq, n = 250, 1000))
+
+all.equal(mse.values, mse.values.cpp)
+
+set.seed(4938)
+fooR <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare(p = 0.3, r, n = 250)}, mc.set.seed = FALSE))
+set.seed(4938)
+fooCpp <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare.cpp(p = 0.3, r, n = 250)}, mc.set.seed = FALSE))#mclapply outputs a list of vectors. Combine them into a matrix.
+
+all.equal(fooCpp, fooR)
+
+
+
+
+
+matplot(r.seq, apply(fooR, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
 # legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
 # 
-# matplot(r.seq, apply(mse.values.cpp, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
-# legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
-# 
-# matplot(r.seq, apply(mse.values.cpp.alt, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+matplot(r.seq, apply(fooCpp, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
 # legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
 
 
