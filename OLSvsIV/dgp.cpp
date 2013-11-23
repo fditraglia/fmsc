@@ -16,7 +16,7 @@ the same random numbers from R as from C++, set the seed, etc.
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List dgp_alt_cpp(double b, NumericVector PI_r, NumericMatrix Ve_r, 
+List dgp_cpp(double b, NumericVector PI_r, NumericMatrix Ve_r, 
               NumericMatrix Vz_r, int n){
     /*------------------------------------------------------------------
       Arguments:

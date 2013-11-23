@@ -118,7 +118,7 @@ mse <- function(x, truth){mean((x - truth)^2)}
 #This function runs in parallel on Linux/Mac machines with more than one core using mclapply. It assumes that the library multicore has been loaded.
 mse.compare <- function(p, r, n, n.reps = 10000){
   
-  sim.results <- mclapply(X = 1:n.reps, FUN = function(.){simple.sim(p, r, n)}) 
+  sim.results <- lapply(X = 1:n.reps, FUN = function(.){simple.sim(p, r, n)}) 
   sim.results <- do.call(rbind, sim.results) #mclapply outputs a list of vectors. Combine them into a matrix.
   out <- apply(sim.results, 2, mse, truth = 1)  
   return(out)
@@ -147,38 +147,38 @@ simple.sim.cpp <- function(p, r, n){
 #Corresponding version of mse.compare
 mse.compare.cpp <- function(p, r, n, n.reps = 10000){
   
-  sim.results <- mclapply(X = 1:n.reps, FUN = function(.){simple.sim.cpp(p, r, n)}) 
+  sim.results <- lapply(X = 1:n.reps, FUN = function(.){simple.sim.cpp(p, r, n)}) 
   sim.results <- do.call(rbind, sim.results) #mclapply outputs a list of vectors. Combine them into a matrix.
   out <- apply(sim.results, 2, mse, truth = 1)  
   return(out)
 }
 
 
-
+set.seed(3029)
+mse.compare.cpp(0.1, 0.2, 100, 10000)
+set.seed(3029)
+mse.compare.cpp(0.1, 0.2, 1000, 10000)
 
 #Example of the kind of plot I'll use in the paper
-r.seq <- seq(0, 0.2, 0.01)
-set.seed(3728)
-mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
-set.seed(3728)
-mse.values.cpp <- t(mapply(mse.compare.cpp, p = 0.1, r = r.seq, n = 250))
-set.seed(3728)
-mse.values.cpp.alt <- t(mapply(mse.compare.cpp.alt, p = 0.1, r = r.seq, n = 250))
+#r.seq <- seq(0, 0.2, 0.01)
+#set.seed(3728)
+#mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
+#set.seed(3728)
+#mse.values.cpp <- t(mapply(mse.compare.cpp, p = 0.1, r = r.seq, n = 250))
+#set.seed(3728)
+#mse.values.cpp.alt <- t(mapply(mse.compare.cpp.alt, p = 0.1, r = r.seq, n = 250))
 
 
-all.equal(mse.values, mse.values.cpp.alt)
+# 
+# matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+# legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
+# 
+# matplot(r.seq, apply(mse.values.cpp, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+# legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
+# 
+# matplot(r.seq, apply(mse.values.cpp.alt, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+# legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
 
-
-matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
-legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
-
-matplot(r.seq, apply(mse.values.cpp, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
-legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
-
-matplot(r.seq, apply(mse.values.cpp.alt, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
-legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
-
-#Why are the results from the cpp version of the code so much smoother? Does it have to do with how we set the seed?
 
 
 
