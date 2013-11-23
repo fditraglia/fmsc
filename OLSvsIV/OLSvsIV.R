@@ -101,18 +101,16 @@ fmsc.ols.iv <- function(x, y, z, DHW.levels = NULL){
   }
 
   
-  #Estimated Optimal Weight for OLS
-  #tau.squared.est <- tau^2 - s.e.squared * s.x.squared * s.v.squared / g.squared
-  #abias.squared.est.ols <- tau.squared.est / s.x.squared^2
-  #numerator <- max(0, abias.squared.est.ols)
-  #avar.est.tsls <- s.e.squared / g.squared
-  #avar.est.ols <- s.e.squared / s.x.squared
-  #denominator <- avar.est.ols - avar.est.tsls
-  #omega.star <- 1 / (1 - (numerator / denominator))
-  #b.star <- omega.star * b.ols + (1 - omega.star) * b.tsls
+  #Estimated Optimal Weight for OLS - plug in asymptotically unbiased estimator of tau-squared
+  tau.squared.est <- tau^2 - s.e.squared * s.x.squared * s.v.squared / g.squared
+  bias.est <- max(0, tau.squared.est / s.x.squared^2)
+  var.diff <- s.e.squared * (1/g.squared - 1/s.x.squared)
+  omega.star <- 1 / (1 + (bias.est / var.diff))
   
-  out <- c(b.ols, b.tsls, b.fmsc) 
-  names(out) <- c('b.ols', 'b.tsls', 'b.fmsc')
+  b.star <- omega.star * b.ols + (1 - omega.star) * b.tsls
+  
+  out <- c(b.ols, b.tsls, b.fmsc, b.star) 
+  names(out) <- c('b.ols', 'b.tsls', 'b.fmsc', 'b.star')
   
   #Append DHW pretest estimators (NULL by default) 
   out <- c(out, DHW)
@@ -160,7 +158,7 @@ r.seq <- seq(0, 0.2, 0.01)
 set.seed(4938)
 fooCpp <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare(p = 0.3, r, n = 250)}, mc.set.seed = FALSE))#mclapply outputs a list of vectors. Combine them into a matrix.
 
-matplot(r.seq, apply(fooCpp, 2, sqrt))
+matplot(r.seq, apply(fooCpp[,1:4], 2, sqrt))
         #, col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
 # legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
 
