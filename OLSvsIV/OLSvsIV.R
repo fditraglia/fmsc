@@ -42,7 +42,7 @@ sourceCpp("dgp.cpp")
 
 
 
-fmsc.ols.iv <- function(x, y, z){
+fmsc.ols.iv <- function(x, y, z, DHW.levels = NULL){
   
   #------------------------------------------------------------------
   #NOTE: This function assumes that x is a column of observations for 
@@ -51,9 +51,14 @@ fmsc.ols.iv <- function(x, y, z){
   #      been "projected out" of the system.
   #------------------------------------------------------------------
   #Arguments:
-  # x       matrix of observations of single endogenous regressor
-  # y       matrix of observations for outcome variable
-  # z       matrix of observations for the instruments
+  # x               matrix of observations of single endog. regressor
+  # y               matrix of observations for outcome variable
+  # z               matrix of observations for the instruments
+  # DHW.levels      optional vector of significance levels for a 
+  #                   Durbin-Hausman-Wu tests. If specified, the 
+  #                   function returns, in addition to the OLS, IV 
+  #                   and FMSC-selected estimators, the corresponding 
+  #                   DHW pretest estimators.
   #------------------------------------------------------------------
   
   n <- length(y)
@@ -86,6 +91,16 @@ fmsc.ols.iv <- function(x, y, z){
   #Estimator chosen by FMSC
   b.fmsc <- ifelse(Tfmsc < 2, b.ols, b.tsls)
   
+  #If DHW-test levels are specified, calculate the pre-test estimators
+  if(!is.null(DHW.levels)){
+    DHW.crit <- qchisq(1 - DHW.levels, 1)
+    DHW <- (as.vector(Tfmsc) <= DHW.crit) * b.ols+ (as.vector(Tfmsc) > DHW.crit) * b.tsls
+    names(DHW) <- paste('b.DHW.', 100 *DHW.levels, sep ="")
+  }else{
+    DHW <- NULL
+  }
+
+  
   #Estimated Optimal Weight for OLS
   #tau.squared.est <- tau^2 - s.e.squared * s.x.squared * s.v.squared / g.squared
   #abias.squared.est.ols <- tau.squared.est / s.x.squared^2
@@ -96,8 +111,12 @@ fmsc.ols.iv <- function(x, y, z){
   #omega.star <- 1 / (1 - (numerator / denominator))
   #b.star <- omega.star * b.ols + (1 - omega.star) * b.tsls
   
-  out <- c(b.fmsc, b.ols, b.tsls) 
-  names(out) <- c('b.fmsc', 'b.ols', 'b.tsls')
+  out <- c(b.ols, b.tsls, b.fmsc) 
+  names(out) <- c('b.ols', 'b.tsls', 'b.fmsc')
+  
+  #Append DHW pretest estimators (NULL by default) 
+  out <- c(out, DHW)
+ 
   return(out)
   
 }
@@ -117,7 +136,7 @@ simple.sim <- function(p, r, n){
   x <- sim.data$x
   y <- sim.data$y
   z <- sim.data$z
-  b <- fmsc.ols.iv(x, y, z)
+  b <- fmsc.ols.iv(x, y, z, DHW.levels = c(0.2, 0.1, 0.05))
   return(b)
   
 }
@@ -141,7 +160,8 @@ r.seq <- seq(0, 0.2, 0.01)
 set.seed(4938)
 fooCpp <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare(p = 0.3, r, n = 250)}, mc.set.seed = FALSE))#mclapply outputs a list of vectors. Combine them into a matrix.
 
-matplot(r.seq, apply(fooCpp, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+matplot(r.seq, apply(fooCpp, 2, sqrt))
+        #, col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
 # legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
 
 
