@@ -16,7 +16,7 @@ the same random numbers from R as from C++, set the seed, etc.
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List dgp_cpp(double b, NumericVector PI_r, NumericMatrix Ve_r, 
+List dgp_alt_cpp(double b, NumericVector PI_r, NumericMatrix Ve_r, 
               NumericMatrix Vz_r, int n){
     /*------------------------------------------------------------------
       Arguments:
@@ -28,6 +28,8 @@ List dgp_cpp(double b, NumericVector PI_r, NumericMatrix Ve_r,
       
       Returns: list of matrices x, y and z containing simulated dataset
     ------------------------------------------------------------------*/ 
+    
+    RNGScope scope; // also done by sourceCpp()
     
     //Number of instruments
     int n_z = Vz_r.ncol();
