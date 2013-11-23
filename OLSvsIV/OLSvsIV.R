@@ -94,7 +94,7 @@ fmsc.ols.iv <- function(x, y, z, DHW.levels = NULL){
   #If DHW-test levels are specified, calculate the pre-test estimators
   if(!is.null(DHW.levels)){
     DHW.crit <- qchisq(1 - DHW.levels, 1)
-    DHW <- (as.vector(Tfmsc) <= DHW.crit) * b.ols+ (as.vector(Tfmsc) > DHW.crit) * b.tsls
+    DHW <- (as.vector(Tfmsc) <= DHW.crit) * b.ols + (as.vector(Tfmsc) > DHW.crit) * b.tsls
     names(DHW) <- paste('b.DHW.', 100 *DHW.levels, sep ="")
   }else{
     DHW <- NULL
@@ -106,6 +106,8 @@ fmsc.ols.iv <- function(x, y, z, DHW.levels = NULL){
   bias.est <- max(0, tau.squared.est / s.x.squared^2)
   var.diff <- s.e.squared * (1/g.squared - 1/s.x.squared)
   omega.star <- 1 / (1 + (bias.est / var.diff))
+  if(omega.star > 1){omega.star <- 1}
+  if(omega.star < 0){omega.start <- 0}
   
   b.star <- omega.star * b.ols + (1 - omega.star) * b.tsls
   
@@ -158,7 +160,7 @@ r.seq <- seq(0, 0.2, 0.01)
 set.seed(4938)
 fooCpp <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare(p = 0.3, r, n = 250)}, mc.set.seed = FALSE))#mclapply outputs a list of vectors. Combine them into a matrix.
 
-matplot(r.seq, apply(fooCpp[,1:4], 2, sqrt))
+matplot(r.seq, apply(fooCpp, 2, sqrt))
         #, col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
 # legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
 
