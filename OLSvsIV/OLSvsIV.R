@@ -35,6 +35,13 @@ dgp <- function(b, PI, V.e, V.z, n){
 
 
 
+
+#Faster C++ version of dgp: requires RcppArmadillo and setwd("~/fmsc/OLSvsIV")
+sourceCpp("dgp.cpp") 
+
+
+
+
 fmsc.ols.iv <- function(x, y, z){
   
   #------------------------------------------------------------------
@@ -96,40 +103,16 @@ fmsc.ols.iv <- function(x, y, z){
 }
 
 
-simple.sim <- function(p, r, n){
-
-  PI <- p * rep(1, 3)
-  V.z <- diag(rep(1, 3))
-  V.e <- diag(rep(1, 2)) + matrix(c(0, r, r, 0), 2, 2)
-  
-  sim.data <- dgp(1, PI, V.e, V.z, n)
-  x <- sim.data$x
-  y <- sim.data$y
-  z <- sim.data$z
-  b <- fmsc.ols.iv(x, y, z)
-  return(b)
-  
-}
 
 
 mse <- function(x, truth){mean((x - truth)^2)}
 
 
-#This function runs in parallel on Linux/Mac machines with more than one core using mclapply. It assumes that the library multicore has been loaded.
-mse.compare <- function(p, r, n, n.reps = 10000){
-  
-  sim.results <- lapply(X = 1:n.reps, FUN = function(.){simple.sim(p, r, n)}) 
-  sim.results <- do.call(rbind, sim.results) #mclapply outputs a list of vectors. Combine them into a matrix.
-  out <- apply(sim.results, 2, mse, truth = 1)  
-  return(out)
-}
 
 
-#(Potentially) Faster C++ version of dgp. Load Rcpp and RcppArmadillo first. Also set the appropriate directory: "~/fmsc/OLSvsIV"
-sourceCpp("dgp.cpp")
 
-#Corresponding version of simple.sim
-simple.sim.cpp <- function(p, r, n){
+
+simple.sim <- function(p, r, n){
   
   PI <- p * rep(1, 3)
   V.z <- diag(rep(1, 3))
@@ -144,44 +127,21 @@ simple.sim.cpp <- function(p, r, n){
   
 }
 
-#Corresponding version of mse.compare
-mse.compare.cpp <- function(p, r, n, n.reps = 10000){
+
+mse.compare <- function(p, r, n, n.reps = 10000){
   
-  sim.results <- lapply(X = 1:n.reps, FUN = function(.){simple.sim.cpp(p, r, n)}) 
-  sim.results <- do.call(rbind, sim.results) #mclapply outputs a list of vectors. Combine them into a matrix.
-  out <- apply(sim.results, 2, mse, truth = 1)  
+  sim.results <- replicate(n.reps, simple.sim(p, r, n))
+  out <- t(apply(sim.results, 1, mse, truth = 1))
   return(out)
 }
 
 
-set.seed(3029)
-mse.compare(0.1, 0.2, 1000, 1000)
-set.seed(3029)
-mse.compare.cpp(0.1, 0.2, 1000, 1000)
-
 
 r.seq <- seq(0, 0.2, 0.01)
-set.seed(3728)
-mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250, 1000))
-set.seed(3728)
-mse.values.cpp <- t(mapply(mse.compare.cpp, p = 0.1, r = r.seq, n = 250, 1000))
-
-all.equal(mse.values, mse.values.cpp)
 
 set.seed(4938)
-fooR <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare(p = 0.3, r, n = 250)}, mc.set.seed = FALSE))
-set.seed(4938)
-fooCpp <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare.cpp(p = 0.3, r, n = 250)}, mc.set.seed = FALSE))#mclapply outputs a list of vectors. Combine them into a matrix.
+fooCpp <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare(p = 0.3, r, n = 250)}, mc.set.seed = FALSE))#mclapply outputs a list of vectors. Combine them into a matrix.
 
-all.equal(fooCpp, fooR)
-
-
-
-
-
-matplot(r.seq, apply(fooR, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
-# legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
-# 
 matplot(r.seq, apply(fooCpp, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
 # legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
 
