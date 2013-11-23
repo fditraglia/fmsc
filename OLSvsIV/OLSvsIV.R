@@ -83,7 +83,7 @@ fmsc.ols.iv <- function(x, y, z){
   #This is numerically equivalent to a Durbin-Hausman-Wu Test Statistic
   #n * (b.ols - b.tsls)^2 / (s.e.squared * (1 / g.squared - 1 / s.x.squared))
   
-  #Estimated chosen by FMSC
+  #Estimator chosen by FMSC
   b.fmsc <- ifelse(Tfmsc < 2, b.ols, b.tsls)
   
   #Estimated Optimal Weight for OLS
@@ -105,11 +105,6 @@ fmsc.ols.iv <- function(x, y, z){
 
 
 
-mse <- function(x, truth){mean((x - truth)^2)}
-
-
-
-
 
 
 simple.sim <- function(p, r, n){
@@ -126,6 +121,10 @@ simple.sim <- function(p, r, n){
   return(b)
   
 }
+
+
+mse <- function(x, truth){mean((x - truth)^2)}
+
 
 
 mse.compare <- function(p, r, n, n.reps = 10000){
