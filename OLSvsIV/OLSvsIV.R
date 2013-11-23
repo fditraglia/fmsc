@@ -37,6 +37,38 @@ dgp <- function(b, PI, V.e, V.z, n){
 }
 
 
+dgp.alt <- function(b, PI, V.e, V.z, n){
+  
+  #------------------------------------------------------------------
+  #NOTE: this does not require MASS
+  #------------------------------------------------------------------
+  #Arguments:
+  # b       coefficient on x in the second stage
+  # PI      vector of coefficients on z in the second stage
+  # V.e     variance-covariance matrix of the errors epsilon and v
+  # V.z     variance-covariance matrix of the instruments z
+  # n       sample size
+  #
+  #Returns:
+  # data    list of matrices x, y and z containing simulated dataset
+  #------------------------------------------------------------------ 
+  
+  n.z <- length(PI)
+  z <- chol(V.z) %*% matrix(rnorm(n.z * n), n.z, n)
+  errors <- chol(V.e) %*% matrix(rnorm(2 * n), 2, n)
+  
+  e <- t(errors)[,1]
+  v <- t(errors)[,2]
+  
+  x <- t(z) %*% PI + v
+  y <- b * x + e
+  
+  data <- list(x = x, y = y, z = t(z))
+  return(data)
+  
+}
+
+
 
 fmsc.ols.iv <- function(x, y, z){
   
@@ -115,6 +147,24 @@ simple.sim <- function(p, r, n){
 }
 
 
+
+simple.sim.alt <- function(p, r, n){
+  
+  PI <- p * rep(1, 3)
+  V.z <- diag(rep(1, 3))
+  V.e <- diag(rep(1, 2)) + matrix(c(0, r, r, 0), 2, 2)
+  
+  sim.data <- dgp.alt(1, PI, V.e, V.z, n)
+  x <- sim.data$x
+  y <- sim.data$y
+  z <- sim.data$z
+  b <- fmsc.ols.iv(x, y, z)
+  return(b)
+  
+}
+
+
+
 mse <- function(x, truth){mean((x - truth)^2)}
 
 
@@ -127,6 +177,21 @@ mse.compare <- function(p, r, n, n.reps = 10000){
   out <- apply(sim.results, 2, mse, truth = 1)  
   return(out)
 }
+
+
+mse.compare.alt <- function(p, r, n, n.reps = 10000){
+  
+  sim.results <- mclapply(X = 1:n.reps, FUN = function(.){simple.sim.alt(p, r, n)}) 
+  sim.results <- do.call(rbind, sim.results) #mclapply outputs a list of vectors. Combine them into a matrix.
+  out <- apply(sim.results, 2, mse, truth = 1)  
+  return(out)
+}
+
+
+
+#Test the results of the standard and "alt" functions to make sure that dgp.alt works as expected
+mse.compare(0.1, 0.1, n = 500, n.reps = 10000)
+mse.compare.alt(0.1, 0.1, n = 500, n.reps = 10000)
 
 
 #(Potentially) Faster C++ version of dgp. Load Rcpp and RcppArmadillo first. Also set the appropriate directory: "~/fmsc/OLSvsIV"
