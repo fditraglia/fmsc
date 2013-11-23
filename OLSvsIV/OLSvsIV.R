@@ -40,8 +40,6 @@ dgp <- function(b, PI, V.e, V.z, n){
 dgp.alt <- function(b, PI, V.e, V.z, n){
   
   #------------------------------------------------------------------
-  #NOTE: this does not require MASS
-  #------------------------------------------------------------------
   #Arguments:
   # b       coefficient on x in the second stage
   # PI      vector of coefficients on z in the second stage
@@ -223,25 +221,28 @@ mse.compare.cpp <- function(p, r, n, n.reps = 10000){
 }
 
 
-microbenchmark(simple.sim(0.2, 0.1, 500), simple.sim.cpp(0.2, 0.1, 500))
+#microbenchmark(simple.sim(0.2, 0.1, 500), simple.sim.cpp(0.2, 0.1, 500))
 
-microbenchmark(mse.compare(0.2, 0.1, 500, 100), mse.compare.cpp(0.2, 0.1, 500, 100))
+#microbenchmark(mse.compare(0.2, 0.1, 500, 100), mse.compare.cpp(0.2, 0.1, 500, 100))
 
 
 
-mse.compare(0.2, 0.1, 500)
-mse.compare.cpp(0.2, 0.1, 500)
+#mse.compare(0.2, 0.1, 500)
+#mse.compare.cpp(0.2, 0.1, 500)
 
 
 #Example of the kind of plot I'll use in the paper
 r.seq <- seq(0, 0.2, 0.01)
 mse.values <- t(mapply(mse.compare, p = 0.1, r = r.seq, n = 250))
+mse.values.alt <- t(mapply(mse.compare.alt, p = 0.1, r = r.seq, n = 250))
 mse.values.cpp <- t(mapply(mse.compare.cpp, p = 0.1, r = r.seq, n = 250))
-mse.values - mse.values.cpp
 
 matplot(r.seq, apply(mse.values, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
 legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
- 
+
+matplot(r.seq, apply(mse.values.alt, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
+legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
+
 matplot(r.seq, apply(mse.values.cpp, 2, sqrt), col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
 legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
 
