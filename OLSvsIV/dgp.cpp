@@ -1,5 +1,5 @@
 /*------------------------------------------------------------
-Filename:        dgp_alt.cpp
+Filename:        dgp.cpp
 Author:          Frank DiTraglia
 First Version:   2013-23-11
 This Version:    2013-23-11
