@@ -124,6 +124,11 @@ fmsc.ols.iv <- function(x, y, z, DHW.levels = NULL){
 
 
 
+#Potentitally faster C++ version
+sourceCpp("fmsc_ols_iv.cpp")
+
+
+
 
 
 simple.sim <- function(p, r, n){
