@@ -69,9 +69,33 @@ NumericVector fmsc_ols_iv_cpp(NumericVector x_r, NumericVector y_r,
     b_fmsc = b_tsls;
   }
   
+  //Calculate Optimal Weight for OLS estimator
+  //Plug in asymptotically unbiased estimator of squared A-Bias
+  //If A-bias estimate is negative, set to zero. Make sure weight
+  //lies in [0,1].
+  double tau_squared_est = pow(tau, 2) - (s_e_squared * s_x_squared 
+                                        * s_v_squared / g_squared);
+  double bias_est;
+  if((tau_squared_est / pow(s_x_squared, 2)) >= 0){
+    bias_est = tau_squared_est / pow(s_x_squared, 2);
+  } else {
+    bias_est = 0;
+  }
+  double var_diff = s_e_squared * (1 / g_squared - 1 / s_x_squared);
+  double omega_star = 1 / (1 + (bias_est / var_diff));
+  if(omega_star > 1){
+    omega_star = 1;
+  }
+  if(omega_star < 0){
+    omega_star = 0;
+  }
+  
+  //Optimal Averaging Estimator
+  double b_star = omega_star * b_ols + (1 - omega_star) * b_tsls;
+  
   //Create and return vector of results
-  NumericVector out = NumericVector::create(b_ols, b_tsls, b_fmsc);
-  out.names() = CharacterVector::create("b.ols", "b.tsls", "b.fmsc");
+  NumericVector out = NumericVector::create(b_ols, b_tsls, b_fmsc, b_star);
+  out.names() = CharacterVector::create("b.ols", "b.tsls", "b.fmsc", "b.star");
   return out;  
   
 }
