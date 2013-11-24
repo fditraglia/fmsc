@@ -1,8 +1,8 @@
 /*------------------------------------------------------------
 Filename:        fmsc_ols_iv.cpp
 Author:          Frank DiTraglia
-First Version:   2013-23-11
-This Version:    2013-23-11
+First Version:   2013-24-11
+This Version:    2013-24-11
 --------------------------------------------------------------
 Carries out FMSC calculations for IV versus 2SLS example with
 a single endogenous regressor.
@@ -13,7 +13,7 @@ a single endogenous regressor.
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List fmsc_ols_iv_cpp(NumericVector x_r, NumericVector y_r, 
+NumericVector fmsc_ols_iv_cpp(NumericVector x_r, NumericVector y_r, 
                       NumericMatrix z_r){ 
                         
   /*------------------------------------------------------------------
@@ -69,7 +69,9 @@ List fmsc_ols_iv_cpp(NumericVector x_r, NumericVector y_r,
     b_fmsc = b_tsls;
   }
   
-  return List::create(Named("b.ols") = b_ols, Named("b.tsls") = b_tsls, 
-                                      Named("b.fmsc") = b_fmsc);
+  //Create and return vector of results
+  NumericVector out = NumericVector::create(b_ols, b_tsls, b_fmsc);
+  out.names() = CharacterVector::create("b.ols", "b.tsls", "b.fmsc");
+  return out;  
   
 }
