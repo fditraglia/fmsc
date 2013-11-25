@@ -133,17 +133,9 @@ sourceCpp("fmsc_ols_iv.cpp")
 
 simple.sim <- function(p, r, n){
   
-  PI <- p * rep(1, 3)
-  V.z <- diag(rep(1, 3))
-  V.e <- diag(rep(1, 2)) + matrix(c(0, r, r, 0), 2, 2)
-  
-  sim.data <- dgp_cpp(1, PI, V.e, V.z, n)
-  x <- sim.data$x
-  y <- sim.data$y
-  z <- sim.data$z
-  b <- fmsc.ols.iv(x, y, z, DHW.levels = c(0.2, 0.1, 0.05))
+  sim.data <- dgp_cpp(1, p * rep(1, 3), matrix(c(1, r, r, 1), 2, 2), diag(rep(1, 3)), n)
+  b <- fmsc.ols.iv(sim.data$x, sim.data$y, sim.data$z)
   return(b)
-  
 }
 
 
