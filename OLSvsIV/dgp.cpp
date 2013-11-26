@@ -4,10 +4,8 @@ Author:          Frank DiTraglia
 First Version:   2013-23-11
 This Version:    2013-23-11
 --------------------------------------------------------------
-Generates simulated data for the OLS versus IV FMSC example.
-Unlike dgp.cpp, this function generates random numbers using
-the Rcpp "sugar" function rnorm. This will allow me to get
-the same random numbers from R as from C++, set the seed, etc.
+Generates simulated data for the OLS versus IV example from 
+my FMSC paper.
 ------------------------------------------------------------*/
   
 // [[Rcpp::depends(RcppArmadillo)]]
