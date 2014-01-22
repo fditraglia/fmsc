@@ -16,16 +16,16 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 List dgp_cpp(double b, NumericVector PI_r, NumericMatrix Ve_r, 
               NumericMatrix Vz_r, int n){
-    /*------------------------------------------------------------------
-      Arguments:
-       b       coefficient on x in the second stage
-       PI      vector of coefficients on z in the second stage
-       V.e     variance-covariance matrix of the errors epsilon and v
-       V.z     variance-covariance matrix of the instruments z
-       n       sample size
-      
-      Returns: list of matrices x, y and z containing simulated dataset
-    ------------------------------------------------------------------*/ 
+/*------------------------------------------------------------------
+# Arguments:
+#  b       coefficient on x in the second stage
+#  PI      vector of coefficients on z in the second stage
+#  V.e     variance-covariance matrix of the errors epsilon and v
+#  V.z     variance-covariance matrix of the instruments z
+#  n       sample size
+#------------------------------------------------------------------- 
+# Returns: list of matrices x, y and z containing simulated dataset
+-------------------------------------------------------------------*/ 
     
     RNGScope scope; // also done by sourceCpp()
     

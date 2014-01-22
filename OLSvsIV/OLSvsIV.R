@@ -6,8 +6,7 @@
 #This script is a preliminary implementation of the OLS versus IV example that I am adding to the fmsc paper.
 
 
-dgp <- function(b, PI, V.e, V.z, n){
-  
+dgp <- function(b, PI, V.e, V.z, n){  
   #------------------------------------------------------------------
   #Arguments:
   # b       coefficient on x in the second stage
@@ -36,14 +35,7 @@ dgp <- function(b, PI, V.e, V.z, n){
 
 
 
-#Faster C++ version of dgp: requires RcppArmadillo and setwd("~/fmsc/OLSvsIV")
-sourceCpp("dgp.cpp") 
-
-
-
-
 fmsc.ols.iv <- function(x, y, z, DHW.levels = NULL){
-  
   #------------------------------------------------------------------
   #NOTE: This function assumes that x is a column of observations for 
   #      a single endogenous regressor. In other words, it assumes 
@@ -71,14 +63,14 @@ fmsc.ols.iv <- function(x, y, z, DHW.levels = NULL){
   zz.inv <- chol2inv(qr.R(qr(z))) 
   x.hat <- z %*% (zz.inv %*% zx)
   b.tsls <- crossprod(x.hat, y) / crossprod(x.hat)
-  #tsls.fit <- tsls(y ~ x - 1, ~ z - 1)
+  #tsls.fit <- tsls(y ~ x - 1, ~ z - 1) #Debugging code
   
   tsls.residuals <- y - x %*% b.tsls
   s.e.squared <- crossprod(tsls.residuals) / n
   #crossprod(tsls.fit$residuals) / n
   
   tau <- crossprod(x, tsls.residuals) / sqrt(n)
-  #tau <- crossprod(x, y - x %*% b.tsls) / sqrt(n)
+  #tau <- crossprod(x, y - x %*% b.tsls) / sqrt(n) #Debugging code
   
   s.x.squared <- xx / n
   g.squared <- t(zx) %*% zz.inv %*% zx / n
@@ -124,12 +116,6 @@ fmsc.ols.iv <- function(x, y, z, DHW.levels = NULL){
 
 
 
-#Potentitally faster C++ version
-sourceCpp("fmsc_ols_iv.cpp")
-
-
-
-
 
 simple.sim <- function(p, r, n){
   
@@ -158,6 +144,8 @@ mse.compare <- function(p, r, n, n.reps = 10000){
   return(out)
 }
 
+
+
 #Faster version that calls a C++ version
 mse.compare.cpp <- function(p, r, n, n.reps = 10000){
   
@@ -165,40 +153,3 @@ mse.compare.cpp <- function(p, r, n, n.reps = 10000){
   out <- t(apply(sim.results, 1, mse, truth = 1))
   return(out)
 }
-
-
-
-library(microbenchmark)
-system.time(mse.compare.cpp(0.3, 0.2, 250))
-system.time(mse.compare(0.3, 0.2, 250))
-
-set.seed(3728)
-barR <- mse.compare(0.3, 0.2, 250)
-set.seed(3728)
-barCpp <- mse.compare.cpp(0.3, 0.2, 250)
-all.equal(barR, barCpp)
-
-
-r.seq <- seq(0, 0.2, 0.01)
-
-system.time(do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare(p = 0.3, r, n = 250)}, mc.set.seed = FALSE)))
-
-system.time(do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare.cpp(p = 0.3, r, n = 250)}, mc.set.seed = FALSE)))
-
-
-set.seed(4938)
-fooR <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare(p = 0.3, r, n = 250)}, mc.set.seed = FALSE))#mclapply outputs a list of vectors. Combine them into a matrix.
-
-set.seed(4938)
-fooCpp <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare.cpp(p = 0.3, r, n = 250)}, mc.set.seed = FALSE))
-
-all.equal(fooR, fooCpp)
-
-
-matplot(r.seq, apply(fooCpp, 2, sqrt))
-        #, col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
-# legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
-
-
-
-
