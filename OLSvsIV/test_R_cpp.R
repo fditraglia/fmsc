@@ -8,9 +8,14 @@ sourceCpp("simulation_functions_OLSvsIV.cpp")
 source("simulation_functions_OLSvsIV.R")
 
 
+set.seed(2)
+foo <- simple.sim(0.3, 0.2, 250)
+set.seed(2)
+bar <- simple_sim_cpp(0.3, 0.2, 250)
+all.equal(foo, bar)
+
 library(microbenchmark)
-system.time(mse.compare.cpp(0.3, 0.2, 250))
-system.time(mse.compare(0.3, 0.2, 250))
+#microbenchmark(mse.compare.cpp(0.3, 0.2, 250), mse.compare(0.3, 0.2, 250))
 
 set.seed(3728)
 barR <- mse.compare(0.3, 0.2, 250)

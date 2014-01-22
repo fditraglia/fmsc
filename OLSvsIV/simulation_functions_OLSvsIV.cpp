@@ -15,8 +15,8 @@ file simulation_functions_OLSvsIV.R.
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List dgp_cpp(double b, NumericVector PI_r, NumericMatrix Ve_r, 
-              NumericMatrix Vz_r, int n){
+arma::mat dgp_cpp(double b, arma::colvec p, arma::mat Ve, 
+              arma::mat Vz, int n){
 /*------------------------------------------------------------------
 # Arguments:
 #  b       coefficient on x in the second stage
@@ -25,19 +25,16 @@ List dgp_cpp(double b, NumericVector PI_r, NumericMatrix Ve_r,
 #  V.z     variance-covariance matrix of the instruments z
 #  n       sample size
 #------------------------------------------------------------------- 
-# Returns: list of matrices x, y and z containing simulated dataset
+# Returns: a matrix of simulated data. The first column is x, the
+#          single endogenous regressor, the second column is y, the
+#          outcome, and all remaining columns are z, the matrix of
+#          instrumental variables.
 -------------------------------------------------------------------*/ 
     
-    RNGScope scope; // also done by sourceCpp()
+    RNGScope scope;
     
     //Number of instruments
-    int n_z = Vz_r.ncol();
-    
-    //Initialize armadillo matrices corresponding to R input matrices
-    //that reuse the original memory
-    arma::mat Ve(Ve_r.begin(), 2, 2, false); //Error terms 
-    arma::mat Vz(Vz_r.begin(), n_z, n_z, false); //Instruments
-    arma::colvec p(PI_r.begin(), PI_r.size(), false); //Can't call it PI!
+    int n_z = Vz.n_cols;
     
     //Generate errors
     arma::colvec stdnorm_errors = rnorm(n * 2);
@@ -51,39 +48,48 @@ List dgp_cpp(double b, NumericVector PI_r, NumericMatrix Ve_r,
     arma::colvec x = z * p + errors.col(1); //Remember: zero indexing!
     arma::colvec y = b * x + errors.col(0); 
     
-    return List::create(Named("x") = x, Named("y") = y, Named("z") = z);
-                        
+    
+    arma::mat sim_data = arma::mat(n, 2 + n_z);
+    sim_data.col(0) = x;
+    sim_data.col(1) = y;
+    sim_data.cols(2, n_z + 1) = z;
+    
+    return (sim_data);
+    
 }
 
+
+
+
+
 // [[Rcpp::export]]
-NumericVector fmsc_ols_iv_cpp(NumericVector x_r, NumericVector y_r, 
-                      NumericMatrix z_r){ 
+NumericVector fmsc_ols_iv_cpp(arma::mat data){ 
                         
 /*------------------------------------------------------------------
-NOTE: This function assumes that x is a column of observations for 
-      a single endogenous regressor. In other words, it assumes 
-      that all exogenous regressors, including the constant, have 
-      been "projected out" of the system.
-------------------------------------------------------------------
-Arguments:
-  x               matrix of observations of single endog. regressor
-  y               matrix of observations for outcome variable
-  z               matrix of observations for the instruments
+# Estimates OLS and IV estimators (without constant terms) using
+# the supplied dataset, calculates the FMSC criterion to choose
+# between them, estimates the AMSE-optimal weights on OLS and IV
+# and uses these to construct an optimal averaging estimator.
+#-------------------------------------------------------------------
+# Arguments:
+#   data           a matrix of data for OLS/IV. The first column is
+#                  x, the single endogenous regressor, the second 
+#                  column is y, the outcome, and all remaining
+#                  columns are the instruments. 
 ------------------------------------------------------------------*/
-  int n = y_r.size();
-  int n_z = z_r.ncol();
+
+  int n_z = data.n_cols - 2;
+  int n = data.n_rows;
   
-  //Initialize armadillo matrices and vectors corresponding to 
-  //R input and reuse original memory
-  arma::colvec x(x_r.begin(), n, false);
-  arma::colvec y(y_r.begin(), n, false);
-  arma::mat z(z_r.begin(), n, n_z, false);
-  
-  //Calculations for OLS estimator
+  arma::colvec x = data.col(0);
+  arma::colvec y = data.col(1);
+  arma::mat z = data.cols(2, n_z + 1);
+
+  //OLS estimator
   double xx = arma::dot(x, x);
   double b_ols = arma::dot(x, y) / xx;
   
-  //Calculations for 2SLS Estimator
+  //2SLS Estimator
   arma::colvec first_stage_coefs = arma::solve(z,x);
   double b_tsls = arma::as_scalar(arma::solve(z * first_stage_coefs, y)); 
   arma::colvec tsls_resid = y - x * b_tsls; 
@@ -143,3 +149,31 @@ Arguments:
   
 }
 
+
+//Run the simulation once with "default" values
+//for "uninteresting" parameters.
+
+// [[Rcpp::export]]
+NumericVector simple_sim_cpp(double p , double r, int n){
+  
+  //default parameter values
+  double b = 1;
+  arma::colvec p_vec = p * arma::ones(3);
+  arma::mat Vz = arma::eye(3, 3);
+  
+  arma::mat Ve;
+  Ve << 1<< r << arma::endr
+     << r << 1 << arma::endr;
+
+  
+  arma::mat sim_data = dgp_cpp(b, p_vec, Ve, Vz, n);
+  
+  NumericVector results = fmsc_ols_iv_cpp(sim_data);
+  return(results);
+
+  
+}
+
+
+
+//Next write mse_compare_cpp as well as an mse helper function

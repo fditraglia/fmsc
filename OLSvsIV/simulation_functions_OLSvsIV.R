@@ -123,18 +123,11 @@ fmsc.ols.iv <- function(x, y, z, DHW.levels = NULL){
 
 simple.sim <- function(p, r, n){
   
-  sim.data <- dgp_cpp(1, p * rep(1, 3), matrix(c(1, r, r, 1), 2, 2), diag(rep(1, 3)), n)
+  sim.data <- dgp(1, p * rep(1, 3), matrix(c(1, r, r, 1), 2, 2), diag(rep(1, 3)), n)
   b <- fmsc.ols.iv(sim.data$x, sim.data$y, sim.data$z)
   return(b)
 }
 
-#Faster version that calls a C++ function
-simple.sim.cpp <- function(p, r, n){
-  
-  sim.data <- dgp_cpp(1, p * rep(1, 3), matrix(c(1, r, r, 1), 2, 2), diag(rep(1, 3)), n)
-  b <- fmsc_ols_iv_cpp(sim.data$x, sim.data$y, sim.data$z)
-  return(b)
-}
 
 
 mse <- function(x, truth){mean((x - truth)^2)}
@@ -153,7 +146,7 @@ mse.compare <- function(p, r, n, n.reps = 10000){
 #Faster version that calls a C++ version
 mse.compare.cpp <- function(p, r, n, n.reps = 10000){
   
-  sim.results <- replicate(n.reps, simple.sim.cpp(p, r, n))
+  sim.results <- replicate(n.reps, simple_sim_cpp(p, r, n))
   out <- t(apply(sim.results, 1, mse, truth = 1))
   return(out)
 }
