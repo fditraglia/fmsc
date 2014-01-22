@@ -14,14 +14,17 @@ set.seed(2)
 bar <- simple_sim_cpp(0.3, 0.2, 250)
 all.equal(foo, bar)
 
+
+
 library(microbenchmark)
 #microbenchmark(mse.compare.cpp(0.3, 0.2, 250), mse.compare(0.3, 0.2, 250))
 
 set.seed(3728)
 barR <- mse.compare(0.3, 0.2, 250)
 set.seed(3728)
-barCpp <- mse.compare.cpp(0.3, 0.2, 250)
-all.equal(barR, barCpp)
+barCpp <- mse_compare_cpp(1, 0.3 * rep(1, 3), matrix(c(1, 0.2, 0.2, 1), 2, 2), diag(rep(1, 3)), 250, 10000)
+  
+sum(abs(barR - barCpp))
 
 
 r.seq <- seq(0, 0.2, 0.01)

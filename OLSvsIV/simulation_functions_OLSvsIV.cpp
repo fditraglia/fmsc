@@ -186,19 +186,6 @@ NumericVector simple_sim_cpp(double p , double r, int n){
   
 }
 
-//
-//// [[Rcpp::export]]
-//NumericVector one_sim_cpp(double b, arma::colvec p, arma::mat Ve, 
-//              arma::mat Vz, int n){
-////Function to run one replication of the simulation study
-//
-//  
-//  arma::mat sim_data = dgp_cpp(b, p, Ve, Vz, n);
-//  NumericVector results = fmsc_ols_iv_cpp(sim_data);
-//  return(results);
-//
-//  
-//}
 
 
 // [[Rcpp::export]]
@@ -227,49 +214,51 @@ double MSE_trim_cpp(arma::colvec x, double truth, double trim){
 }
 
 
-//
-//
-//// [[Rcpp::export]]
-//NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve, 
-//              arma::mat Vz, int n, int n_reps){
-//    
-//  //This is the dimension of the output from sim_results_cpp
-//  //(Pre-allocating memory is much faster)
-//  int k = 4;
-//  arma::mat sim_results = arma::mat(n_reps, k);
-//  
-//  
-//  
-//    
+
+
+
+// [[Rcpp::export]]
+NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve, 
+              arma::mat Vz, int n, int n_reps){
+//Function to run n_reps of the simulation study and calculate the MSE
+//of the various estimators
+  
+  //This is the dimension of the output from sim_results_cpp
+  //(Pre-allocating memory is much faster)
+  int k = 4;
+  arma::mat sim_estimates = arma::mat(k, n_reps); //Each column is a rep
+  
+  int n_z = p.n_cols;
+  arma::mat sim_data = arma::mat(n, 2 + n_z);
+
+  for(int i = 0; i < n_reps; i++){
     
+    sim_data = dgp_cpp(b, p, Ve, Vz, n);
+    sim_estimates.col(i) = fmsc_ols_iv_cpp(sim_data);
+    
+  }
+  
+  arma::colvec mse_values(k);
 
-//  
-//  NumericMatrix sim_results = mat(n_reps, k);
-//  
-//  for(int i = 0; i < n_reps; i++){
-//    
-//    sim_results(i,) = simple_sim_cpp(p, r, n);
-//    
-//  }
-//  
-//  NumericVector out(k);
-//  
-//  for(int j = 0; j < k; j++){
-//    
-//    out(j) = MSE_trim_cpp(sim_results(,j)
-//    
-//    
-//  }
-//}
+  for(int j = 0; j < k; j++){
+    
+    //convert row vector to column vector
+    arma::colvec temp = vectorise(sim_estimates.row(j));
+    mse_values(j) = MSE_trim_cpp(temp, b, 0);
+    
+  }
+  
+  double MSE_ols = mse_values(0);
+  double MSE_tsls = mse_values(1);
+  double MSE_fmsc = mse_values(2);
+  double MSE_star = mse_values(3);
+  
+  //Create and return vector of results
+  NumericVector out = NumericVector::create(MSE_ols, MSE_tsls, MSE_fmsc, MSE_star);
+  out.names() = CharacterVector::create("b.ols", "b.tsls", "b.fmsc", "b.star");
+  return(out);  
+  
+  
+}
 
 
-//mse.compare <- function(p, r, n, n.reps = 10000){
-//  
-//  sim.results <- replicate(n.reps, simple.sim(p, r, n))
-//  out <- t(apply(sim.results, 1, mse, truth = 1))
-//  return(out)
-//}
-
-
-//Next write mse_compare_cpp as well as an mse helper function.
-//Also add post-DHW test estimators to fmsc_ols_iv_cpp
