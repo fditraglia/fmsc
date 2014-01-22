@@ -1,9 +1,13 @@
-#Filename:        OLSvsIV.R
-#Author:          Frank DiTraglia
-#First Version:   2013-21-11
-#This Version:    2013-22-11
-
-#This script is a preliminary implementation of the OLS versus IV example that I am adding to the fmsc paper.
+#--------------------------------------------------------------
+# Filename:        simulation_functions_OLSvsIV.R
+# Author:          Frank DiTraglia
+# First Version:   2014-01-22
+# This Version:    2013-11-22
+#--------------------------------------------------------------
+# R code to carry out the OLS vs. IV simulation experiments.
+# All functions here correspond to C++ versions contained in 
+# the file simulation_functions_OLSvsIV.cpp.
+#--------------------------------------------------------------
 
 
 dgp <- function(b, PI, V.e, V.z, n){  
