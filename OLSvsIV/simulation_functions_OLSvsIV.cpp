@@ -262,3 +262,22 @@ NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve,
 }
 
 
+
+// [[Rcpp::export]]
+NumericVector mse_compare_default_cpp(double p , double r, int n, 
+                                        int n_reps){
+//Runs the simulation once with "default" values
+//for "uninteresting" parameters.
+
+  double b = 1;
+  arma::colvec p_vec = p * arma::ones(3);
+  arma::mat Vz = arma::eye(3, 3);
+  
+  arma::mat Ve;
+  Ve << 1<< r << arma::endr
+     << r << 1 << arma::endr;
+  
+  NumericVector out = mse_compare_cpp(b, p_vec, Ve, Vz, n, n_reps);
+  return(out);
+  
+}

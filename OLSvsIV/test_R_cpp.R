@@ -20,25 +20,25 @@ library(microbenchmark)
 #microbenchmark(mse.compare.cpp(0.3, 0.2, 250), mse.compare(0.3, 0.2, 250))
 
 set.seed(3728)
-barR <- mse.compare(0.3, 0.2, 250)
+barR <- mse.compare(0.3, 0.2, 250, 10000)
 set.seed(3728)
-barCpp <- mse_compare_cpp(1, 0.3 * rep(1, 3), matrix(c(1, 0.2, 0.2, 1), 2, 2), diag(rep(1, 3)), 250, 10000)
+barCpp <- mse_compare_default_cpp(0.3, 0.2, 250, 10000)
   
 sum(abs(barR - barCpp))
 
 
 r.seq <- seq(0, 0.2, 0.01)
 
-system.time(do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare(p = 0.3, r, n = 250)}, mc.set.seed = FALSE)))
+system.time(do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare(0.3, r, 250, 10000)}, mc.set.seed = FALSE)))
 
-system.time(do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare.cpp(p = 0.3, r, n = 250)}, mc.set.seed = FALSE)))
+system.time(do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse_compare_default_cpp(0.3, r, 250, 10000)}, mc.set.seed = FALSE)))
 
-
-set.seed(4938)
-fooR <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare(p = 0.3, r, n = 250)}, mc.set.seed = FALSE))#mclapply outputs a list of vectors. Combine them into a matrix.
 
 set.seed(4938)
-fooCpp <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare.cpp(p = 0.3, r, n = 250)}, mc.set.seed = FALSE))
+fooR <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse.compare(0.3, r, 250, 10000)}, mc.set.seed = FALSE))#mclapply outputs a list of vectors. Combine them into a matrix.
+
+set.seed(4938)
+fooCpp <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse_compare_default_cpp(0.3, r, 250, 10000)}, mc.set.seed = FALSE))
 
 all.equal(fooR, fooCpp)
 
