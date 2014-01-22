@@ -4,9 +4,7 @@ library(parallel)
 
 
 setwd("~/fmsc/OLSvsIV")
-sourceCpp("dgp.cpp") 
-sourceCpp("fmsc_ols_iv.cpp")
-
+sourceCpp("simulation_functions_OLSvsIV.cpp")
 source("simulation_functions_OLSvsIV.R")
 
 
