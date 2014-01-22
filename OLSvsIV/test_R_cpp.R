@@ -43,3 +43,4 @@ all.equal(fooR, fooCpp)
 matplot(r.seq, apply(fooCpp, 2, sqrt))
 #, col = c('black', 'red', 'blue'), xlab = 'Cor(e,v)', ylab = 'RMSE', type =  'l', lty = 1)
 # legend("topleft", c("FMSC", "OLS", "IV"), fill = c("black", "red", "blue"))
+

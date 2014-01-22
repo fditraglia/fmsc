@@ -63,7 +63,7 @@ arma::mat dgp_cpp(double b, arma::colvec p, arma::mat Ve,
 
 
 // [[Rcpp::export]]
-NumericVector fmsc_ols_iv_cpp(arma::mat data){ 
+arma::colvec fmsc_ols_iv_cpp(arma::mat data){ 
                         
 /*------------------------------------------------------------------
 # Estimates OLS and IV estimators (without constant terms) using
@@ -143,20 +143,23 @@ NumericVector fmsc_ols_iv_cpp(arma::mat data){
   double b_star = omega_star * b_ols + (1 - omega_star) * b_tsls;
   
   //Create and return vector of results
-  NumericVector out = NumericVector::create(b_ols, b_tsls, b_fmsc, b_star);
-  out.names() = CharacterVector::create("b.ols", "b.tsls", "b.fmsc", "b.star");
-  return out;  
+  arma::colvec out = arma::vec(4);
+  out(0) = b_ols;
+  out(1) = b_tsls;
+  out(2) = b_fmsc;
+  out(3) = b_star;
+  
+  return(out);  
   
 }
 
 
-//Run the simulation once with "default" values
-//for "uninteresting" parameters.
 
 // [[Rcpp::export]]
 NumericVector simple_sim_cpp(double p , double r, int n){
-  
-  //default parameter values
+//Runs the simulation once with "default" values
+//for "uninteresting" parameters.
+
   double b = 1;
   arma::colvec p_vec = p * arma::ones(3);
   arma::mat Vz = arma::eye(3, 3);
@@ -168,12 +171,104 @@ NumericVector simple_sim_cpp(double p , double r, int n){
   
   arma::mat sim_data = dgp_cpp(b, p_vec, Ve, Vz, n);
   
-  NumericVector results = fmsc_ols_iv_cpp(sim_data);
-  return(results);
+  arma::colvec results = fmsc_ols_iv_cpp(sim_data);
+  
+  double b_ols = results(0);
+  double b_tsls = results(1);
+  double b_fmsc = results(2);
+  double b_star = results(3);
+  
+  //Create and return vector of results
+  NumericVector out = NumericVector::create(b_ols, b_tsls, b_fmsc, b_star);
+  out.names() = CharacterVector::create("b.ols", "b.tsls", "b.fmsc", "b.star");
+  return(out);  
 
   
 }
 
+//
+//// [[Rcpp::export]]
+//NumericVector one_sim_cpp(double b, arma::colvec p, arma::mat Ve, 
+//              arma::mat Vz, int n){
+////Function to run one replication of the simulation study
+//
+//  
+//  arma::mat sim_data = dgp_cpp(b, p, Ve, Vz, n);
+//  NumericVector results = fmsc_ols_iv_cpp(sim_data);
+//  return(results);
+//
+//  
+//}
+
+
+// [[Rcpp::export]]
+double MSE_trim_cpp(arma::colvec x, double truth, double trim){
+/*-------------------------------------------------------
+# Calculates trimmed mean-squared error.
+#--------------------------------------------------------
+#  x        vector of estimates
+#  truth    true value of the parameter
+#  trim     fraction of estimates to discard (half from
+#             each tail) before calculating MSE
+#-------------------------------------------------------*/
+
+  int k = x.n_elem;
+  int tail_drop = ceil(k * trim / 2);
+  
+  arma::colvec x_trimmed = arma::sort(x);
+  x_trimmed = x_trimmed(arma::span(tail_drop, k - tail_drop - 1));
+  
+  arma::colvec truth_vec = truth * arma::ones(x_trimmed.n_elem);
+  arma::colvec errors = x_trimmed - truth_vec;
+  double MSE = arma::dot(errors, errors) / errors.n_elem;
+  
+  return(MSE);
+  
+}
+
+
+//
+//
+//// [[Rcpp::export]]
+//NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve, 
+//              arma::mat Vz, int n, int n_reps){
+//    
+//  //This is the dimension of the output from sim_results_cpp
+//  //(Pre-allocating memory is much faster)
+//  int k = 4;
+//  arma::mat sim_results = arma::mat(n_reps, k);
+//  
+//  
+//  
+//    
+    
+
+//  
+//  NumericMatrix sim_results = mat(n_reps, k);
+//  
+//  for(int i = 0; i < n_reps; i++){
+//    
+//    sim_results(i,) = simple_sim_cpp(p, r, n);
+//    
+//  }
+//  
+//  NumericVector out(k);
+//  
+//  for(int j = 0; j < k; j++){
+//    
+//    out(j) = MSE_trim_cpp(sim_results(,j)
+//    
+//    
+//  }
+//}
+
+
+//mse.compare <- function(p, r, n, n.reps = 10000){
+//  
+//  sim.results <- replicate(n.reps, simple.sim(p, r, n))
+//  out <- t(apply(sim.results, 1, mse, truth = 1))
+//  return(out)
+//}
 
 
 //Next write mse_compare_cpp as well as an mse helper function.
