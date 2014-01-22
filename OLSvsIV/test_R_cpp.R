@@ -7,7 +7,7 @@ setwd("~/fmsc/OLSvsIV")
 sourceCpp("dgp.cpp") 
 sourceCpp("fmsc_ols_iv.cpp")
 
-source("OLSvsIV.R")
+source("simulation_functions_OLSvsIV.R")
 
 
 library(microbenchmark)
