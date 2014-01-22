@@ -176,4 +176,5 @@ NumericVector simple_sim_cpp(double p , double r, int n){
 
 
 
-//Next write mse_compare_cpp as well as an mse helper function
+//Next write mse_compare_cpp as well as an mse helper function.
+//Also add post-DHW test estimators to fmsc_ols_iv_cpp
