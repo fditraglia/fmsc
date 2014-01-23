@@ -142,13 +142,31 @@ arma::colvec fmsc_ols_iv_cpp(arma::mat data){
   //Optimal Averaging Estimator
   double b_star = omega_star * b_ols + (1 - omega_star) * b_tsls;
   
+  //DHW pre-test estimators
+  double DHW90_crit = R::qchisq(0.9, 1, 1, 0);
+  double b_DHW90;
+  if(Tfmsc > DHW90_crit){
+    b_DHW90 = b_tsls;
+  }else{
+    b_DHW90 = b_ols;
+  }
+  
+  double DHW95_crit = R::qchisq(0.95, 1, 1, 0)
+  double DHW95;
+  if(Tfmsc > DHW95_crit){
+    b_DHW95 = b_tsls;
+  }else{
+    b_DHW95 = b_ols;
+  }
+  
   //Create and return vector of results
-  arma::colvec out = arma::vec(4);
+  arma::colvec out = arma::vec(6);
   out(0) = b_ols;
   out(1) = b_tsls;
   out(2) = b_fmsc;
   out(3) = b_star;
-  
+  out(4) = b_DHW90;
+  our(5) = b_DHW95
   return(out);  
   
 }
@@ -177,10 +195,14 @@ NumericVector simple_sim_cpp(double p , double r, int n){
   double b_tsls = results(1);
   double b_fmsc = results(2);
   double b_star = results(3);
+  double b_DHW90 = results(4);
+  double b_DHW95 = results(5);
   
   //Create and return vector of results
-  NumericVector out = NumericVector::create(b_ols, b_tsls, b_fmsc, b_star);
-  out.names() = CharacterVector::create("b.ols", "b.tsls", "b.fmsc", "b.star");
+  NumericVector out = NumericVector::create(b_ols, b_tsls, b_fmsc, 
+                        b_star, b_DHW90, b_DHW95);
+  out.names() = CharacterVector::create("b.ols", "b.tsls", "b.fmsc", 
+                        "b.star", "b.DHW90", "b.DHW95");
   return(out);  
 
   
@@ -225,7 +247,7 @@ NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve,
   
   //This is the dimension of the output from sim_results_cpp
   //(Pre-allocating memory is much faster)
-  int k = 4;
+  int k = 6;
   arma::mat sim_estimates = arma::mat(k, n_reps); //Each column is a rep
   
   int n_z = p.n_cols;
@@ -252,12 +274,16 @@ NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve,
   double MSE_tsls = mse_values(1);
   double MSE_fmsc = mse_values(2);
   double MSE_star = mse_values(3);
+  double MSE_DHW90 = mse_values(4);
+  double MSE_DHW95 = mse_values(5);
   
   //Create and return vector of results
-  NumericVector out = NumericVector::create(MSE_ols, MSE_tsls, MSE_fmsc, MSE_star);
-  out.names() = CharacterVector::create("b.ols", "b.tsls", "b.fmsc", "b.star");
+  NumericVector out = NumericVector::create(MSE_ols, MSE_tsls, MSE_fmsc, 
+                        MSE_star, MSE_DHW90, MSE_DHW95);
+  out.names() = CharacterVector::create("b.ols", "b.tsls", "b.fmsc", 
+                        "b.star", "b.DHW90", "b.DHW95");
   return(out);  
-  
+
   
 }
 
