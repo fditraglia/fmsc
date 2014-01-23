@@ -720,36 +720,8 @@ Differentiating,
 \todo[inline]{We need to substitute estimators. Difficulty with handling $\tau^2$ since we only have an asymptotically unbiased estimator of this. Can't get an asymptotically unbiased estimator of the optimal weight in this case. I don't want to get side-tracked on this so perhaps just try the simplest thing: substitute the asymptotically unbiased estimator of $\tau^2$. This will be a short section in any case and is intended to be illustrative more than anything else.}
 % subsection feasible_amse_optimal_weighting (end)
 
+\subsection{Post-Selection Inference}
 
-\newpage
-\begin{assump}[DGP]
-\label{assump:local}
-  Let $\left\{\left(\mathbf{z}_{ni}', \epsilon_{ni}, v_{ni}\right)'\colon 1\leq i \leq n, n = 1, 2, \hdots\right\}$ be a triangular array of random variables such that $\left(\mathbf{z}_{ni}', \epsilon_{ni}, v_{ni}\right)' \sim \mbox{iid} \;(0, \mathcal{V}_n)$ for fixed $n$ where
-		\begin{equation}
-		\mathcal{V}_n = \left[ \begin{array}{ccc}
-	Q_Z & 0 & 0\\
-	0 & \sigma_\epsilon^2 & \tau/\sqrt{n}\\
-	0 & \tau/\sqrt{n}& \sigma_v^2
-\end{array}	 \right] > 0
-		\end{equation}
-			\begin{eqnarray}
-			y_{ni} &=& \beta x_{ni}  + \epsilon_{ni}\\
-	x_{ni} &=& \mathbf{z}_{ni}' \pi + v_{ni}
-		\end{eqnarray}
-and $\tau,\pi, \beta$ are constants.
-\end{assump}
-
-
-\begin{assump}[Regularity Conditions]
-  \label{assump:reg}For some $\eta > 0$,
-  \begin{enumerate}[(a)]
-		\item $\sup_n E\left[ \lvert\epsilon_iv_i \rvert^{2+\eta}\right]<\infty$ and
-		\item $\sup_n E\left[ \lvert \epsilon_{ni} z_{ni\ell} \rvert^{2+\eta} \right]<\infty$ for each component $z_{ni\ell}$ of $\mathbf{z}_{ni}$.
-	\end{enumerate}
-\end{assump}
-
-
-For convenience state a Lemma that we'll use for all the limit distributions in the paper. Provides sufficient conditions that specialize the Lindeberg-Feller CLT to the triangular array defined in Assumption \ref{assump:local}. These are basically standard.
 
 
 
