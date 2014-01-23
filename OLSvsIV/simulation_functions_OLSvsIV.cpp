@@ -151,8 +151,8 @@ arma::colvec fmsc_ols_iv_cpp(arma::mat data){
     b_DHW90 = b_ols;
   }
   
-  double DHW95_crit = R::qchisq(0.95, 1, 1, 0)
-  double DHW95;
+  double DHW95_crit = R::qchisq(0.95, 1, 1, 0);
+  double b_DHW95;
   if(Tfmsc > DHW95_crit){
     b_DHW95 = b_tsls;
   }else{
@@ -166,7 +166,7 @@ arma::colvec fmsc_ols_iv_cpp(arma::mat data){
   out(2) = b_fmsc;
   out(3) = b_star;
   out(4) = b_DHW90;
-  our(5) = b_DHW95
+  out(5) = b_DHW95;
   return(out);  
   
 }
