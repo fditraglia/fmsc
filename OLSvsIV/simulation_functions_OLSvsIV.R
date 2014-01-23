@@ -39,7 +39,7 @@ dgp <- function(b, PI, V.e, V.z, n){
 
 
 
-fmsc.ols.iv <- function(x, y, z, DHW.levels = NULL){
+fmsc.ols.iv <- function(x, y, z, DHW.levels = c(0.1, 0.05)){
   #------------------------------------------------------------------
   #NOTE: This function assumes that x is a column of observations for 
   #      a single endogenous regressor. In other words, it assumes 
@@ -91,7 +91,7 @@ fmsc.ols.iv <- function(x, y, z, DHW.levels = NULL){
   if(!is.null(DHW.levels)){
     DHW.crit <- qchisq(1 - DHW.levels, 1)
     DHW <- (as.vector(Tfmsc) <= DHW.crit) * b.ols + (as.vector(Tfmsc) > DHW.crit) * b.tsls
-    names(DHW) <- paste('b.DHW.', 100 *DHW.levels, sep ="")
+    names(DHW) <- paste('b.DHW', 100 *(1 - DHW.levels), sep ="")
   }else{
     DHW <- NULL
   }
