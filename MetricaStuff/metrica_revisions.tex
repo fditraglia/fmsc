@@ -580,45 +580,7 @@ The FMSC is equivalent to carrying out this test at a particular significance le
 % subsection robust_version_of_fmsc_and_hausman_test_ (end)
 
 
-\subsection{Valid Confidence Interval for OLS vs 2SLS Example} % (fold)
-\label{sub:valid_confidence_interval_for_ols_vs_2sls_example}
 
-\todo[inline]{Bootstrap the limit experiment using the asymptotic normality of the estimators. Start with the situation where we assume $\tau$ is known. Then take the supremum over all possible $\tau$ within a particular confidence interval.}
-
-There doesn't seem to be a shortcut that makes this any cleaner, so we'll just have to write it out from first principles. The post-FMSC estimator is
-  $$\beta^*_{FMSC} = \textbf{1}\left\{\widehat{T}_{FMSC} < 2 \right\} \widehat{\beta} + \textbf{1}\left\{\widehat{T}_{FMSC} \geq 2 \right\} \widetilde{\beta}$$
-where
-  $$\widehat{T}_{FMSC} = \frac{\widehat{\tau}^2 }{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2/\widehat{\gamma}^2}$$    
-Since the weights sum to one, we can write
-  $$\sqrt{n}(\beta^*_{FMSC} - \beta) = \textbf{1}\left\{\widehat{T}_{FMSC} < 2 \right\} \sqrt{n}(\widehat{\beta} - \beta) + \textbf{1}\left\{\widehat{T}_{FMSC} \geq 2 \right\}\sqrt{n}( \widetilde{\beta}-\beta)$$
-The limit of $\sqrt{n}(\beta^*_{FMSC} - \beta)$ is $\Lambda(\tau)$ in the notation of the paper. From above we have
-  $$
-\left[
-\begin{array}{c}
-  \sqrt{n}\left(\widehat{\beta} - \beta\right) \\
-  \sqrt{n}\left(\widetilde{\beta} - \beta\right)\\
-  \widehat{\tau}
-\end{array}
-\right] \overset{d}{\rightarrow} 
-\left[\begin{array}{cc}
-\widehat{K} & \mathbf{0}'\\
-  0 & \widetilde{K}\\
-  1 & -\widehat{K}^{-1} \widetilde{K}
-  \end{array}
-  \right]\left( \left[\begin{array}{c} \tau \\ \mathbf{0}  \end{array} \right] + M\right)
-$$
-where $M \sim \mathcal{N}(0, \Omega)$ and
-  \begin{eqnarray}
- \widehat{K}&=&   \left(\boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2\right)^{-1}\\
-    \widetilde{K} &=& \left(\boldsymbol{\pi}'Q_z \boldsymbol{\pi}\right)^{-1}\boldsymbol{\pi}'\\
-    \Omega &=& \sigma_\epsilon^2\left[ \begin{array}{cc}
-\boldsymbol{\pi}'Q_z \boldsymbol{\pi}  +\sigma^2_v 
-&\boldsymbol{\pi}'Q_z\\
-  Q_z \boldsymbol{\pi}&Q_z
-  \end{array}\right]
-  \end{eqnarray}
-Following the general procedure from the paper, we'll simulate draws $M_j$, substituting consistent estimators of all unknowns except for $\tau$, for which we'll construct a confidence interval.
-% subsection valid_confidence_interval_for_ols_vs_2sls_example (end)
 
 
 \subsection{AMSE-Optimal Averaging} % (fold)
@@ -720,7 +682,77 @@ Differentiating,
 \todo[inline]{We need to substitute estimators. Difficulty with handling $\tau^2$ since we only have an asymptotically unbiased estimator of this. Can't get an asymptotically unbiased estimator of the optimal weight in this case. I don't want to get side-tracked on this so perhaps just try the simplest thing: substitute the asymptotically unbiased estimator of $\tau^2$. This will be a short section in any case and is intended to be illustrative more than anything else.}
 % subsection feasible_amse_optimal_weighting (end)
 
-\subsection{Post-Selection Inference}
+\subsection{Post-Selection/Averaging Inference} % (fold)
+\label{sub:valid_confidence_interval_for_ols_vs_2sls_example}
+
+\paragraph{``Myopic'' Confidence Intervals}
+These intervals assume that the selected model is correctly specified and ignore any uncertainty from the model selection step. They are constructed from the following asymptotic results:
+  \begin{eqnarray*}
+    \mbox{OLS:} \quad \sqrt{n}(\widehat{\beta} - \beta) \overset{d}{\rightarrow} N(0, \sigma_\epsilon^2/\sigma_x^2)\\
+    \mbox{IV:} \quad \sqrt{n}(\widetilde{\beta} - \beta) \overset{d}{\rightarrow} N(0, \sigma_\epsilon^2/\gamma^2)\\
+  \end{eqnarray*}
+The reason the OLS estimator has a zero mean is that we are assuming here that, conditional on it being selected, it is correctly specified so that $\tau = 0$. To turn these results in to a procedure for constructing confidence interval, we'll plug in the estimators
+ \begin{eqnarray*}
+    \widehat{\beta} &=& (\mathbf{x}'\mathbf{x})^{-1}\mathbf{x}'\mathbf{y}\\
+    \widehat{\sigma}_x^2 &=& n^{-1}\mathbf{x}'\mathbf{x} \\
+    \widetilde{\beta} &=& (\mathbf{x}'Z(Z'Z)^{-1} Z'\mathbf{x})^{-1}\mathbf{x}'Z (Z'Z)^{-1} Z'\mathbf{y}\\
+    \widehat{\gamma}^2 &=& n^{-1} \mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x}
+  \end{eqnarray*}
+from above. For $\sigma_\epsilon^2$, we'll use the error variance estimator that \emph{corresponds} to each estimator. In other words, 
+  \begin{eqnarray*}
+    \mbox{OLS:} \quad \widehat{\sigma}_\epsilon^2 = n^{-1} \left(\mathbf{y} - \mathbf{x}\widehat{\beta}\right)'\left(\mathbf{y} - \mathbf{x}\widehat{\beta}\right)\\
+    \mbox{IV:} \quad \widetilde{\sigma}_\epsilon^2 = n^{-1} \left(\mathbf{y} - \mathbf{x}\widetilde{\beta}\right)'\left(\mathbf{y} - \mathbf{x}\widetilde{\beta}\right)
+  \end{eqnarray*}
+Note that for each we use the MLE rather than the unbiased variance estimator. It shouldn't make a big difference either way, of course. The resulting intervals are as follows:
+  \begin{eqnarray*}
+    \mbox{OLS:} \quad \widehat{\beta} \pm z_{\alpha/2} \cdot \frac{1}{\sqrt{n}} \left(\frac{\widehat{\sigma}_\epsilon^2}{\widehat{\sigma}_x^2} \right)^{1/2}\\
+    \mbox{IV:} \quad \widetilde{\beta} \pm z_{\alpha/2} \cdot \frac{1}{\sqrt{n}} \left(\frac{\widetilde{\sigma}_\epsilon^2}{\widehat{\gamma}^2} \right)^{1/2}
+  \end{eqnarray*}
+
+\todo[inline]{Bootstrap the limit experiment using the asymptotic normality of the estimators. Start with the situation where we assume $\tau$ is known. Then take the supremum over all possible $\tau$ within a particular confidence interval.}
+
+\paragraph{Post-FMSC Corrected CIs}
+The post-FMSC estimator is
+  $$\beta^*_{FMSC} = \textbf{1}\left\{\widehat{T}_{FMSC} < 2 \right\} \widehat{\beta} + \textbf{1}\left\{\widehat{T}_{FMSC} \geq 2 \right\} \widetilde{\beta}$$
+where
+  $$\widehat{T}_{FMSC} = \frac{\widehat{\tau}^2 }{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2/\widehat{\gamma}^2}$$    
+Since the weights sum to one, we can write
+  $$\sqrt{n}(\beta^*_{FMSC} - \beta) = \textbf{1}\left\{\widehat{T}_{FMSC} < 2 \right\} \sqrt{n}(\widehat{\beta} - \beta) + \textbf{1}\left\{\widehat{T}_{FMSC} \geq 2 \right\}\sqrt{n}( \widetilde{\beta}-\beta)$$
+The limit of $\sqrt{n}(\beta^*_{FMSC} - \beta)$ is $\Lambda(\tau)$ in the notation of the paper. From above we have
+  $$
+\left[
+\begin{array}{c}
+  \sqrt{n}\left(\widehat{\beta} - \beta\right) \\
+  \sqrt{n}\left(\widetilde{\beta} - \beta\right)\\
+  \widehat{\tau}
+\end{array}
+\right] \overset{d}{\rightarrow} 
+\left[\begin{array}{cc}
+\widehat{K} & \mathbf{0}'\\
+  0 & \widetilde{K}\\
+  1 & -\widehat{K}^{-1} \widetilde{K}
+  \end{array}
+  \right]\left( \left[\begin{array}{c} \tau \\ \mathbf{0}  \end{array} \right] + M\right)
+$$
+where $M \sim \mathcal{N}(0, \Omega)$ and
+  \begin{eqnarray}
+ \widehat{K}&=&   \left(\boldsymbol{\pi}'Q_z \boldsymbol{\pi} + \sigma_v^2\right)^{-1}\\
+    \widetilde{K} &=& \left(\boldsymbol{\pi}'Q_z \boldsymbol{\pi}\right)^{-1}\boldsymbol{\pi}'\\
+    \Omega &=& \sigma_\epsilon^2\left[ \begin{array}{cc}
+\boldsymbol{\pi}'Q_z \boldsymbol{\pi}  +\sigma^2_v 
+&\boldsymbol{\pi}'Q_z\\
+  Q_z \boldsymbol{\pi}&Q_z
+  \end{array}\right]
+  \end{eqnarray}
+Following the general procedure from the paper, we'll simulate draws $M_j$, substituting consistent estimators of all unknowns except for $\tau$, for which we'll construct a confidence interval.
+
+
+
+\paragraph{Corrected CIs for DHW pre-test Estimators}
+This is almost exactly the same as for post-FMSC described above. Simply replace 2 with the critical value for the desired test.
+
+
+% subsection valid_confidence_interval_for_ols_vs_2sls_example (end)
 
 
 
