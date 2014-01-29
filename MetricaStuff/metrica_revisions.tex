@@ -317,14 +317,10 @@ where $\sigma_x^2 = \gamma^2 + \sigma_v^2$ and $\gamma^2 = \boldsymbol{\pi}'Q_z 
 \begin{proof}
 First,
 $$\Omega = \sigma_\epsilon^2\left[ \begin{array}{cc}
-\boldsymbol{\pi}'Q_z \boldsymbol{\pi}  +\sigma^2_v 
+\sigma_x^2
 &\boldsymbol{\pi}'Q_z\\
   Q_z \boldsymbol{\pi}&Q_z
-  \end{array}\right] = \sigma_\epsilon^2\left[
-  \begin{array}{cc}
-  V_{11} & V_{12} \\ V_{21} & V_{22}
-  \end{array}
-  \right]=\sigma_\epsilon^2 V$$
+  \end{array}\right] = \sigma_\epsilon^2 V$$
   Since $W_n = (Z'Z/n)^{-1}\overset{p}{\rightarrow} Q_z^{-1}$, we have $\widetilde{K} = \left(\boldsymbol{\pi}'Q_z \boldsymbol{\pi}\right)^{-1}\boldsymbol{\pi}'$. 
 Defining
   $$\Sigma = \left[\begin{array}{cc}
@@ -332,44 +328,50 @@ Defining
   \mathbf{0} & \widetilde{K}\\
   1 & -\widehat{K}^{-1} \widetilde{K}
   \end{array}
-  \right]$$
+  \right] = \left[\begin{array}
+    {cc}
+    1/\sigma_x^2 & \textbf{0}' \\
+    0 & \boldsymbol{\pi}'/\gamma^2\\
+    1 & (-\sigma_x^2/\gamma^2) \boldsymbol{\pi}'
+  \end{array}\right]$$
 we have,
   \begin{eqnarray*}
     \sigma_\epsilon^2 \Sigma V \Sigma' &=&
     \sigma_\epsilon^2 
-    \left[\begin{array}{cc}
-\widehat{K} & \mathbf{0}'\\
-  \mathbf{0} & \widetilde{K}\\
-  1 & -\widehat{K}^{-1} \widetilde{K}
-  \end{array}
-  \right]
-    \left[
-  \begin{array}{cc}
-  V_{11} & V_{12} \\ V_{21} & V_{22}
-  \end{array}
-  \right]
+    \left[\begin{array}
+    {cc}
+    1/\sigma_x^2 & \textbf{0}' \\
+    0 & \boldsymbol{\pi}'/\gamma^2\\
+    1 & (-\sigma_x^2/\gamma^2) \boldsymbol{\pi}'
+  \end{array}\right]
+    \left[ \begin{array}{cc}
+\sigma_x^2
+&\boldsymbol{\pi}'Q_z\\
+  Q_z \boldsymbol{\pi}&Q_z
+  \end{array}\right] 
     \left[
     \begin{array}{ccc}
-      \widehat{K}'& \mathbf{0}' &1 \\ 
-      \mathbf{0}&\widetilde{K}' &-\widetilde{K}\widehat{K}^{-1}
+      1/\sigma_x^2 & 0 & 1 \\
+      \mathbf{0} & \boldsymbol{\pi}/\gamma^2 & (-\sigma_x^2/\gamma^2)\boldsymbol{\pi}
     \end{array}
     \right]\\
-   &=& \sigma_\epsilon^2
-   \left[\begin{array}{ccc}
-     \widehat{K}V_{11} \widehat{K}' &
-     \widehat{K} V_{12} \widetilde{K}' &
-     \widehat{K}V_{11} - \widehat{K}V_{12}\widetilde{K}\widehat{K}^{-1}\\
-     \widetilde{K}V_{21}\widehat{K}' &
-     \widetilde{K}V_{22}\widetilde{K}'&
-     \widetilde{K}V_{21} - \widetilde{K}V_{22}\widetilde{K}\widehat{K}^{-1}\\
-     (V_{11} -\widehat{K}^{-1}\widetilde{K} V_{21})\widehat{K}'&
-     (V_{12} - \widehat{K}^{-1}\widetilde{K}V_{22})\widetilde{K}'&
-     (V_11 - \widehat{K}^{-1}\widetilde{K}V_{21}) - (V_{12} - \widehat{K}^{-1}\widetilde{K}V_22)\widetilde{K}\widehat{K}^{-1}
-   \end{array}\right]\\
+   &=&\sigma_\epsilon^2 
+    \left[\begin{array}
+    {cc}
+    1/\sigma_x^2 & \textbf{0}' \\
+    0 & \boldsymbol{\pi}'/\gamma^2\\
+    1 & (-\sigma_x^2/\gamma^2) \boldsymbol{\pi}'
+  \end{array}\right]\left[ 
+    \begin{array}
+      {ccc}
+      1 & 1 & 0 \\
+      Q_z \boldsymbol{\pi}/\sigma_x^2 & Q_z \boldsymbol{\pi}/\gamma^2 & Q_z \boldsymbol{\pi}(1 - \sigma_x^2/\gamma^2)
+    \end{array}
+  \right] \\
   &=& \sigma_\epsilon^2 \left[ \begin{array}{ccc}
   1/\sigma_x^2 & 1/\sigma_x^2 & 0\\
-  1/\sigma_x^2 & 1/\gamma^2 & 1 - 1/(\gamma^2\sigma_x^2)\\
-  0& 1 - 1/(\gamma^2 \sigma_x^2) & \sigma_x^2(\sigma_x^2/\gamma^2 - 1)
+  1/\sigma_x^2 & 1/\gamma^2 & 1 - \sigma_x^2/\gamma^2\\
+  0& 1 - \sigma_x^2/\gamma^2 & \sigma_x^2(\sigma_x^2/\gamma^2 - 1)
   \end{array}\right].
     \end{eqnarray*}
 \end{proof}
@@ -708,7 +710,7 @@ Note that for each we use the MLE rather than the unbiased variance estimator. I
     \mbox{OLS:} \quad \widehat{\beta} \pm z_{\alpha/2} \cdot \frac{1}{\sqrt{n}} \left(\frac{\widehat{\sigma}_\epsilon^2}{\widehat{\sigma}_x^2} \right)^{1/2}\\
     \mbox{IV:} \quad \widetilde{\beta} \pm z_{\alpha/2} \cdot \frac{1}{\sqrt{n}} \left(\frac{\widetilde{\sigma}_\epsilon^2}{\widehat{\gamma}^2} \right)^{1/2}
   \end{eqnarray*}
-\todonote[inline]{Should I be using heteroscedasticity-consistent standard errors here?}
+\todo[inline]{Should I be using heteroscedasticity-consistent standard errors here?}
 
 \paragraph{Post-FMSC Corrected CIs}
 The post-FMSC estimator is
