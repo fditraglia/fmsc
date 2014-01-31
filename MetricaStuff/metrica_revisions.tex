@@ -687,7 +687,7 @@ Differentiating,
 \subsection{Post-Selection/Averaging Inference} % (fold)
 \label{sub:valid_confidence_interval_for_ols_vs_2sls_example}
 
-\paragraph{``Myopic'' Confidence Intervals}
+\subsubsection{``Myopic'' Confidence Intervals}
 These intervals assume that the selected model is correctly specified and ignore any uncertainty from the model selection step. They are constructed from the following asymptotic results:
   \begin{eqnarray*}
     \mbox{OLS:} \quad \sqrt{n}(\widehat{\beta} - \beta) \overset{d}{\rightarrow} N(0, \sigma_\epsilon^2/\sigma_x^2)\\
@@ -712,7 +712,7 @@ Note that for each we use the MLE rather than the unbiased variance estimator. I
   \end{eqnarray*}
 \todo[inline]{Should I be using heteroscedasticity-consistent standard errors here?}
 
-\paragraph{Post-FMSC Corrected CIs}
+\subsubsection{Post-FMSC Corrected CIs}
 The post-FMSC estimator is
   $$\beta^*_{FMSC} = \textbf{1}\left\{\widehat{T}_{FMSC} < 2 \right\} \widehat{\beta} + \textbf{1}\left\{\widehat{T}_{FMSC} \geq 2 \right\} \widetilde{\beta}$$
 where
@@ -748,15 +748,77 @@ where $M \sim \mathcal{N}(0, \Omega)$ and
 Following the general procedure from the paper, we'll simulate draws $M_j$, substituting consistent estimators of all unknowns except for $\tau$, for which we'll construct a confidence interval.
 
 \paragraph{First Step: Confidence Region for $\tau$}
-We'll use the fact, shown above, that
-    $$\widehat{\tau} \overset{d}{\rightarrow} N\left(\tau,\sigma_\epsilon^2 \frac{\sigma_x^2\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right)$$
-to construct a confidence interval for $\tau$.
+We'll use the fact, shown above, that $\widehat{\tau} \overset{d}{\rightarrow} N(\tau,V)$ where 
+$$V = \sigma_\epsilon^2 \frac{\sigma_x^2\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}} = \sigma^2_\epsilon \sigma^2_x \left(\sigma_x^2/\gamma^2 - 1 \right)$$
+Define a consistent estimator $\widehat{V}$ of $V$ as follows
+  $$\widehat{V} = \widehat{\sigma}^2_\epsilon \widehat{\sigma}^2_x \left(\widehat{\sigma}_x^2/\widehat{\gamma}^2 - 1 \right)$$
+For $\widehat{\sigma}^2_x$ and $\widehat{\gamma}^2$, we can simply use the estimators from above:
+ \begin{eqnarray*}
+    \widehat{\sigma}_x^2 &=& n^{-1}\mathbf{x}'\mathbf{x} \\
+    \widehat{\gamma}^2 &=& n^{-1} \mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x}
+  \end{eqnarray*}
+To estimate $\sigma_\epsilon^2$, there are two options: using the resdiduals formed from $\widetilde{\beta}$ or those formed from $\widehat{\beta}$. 
+\todo[inline]{Don't worry about making a decision about this for the moment, but make sure to come back to it.}
 
-\paragraph{Corrected CIs for DHW pre-test Estimators}
-This is almost exactly the same as for post-FMSC described above. Simply replace 2 with the critical value for the desired test.
+Letting $z_{\alpha/2}$ denote the $\alpha/2$ quantile of a standard normal distribution,
+  $$\widehat{\tau} \pm z_{\alpha/2} \; \sqrt{\widehat{\sigma}^2_\epsilon \widehat{\sigma}^2_x \left(\frac{\widehat{\sigma}_x^2}{\widehat{\gamma}^2} - 1 \right)}$$
+is a $(1-\alpha) \times 100\%$ asymptotic confidence interval for $\tau$.
+
+\paragraph{Second Step: Simulation-Based Interval Conditional on $\tau$}
+Let $\tau^*$ be an arbitrary value inside the confidence interval for $\tau$ from above. Now we will \emph{condition} on this value and calculate a confidence interval for $\beta^*_{FMSC}$ by simulation. To make the notation a little simpler, we'll assign names to each of the limiting random variables. Define
+$$
+\left[\begin{array}
+  {c}
+  A(\tau) \\ B \\ C(\tau) 
+\end{array}\right] = \left[\begin{array}
+  {c}
+  \tau/\sigma_x^2  \\ 0 \\ \tau
+\end{array}\right] + \left[\begin{array}{cc}
+1/\sigma_x^2 & \mathbf{0}'\\
+  0 & \boldsymbol{\pi}'/\gamma^2\\
+  1 & (-\sigma_x^2/\gamma^2) \boldsymbol{\pi}'
+  \end{array}
+  \right]\left[ \begin{array}
+    {c} M_1 \\ M_2
+  \end{array}\right]$$
+where 
+  $$\left[\begin{array}
+    {c} M_1 \\ M_2
+  \end{array} \right] \sim N(0, \Omega)$$
+and 
+  $$\Omega = \sigma_\epsilon^2\left[ \begin{array}{cc}
+\sigma_x^2
+&\boldsymbol{\pi}'Q_z\\
+  Q_z \boldsymbol{\pi}&Q_z
+  \end{array}\right]$$
+Using this notation, we have
+ $$\left[
+\begin{array}{c}
+  \sqrt{n}\left(\widehat{\beta} - \beta\right) \\
+  \sqrt{n}\left(\widetilde{\beta} - \beta\right)\\
+  \widehat{\tau}
+\end{array}
+\right] \overset{d}{\rightarrow} \left[\begin{array}
+  {c}
+  A(\tau) \\ B \\ C(\tau) 
+\end{array}\right]$$
+Now let $\Lambda(\tau)$ denote the limiting random variable to which $\sqrt{n}\left(\beta^*_{FMSC} - \beta\right)$ converges. Then we have
+  \begin{eqnarray*}
+    \Lambda(\tau) &=& \mathbf{1}\left\{ \frac{C^2(\tau)}{V} < 2 \right\} A(\tau) +  \mathbf{1}\left\{ \frac{C^2(\tau)}{V} \geq 2 \right\} B\\
+    &=& \mathbf{1}\left\{ C^2(\tau)< 2 V \right\} A(\tau) +  \mathbf{1}\left\{ C^2(\tau)\geq 2 V \right\} B
+  \end{eqnarray*}
+by the continuous mapping theorem since the indicator functions are almost-surely continuous. 
+
 
 
 % subsection valid_confidence_interval_for_ols_vs_2sls_example (end)
+
+
+\subsubsection{Corrected CIs for DHW pre-test Estimators}
+This is almost exactly the same as for post-FMSC described above. Simply replace 2 with the critical value for the desired test.
+
+
+
 
 
 
