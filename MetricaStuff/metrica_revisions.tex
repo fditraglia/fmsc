@@ -313,7 +313,7 @@ $$
 $$
 where $\sigma_x^2 = \gamma^2 + \sigma_v^2$ and $\gamma^2 = \boldsymbol{\pi}'Q_z \boldsymbol{\pi}$.
 \end{cor}
-
+Note that, since $\sigma_x^2/\gamma^2 = 1 + \sigma_v^2 /\gamma^2$, the covariance between $\sqrt{n}\left(\widetilde{\beta} - \beta\right)$ and $\widehat{\tau}$ in the limit is \emph{negative}. In particular, it equals $\sigma_v^2/\gamma^2$. Hence, the weaker the instruments, the more negative the covariance becomes.
 \begin{proof}
 First,
 $$\Omega = \sigma_\epsilon^2\left[ \begin{array}{cc}
@@ -675,7 +675,8 @@ The result makes intuitive sense. As $\kappa^2$ increases, the instruments $z$ b
 
 \paragraph{Is there an interior optimum?} To solve for $\omega^*$ we minimized the function 
     $$g(\omega) = a\omega^2 + b(2\omega - \omega^2) + c = (a - b)\omega^2 + 2b\omega + c$$ 
-where $a = \mbox{ABIAS(OLS)}^2$ and $b = \mbox{AVAR(OLS) - AVAR(2SLS)}$. Since it is a squared bias, $a \geq 0$ and since OLS has a strictly lower asymptotic variance than 2SLS so long as the instruments aren't perfect predictors of $x$, $b \leq 0$. This implies that $(a - b)$ is \emph{positive}. Hence, the second derivative is strictly positive \emph{for all $x$} meaning that we are minimizing a \emph{globally convex function}, namely a quadratic. This means that the first order condition is both necessary and sufficient for a minimum. The only remaining question is whether the solution $\omega^* = 1/(1 - a/b)$ lies inside the interval $[0,1]$. Now, we'll assume that the instruments are \emph{not} perfect predictors of $x$ so the inequality for $b$ becomes strict, i.e.\ $b < 0$. Since $a \geq 0$, it follows that $-a/b \geq 0$ so that $1 - a/b \geq 1$.
+where $a = \mbox{ABIAS(OLS)}^2$ and $b = \mbox{AVAR(OLS) - AVAR(2SLS)}$. Since it is a squared bias, $a \geq 0$ and since OLS has a strictly lower asymptotic variance than 2SLS so long as the instruments aren't perfect predictors of $x$, $b \leq 0$. This implies that $(a - b)$ is \emph{positive}. Hence, the second derivative is strictly positive \emph{for all $x$} meaning that we are minimizing a \emph{globally convex function}, namely a quadratic. This means that the first order condition is both necessary and sufficient for a minimum. The only remaining question is whether the solution $\omega^* = 1/(1 - a/b)$ lies inside the interval $[0,1]$. Now, we'll assume that the instruments are \emph{not} perfect predictors of $x$ so the inequality for $b$ becomes strict, i.e.\ $b < 0$. Since $a \geq 0$, it follows that $-a/b \geq 0$ so that $1 - a/b \geq 1$. Hence,
+$\omega^* = 1/(1 - a/b) \leq 1$. Since the denominator cannot be negative, we have $0 < \omega^* \leq 1$. Hence the optimum is \emph{always interior}.
  
 
 
@@ -683,7 +684,16 @@ where $a = \mbox{ABIAS(OLS)}^2$ and $b = \mbox{AVAR(OLS) - AVAR(2SLS)}$. Since i
 
 \subsection{Feasible AMSE-Optimal Weighting} % (fold)
 \label{sub:feasible_amse_optimal_weighting}
-\todo[inline]{We need to substitute estimators. Difficulty with handling $\tau^2$ since we only have an asymptotically unbiased estimator of this. Can't get an asymptotically unbiased estimator of the optimal weight in this case. I don't want to get side-tracked on this so perhaps just try the simplest thing: substitute the asymptotically unbiased estimator of $\tau^2$. This will be a short section in any case and is intended to be illustrative more than anything else.}
+Since $\omega^*$ depends on unknowns, we need to estimate it. Recall from above that
+  $$\omega^* = \left[1 + \frac{\mbox{ABIAS(OLS)}^2}{\mbox{AVAR(2SLS)}-\mbox{AVAR(OLS)}} \right]^{-1} = \left[1 + \frac{\tau^2/\sigma_x^4}{\sigma_\epsilon^2 (1/\gamma^2 - 1/\sigma_x^2)}\right]^{-1}$$ 
+For $\sigma_x^2$, $\gamma^2$ and $\sigma_\epsilon^2$ we will use the obvious consistent estimators $\widehat{\sigma}_x^2$, $\widehat{\gamma}^2$ and $\widehat{\sigma}_\epsilon^2$. 
+\todo[inline]{There is a question of whether $\sigma_\epsilon^2$ should be estimated based on the residuals constrcted from the OLS estimator or those constructed from the 2SLS estimator.}
+
+For $\tau^2$ the situation is more complicated. As explained above, no consisted estimator of $\tau$ exsists although we can construct an asymptotically unbiased estimator of $\widehat{\tau}^2$. In the FMSC expression this yields an asymptotically unbiased estimator of AMSE. However here we will be substituting our estimator of $\tau^2$ into a \emph{highly nonlinear} function so there is no obvious way to preserve the asymptotic unbiasedness. Nevertheless, the most obvious idea is to substitute our asymptotically unbiased estimator of $\tau^2$ from above: 
+$$\widehat{\tau}^2 - \widehat{V} = \widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2  \left(\frac{\widehat{\sigma}_x^2}{\widehat{\gamma}^2} - 1 \right)$$
+The problem is that, while $\tau^2$ is always greater than or equal to zero as is $\widehat{\tau}^2$, the difference $\widehat{\tau}^2 - \widehat{V}$ \emph{can easily be negative}. This gives a \emph{negative} estimate of $\mbox{ABIAS(OLS)}^2$ The obvious solution to this problem, borrowing an idea from James-Stein estimation, is to work with the positive part instead, namely $\max\left\{0, \; \widehat{\tau}^2 - \widehat{V}\right\}$. This will ensure that our estimate of $a$, using the notation of the preceding section, will satisfy the same inequalities as the population quantity ensuring that our estimate of $\omega^*$ is interior to $[0,1]$. (The estimator of $b$ automatically satisfies the corresponding inequalities for the population quantity). Our sample estimate of the AMSE-optimal weight on the OLS estimator is thus
+  $$\widehat{\omega }^* = \left[1 + \frac{\max \left\{0, \; \left(\widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2  \left(\widehat{\sigma}_x^2/\widehat{\gamma}^2 - 1 \right) \right)/\;\widehat{\sigma}_x^4 \right\}}{\widehat{\sigma}_\epsilon^2 (1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2)}\right]^{-1}$$
+
 % subsection feasible_amse_optimal_weighting (end)
 
 \subsection{Post-Selection/Averaging Inference} % (fold)
@@ -859,9 +869,17 @@ This is almost exactly the same as for post-FMSC described above. Simply replace
 
 
 \subsubsection{Corrected CIs for Averaging Estimator}
-
-
-
+The feasible version of the AMSE-optimal averaging estimator is
+  $$\beta^*_{Avg} = \widehat{\omega}^* \widehat{\beta} + (1 - \widehat{\omega}^*)\widetilde{\beta}$$
+where
+$$\widehat{\omega }^* = \left[1 + \frac{\max \left\{0, \; \left(\widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2  \left(\widehat{\sigma}_x^2/\widehat{\gamma}^2 - 1 \right) \right)/\;\widehat{\sigma}_x^4 \right\}}{\widehat{\sigma}_\epsilon^2 (1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2)}\right]^{-1}$$
+Since the weights sum to one, we can write
+  $$\sqrt{n}\left(\beta^*_{Avg}  - \beta \right) =\widehat{\omega}^* \sqrt{n}\left(\widehat{\beta} - \beta \right) +(1 - \widehat{\omega}^*) \sqrt{n}\left(\widetilde{\beta}  - \beta \right)$$
+Now we can proceed to describe a simulation-based procedure to construct valid confidence intervals by direct analogy with the post-FMSC selection estimator. The only difference here is the form of the weight function which affects only the third step of the algorithm, the step in which we construct the draws $\Lambda_j(\tau)$. For the case of the averaging estimator, we set
+  $$\Lambda_j(\tau) = \widehat{\omega}^*(C_j^2(\tau)) A_j(\tau) + \left[1 -  \widehat{\omega}^*(C_j^2(\tau)) \right]B_j$$
+where
+  $$\widehat{\omega}^*(C_j^2(\tau)) = \left[1 + \frac{\max \left\{0, \; \left(C^2_j(\tau) - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2  \left(\widehat{\sigma}_x^2/\widehat{\gamma}^2 - 1 \right) \right)/\;\widehat{\sigma}_x^4 \right\}}{\widehat{\sigma}_\epsilon^2 (1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2)}\right]^{-1}$$
+All other steps of the procedure are identical.
 
 \section{Derivations for Choosing Instruments Example}
 
