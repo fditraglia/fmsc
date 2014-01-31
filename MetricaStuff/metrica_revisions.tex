@@ -760,9 +760,9 @@ For $\widehat{\sigma}^2_x$ and $\widehat{\gamma}^2$, we can simply use the estim
 To estimate $\sigma_\epsilon^2$, there are two options: using the resdiduals formed from $\widetilde{\beta}$ or those formed from $\widehat{\beta}$. 
 \todo[inline]{Don't worry about making a decision about this for the moment, but make sure to come back to it.}
 
-Letting $z_{\alpha/2}$ denote the $\alpha/2$ quantile of a standard normal distribution,
-  $$\widehat{\tau} \pm z_{\alpha/2} \; \sqrt{\widehat{\sigma}^2_\epsilon \widehat{\sigma}^2_x \left(\frac{\widehat{\sigma}_x^2}{\widehat{\gamma}^2} - 1 \right)}$$
-is a $(1-\alpha) \times 100\%$ asymptotic confidence interval for $\tau$.
+Letting $z_{\delta/2}$ denote the $\alpha/2$ quantile of a standard normal distribution,
+  $$\widehat{\tau} \pm z_{\delta/2} \; \sqrt{\widehat{\sigma}^2_\epsilon \widehat{\sigma}^2_x \left(\frac{\widehat{\sigma}_x^2}{\widehat{\gamma}^2} - 1 \right)}$$
+is a $(1-\delta) \times 100\%$ asymptotic confidence interval for $\tau$.
 
 \paragraph{Second Step: Simulation-Based Interval Conditional on $\tau$}
 Let $\tau^*$ be an arbitrary value inside the confidence interval for $\tau$ from above. Now we will \emph{condition} on this value and calculate a confidence interval for $\beta^*_{FMSC}$ by simulation. To make the notation a little simpler, we'll assign names to each of the limiting random variables. Define
@@ -810,7 +810,45 @@ Now let $\Lambda(\tau)$ denote the limiting random variable to which $\sqrt{n}\l
 by the continuous mapping theorem since the indicator functions are almost-surely continuous. 
 
 
-
+\begin{enumerate}
+  \item For $j = 1, \hdots, J$ generate
+    $$\left[ \begin{array}
+      {c} M_1^{(j)} \\ M_2^{(j)}
+    \end{array}\right] \overset{\mbox{iid}}{\sim} N\left( \left[ \begin{array}
+      {c} 0 \\ \textbf{0}\\
+    \end{array}\right], \;\widehat{\sigma}_\epsilon^2\left[ \begin{array}
+      {cc}
+      \widehat{\sigma}_x^2& \widehat{\boldsymbol{\pi}}' \widehat{Q}_z\\
+      \widehat{Q}_z\widehat{\boldsymbol{\pi}} & \widehat{Q}_z
+    \end{array}\right] \right) $$
+  \item Set
+    \begin{eqnarray*}
+        A_j(\tau) &=&  \left(\tau + M_1^{(j)} \right)/\; \widehat{\sigma}_x^2\\    
+        B_j &=& \widehat{\boldsymbol{\pi}'}M_2^{(j)}/\; \widehat{\gamma}^2\\
+        C_j(\tau)&=& \tau + M_1^{(j)} - (\widehat{\sigma}_x^2/\widehat{\gamma}^2) \widehat{\boldsymbol{\pi}}' M_2^{(j)}
+    \end{eqnarray*}
+  \item Set 
+    $$\Lambda_j(\tau) = \mathbf{1}\left\{ C_j^2(\tau)< 2 \widehat{V} \right\} A_j(\tau) +  \mathbf{1}\left\{ C_j^2(\tau)\geq 2 \widehat{V} \right\} B_j$$
+    where $\widehat{V} = \widehat{\sigma}^2_\epsilon \widehat{\sigma}^2_x \left(\widehat{\sigma}_x^2/\widehat{\gamma}^2 - 1 \right)$.
+\end{enumerate}
+Now, \emph{conditional on $\tau$} we can use the draws $\Lambda_j(\tau)$ to construct a confidence interval for $\beta$ post-FMSC selection as follows. Let $\widehat{a}(\tau)$ be the $\alpha/2$ quantile of the draws $\Lambda_j(\tau)$ and $\widehat{b}(\tau)$ be the $1- \alpha/2$ quantile. To get rid of the conditioning on $\tau$ we simply minimize $\widehat{a}(\tau)$ and maximize $\widehat{b}(\tau)$ over all values of $\tau$ in the confidence interval 
+  $$\mathbf{T} = \left[ \widehat{\tau} - z_{\delta/2} \; \sqrt{\widehat{V}},  \; \widehat{\tau} + z_{\delta/2} \; \sqrt{\widehat{V}} \right]$$
+Specifically, define
+    \begin{eqnarray*}
+      \widehat{a}_{min} &=& \min_{\tau \in \mathbf{T}} \widehat{a}(\tau)\\
+      \widehat{b}_{max} &=& \max_{\tau \in \mathbf{T}} \widehat{b}(\tau)
+    \end{eqnarray*}
+Then $[\widehat{a}_{min} , \widehat{b}_{max}]$ is a confidence interval for $\Lambda(\tau)$ with asymptotic coverage of at least $1 - (\alpha + \delta)$ that \emph{does not depend on $\tau$}. Since $\Lambda(\tau)$ is the limit random variable to which $\sqrt{n}(\beta^*_{FMSC} - \beta)$ converges, we can use convert this into a confidence interval for $\beta$ based on $\beta^*_{FMSC}$ as follows. First substitute $\sqrt{n}(\beta^*_{FMSC} - \beta)$ for $\Lambda(\tau)$
+$$P\left\{ \widehat{a}_{min} \leq  \sqrt{n}(\beta^*_{FMSC} - \beta) \leq \widehat{b}_{max}\right\} \geq 1 - (\alpha + \delta)$$
+Rearranging,
+\begin{eqnarray*}
+   P\left\{ \widehat{a}_{min}/\sqrt{n} \leq  (\beta^*_{FMSC} - \beta) \leq \widehat{b}_{max}/\sqrt{n}\right\} &\geq& 1 - (\alpha + \delta)\\ 
+   P\left\{ \widehat{a}_{min}/\sqrt{n} - \beta^*_{FMSC}  \leq - \beta \leq \widehat{b}_{max}/\sqrt{n} - \beta^*_{FMSC}  \right\} &\geq& 1 - (\alpha + \delta)\\
+P\left\{\beta^*_{FMSC} -  \widehat{b}_{max}/\sqrt{n}  \leq  \beta \leq \beta^*_{FMSC} - \widehat{a}_{min}/\sqrt{n} \right\} &\geq& 1 - (\alpha + \delta)\\
+ \end{eqnarray*} 
+Thus, 
+  $$\left[ \beta^*_{FMSC}  - \frac{\widehat{b}_{max}}{\sqrt{n}}, \; \beta^*_{FMSC}  - \frac{\widehat{a}_{min}}{\sqrt{n}} \right]$$
+is a confidence interval for $\beta$ post-FMSC moment selection with asymptotic coverage of at least $1 - (\alpha + \delta)$.
 % subsection valid_confidence_interval_for_ols_vs_2sls_example (end)
 
 
@@ -818,7 +856,7 @@ by the continuous mapping theorem since the indicator functions are almost-surel
 This is almost exactly the same as for post-FMSC described above. Simply replace 2 with the critical value for the desired test.
 
 
-
+\subsubsection{Corrected CIs for Averaging Estimator}
 
 
 
