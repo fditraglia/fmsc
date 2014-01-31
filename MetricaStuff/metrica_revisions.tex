@@ -468,14 +468,12 @@ as we saw in the proofs above. The difference of the two provides a consistent e
 
  There are two possible ways to estimate $\sigma_\epsilon^2$. We can either use the redsiduals from the OLS estimator or those from the IV estimator. Under local mis-specification, either choice gives a consistent estimator. Unless the instruments are extremely weak, however, we would expect the IV residuals to be more robust. (We could always try both and see if it makes a difference.)  
 
- The only remaining quantity to be estimated is $\tau^2$. From above we know that 
-    $$\widehat{\tau} \overset{d}{\rightarrow} N\left(\tau,\sigma_\epsilon^2 \frac{\sigma_x^2\sigma_v^2}{\boldsymbol{\pi}'Q_z \boldsymbol{\pi}}\right)$$
-since
-  $$\sigma_x^2 \left(\frac{\sigma_x^2}{\gamma^2} - 1 \right) = \sigma_x^2 \left(\frac{\sigma_x^2 - \gamma^2}{\gamma^2} \right) = \sigma_x^2 \left(\frac{\sigma_v^2}{\gamma^2}\right)$$
+ The only remaining quantity to be estimated is $\tau^2$. From above we know that $\widehat{\tau} \overset{d}{\rightarrow} N(\tau, V)$ where
+    $$V = \sigma^2_\epsilon \sigma^2_x \left(\frac{\sigma^2_x}{\gamma^2} - 1 \right)  = \sigma^2_\epsilon \sigma^2_x \left(\frac{\sigma^2_v + \gamma^2}{\gamma^2} - 1 \right) =  \sigma^2_\epsilon \sigma^2_x \left( \frac{\sigma^2_v}{\gamma^2}\right)$$
 Therefore,
-  $$\widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2 \widehat{\sigma}_v^2/\widehat{\gamma}^2$$
+  $$\widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2  \left(\frac{\widehat{\sigma}_x^2}{\widehat{\gamma}^2} - 1 \right)= \widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2 \left(\frac{\widehat{\sigma}_v^2}{\widehat{\gamma}^2}\right)$$
 is an asymptotically unbiased estimator of $\tau^2$ and accordingly
-  $$\frac{\widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2 \widehat{\sigma}_v^2/\widehat{\gamma}^2}{\widehat{\sigma}_\epsilon^2 \widehat{\sigma}_v^2} = \frac{\widehat{\tau}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} - \frac{\widehat{\sigma}_x^2}{\widehat{\gamma}^2}$$
+  $$\frac{\widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2 \widehat{\sigma}_v^2/\widehat{\gamma}^2}{\widehat{\sigma}_\epsilon^2 \widehat{\sigma}_v^2} = \frac{\widehat{\tau}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} - \frac{\widehat{\sigma}_x^2}{\widehat{\gamma}^2} =  \frac{\widehat{\tau}^2}{(\widehat{\sigma}_x^2 - \widehat{\gamma}^2) \widehat{\sigma}_\epsilon^2} - \frac{\widehat{\sigma}_x^2}{\widehat{\gamma}^2}$$
 is an asymptotically unbiased estimator of $\tau^2/(\sigma_\epsilon^2 \sigma_v^2)$.
 
 Now we can construct the FMSC for the OLS versus IV example. From above we know that the AMSE of OLS is lower than that of IV whenever $\tau^2/(\sigma_\epsilon^2 \sigma_v^2)$ is less than $\sigma_x^2/\gamma^2$. Substituting our estimators of these quantities into the inequality, the FMSC tells us to use OLS whenever
@@ -486,7 +484,7 @@ Now we can construct the FMSC for the OLS versus IV example. From above we know 
   \end{eqnarray*}
 Now, the question is what is the limiting behavior of $\widehat{T}_{FMSC}$? Note that
   \begin{eqnarray*}
-    \widehat{T}_{FMSC} &=& \frac{\widehat{\tau}^2 }{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2/\widehat{\gamma}^2} = \left(\frac{\widehat{\tau}}{\widehat{SD}(\widehat{\tau})}\right)^2
+    \widehat{T}_{FMSC} &=& \frac{\widehat{\tau}^2}{\widehat{V}} = \frac{\widehat{\tau}^2 }{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2/\widehat{\gamma}^2} = \frac{\widehat{\tau}^2}{ \widehat{\sigma}^2_\epsilon \widehat{\sigma}^2_x \left(\widehat{\sigma}_x^2/\widehat{\gamma}^2 - 1 \right)}
   \end{eqnarray*}
 Hence, if $\tau = 0$ then $\widehat{T}_{FMSC} \overset{d}{\rightarrow} \chi^2(1)$. This means that we can interpret the FMSC as a test of the null hypothesis $H\colon \tau = 0$ against the two-sided alternative based on a critical value of $2$. This corresponds to a test with size  \texttt{1 - pchisq(2, df = 1)}$\approx 0.16$. Rather than leaving us free to choose the size of our test, the FMSC tells us precisely what size to use to obtain a favorable bias-variance tradeoff. We should use IV only when we reject $H_0\colon \tau = 0$ at the 16\% level. 
 
@@ -510,12 +508,12 @@ Hence, if $\tau = 0$ then $\widehat{T}_{FMSC} \overset{d}{\rightarrow} \chi^2(1)
         \end{array}
       \right]
     \right)\\
-    &\sim& N\left(\tau/\sigma_x^2, V
+    &\sim& N\left(\tau/\sigma_x^2, \Sigma
     \right)
   \end{eqnarray*}
 where
     \begin{eqnarray*}
-      V &=& (\sigma_\epsilon^2/\sigma_x^2) \left[\begin{array}{cc}
+      \Sigma &=& (\sigma_\epsilon^2/\sigma_x^2) \left[\begin{array}{cc}
     1 & -1
     \end{array}\right]
       \left[
@@ -533,19 +531,16 @@ where
     \end{eqnarray*}
 which agrees with the standard textbook formula in the case where OLS is efficient under the null (see e.g.\ Cameron \& Trivedi). Hence,
   \begin{eqnarray*}
-    \widehat{T}_{Hausman} &=& \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{V}} = \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{\sigma}_\epsilon^2\left(1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2\right)}= \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{\sigma}_\epsilon^2\left(\displaystyle \frac{\widehat{\sigma}_x^2 - \widehat{\gamma}^2}{\widehat{\gamma}^2 \widehat{\sigma}_x^2}\right)}\\
-     &=& \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{\sigma}_\epsilon^2\left(\displaystyle \frac{\widehat{\sigma}_v^2}{\widehat{\gamma}^2 \widehat{\sigma}_x^2}\right)}
-     =\frac{n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2}
-     \overset{d}{\rightarrow} \chi^2(1)
+    \widehat{T}_{Hausman} &=& \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{\Sigma}} = \frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{\sigma}_\epsilon^2\left(1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2\right)}\overset{d}{\rightarrow} \chi^2(1)
   \end{eqnarray*}
-under $H_0\colon \tau = 0$, where we have used the fact that $\widehat{\sigma}_x^2 = \widehat{\gamma}^2 + \widehat{\sigma}_v^2$ from above. So long as we use the same estimator of $\sigma_\epsilon^2$ for each term in the denominator, as we have here, we can be sure that the difference is positive since $\widehat{\sigma}_x^2 = \widehat{\gamma}^2 + \widehat{\sigma}_v^2$ and we showed above that $\widehat{\sigma}_v^2 = (M_Z \mathbf{x})'(M_Z \mathbf{x})/n$.
+under $H_0\colon \tau = 0$. So long as we use the same estimator of $\sigma_\epsilon^2$ for each term in the denominator, as we have here, we can be sure that the difference is positive since $\widehat{\sigma}_x^2 = \widehat{\gamma}^2 + \widehat{\sigma}_v^2$ and we showed above that $\widehat{\sigma}_v^2 = (M_Z \mathbf{x})'(M_Z \mathbf{x})/n$.
 
 
 Now we will show that the test statistic for the Durbin-Hausman-Wu test is \emph{numerically identical} to the ``test statistic'' view of the FMSC for this problem. From above,
-  $$\widehat{T}_{FMSC} = \frac{\widehat{\tau}^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2} = \left(\frac{ \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2}\right)\left(\frac{\widehat{\tau}^2}{\widehat{\sigma}_x^2}\right)$$
+  $$\widehat{T}_{FMSC} =  \frac{\widehat{\tau}^2}{ \widehat{\sigma}^2_\epsilon \widehat{\sigma}^2_x \left(\widehat{\sigma}_x^2/\widehat{\gamma}^2 - 1 \right)} = \left(\frac{\widehat{\tau}}{\widehat{\sigma}_x^4}\right)\left[\frac{1}{\widehat{\sigma}_\epsilon^2\left(1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2\right)} \right]$$
 whereas,
-  $$\widehat{T}_{Hausman} = \frac{n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2} = \left(\frac{ \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2}\right)n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^2$$
-  Thus, we only need to show that $\widehat{\tau}^2 = n(\widehat{\beta} - \widetilde{\beta})^2 \widehat{\sigma}_x^4$. First notice that
+  $$\widehat{T}_{Hausman} =\frac{n(\widehat{\beta} - \widetilde{\beta})^2}{\widehat{\sigma}_\epsilon^2\left(1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2\right)}$$
+  Thus, we only need to show that $\widehat{\tau}^2/\widehat{\sigma}_x^4 = n(\widehat{\beta} - \widetilde{\beta})^2$. First notice that
 \begin{eqnarray*}
    \mathbf{x}' \left(\mathbf{y} - \mathbf{x}\widetilde{\beta}\right)&=& \mathbf{x}'\mathbf{y} - \mathbf{x}'\mathbf{x}\widetilde{\beta} =\mathbf{x}'\mathbf{x}\left(\mathbf{x}'\mathbf{x}\right)^{-1} \mathbf{x}'\mathbf{y} - \mathbf{x}'\mathbf{x}\widetilde{\beta}\\
     &=&\mathbf{x}'\mathbf{x}\left[\left(\mathbf{x}'\mathbf{x}\right)^{-1} \mathbf{x}'\mathbf{y} -  \widetilde{\beta}\right] = \mathbf{x}'\mathbf{x} \left( \widehat{\beta} - \widetilde{\beta}\right)
@@ -554,14 +549,14 @@ Now, from above
   $$\widehat{\tau} = \sqrt{n} \left[\mathbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})/n\right] = n^{-1/2} \textbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})$$
 so we have,
   \begin{eqnarray*}
-    \widehat{\tau}^2 &=&  \left[n^{-1/2} \textbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})\right]^2 = n^{-1}\left[\mathbf{x}'\mathbf{x} \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2 \\
-      &=& n^{-1}\left[n \widehat{\sigma}_x^2 \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2  = n\widehat{\sigma}_x^4 \left( \widehat{\beta} - \widetilde{\beta}\right) ^2
+    \widehat{\tau}^2/\widehat{\sigma}_x^4 &=&  \left[n^{-1/2} \textbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})\right]^2 = n^{-1}\left[\mathbf{x}'\mathbf{x} \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2/\widehat{\sigma}_x^4 \\
+      &=& n^{-1}\left[n \widehat{\sigma}_x^2 \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2/\widehat{\sigma}_x^4  = n\left( \widehat{\beta} - \widetilde{\beta}\right) ^2
   \end{eqnarray*}
   Therefore $\widehat{T}_{FMSC} = \widehat{T}_{Hausman}$ as claimed. In other words, using the FMSC to choose between OLS and 2SLS is numerically equivalent to carrying out a DHW test at the 16\% level.
 
 
 \paragraph{Implementing the FMSC via a Hausman Test}
-We can use the relationship from above to implement the FMSC for this example directly. There is a potential issue involving the denominator, since this is a difference of asymptotic variance estimators. As formulated above, it is guaranteed to be positive since we use the sample estimator of the error variance for each piece. (See 8.3.2 of Cameron \& Trivedi for more on this). 
+We can use the relationship from above to implement the FMSC for this example directly. There is a potential issue involving the denominator, since this is a difference of asymptotic variance estimators. As formulated above, it is guaranteed to be positive since we use the \emph{same} sample estimator of $\sigma^2_\epsilon$ for each term of the difference in the denominator piece. (See 8.3.2 of Cameron \& Trivedi for more on this). 
 
 There are several possible estimators for $\sigma_\epsilon^2$ as mentioned above. One is to use the OLS estimator, another is to use the 2SLS estimator. (See Dufour et al. for more possibilities.) It seems like the easiest thing to do would be to use the 2SLS estimator. I could also try the OLS estimator. Another idea would be to take the average of the two. It seems like much ink has been spilled on this topic but it's a bit of a distraction from this paper so I shouldn't spend too much time on it.
 
@@ -676,7 +671,14 @@ Differentiating,
     \frac{\partial \omega^*}{\partial \tau^2} &=&-\left[1 + \left(\frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2}\right)\left( \frac{\kappa^2}{1 + \kappa^2}\right)\right]^{-2}\left(\frac{\kappa^2}{1 + \kappa^2} \right)\frac{d}{d\tau^2}\left( \frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2} \right) \\
     &=&-\left[1 + \left(\frac{\tau^2}{\sigma_\epsilon^2 \sigma_v^2}\right)\left( \frac{\kappa^2}{1 + \kappa^2}\right)\right]^{-2}\left(\frac{\kappa^2}{1 + \kappa^2} \right)\left( \frac{1}{\sigma_\epsilon^2 \sigma_v^2} \right) < 0 
   \end{eqnarray*}
-  The result makes intuitive sense. As $\kappa^2$ increases, the instruments $z$ become stronger so we give \emph{less} weight to OLS and more to 2SLS. As the $\kappa^2$ decreases, the instruments become weaker so we give \emph{more} weight to OLS and less to 2SLS. Similarly, as $\tau^2$ increases the regressor $x$ becomes more endogenous so we give \emph{less} weight to OLS and more to 2SLS. As $\tau^2$ decreases the regressor $x$ becomes less endogenous, so we give \emph{more} weight to OLS and less to 2SLS.
+The result makes intuitive sense. As $\kappa^2$ increases, the instruments $z$ become stronger so we give \emph{less} weight to OLS and more to 2SLS. As the $\kappa^2$ decreases, the instruments become weaker so we give \emph{more} weight to OLS and less to 2SLS. Similarly, as $\tau^2$ increases the regressor $x$ becomes more endogenous so we give \emph{less} weight to OLS and more to 2SLS. As $\tau^2$ decreases the regressor $x$ becomes less endogenous, so we give \emph{more} weight to OLS and less to 2SLS.
+
+\paragraph{Is there an interior optimum?} To solve for $\omega^*$ we minimized the function 
+    $$g(\omega) = a\omega^2 + b(2\omega - \omega^2) + c = (a - b)\omega^2 + 2b\omega + c$$ 
+where $a = \mbox{ABIAS(OLS)}^2$ and $b = \mbox{AVAR(OLS) - AVAR(2SLS)}$. Since it is a squared bias, $a \geq 0$ and since OLS has a strictly lower asymptotic variance than 2SLS so long as the instruments aren't perfect predictors of $x$, $b \leq 0$. This implies that $(a - b)$ is \emph{positive}. Hence, the second derivative is strictly positive \emph{for all $x$} meaning that we are minimizing a \emph{globally convex function}, namely a quadratic. This means that the first order condition is both necessary and sufficient for a minimum. The only remaining question is whether the solution $\omega^* = 1/(1 - a/b)$ lies inside the interval $[0,1]$. Now, we'll assume that the instruments are \emph{not} perfect predictors of $x$ so the inequality for $b$ becomes strict, i.e.\ $b < 0$. Since $a \geq 0$, it follows that $-a/b \geq 0$ so that $1 - a/b \geq 1$.
+ 
+
+
 % subsection amse_optimal_averaging (end)
 
 \subsection{Feasible AMSE-Optimal Weighting} % (fold)
