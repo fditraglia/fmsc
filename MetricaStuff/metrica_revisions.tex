@@ -172,7 +172,7 @@ Therefore, by the Lindeberg-Feller Central Limit Theorem,
 \end{proof}
 
 
-\section{Derivations for OLS vs.\ IV Example}
+\section{OLS versus IV Example}
 Without loss of generality, we may assume that there are no exogenous regressors or, equivalently, that they have been ``projected out.'' Thus, the DGP is: 
     	\begin{eqnarray}
 			y_{i} &=& \beta x_{i}  + \epsilon_{i}\\
@@ -881,23 +881,33 @@ where
   $$\widehat{\omega}^*(C_j^2(\tau)) = \left[1 + \frac{\max \left\{0, \; \left(C^2_j(\tau) - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2  \left(\widehat{\sigma}_x^2/\widehat{\gamma}^2 - 1 \right) \right)/\;\widehat{\sigma}_x^4 \right\}}{\widehat{\sigma}_\epsilon^2 (1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2)}\right]^{-1}$$
 All other steps of the procedure are identical.
 
-\section{Derivations for Choosing Instruments Example}
+\section{Choosing Instruments Example}
 
+Without loss of generality suppose that there are no exogenous regressors (they can always be projected out)
 \begin{eqnarray}
-    y_i &=& \mathbf{x}_i' \boldsymbol{\beta} +  \epsilon_i\\
-    \mathbf{x}_i &=& \Pi_w \mathbf{w}_i + \Pi_z \mathbf{z}_i + \mathbf{v}_i
+    y_i &=& \mathbf{x}_i' \beta +  \epsilon_i\\
+    \mathbf{x}_i &=& \mathbf{z}_{i1}' \Pi_1' + \mathbf{z}_{i2}' \Pi_2 + \mathbf{v}_i 
 \end{eqnarray}
-
-$$E_n[\mathbf{z}_i(y_i - \mathbf{x}_i' \boldsymbol{\beta})] = E_n[\mathbf{z}_i\epsilon_i] = \boldsymbol{\tau}/\sqrt{n}$$
-
-$$E_n[\mathbf{w}_i (y_i - \mathbf{x}_i' \boldsymbol{\beta})]= E_n[\mathbf{w}_i\epsilon_i] = \mathbf{0}$$
-
+Stacking observations
+\begin{eqnarray}
+  \mathbf{y} &=& X\beta +\boldsymbol{\epsilon}\\
+  X &=&  Z \Pi + \mathbf{v}
+\end{eqnarray}
+where $Z = (Z_1, Z_2)$ and $\Pi = (\Pi_1', \Pi_2')'$. The local mis-specification assumption is given by
+\begin{equation}
+  E_n\left[\begin{array}
+    {c}
+    \textbf{z}_{i1} (y_i - \textbf{x}_i\beta) \\
+    \textbf{z}_{i2} (y_i - \textbf{x}_i \beta)
+\end{array}\right] = \left[
+  \begin{array}
+    {c}
+    \textbf{0} \\ \boldsymbol{\tau}/\sqrt{n}
+  \end{array}
+\right]
+\end{equation}
+and we can calculate the endogeneity of $x$ as follows
 $$E_n[\mathbf{x}_i \epsilon_i] = \Pi_z \boldsymbol{\tau}/\sqrt{n} + E_n[\epsilon_i \mathbf{v}_i]$$
-Need to think about how to control the endogeneity of $\mathbf{x}$ as I vary other parameters. Perhaps set
-  $$E_n[\epsilon_i \mathbf{v}_i] = \boldsymbol{\gamma^2} - \Pi_z \boldsymbol{\tau}/\sqrt{n}$$ so that the endogeneity of $\mathbf{x}$ is held constant at $\boldsymbol{\gamma^2}$? Does this have any effect on the FMSC or does it only matter in the simulation?
-  
-  Should be able to write this down in terms of a tradeoff...
-
 
 
 
