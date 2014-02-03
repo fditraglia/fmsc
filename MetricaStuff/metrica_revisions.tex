@@ -917,26 +917,59 @@ where we are assuming that $Cov(\epsilon_i v_i) = \sigma_{\epsilon v}$ does not 
 \todo[inline]{We see from this that the endogenity of $x$ changes with both the strength and endogeneity of $\mathbf{z}_{i2}$. If we want to compensate for this in the simulation design, we could change $\sigma_{\epsilon v}$ to keep the endogeneity of $x$ fixed. No sure if it makes sense to do this or not.}
 
 We'll consider generalized instrumental variables estimators of the following form
-$$\widehat{\beta}_S = (X'Z_S W Z_S' X)^{-1}X'Z_S W_S Z_S' \mathbf{y}$$
+$$\widehat{\beta}_S = (X'Z_S W^S_n Z_S' X)^{-1}X'Z_S W^S_n Z_S' \mathbf{y}$$
 where $S$ indexes the instrument set under consideration and we always include $Z_1$ in the instrument set. Expanding,
   \begin{eqnarray*}
-    \widehat{\beta}_S &=& (X'Z_S W Z_S' X)^{-1}X'Z_S W_S Z_S' \mathbf{y}\\
-      &=& (X'Z_S W Z_S' X)^{-1}X'Z_S W_S Z_S'(X\beta + \boldsymbol{\epsilon})\\
-      &=& \beta +(X'Z_S W Z_S' X)^{-1}X'Z_S W_S Z_S'\boldsymbol{\epsilon}
+    \widehat{\beta}_S &=& (X'Z_S W^S_n Z_S' X)^{-1}X'Z_S W^S_n Z_S' \mathbf{y}\\
+      &=& (X'Z_S W^S_n Z_S' X)^{-1}X'Z_S W^S_nZ_S'(X\beta + \boldsymbol{\epsilon})\\
+      &=& \beta +(X'Z_S W^S_n Z_S' X)^{-1}X'Z_S W^S_n Z_S'\boldsymbol{\epsilon}
   \end{eqnarray*}
 and hence, 
-  $$\sqrt{n}(\widehat{\beta}_S -\beta) = \sqrt{n}(X'Z_S W Z_S' X)^{-1}X'Z_S W_S Z_S'\boldsymbol{\epsilon}$$
-  For the special case of two-stage least squares (2SLS), we have $W_S = (Z_S' Z_S)^{-1}$ and hence
+\begin{eqnarray*}
+  \sqrt{n}(\widehat{\beta}_S -\beta) &=& \sqrt{n}(X'Z_S W^S_n Z_S' X)^{-1}X'Z_S W^S_n Z_S'\boldsymbol{\epsilon}\\
+      &=& \left[(X'Z_S/n) W^S_n (Z_S' X/n)\right]^{-1}(X'Z_S/n) W^S_n  \left( \Xi_S \; n^{-1/2} Z' \boldsymbol{\epsilon}\right)\\
+      &=& \widehat{K}_n^S \Xi_S \left(  n^{-1/2} Z' \boldsymbol{\epsilon}\right)
+\end{eqnarray*}
+where we have used the fact that $Z_S'  = \Xi_S Z'$ and have defined
+  \begin{eqnarray*}
+    \widehat{K}_n^S &=& n(X'Z_S W^S_n Z_S' X)^{-1}X'Z_S W^S_n\\
+        &=&\left[(X'Z_S/n) W^S_n (Z_S' X/n)\right]^{-1}(X'Z_S/n) W^S_n
+  \end{eqnarray*}
+Now, we have
+  \begin{eqnarray*}
+     n^{-1}X' Z_S &=& n^{-1}(Z\Pi + \mathbf{v})' \Xi_S Z = n^{-1}\left(\Pi' Z' Z_s + \mathbf{v}' Z_S\right)\\
+      &=&n^{-1}\Pi' Z' Z\Xi_S' + n^{-1}\mathbf{v}'Z \Xi_S' \\
+      &=& \Pi' \left(\frac{1}{n}\sum_{i=1}^n \mathbf{z}_i  \mathbf{z}_i'\right) \Xi_S' + \left(\frac{1}{n} \sum_{i=1}^n \mathbf{v}_i \mathbf{z}_i' \right)\Xi_S'\\
+      &=& \left[ \Pi' \left(\frac{1}{n}\sum_{i=1}^n \mathbf{z}_i  \mathbf{z}_i'\right)  + \left(\frac{1}{n} \sum_{i=1}^n \mathbf{v}_i \mathbf{z}_i' \right)\right]\Xi_S'\\
+      &\overset{p}{\rightarrow}& \Pi' Q_Z \Xi_S'
+  \end{eqnarray*}
+where $Q_z = \lim_{n\rightarrow \infty}E_n[\mathbf{z}_i \mathbf{z}_i']$ and we have used the fact that $E_n[\mathbf{v}_i \mathbf{z}_i'] = 0$. It follows that
+  \begin{eqnarray*}
+    \widehat{K}_n^S &\overset{p}{\rightarrow}& K_S =   \left(\Pi' Q_Z \Xi_S' W_S \Xi_S Q_Z' \Pi\right)^{-1} \Pi'Q_z \Xi_S'W_S
+  \end{eqnarray*}
+For the special case of two-stage least squares (2SLS), we have
+  \begin{eqnarray*}
+     W_n^S = (Z_S' Z_S/n)^{-1} = \left[\Xi_S (Z'Z/n) \Xi_S'\right]^{-1}  \overset{p}{\rightarrow} \left(\Xi_S Q_Z \Xi_S'\right)^{-1}
+   \end{eqnarray*} 
+So we have
+    \begin{eqnarray*}
+      K_S &=&  \left[\Pi' Q_Z \Xi_S' \left(\Xi_S Q_Z \Xi_S'\right)^{-1} \Xi_S Q_Z' \Pi\right]^{-1} \Pi'Q_z \Xi_S'\left(\Xi_S Q_Z \Xi_S'\right)^{-1}
+    \end{eqnarray*}
+
+\todo[inline]{Need to use Cholesky factorization for $Q_z$ and some properties about $\Xi_S$. For example, I think it's true that $\Xi\Xi' = I$ (in other words, that it has orthogonal columns) but I need to check this. This should simplify}
+
+
   \begin{eqnarray*}
     \sqrt{n}(\widehat{\beta}_S -\beta) &=&\sqrt{n} (X' P_S X)^{-1}X' P_S \boldsymbol{\epsilon}\\
       &=&\sqrt{n} \left[(Z\Pi + \mathbf{v})' P_S (Z\Pi + \mathbf{v})\right]^{-1}(Z\pi + \mathbf{v})' P_S \boldsymbol{\epsilon}\\
       &=& \sqrt{n} \left[(P_SZ\Pi + P_S\mathbf{v})'  (P_SZ\Pi + P_S\mathbf{v})\right]^{-1}(P_S Z\Pi + P_S\mathbf{v})' \boldsymbol{\epsilon}\\
-      &=& \sqrt{n} \left[\left(\widetilde{Z}\Pi + \widetilde{\mathbf{v}}\right)'\left(\widetilde{Z}\Pi + \widetilde{\mathbf{v}}\right)\right]^{-1} \left(\widetilde{Z} \Pi + \widetilde{\mathbf{v}}\right)' \boldsymbol{\epsilon}
+      &=& \sqrt{n} \left[\left(\widetilde{Z}\Pi + \widetilde{\mathbf{v}}\right)'\left(\widetilde{Z}\Pi + \widetilde{\mathbf{v}}\right)\right]^{-1} \left(\widetilde{Z} \Pi + \widetilde{\mathbf{v}}\right)' \boldsymbol{\epsilon}\\
+      &=& \sqrt{n} \left[ \Pi' \widetilde{Z}' \widetilde{Z} \Pi + \widetilde{\mathbf{v}}' \widetilde{Z}\Pi + \Pi' \widetilde{Z}'\widetilde{\mathbf{v}} + \widetilde{\mathbf{v}}'\widetilde{\mathbf{v}}\right]^{-1} \left(\widetilde{Z} \Pi + \widetilde{\mathbf{v}}\right)' \boldsymbol{\epsilon}
   \end{eqnarray*}
-where $P_S = Z_S(Z_S'Z_S)^{-1} Z_S'$, $\widetilde{Z} = P_S Z$, $\widetilde{\mathbf{v}} = P_S \mathbf{v}$ and we have used the fact that $P_S$ is symmetric and idempotent.
+where $P_S = Z_S(Z_S'Z_S)^{-1} Z_S'$, $\widetilde{Z} = P_S Z$, $\widetilde{\mathbf{v}} = P_S \mathbf{v}$ and we have used the fact that $P_S$ is symmetric and idempotent. Now, 
 
 \begin{eqnarray*}
-  (\Pi'\widetilde{Z}' + \widetilde{\mathbf{v}}')(\widetilde{Z} \Pi + \widetilde{\mathbf{v}}) = \Pi' \widetilde{Z}' \widetilde{Z} \Pi
+  (\Pi'\widetilde{Z}' + \widetilde{\mathbf{v}}')(\widetilde{Z} \Pi + \widetilde{\mathbf{v}}) = \Pi' \widetilde{Z}' \widetilde{Z} \Pi + \widetilde{\mathbf{v}}' \widetilde{Z}\Pi + \Pi' \widetilde{Z}'\widetilde{\mathbf{v}} + \widetilde{\mathbf{v}}'\widetilde{\mathbf{v}}
 \end{eqnarray*}
 
 Now, $\widetilde{Z}$ is the projection of $Z$ onto the column space of $Z_S$. Since $Z = (Z_1, Z_2)$ and we have assumed that $Z_S$ includes $Z_1$, $\widetilde{Z} = (Z_1, \widetilde{Z}_2)$ where $\widetilde{Z}_2 = P_S Z_2$. In the special case where $Z_S = Z$ it follows that $\widetilde{Z} = Z$. 
