@@ -896,7 +896,7 @@ Stacking observations in the usual way,
   \mathbf{y} &=& X\beta +\boldsymbol{\epsilon}\\
   X &=&  Z \Pi + \mathbf{v}
 \end{eqnarray}
-where $Z = (Z_1, Z_2)$ and $\Pi = (\Pi_1', \Pi_2')'$. Let $n$ be the number of observations, $p$ be the number of (endogenous)regressors $\textbf{x}$, and $q$ be the total number of instruments. Then, $X$ is an $n\times p$ matrix, $Z$ is an $n\times q$ matrix, and $\Pi$ is a $q\times p$ matrix. The local mis-specification assumption is given by
+where $Z = (Z_1, Z_2)$ and $\Pi = (\Pi_1', \Pi_2')'$. Let $n$ be the number of observations, $p$ be the number of (endogenous)regressors $\textbf{x}$, and $q$ be the total number of instruments. Then, $X$ is an $n\times p$ matrix, $Z$ is an $n\times q$ matrix, and $\Pi$ is a $q\times p$ matrix. Let $q_1$ be the number of instruments in $Z_1$ and $q_2$ be the number of instruments in $Z_2$ so that $q = q_1 + q_2$. The local mis-specification assumption is given by
 \begin{equation}
   E_n\left[\begin{array}
     {c}
@@ -992,6 +992,22 @@ To estimate $\tau$ we need an an asymptotically unbiased estimator of $\beta$ to
 \begin{equation}
   \widehat{\beta}_V = \left(X'Z_1 W^V_n Z_1' X\right)^{-1} X'Z_1 W_n^V Z_1' \mathbf{y}
 \end{equation}
+By the result in the previous section,
+  \begin{eqnarray*}
+    \sqrt{n} \left(\widehat{\beta}_V - \beta \right) &\overset{d}{\rightarrow}& K_V \left[\begin{array}{cc} I_{q_1} & 0_{q_2 \times q_2}  \end{array}\right] \left(\left[\begin{array}
+           {c} \mathbf{0} \\ \boldsymbol{\tau}
+         \end{array}\right] + M \right)\\
+          &\sim& K_V  \times N\left(0, \lim_{n\rightarrow \infty} E_n[\epsilon_i^2 \mathbf{z}_{i1}\mathbf{z}_{i1}']\right)
+  \end{eqnarray*}
+
+We estimate $\tau$ as follows:
+\begin{eqnarray*}
+  \widehat{\tau} &=& \sqrt{n} \left[ Z_2' \left(\textbf{y} - X\widehat{\beta}_V\right)/n\right] = n^{-1/2} Z_2'\left(\textbf{y} - X\widehat{\beta}_V\right)\\
+      &=& n^{-1/2} Z_2'(X\beta + \boldsymbol{\epsilon} - X \widehat{\beta}_V) = n^{-1/2} Z_2' \left[\boldsymbol{\epsilon} - X(\widehat{\beta}_V - \beta)\right]\\
+      &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - n^{-1/2} Z_2' X (\widehat{\beta}_V - \beta)\\
+      &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - (Z_2' X/n) \left[  \sqrt{n}(\widehat{\beta}_V - \beta)\right]
+\end{eqnarray*}
+
 
 \subsection{Special Case: Two-stage Least Squares}
 For the special case of two-stage least squares (2SLS), we have
