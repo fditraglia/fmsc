@@ -937,7 +937,7 @@ where we have used the fact that $Z_S'  = \Xi_S Z'$ and have defined
   \end{eqnarray*}
 \todo[inline]{Express this in terms of $Z$ and $\Xi_S$ to make it clearer how we'll actually compute things in an example and do the same for the 2SLS simplification.}
 
-Note that $\Xi_S$ is a. Now, we have
+Note that $\Xi_S$ is an $|S|\times q$ matrix. Now, we have
   \begin{eqnarray*}
      n^{-1}X' Z_S &=& n^{-1}(Z\Pi + \mathbf{v})' \Xi_S Z = n^{-1}\left(\Pi' Z' Z_s + \mathbf{v}' Z_S\right)\\
       &=&n^{-1}\Pi' Z' Z\Xi_S' + n^{-1}\mathbf{v}'Z \Xi_S' \\
@@ -949,6 +949,9 @@ where $Q_z = \lim_{n\rightarrow \infty}E_n[\mathbf{z}_i \mathbf{z}_i']$ and we h
   \begin{eqnarray*}
     \widehat{K}_n^S &\overset{p}{\rightarrow}& K_S =   \left(\Pi' Q_Z \Xi_S' W_S \Xi_S Q_Z' \Pi\right)^{-1} \Pi'Q_z \Xi_S'W_S
   \end{eqnarray*}
+\todo[inline]{Now incorporate this along with the CLT into a proposition that gives the limiting distribution for the choosing instruments example. Add limit distribution for the estimator of $\tau$.}
+
+
 For the special case of two-stage least squares (2SLS), we have
   \begin{eqnarray*}
      W_n^S = (Z_S' Z_S/n)^{-1} = \left[\Xi_S (Z'Z/n) \Xi_S'\right]^{-1}  \overset{p}{\rightarrow} \left(\Xi_S Q_Z \Xi_S'\right)^{-1}
