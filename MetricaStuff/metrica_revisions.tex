@@ -988,35 +988,68 @@ Now, applying Lemma \ref{lem:CLT} to $n^{-1/2}Z'\boldsymbol{\epsilon}$, we have 
 
 
 \subsection{Estimating $\tau$}
-To estimate $\tau$ we need an an asymptotically unbiased estimator of $\beta$ to plug into the moment conditions for the ``suspect'' instruments contained in $Z_2$. Let $\widehat{\beta}_V$, for ``valid,'' denote the GIV estimator based \emph{only} on the instruments contained in $Z_1$:
+To simplify the notation in this section, define the following selection matrices corresponding to $Z_1$ and $Z_2$: 
+  \begin{eqnarray*}
+  \Xi_1 &=& \left[\begin{array}{cc} I_{q_1} & 0_{q_2 \times q_2}  \end{array}\right]\\
+    \Xi_2 &=& \left[ \begin{array}{cc}
+              0_{q_2 \times q_1}& I_{q_2}
+            \end{array}\right]
+  \end{eqnarray*}
+The $q_1\times q$ matrix $\Xi_1$ extracts the first $q_1$ elements of a $(q_1 + q_2)\times 1$ while the $q_2\times q$ matrix $\Xi_2$ extracts the last $q_2$ elements. 
+
+To estimate $\tau$ we need an an asymptotically unbiased estimator of $\beta$ to plug into the moment conditions for the ``suspect'' instruments contained in $Z_2$. 
+Let $\widehat{\beta}_1$ denote the GIV estimator based \emph{only} on the instruments contained in $Z_1$:
 \begin{equation}
-  \widehat{\beta}_V = \left(X'Z_1 W^V_n Z_1' X\right)^{-1} X'Z_1 W_n^V Z_1' \mathbf{y}
+  \widehat{\beta}_1 = \left(X'Z_1 W^V_n Z_1' X\right)^{-1} X'Z_1 W_n^1 Z_1' \mathbf{y}
 \end{equation}
 By the result in the previous section,
   \begin{eqnarray*}
-    \sqrt{n} \left(\widehat{\beta}_V - \beta \right) &\overset{d}{\rightarrow}& K_V \left[\begin{array}{cc} I_{q_1} & 0_{q_2 \times q_2}  \end{array}\right] \left(\left[\begin{array}
+    \sqrt{n} \left(\widehat{\beta}_1 - \beta \right) &\overset{d}{\rightarrow}& K_1 \left[\begin{array}{cc} I_{q_1} & 0_{q_2 \times q_2}  \end{array}\right] \left(\left[\begin{array}
            {c} \mathbf{0} \\ \boldsymbol{\tau}
          \end{array}\right] + M \right)\\
-          &\sim& K_V  \times N\left(0, \lim_{n\rightarrow \infty} E_n[\epsilon_i^2 \mathbf{z}_{i1}\mathbf{z}_{i1}']\right)
+         &=& K_1 \Xi_1  \left(\left[\begin{array}
+           {c} \mathbf{0} \\ \boldsymbol{\tau}
+         \end{array}\right] + M \right) = K_1 \Xi_1 M\\
+          &\sim& K_1  \times N\left(0, \lim_{n\rightarrow \infty} E_n[\epsilon_i^2 \mathbf{z}_{i1}\mathbf{z}_{i1}']\right)
   \end{eqnarray*}
 
 We estimate $\tau$ as follows:
 \begin{eqnarray*}
-  \widehat{\tau} &=& \sqrt{n} \left[ Z_2' \left(\textbf{y} - X\widehat{\beta}_V\right)/n\right] = n^{-1/2} Z_2'\left(\textbf{y} - X\widehat{\beta}_V\right)\\
-      &=& n^{-1/2} Z_2'(X\beta + \boldsymbol{\epsilon} - X \widehat{\beta}_V) = n^{-1/2} Z_2' \left[\boldsymbol{\epsilon} - X(\widehat{\beta}_V - \beta)\right]\\
-      &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - n^{-1/2} Z_2' X (\widehat{\beta}_V - \beta)\\
-      &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - (Z_2' X/n) \left[  \sqrt{n}(\widehat{\beta}_V - \beta)\right]
+  \widehat{\tau} &=& \sqrt{n} \left[ Z_2' \left(\textbf{y} - X\widehat{\beta}_1\right)/n\right] = n^{-1/2} Z_2'\left(\textbf{y} - X\widehat{\beta}_1\right)\\
+      &=& n^{-1/2} Z_2'(X\beta + \boldsymbol{\epsilon} - X \widehat{\beta}_V) = n^{-1/2} Z_2' \left[\boldsymbol{\epsilon} - X(\widehat{\beta}_1 - \beta)\right]\\
+      &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - n^{-1/2} Z_2' X (\widehat{\beta}_1 - \beta)\\
+      &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - (Z_2' X/n) \left[  \sqrt{n}(\widehat{\beta}_1 - \beta)\right]
 \end{eqnarray*}
 We have
   \begin{eqnarray*}
     Z_2'X/n &=& n^{-1} Z_2'(Z\Pi + \mathbf{v}) = n^{-1}Z_2'Z\Pi + n^{-1}Z_2'\mathbf{v}\\  
             &=& n^{-1}Z_2' \left[\begin{array}
               {cc} Z_1 & Z_2 
-            \end{array} \right] + n^{-1}Z_2'\mathbf{v}\\
-            &\overset{p}{\rightarrow}& 
+            \end{array} \right] \Pi + n^{-1}Z_2'\mathbf{v}\\
+            &\overset{p}{\rightarrow}&  \left[ \begin{array}{cc}
+              0_{q_2 \times q_1}& I_{q_2}
+            \end{array}\right] Q_Z \Pi = \Xi_2 Q_Z \Pi
   \end{eqnarray*}
-  \todo[inline]{Need to express as a matrix product in terms of $Q_Z$.}
-since $n^{-1}Z_2'\mathbf{v} \overset{p}{\rightarrow} 0$.
+since $n^{-1}Z_2'\mathbf{v} \overset{p}{\rightarrow} 0$. Similarly, the CLT for $n^{-1/2}Z'\boldsymbol{\epsilon}$ gives,
+\begin{eqnarray*}
+  n^{-1/2} Z_2' \boldsymbol{\epsilon} &\overset{d}{\rightarrow}& \left[ \begin{array}{cc} 0_{q_2 \times q_1}& I_{q_2}
+            \end{array}\right]   \left(\left[\begin{array}
+           {c} \mathbf{0} \\ \boldsymbol{\tau}
+         \end{array}\right] + M \right)\\
+         &=& \Xi_2  \left(\left[\begin{array}
+           {c} \mathbf{0} \\ \boldsymbol{\tau}
+         \end{array}\right] + M \right)\\
+         &=& \Xi_2\left[\begin{array}
+           {c} \mathbf{0} \\ \boldsymbol{\tau}
+         \end{array}\right] + \Xi_2 M \\
+         &=& \boldsymbol{\tau} + \Xi_2 M
+\end{eqnarray*}
+Thus, using the limit distribution for Specializing the limit result for $\sqrt{n}\left(\widehat{\beta}_V - \beta \right)$ given above, we have
+\begin{eqnarray*}
+  \widehat{\tau} &\overset{d}{\rightarrow}& \boldsymbol{\tau} + \Xi_2 M - \Xi_2 Q_ZK_1 \Pi \Xi_1 M\\
+    &=& \boldsymbol{\tau} + \Xi_2(M - Q_Z \Pi K_1 \Xi_1 M)\\
+    &=& \boldsymbol{\tau} + \Xi_2(I_q - Q_Z \Pi K_1 \Xi_1) M
+\end{eqnarray*}
 
 \subsection{Special Case: Two-stage Least Squares}
 For the special case of two-stage least squares (2SLS), we have
@@ -1033,10 +1066,11 @@ So we have
 and
     \begin{equation}
       K_S =  \left[\Pi' Q_Z \Xi_S' \left(\Xi_S Q_Z \Xi_S'\right)^{-1} \Xi_S Q_Z' \Pi\right]^{-1} \Pi'Q_z \Xi_S'\left(\Xi_S Q_Z \Xi_S'\right)^{-1}
-    \end{equation}
+    \end{equation}    
 
 \todo[inline]{I don't know of any way to simplify this expression. The problem is that we can't decompose $\Xi_S Q_Z \Xi_S$ into a product of square matrices to there's no way to express the inverse of the product in terms of the product of inverses.}
 
+\todo[inline]{Add in the simplification of the variance matrix that results from the assumption that there is no heteroscedasticity in the limit.}
 
 \subsection{Valid Post-Selection Confidence Intervals}
 
