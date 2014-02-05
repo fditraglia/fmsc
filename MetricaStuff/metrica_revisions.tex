@@ -1007,7 +1007,16 @@ We estimate $\tau$ as follows:
       &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - n^{-1/2} Z_2' X (\widehat{\beta}_V - \beta)\\
       &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - (Z_2' X/n) \left[  \sqrt{n}(\widehat{\beta}_V - \beta)\right]
 \end{eqnarray*}
-
+We have
+  \begin{eqnarray*}
+    Z_2'X/n &=& n^{-1} Z_2'(Z\Pi + \mathbf{v}) = n^{-1}Z_2'Z\Pi + n^{-1}Z_2'\mathbf{v}\\  
+            &=& n^{-1}Z_2' \left[\begin{array}
+              {cc} Z_1 & Z_2 
+            \end{array} \right] + n^{-1}Z_2'\mathbf{v}\\
+            &\overset{p}{\rightarrow}& 
+  \end{eqnarray*}
+  \todo[inline]{Need to express as a matrix product in terms of $Q_Z$.}
+since $n^{-1}Z_2'\mathbf{v} \overset{p}{\rightarrow} 0$.
 
 \subsection{Special Case: Two-stage Least Squares}
 For the special case of two-stage least squares (2SLS), we have
