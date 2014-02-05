@@ -894,7 +894,7 @@ Stacking observations in the usual way,
   \mathbf{y} &=& X\beta +\boldsymbol{\epsilon}\\
   X &=&  Z \Pi + \mathbf{v}
 \end{eqnarray}
-where $Z = (Z_1, Z_2)$ and $\Pi = (\Pi_1', \Pi_2')'$. The local mis-specification assumption is given by
+where $Z = (Z_1, Z_2)$ and $\Pi = (\Pi_1', \Pi_2')'$. Let $n$ be the number of observations, $p$ be the number of (endogenous)regressors $\textbf{x}$, and $q$ be the total number of instruments. Then, $X$ is an $n\times p$ matrix, $Z$ is an $n\times q$ matrix, and $\Pi$ is a $q\times p$ matrix. The local mis-specification assumption is given by
 \begin{equation}
   E_n\left[\begin{array}
     {c}
@@ -935,7 +935,9 @@ where we have used the fact that $Z_S'  = \Xi_S Z'$ and have defined
     \widehat{K}_n^S &=& n(X'Z_S W^S_n Z_S' X)^{-1}X'Z_S W^S_n\\
         &=&\left[(X'Z_S/n) W^S_n (Z_S' X/n)\right]^{-1}(X'Z_S/n) W^S_n
   \end{eqnarray*}
-Now, we have
+\todo[inline]{Express this in terms of $Z$ and $\Xi_S$ to make it clearer how we'll actually compute things in an example and do the same for the 2SLS simplification.}
+
+Note that $\Xi_S$ is a. Now, we have
   \begin{eqnarray*}
      n^{-1}X' Z_S &=& n^{-1}(Z\Pi + \mathbf{v})' \Xi_S Z = n^{-1}\left(\Pi' Z' Z_s + \mathbf{v}' Z_S\right)\\
       &=&n^{-1}\Pi' Z' Z\Xi_S' + n^{-1}\mathbf{v}'Z \Xi_S' \\
@@ -956,7 +958,7 @@ So we have
       K_S &=&  \left[\Pi' Q_Z \Xi_S' \left(\Xi_S Q_Z \Xi_S'\right)^{-1} \Xi_S Q_Z' \Pi\right]^{-1} \Pi'Q_z \Xi_S'\left(\Xi_S Q_Z \Xi_S'\right)^{-1}
     \end{eqnarray*}
 
-\todo[inline]{Need to use Cholesky factorization for $Q_z$ and some properties about $\Xi_S$. For example, I think it's true that $\Xi\Xi' = I$ (in other words, that it has orthogonal columns) but I need to check this. This should simplify}
+\todo[inline]{I don't know of any way to simplify this expression. The problem is that we can't decompose $\Xi_S Q_Z \Xi_S$ into a product of square matrices to there's no way to express the inverse of the product in terms of the product of inverses.}
 
 
   \begin{eqnarray*}
