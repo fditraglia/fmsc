@@ -961,26 +961,6 @@ So we have
 \todo[inline]{I don't know of any way to simplify this expression. The problem is that we can't decompose $\Xi_S Q_Z \Xi_S$ into a product of square matrices to there's no way to express the inverse of the product in terms of the product of inverses.}
 
 
-  \begin{eqnarray*}
-    \sqrt{n}(\widehat{\beta}_S -\beta) &=&\sqrt{n} (X' P_S X)^{-1}X' P_S \boldsymbol{\epsilon}\\
-      &=&\sqrt{n} \left[(Z\Pi + \mathbf{v})' P_S (Z\Pi + \mathbf{v})\right]^{-1}(Z\pi + \mathbf{v})' P_S \boldsymbol{\epsilon}\\
-      &=& \sqrt{n} \left[(P_SZ\Pi + P_S\mathbf{v})'  (P_SZ\Pi + P_S\mathbf{v})\right]^{-1}(P_S Z\Pi + P_S\mathbf{v})' \boldsymbol{\epsilon}\\
-      &=& \sqrt{n} \left[\left(\widetilde{Z}\Pi + \widetilde{\mathbf{v}}\right)'\left(\widetilde{Z}\Pi + \widetilde{\mathbf{v}}\right)\right]^{-1} \left(\widetilde{Z} \Pi + \widetilde{\mathbf{v}}\right)' \boldsymbol{\epsilon}\\
-      &=& \sqrt{n} \left[ \Pi' \widetilde{Z}' \widetilde{Z} \Pi + \widetilde{\mathbf{v}}' \widetilde{Z}\Pi + \Pi' \widetilde{Z}'\widetilde{\mathbf{v}} + \widetilde{\mathbf{v}}'\widetilde{\mathbf{v}}\right]^{-1} \left(\widetilde{Z} \Pi + \widetilde{\mathbf{v}}\right)' \boldsymbol{\epsilon}
-  \end{eqnarray*}
-where $P_S = Z_S(Z_S'Z_S)^{-1} Z_S'$, $\widetilde{Z} = P_S Z$, $\widetilde{\mathbf{v}} = P_S \mathbf{v}$ and we have used the fact that $P_S$ is symmetric and idempotent. Now, 
-
-\begin{eqnarray*}
-  (\Pi'\widetilde{Z}' + \widetilde{\mathbf{v}}')(\widetilde{Z} \Pi + \widetilde{\mathbf{v}}) = \Pi' \widetilde{Z}' \widetilde{Z} \Pi + \widetilde{\mathbf{v}}' \widetilde{Z}\Pi + \Pi' \widetilde{Z}'\widetilde{\mathbf{v}} + \widetilde{\mathbf{v}}'\widetilde{\mathbf{v}}
-\end{eqnarray*}
-
-Now, $\widetilde{Z}$ is the projection of $Z$ onto the column space of $Z_S$. Since $Z = (Z_1, Z_2)$ and we have assumed that $Z_S$ includes $Z_1$, $\widetilde{Z} = (Z_1, \widetilde{Z}_2)$ where $\widetilde{Z}_2 = P_S Z_2$. In the special case where $Z_S = Z$ it follows that $\widetilde{Z} = Z$. 
-
-Similarly, $\widetilde{\mathbf{v}}$ is the projection of $\mathbf{v}$ onto the column space of $Z_S$.
-
-
-
-
 
 
 
