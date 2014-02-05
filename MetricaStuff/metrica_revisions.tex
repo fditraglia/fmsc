@@ -882,6 +882,8 @@ where
 All other steps of the procedure are identical.
 
 \section{Choosing Instruments Example}
+
+\subsection{Overview}
 In this example we suppose that we have a minimal set of valid instruments that identifies the model. We have another set of instruments that we expect to be stronger and, as a consequence, are worried might be slightly endogenous. The question is whether to include the extra instruments. This is the situation examined in the empirical example.
 
 Without loss of generality suppose that there are no exogenous regressors (they can always be projected out)
@@ -916,6 +918,8 @@ and we can calculate the endogeneity of $x$ as follows
 where we are assuming that $Cov(\epsilon_i v_i) = \sigma_{\epsilon v}$ does not change with sample size.
 \todo[inline]{We see from this that the endogenity of $x$ changes with both the strength and endogeneity of $\mathbf{z}_{i2}$. If we want to compensate for this in the simulation design, we could change $\sigma_{\epsilon v}$ to keep the endogeneity of $x$ fixed. No sure if it makes sense to do this or not.}
 
+
+\subsection{Limit Distributions of the Estimators}
 We'll consider generalized instrumental variables estimators of the following form
 $$\widehat{\beta}_S = (X'Z_S W^S_n Z_S' X)^{-1}X'Z_S W^S_n Z_S' \mathbf{y}$$
 where $S$ indexes the instrument set under consideration and we always include $Z_1$ in the instrument set. Expanding,
@@ -932,11 +936,10 @@ and hence,
 \end{eqnarray*}
 where we have used the fact that $Z_S'  = \Xi_S Z'$ and have defined
   \begin{eqnarray*}
-    \widehat{K}_n^S &=& n(X'Z_S W^S_n Z_S' X)^{-1}X'Z_S W^S_n\\
+    \widehat{K}_n^S &=& n(X'Z \Xi_S' W^S_n \Xi_S Z X)^{-1}X' Z \Xi_S' W^S_n \\
+                    &=& n(X'Z_S W^S_n Z_S' X)^{-1}X'Z_S W^S_n\\
         &=&\left[(X'Z_S/n) W^S_n (Z_S' X/n)\right]^{-1}(X'Z_S/n) W^S_n
   \end{eqnarray*}
-\todo[inline]{Express this in terms of $Z$ and $\Xi_S$ to make it clearer how we'll actually compute things in an example and do the same for the 2SLS simplification.}
-
 Note that $\Xi_S$ is an $|S|\times q$ matrix. Now, we have
   \begin{eqnarray*}
      n^{-1}X' Z_S &=& n^{-1}(Z\Pi + \mathbf{v})' \Xi_S Z = n^{-1}\left(\Pi' Z' Z_s + \mathbf{v}' Z_S\right)\\
@@ -949,21 +952,36 @@ where $Q_z = \lim_{n\rightarrow \infty}E_n[\mathbf{z}_i \mathbf{z}_i']$ and we h
   \begin{eqnarray*}
     \widehat{K}_n^S &\overset{p}{\rightarrow}& K_S =   \left(\Pi' Q_Z \Xi_S' W_S \Xi_S Q_Z' \Pi\right)^{-1} \Pi'Q_z \Xi_S'W_S
   \end{eqnarray*}
+
+To calculate $\widehat{\tau}$ we substitute 
+
+
 \todo[inline]{Now incorporate this along with the CLT into a proposition that gives the limiting distribution for the choosing instruments example. Add limit distribution for the estimator of $\tau$.}
 
+\subsection{Estimating $\tau$}
 
+
+\subsection{Special Case: Two-stage Least Squares}
 For the special case of two-stage least squares (2SLS), we have
   \begin{eqnarray*}
      W_n^S = (Z_S' Z_S/n)^{-1} = \left[\Xi_S (Z'Z/n) \Xi_S'\right]^{-1}  \overset{p}{\rightarrow} \left(\Xi_S Q_Z \Xi_S'\right)^{-1}
    \end{eqnarray*} 
 So we have
-    \begin{eqnarray*}
-      K_S &=&  \left[\Pi' Q_Z \Xi_S' \left(\Xi_S Q_Z \Xi_S'\right)^{-1} \Xi_S Q_Z' \Pi\right]^{-1} \Pi'Q_z \Xi_S'\left(\Xi_S Q_Z \Xi_S'\right)^{-1}
-    \end{eqnarray*}
+  \begin{eqnarray*}
+    \widehat{K}_n^S &=& n\left(X'Z \Xi_S' W^S_n \Xi_S Z' X\right)^{-1}X' Z \Xi_S' W^S_n \\
+        &=& n\left(X'Z \Xi_S' \left[\Xi_S (Z'Z/n) \Xi_S'\right]^{-1}  \Xi_S Z' X\right)^{-1}X' Z \Xi_S' \left[\Xi_S (Z'Z/n) \Xi_S'\right]^{-1} \\
+        &=& n\left[X'Z \Xi_S' \left(\Xi_S Z'Z \Xi_S'\right)^{-1}  \Xi_S Z' X\right]^{-1}X' Z \Xi_S' \left(\Xi_S Z'Z \Xi_S'\right)^{-1}\\
+        &=& n\left[X' Z_S (Z_S' Z_S)^{-1} Z_S' X\right]^{-1} X'Z_S (Z_S' Z_S)^{-1}
+  \end{eqnarray*}
+and
+    \begin{equation}
+      K_S =  \left[\Pi' Q_Z \Xi_S' \left(\Xi_S Q_Z \Xi_S'\right)^{-1} \Xi_S Q_Z' \Pi\right]^{-1} \Pi'Q_z \Xi_S'\left(\Xi_S Q_Z \Xi_S'\right)^{-1}
+    \end{equation}
 
 \todo[inline]{I don't know of any way to simplify this expression. The problem is that we can't decompose $\Xi_S Q_Z \Xi_S$ into a product of square matrices to there's no way to express the inverse of the product in terms of the product of inverses.}
 
 
+\subsection{Valid Post-Selection Confidence Intervals}
 
 
 
