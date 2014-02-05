@@ -952,14 +952,46 @@ where $Q_z = \lim_{n\rightarrow \infty}E_n[\mathbf{z}_i \mathbf{z}_i']$ and we h
   \begin{eqnarray*}
     \widehat{K}_n^S &\overset{p}{\rightarrow}& K_S =   \left(\Pi' Q_Z \Xi_S' W_S \Xi_S Q_Z' \Pi\right)^{-1} \Pi'Q_z \Xi_S'W_S
   \end{eqnarray*}
+Now, applying Lemma \ref{lem:CLT} to $n^{-1/2}Z'\boldsymbol{\epsilon}$, we have the following result.
 
-To calculate $\widehat{\tau}$ we substitute 
+\begin{eqnarray*}
+   n^{-1/2}Z'\boldsymbol{\epsilon}  &=& \frac{1}{\sqrt{n}}\sum_{i=1}^n \mathbf{z_i}\epsilon_i  = \frac{1}{\sqrt{n}}\sum_{i=1}^n \left[\begin{array}
+     {c} \mathbf{z_{i1}} \epsilon_i  \\ \mathbf{z_{i2}} \epsilon_i 
+   \end{array}\right]\\
+         &\overset{d}{\rightarrow}& N\left(\left[\begin{array}
+           {c} \mathbf{0} \\ \boldsymbol{\tau}
+         \end{array}\right], \lim_{n\rightarrow \infty}E_n \left[\begin{array}
+           {cc} 
+           \epsilon_i^2 \mathbf{z}_{i1}\mathbf{z}_{i1}' & \epsilon_i^2 \mathbf{z}_{i1}\mathbf{z}_{i2}'\\
+           \epsilon_i^2 \mathbf{z}_{i2}\mathbf{z}_{i1}' & \epsilon_i^2 \mathbf{z}_{i2}\mathbf{z}_{i2}'
+          \end{array}\right] \right)
+\end{eqnarray*}
+
+\begin{pro}[Limit Distribution for GIV Estimators]
+  Fourth and a bit moments (needed to get $L_2$ convergence for the triangular array, see Davidson 19.1), local mis-specification, limiting variance matrix exists and is positive-definite, instruments are relevant imply that
+    $$\sqrt{n}\left(\widehat{\beta}_S - \beta \right) \overset{d}{\rightarrow} K_S \Xi_S \left(\left[\begin{array}
+           {c} \mathbf{0} \\ \boldsymbol{\tau}
+         \end{array}\right] + M \right)$$
+  where
+      \begin{eqnarray*}
+        K_S &=& \left(\Pi' Q_Z \Xi_S' W_S \Xi_S Q_Z' \Pi\right)^{-1} \Pi'Q_Z \Xi_S'W_S\\
+        Q_Z &=&\lim_{n\rightarrow \infty}E_n[\mathbf{z}_i \mathbf{z}_i'] \\
+        M &\sim& N(\mathbf{0}, \Omega)\\
+        \Omega &=& \lim_{n\rightarrow \infty}E_n \left[\begin{array}
+           {cc} 
+           \epsilon_i^2 \mathbf{z}_{i1}\mathbf{z}_{i1}' & \epsilon_i^2 \mathbf{z}_{i1}\mathbf{z}_{i2}'\\
+           \epsilon_i^2 \mathbf{z}_{i2}\mathbf{z}_{i1}' & \epsilon_i^2 \mathbf{z}_{i2}\mathbf{z}_{i2}'
+          \end{array}\right]
+      \end{eqnarray*}
+\end{pro}
 
 
-\todo[inline]{Now incorporate this along with the CLT into a proposition that gives the limiting distribution for the choosing instruments example. Add limit distribution for the estimator of $\tau$.}
 
 \subsection{Estimating $\tau$}
-
+To estimate $\tau$ we need an an asymptotically unbiased estimator of $\beta$ to plug into the moment conditions for the ``suspect'' instruments contained in $Z_2$. Let $\widehat{\beta}_V$, for ``valid,'' denote the GIV estimator based \emph{only} on the instruments contained in $Z_1$:
+\begin{equation}
+  \widehat{\beta}_V = \left(X'Z_1 W^V_n Z_1' X\right)^{-1} X'Z_1 W_n^V Z_1' \mathbf{y}
+\end{equation}
 
 \subsection{Special Case: Two-stage Least Squares}
 For the special case of two-stage least squares (2SLS), we have
