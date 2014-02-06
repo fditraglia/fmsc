@@ -1019,7 +1019,8 @@ We estimate $\tau$ as follows:
   \widehat{\tau} &=& \sqrt{n} \left[ Z_2' \left(\textbf{y} - X\widehat{\beta}_1\right)/n\right] = n^{-1/2} Z_2'\left(\textbf{y} - X\widehat{\beta}_1\right)\\
       &=& n^{-1/2} Z_2'(X\beta + \boldsymbol{\epsilon} - X \widehat{\beta}_V) = n^{-1/2} Z_2' \left[\boldsymbol{\epsilon} - X(\widehat{\beta}_1 - \beta)\right]\\
       &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - n^{-1/2} Z_2' X (\widehat{\beta}_1 - \beta)\\
-      &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - (Z_2' X/n) \left[  \sqrt{n}(\widehat{\beta}_1 - \beta)\right]
+      &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - (Z_2' X/n) \left[  \sqrt{n}(\widehat{\beta}_1 - \beta)\right]\\
+      &=&n^{-1/2} Z_2'\boldsymbol{\epsilon} - (Z_2' X/n)\widehat{K}_1 \Xi_1 (n^{-1/2}Z'\boldsymbol{\epsilon})
 \end{eqnarray*}
 We have
   \begin{eqnarray*}
@@ -1081,11 +1082,17 @@ It follows immediately that
     \end{array} \right]  \Xi_S' K_S' \nabla_\beta (\beta)  \\
     \mbox{AVAR}(\widehat{\mu}_S) &=& \nabla_\beta (\beta)' K_S \Xi_S  \Omega  \Xi_S' K_S' \nabla_\beta (\beta)
   \end{eqnarray*}
-We estimate $\nabla\mu_\beta(\beta)$ by $\nabla_\beta\mu(\widehat{\beta}_1)$ when necessary (sometimes the derivatives don't depend on $\beta$), and $K_S$ by $\widehat{K}_S$. Both of these will be consistent. Various estimators of $\Omega$ are possible, but the point is that we can easily get a consistent estimator under these asymptotics. The only problem is $\tau \tau'$. We can construct an asymptotically unbiased estimator by using the fact that 
-
-
-\todo[inline]{Target parameter, delta method, expression for estimate of AMSE. Asymptotically unbiased estimator of asymptotic bias. Write out the special case when the target parameter is a linear combination of the elements of $\beta$. This includes as an even more special case situation in which we're only interested in one of the parameters.}
-
+We estimate $\nabla\mu_\beta(\beta)$ by $\nabla_\beta\mu(\widehat{\beta}_1)$ when necessary (sometimes the derivatives don't depend on $\beta$), and $K_S$ by $\widehat{K}_S$. Both of these will be consistent. Various estimators of $\Omega$ are possible, but the point is that we can easily get a consistent estimator under these asymptotics. The only problem is $\tau \tau'$. We can construct an asymptotically unbiased estimator by using the fact that $\widehat{\tau} \overset{d}{\rightarrow} \Psi M$. It follows that $\widehat{\tau}\widehat{\tau}' - \widehat{\Psi} \widehat{\Omega} \widehat{\Psi}$ is an asymptotically unbiased estimator of $\tau\tau'$ In particular, our estimators are:
+\begin{eqnarray*}
+  \widehat{\tau} \widehat{\tau}' &=& \left[n^{-1/2} Z_2'\left(\textbf{y} - X\widehat{\beta}_1\right)\right] \left[n^{-1/2} Z_2'\left(\textbf{y} - X\widehat{\beta}_1\right) \right]'\\
+    &=&n^{-1} Z_2' \hat{\epsilon}_1 \hat{\epsilon}_1' Z_2 
+\end{eqnarray*}
+and
+\begin{eqnarray*}
+  \widehat{\Psi} &=& \left[ \begin{array}{cc}
+      -n^{-1} Z_2' \widehat{K}_1 & I_{q_2}
+  \end{array}\right]
+\end{eqnarray*}
 \subsection{Special Case: Two-stage Least Squares}
 For the special case of two-stage least squares (2SLS), we have
   \begin{eqnarray*}
@@ -1105,7 +1112,9 @@ and
 
 \todo[inline]{I don't know of any way to simplify this expression. The problem is that we can't decompose $\Xi_S Q_Z \Xi_S$ into a product of square matrices to there's no way to express the inverse of the product in terms of the product of inverses.}
 
-\todo[inline]{Add in the simplification of the variance matrix that results from the assumption that there is no heteroscedasticity in the limit.}
+
+Under the assumption that there is no heteroscedasticity in the limit, 2SLS is the efficient GMM estimator and the variance matrix from the CLT, $\Omega$, simplifies as follows:
+
 
 
 \subsection{Valid Post-Selection Confidence Intervals}
