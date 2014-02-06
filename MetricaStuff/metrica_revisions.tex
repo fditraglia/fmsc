@@ -882,6 +882,7 @@ where
 All other steps of the procedure are identical.
 
 \section{Choosing Instruments Example}
+\todo[inline]{For this example it's probably worth considering what happens if we constrain the squared bias estimator to be non-negative. There wasn't any need to do this when using the FMSC for the other example since the ``test statistic'' view of the criterion didn't directly involve comparisons of AMSE values. Could try it both ways in the simulation.}
 
 \subsection{Overview}
 In this example we suppose that we have a minimal set of valid instruments that identifies the model. We have another set of instruments that we expect to be stronger and, as a consequence, are worried might be slightly endogenous. The question is whether to include the extra instruments. This is the situation examined in the empirical example.
@@ -1046,13 +1047,28 @@ since $n^{-1}Z_2'\mathbf{v} \overset{p}{\rightarrow} 0$. Similarly, the CLT for 
 \end{eqnarray*}
 Thus, using the limit distribution for $\sqrt{n}\left(\widehat{\beta}_1 - \beta \right)$ given above, we have
 \begin{eqnarray*}
-  \widehat{\tau} &\overset{d}{\rightarrow}& \boldsymbol{\tau} + \Xi_2 M - \Xi_2 Q_ZK_1 \Pi \Xi_1 M\\
+  \widehat{\tau} &\overset{d}{\rightarrow}& \boldsymbol{\tau} + \Xi_2 M - \Xi_2 Q_Z \Pi K_1 \Pi \Xi_1 M\\
     &=& \boldsymbol{\tau} + \Xi_2(M - Q_Z \Pi K_1 \Xi_1 M)\\
     &=& \boldsymbol{\tau} + \Xi_2(I_q - Q_Z \Pi K_1 \Xi_1) M
 \end{eqnarray*}
 Since all the limit results we have written down depend only on $M$ and constant matrices, we in fact have \emph{joint convergence} of any collection of $\sqrt{n}\left(\widehat{\beta}_S - \beta \right)$ estimators \emph{along} with $\widehat{\tau}$. We will use this fact to construct valid confidence intervals.
 
 \subsection{The FMSC for the Choosing Instruments Example}
+Consider a target parameter $\mu$ where $\mu = \mu(\beta)$ denotes $\mu$ evaluated at the true $\beta$ and $\widehat{\mu}_S = \mu(\beta)$ denotes the estimator of $\mu$ implied by $\widehat{\beta}_S$. Then, by the Delta Method and the results from above,
+  $$\sqrt{n}\left( \widehat{\mu}_S - \mu \right) \overset{d}{\rightarrow} \nabla_\beta (\beta)' K_S \Xi_S\left(\left[\begin{array}
+           {c} \mathbf{0} \\ \boldsymbol{\tau}
+         \end{array}\right] + M \right)$$
+It follows immediately that 
+  \begin{eqnarray*}
+    \mbox{ABIAS}^2(\widehat{\mu}_S) &=&  \nabla_\beta (\beta)' K_S \Xi_S  \left[\begin{array}
+      {cc}
+      0 & 0 \\ 0 & \tau \tau'
+    \end{array} \right]  \Xi_S' K_S' \nabla_\beta (\beta)  \\
+    \mbox{AVAR}(\widehat{\mu}_S) &=& \nabla_\beta (\beta)' K_S \Xi_S  \Omega  \Xi_S' K_S' \nabla_\beta (\beta)
+  \end{eqnarray*}
+We estimate $\nabla\mu_\beta(\beta)$ by $\nabla_\beta\mu(\widehat{\beta}_1)$ when necessary (sometimes the derivatives don't depend on $\beta$), and $K_S$ by $\widehat{K}_S$. Both of these will be consistent. Various estimators of $\Omega$ are possible, but the point is that we can easily get a consistent estimator under these asymptotics. The only problem is $\tau \tau'$. We can construct an asymptotically unbiased estimator by using the fact that 
+
+
 \todo[inline]{Target parameter, delta method, expression for estimate of AMSE. Asymptotically unbiased estimator of asymptotic bias. Write out the special case when the target parameter is a linear combination of the elements of $\beta$. This includes as an even more special case situation in which we're only interested in one of the parameters.}
 
 \subsection{Special Case: Two-stage Least Squares}
