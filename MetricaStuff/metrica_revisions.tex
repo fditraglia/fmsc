@@ -1093,6 +1093,8 @@ and
       -n^{-1} Z_2' \widehat{K}_1 & I_{q_2}
   \end{array}\right]
 \end{eqnarray*}
+where $\hat{\epsilon}_1$ is the vector of residuals constructed from the estimator $\widehat{\beta}_1$.
+
 \subsection{Special Case: Two-stage Least Squares}
 For the special case of two-stage least squares (2SLS), we have
   \begin{eqnarray*}
@@ -1114,6 +1116,15 @@ and
 
 
 Under the assumption that there is no heteroscedasticity in the limit, 2SLS is the efficient GMM estimator and the variance matrix from the CLT, $\Omega$, simplifies as follows:
+\begin{eqnarray*}
+\Omega &=& \lim_{n\rightarrow \infty}E_n \left[\begin{array}
+           {cc} 
+           \epsilon_i^2 \mathbf{z}_{i1}\mathbf{z}_{i1}' & \epsilon_i^2 \mathbf{z}_{i1}\mathbf{z}_{i2}'\\
+           \epsilon_i^2 \mathbf{z}_{i2}\mathbf{z}_{i1}' & \epsilon_i^2 \mathbf{z}_{i2}\mathbf{z}_{i2}'
+          \end{array}\right]  = \sigma_\epsilon^2 Q_Z
+\end{eqnarray*}
+In this case, a natural estimator of $\Omega$ is given by
+  $$\widehat{\Omega} = \widehat{\sigma}_\epsilon^2 n^{-1}Z'Z = \left(n^{-1}\hat{\epsilon}_1 ' \hat{\epsilon}_1\right) n^{-1}Z'Z$$
 
 
 
