@@ -991,7 +991,7 @@ Now, applying Lemma \ref{lem:CLT} to $n^{-1/2}Z'\boldsymbol{\epsilon}$, we have 
 \subsection{Estimating $\tau$}
 To simplify the notation in this section, define the following selection matrices corresponding to $Z_1$ and $Z_2$: 
   \begin{eqnarray*}
-  \Xi_1 &=& \left[\begin{array}{cc} I_{q_1} & 0_{q_2 \times q_2}  \end{array}\right]\\
+  \Xi_1 &=& \left[\begin{array}{cc} I_{q_1} & 0_{q_1 \times q_2}  \end{array}\right]\\
     \Xi_2 &=& \left[ \begin{array}{cc}
               0_{q_2 \times q_1}& I_{q_2}
             \end{array}\right]
@@ -1047,11 +1047,26 @@ since $n^{-1}Z_2'\mathbf{v} \overset{p}{\rightarrow} 0$. Similarly, the CLT for 
 \end{eqnarray*}
 Thus, using the limit distribution for $\sqrt{n}\left(\widehat{\beta}_1 - \beta \right)$ given above, we have
 \begin{eqnarray*}
-  \widehat{\tau} &\overset{d}{\rightarrow}& \boldsymbol{\tau} + \Xi_2 M - \Xi_2 Q_Z \Pi K_1 \Pi \Xi_1 M\\
-    &=& \boldsymbol{\tau} + \Xi_2(M - Q_Z \Pi K_1 \Xi_1 M)\\
-    &=& \boldsymbol{\tau} + \Xi_2(I_q - Q_Z \Pi K_1 \Xi_1) M
+  \widehat{\tau} &\overset{d}{\rightarrow}& \boldsymbol{\tau}  - \Xi_2 Q_Z \Pi K_1 \Xi_1 M + \Xi_2 M\\
+    &=& \boldsymbol{\tau} + (-\Xi_2Q_Z \Pi K_1 \Xi_1 + \Xi_2)M\\
+    &=& \boldsymbol{\tau} + \left\{-\Xi_2Q_Z \Pi K_1 
+      \left[ \begin{array}{cc}
+              I_{q_1} & 0_{q_1 \times q_2}
+            \end{array}\right] + \left[ \begin{array}{cc}
+              0_{q_2 \times q_1}& I_{q_2}
+            \end{array}\right]\right\} M\\
+          &=& \boldsymbol{\tau} + \left\{
+      \left[ \begin{array}{cc}
+              -\Xi_2Q_Z \Pi K_1  & 0_{q_2 \times q_2}
+            \end{array}\right] + \left[ \begin{array}{cc}
+              0_{q_2 \times q_1}& I_{q_2}
+            \end{array}\right]\right\} M\\
+          &=&\boldsymbol{\tau}  + \left[ \begin{array}{cc}
+              -\Xi_2Q_Z \Pi K_1  & I_{q_2}
+            \end{array}\right]M\\
+          &=& \boldsymbol{\tau}  + \Psi M
 \end{eqnarray*}
-Since all the limit results we have written down depend only on $M$ and constant matrices, we in fact have \emph{joint convergence} of any collection of $\sqrt{n}\left(\widehat{\beta}_S - \beta \right)$ estimators \emph{along} with $\widehat{\tau}$. We will use this fact to construct valid confidence intervals.
+where we have used the fact that $\Xi_2Q_Z \Pi K_1 $ is a $q_2\times q_1$ matrix. Since all the limit results we have written down depend only on $M$ and constant matrices, we in fact have \emph{joint convergence} of any collection of $\sqrt{n}\left(\widehat{\beta}_S - \beta \right)$ estimators \emph{along} with $\widehat{\tau}$. We will use this fact to construct valid confidence intervals.
 
 \subsection{The FMSC for the Choosing Instruments Example}
 Consider a target parameter $\mu$ where $\mu = \mu(\beta)$ denotes $\mu$ evaluated at the true $\beta$ and $\widehat{\mu}_S = \mu(\beta)$ denotes the estimator of $\mu$ implied by $\widehat{\beta}_S$. Then, by the Delta Method and the results from above,
