@@ -99,11 +99,9 @@ fmsc.ols.iv <- function(x, y, z, DHW.levels = c(0.1, 0.05)){
   
   #Estimated Optimal Weight for OLS - plug in asymptotically unbiased estimator of tau-squared
   tau.squared.est <- tau^2 - s.e.squared * s.x.squared * s.v.squared / g.squared
-  bias.est <- max(0, tau.squared.est / s.x.squared^2)
+  sq.bias.est <- max(0, tau.squared.est / s.x.squared^2)
   var.diff <- s.e.squared * (1/g.squared - 1/s.x.squared)
-  omega.star <- 1 / (1 + (bias.est / var.diff))
-  if(omega.star > 1){omega.star <- 1}
-  if(omega.star < 0){omega.start <- 0}
+  omega.star <- 1 / (1 + (sq.bias.est / var.diff))
   
   b.star <- omega.star * b.ols + (1 - omega.star) * b.tsls
   

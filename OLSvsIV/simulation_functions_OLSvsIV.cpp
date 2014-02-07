@@ -120,24 +120,18 @@ arma::colvec fmsc_ols_iv_cpp(arma::mat data){
   
   //Calculate Optimal Weight for OLS estimator
   //Plug in asymptotically unbiased estimator of squared A-Bias
-  //If A-bias estimate is negative, set to zero. Make sure weight
-  //lies in [0,1].
+  //If squared A-bias estimate is negative, set to zero. 
+  //This ensures the weight lies in [0,1]
   double tau_squared_est = pow(tau, 2) - (s_e_squared * s_x_squared 
                                         * s_v_squared / g_squared);
-  double bias_est;
+  double sq_bias_est;
   if((tau_squared_est / pow(s_x_squared, 2)) >= 0){
-    bias_est = tau_squared_est / pow(s_x_squared, 2);
+    sq_bias_est = tau_squared_est / pow(s_x_squared, 2);
   } else {
-    bias_est = 0;
+    sq_bias_est = 0;
   }
   double var_diff = s_e_squared * (1 / g_squared - 1 / s_x_squared);
-  double omega_star = 1 / (1 + (bias_est / var_diff));
-  if(omega_star > 1){
-    omega_star = 1;
-  }
-  if(omega_star < 0){
-    omega_star = 0;
-  }
+  double omega_star = 1 / (1 + (sq_bias_est / var_diff));
   
   //Optimal Averaging Estimator
   double b_star = omega_star * b_ols + (1 - omega_star) * b_tsls;
