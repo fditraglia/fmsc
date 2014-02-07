@@ -55,66 +55,22 @@ dgp_OLS_IV::dgp_OLS_IV(double b, arma::colvec p, arma::mat Ve,
 
 
 
-// [[Rcpp::export]]
-arma::mat dgp_cpp(double b, arma::colvec p, arma::mat Ve, 
-              arma::mat Vz, int n){
-/*------------------------------------------------------------------
-# Arguments:
-#  b       coefficient on x in the second stage
-#  PI      vector of coefficients on z in the second stage
-#  V.e     variance-covariance matrix of the errors epsilon and v
-#  V.z     variance-covariance matrix of the instruments z
-#  n       sample size
-#------------------------------------------------------------------- 
-# Returns: a matrix of simulated data. The first column is x, the
-#          single endogenous regressor, the second column is y, the
-#          outcome, and all remaining columns are z, the matrix of
-#          instrumental variables.
--------------------------------------------------------------------*/ 
-    
-    RNGScope scope;
-    
-    //Number of instruments
-    int n_z = Vz.n_cols;
-    
-    //Generate errors
-    arma::colvec stdnorm_errors = rnorm(n * 2);
-    arma::mat errors = trans(arma::chol(Ve) * reshape(stdnorm_errors, 2, n));
-    
-    //Generate instruments
-    arma::colvec stdnorm_z = rnorm(n * n_z);
-    arma::mat z = trans(arma::chol(Vz) * reshape(stdnorm_z, n_z, n));
-
-    //Generate endogenous variables: x and y
-    arma::colvec x = z * p + errors.col(1); //Remember: zero indexing!
-    arma::colvec y = b * x + errors.col(0); 
-    
-    
-    arma::mat sim_data = arma::mat(n, 2 + n_z);
-    sim_data.col(0) = x;
-    sim_data.col(1) = y;
-    sim_data.cols(2, n_z + 1) = z;
-    
-    return (sim_data);
-    
-}
-
 
 
 class fmsc_OLS_IV {
   private:
     int n_z, n;
     double xx, g_squared, s_e_squared, s_x_squared, 
-        s_v_squared, tau;
+        s_v_squared, tau, ols_estimate, tsls_estimate;
     arma::colvec tsls_resid, first_stage_coefs, zx;
     arma::mat Qz, Rz, Rzinv, zz_inv;
   public:
-    double b_ols;
-    double b_tsls;
     //class constructor
     fmsc_OLS_IV(arma::colvec, arma::colvec, arma::mat);
     //member functions
     double Tfmsc();
+    double b_ols();
+    double b_tsls();
     double b_fmsc();
     double b_DHW(double);
     double b_AVG();
@@ -131,12 +87,12 @@ fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y,
       
   //OLS estimator
   xx = arma::dot(x, x);
-  b_ols = arma::dot(x, y) / xx;
+  ols_estimate = arma::dot(x, y) / xx;
   
   //2SLS Estimator
   first_stage_coefs = arma::solve(z,x);
-  b_tsls = arma::as_scalar(arma::solve(z * first_stage_coefs, y)); 
-  tsls_resid = y - x * b_tsls; 
+  tsls_estimate = arma::as_scalar(arma::solve(z * first_stage_coefs, y)); 
+  tsls_resid = y - x * tsls_estimate; 
   
   //2SLS Weighting Matrix and "gamma-squared"
   arma::qr_econ(Qz, Rz, z);
@@ -152,23 +108,34 @@ fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y,
   tau = arma::dot(x, tsls_resid) / sqrt(n);
 }
 
+double fmsc_OLS_IV::b_ols(){
+//Member function of class fmsc_OLS_IV
+//Extracts OLS estimate
+  return(ols_estimate);
+}
 
+
+double fmsc_OLS_IV::b_tsls(){
+//Member function of class fmsc_OLS_IV
+//Extracts 2SLS estimate
+  return(tsls_estimate);
+}
     
 double fmsc_OLS_IV::Tfmsc(){
-//Member function to calculate FMSC "test statistic"
+//Member function of class fmsc_OLS_IV
+//Calculates FMSC "test statistic"
   return(pow(tau, 2) * g_squared / (s_v_squared * 
                                   s_e_squared * s_x_squared));      
 }
-    
     
 double fmsc_OLS_IV::b_fmsc(){
 //Member function of class fmsc_OLS_IV
 //Calculates estimator selected by FMS
   double out;
   if(Tfmsc() < 2){
-    out = b_ols;
+    out = ols_estimate;
   } else {
-    out = b_tsls;
+    out = tsls_estimate;
   }
   return(out);
 }
@@ -180,9 +147,9 @@ double fmsc_OLS_IV::b_DHW(double level){
   double out;
   double DHW_crit = R::qchisq(level, 1, 1, 0);
   if(Tfmsc() > DHW_crit){
-    out = b_tsls;
+    out = tsls_estimate;
   }else{
-    out = b_ols;
+    out = ols_estimate;
   }
   return(out);
 }
@@ -203,7 +170,7 @@ double fmsc_OLS_IV::b_AVG(){
   }
   double var_diff = s_e_squared * (1 / g_squared - 1 / s_x_squared);
   double omega = 1 / (1 + (sq_bias_est / var_diff));  
-  double out = omega * b_ols + (1 - omega) * b_tsls;
+  double out = omega * ols_estimate + (1 - omega) * tsls_estimate;
   return(out);
 }
 
@@ -211,115 +178,7 @@ double fmsc_OLS_IV::b_AVG(){
 
 
 
-
-
-// [[Rcpp::export]]
-arma::colvec fmsc_ols_iv_cpp(arma::mat data){ 
-                        
-/*------------------------------------------------------------------
-# Estimates OLS and IV estimators (without constant terms) using
-# the supplied dataset, calculates the FMSC criterion to choose
-# between them, estimates the AMSE-optimal weights on OLS and IV
-# and uses these to construct an optimal averaging estimator.
-#-------------------------------------------------------------------
-# Arguments:
-#   data           a matrix of data for OLS/IV. The first column is
-#                  x, the single endogenous regressor, the second 
-#                  column is y, the outcome, and all remaining
-#                  columns are the instruments. 
-------------------------------------------------------------------*/
-
-  int n_z = data.n_cols - 2;
-  int n = data.n_rows;
-  
-  arma::colvec x = data.col(0);
-  arma::colvec y = data.col(1);
-  arma::mat z = data.cols(2, n_z + 1);
-
-  //OLS estimator
-  double xx = arma::dot(x, x);
-  double b_ols = arma::dot(x, y) / xx;
-  
-  //2SLS Estimator
-  arma::colvec first_stage_coefs = arma::solve(z,x);
-  double b_tsls = arma::as_scalar(arma::solve(z * first_stage_coefs, y)); 
-  arma::colvec tsls_resid = y - x * b_tsls; 
-  
-  //2SLS Weighting Matrix and "gamma-squared"
-  arma::mat Qz, Rz;
-  arma::qr_econ(Qz, Rz, z);
-  arma::mat Rzinv = arma::inv(arma::trimatu(Rz));
-  arma::mat zz_inv = Rzinv * arma::trans(Rzinv);
-  arma::colvec zx = arma::trans(z) * x;
-  double g_squared = arma::as_scalar(arma::trans(zx) * zz_inv * zx) / n;
-
-  //Remaining quantities needed for FMSC
-  double s_e_squared = arma::dot(tsls_resid, tsls_resid) / n;
-  double s_x_squared = xx / n;
-  double s_v_squared = s_x_squared - g_squared;
-  double tau = arma::dot(x, tsls_resid) / sqrt(n);
-  
-  //Calculate FMSC "test statistic" and selected estimator
-  double Tfmsc = pow(tau, 2) * g_squared / (s_v_squared * 
-                                      s_e_squared * s_x_squared);
-  double b_fmsc;
-  if(Tfmsc < 2){
-    b_fmsc = b_ols;
-  } else {
-    b_fmsc = b_tsls;
-  }
-  
-  //Calculate Optimal Weight for OLS estimator
-  //Plug in asymptotically unbiased estimator of squared A-Bias
-  //If squared A-bias estimate is negative, set to zero. 
-  //This ensures the weight lies in [0,1]
-  double tau_squared_est = pow(tau, 2) - (s_e_squared * s_x_squared 
-                                        * s_v_squared / g_squared);
-  double sq_bias_est;
-  if((tau_squared_est / pow(s_x_squared, 2)) >= 0){
-    sq_bias_est = tau_squared_est / pow(s_x_squared, 2);
-  } else {
-    sq_bias_est = 0;
-  }
-  double var_diff = s_e_squared * (1 / g_squared - 1 / s_x_squared);
-  double omega_star = 1 / (1 + (sq_bias_est / var_diff));
-  
-  //Optimal Averaging Estimator
-  double b_star = omega_star * b_ols + (1 - omega_star) * b_tsls;
-  
-  //DHW pre-test estimators
-  double DHW90_crit = R::qchisq(0.9, 1, 1, 0);
-  double b_DHW90;
-  if(Tfmsc > DHW90_crit){
-    b_DHW90 = b_tsls;
-  }else{
-    b_DHW90 = b_ols;
-  }
-  
-  double DHW95_crit = R::qchisq(0.95, 1, 1, 0);
-  double b_DHW95;
-  if(Tfmsc > DHW95_crit){
-    b_DHW95 = b_tsls;
-  }else{
-    b_DHW95 = b_ols;
-  }
-  
-  //Create and return vector of results
-  arma::colvec out = arma::vec(6);
-  out(0) = b_ols;
-  out(1) = b_tsls;
-  out(2) = b_fmsc;
-  out(3) = b_star;
-  out(4) = b_DHW90;
-  out(5) = b_DHW95;
-  return(out);  
-  
-}
-
-
-
-// [[Rcpp::export]]
-double MSE_trim_cpp(arma::colvec x, double truth, double trim){
+double MSE_trim(arma::colvec x, double truth, double trim){
 /*-------------------------------------------------------
 # Calculates trimmed mean-squared error.
 #--------------------------------------------------------
@@ -345,45 +204,39 @@ double MSE_trim_cpp(arma::colvec x, double truth, double trim){
 
 
 
-
-
 // [[Rcpp::export]]
-NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve, 
+NumericVector mse_compare_classes(double b, arma::colvec p, arma::mat Ve, 
               arma::mat Vz, int n, int n_reps){
 //Function to run n_reps of the simulation study and calculate the MSE
 //of the various estimators
   
-  //This is the dimension of the output from sim_results_cpp
-  //(Pre-allocating memory is much faster)
-  int k = 6;
-  arma::mat sim_estimates = arma::mat(k, n_reps); //Each column is a rep
-  
-  int n_z = p.n_cols;
-  arma::mat sim_data = arma::mat(n, 2 + n_z);
+  arma::colvec ols(n_reps);
+  arma::colvec tsls(n_reps);
+  arma::colvec fmsc(n_reps);
+  arma::colvec DHW90(n_reps);
+  arma::colvec DHW95(n_reps);
+  arma::colvec AVG(n_reps);
 
   for(int i = 0; i < n_reps; i++){
     
-    sim_data = dgp_cpp(b, p, Ve, Vz, n);
-    sim_estimates.col(i) = fmsc_ols_iv_cpp(sim_data);
-    
-  }
-  
-  arma::colvec mse_values(k);
+    dgp_OLS_IV sim(b, p, Ve, Vz, n);
+    fmsc_OLS_IV est(sim.x, sim.y, sim.z);
 
-  for(int j = 0; j < k; j++){
-    
-    //convert row vector to column vector
-    arma::colvec temp = vectorise(sim_estimates.row(j));
-    mse_values(j) = MSE_trim_cpp(temp, b, 0);
+    ols(i) = est.b_ols();
+    tsls(i) = est.b_tsls();
+    fmsc(i) = est.b_fmsc();
+    DHW90(i) = est.b_DHW(0.90);
+    DHW95(i) = est.b_DHW(0.95);
+    AVG(i) = est.b_AVG();
     
   }
   
-  double MSE_ols = mse_values(0);
-  double MSE_tsls = mse_values(1);
-  double MSE_fmsc = mse_values(2);
-  double MSE_star = mse_values(3);
-  double MSE_DHW90 = mse_values(4);
-  double MSE_DHW95 = mse_values(5);
+  double MSE_ols = MSE_trim(ols, b, 0);
+  double MSE_tsls = MSE_trim(tsls, b, 0);
+  double MSE_fmsc = MSE_trim(fmsc, b, 0);
+  double MSE_DHW90 = MSE_trim(DHW90, b, 0);
+  double MSE_DHW95 = MSE_trim(DHW95, b, 0);
+  double MSE_star = MSE_trim(AVG, b, 0);
   
   //Create and return vector of results
   NumericVector out = NumericVector::create(MSE_ols, MSE_tsls, MSE_fmsc, 
@@ -397,8 +250,12 @@ NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve,
 
 
 
+
+
+
+
 // [[Rcpp::export]]
-NumericVector mse_compare_default_cpp(double p , double r, int n, 
+NumericVector mse_compare_default_classes(double p , double r, int n, 
                                         int n_reps){
 //Runs the simulation once with "default" values
 //for "uninteresting" parameters.
@@ -411,7 +268,7 @@ NumericVector mse_compare_default_cpp(double p , double r, int n,
   Ve << 1<< r << arma::endr
      << r << 1 << arma::endr;
   
-  NumericVector out = mse_compare_cpp(b, p_vec, Ve, Vz, n, n_reps);
+  NumericVector out = mse_compare_classes(b, p_vec, Ve, Vz, n, n_reps);
   return(out);
   
 }
