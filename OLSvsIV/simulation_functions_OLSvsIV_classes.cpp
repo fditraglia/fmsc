@@ -1,18 +1,56 @@
 /*------------------------------------------------------------
-Filename:        simulation_functions_OLSvsIV.cpp
+Filename:        simulation_functions_OLSvsIV_classes.cpp
 Author:          Frank DiTraglia
-First Version:   2014-01-22
-This Version:    2014-01-22
+First Version:   2014-02-07
+This Version:    2014-02-07
 --------------------------------------------------------------
 C++ code to carry out the OLS vs. IV simulation experiments.
-All functions here correspond to R versions contained in the 
-file simulation_functions_OLSvsIV.R.
+Unlike the versions in simulation_functions_OLSvsIV.cpp, the
+code here uses classes.
 ------------------------------------------------------------*/
   
 // [[Rcpp::depends(RcppArmadillo)]]
 
 #include <RcppArmadillo.h>
 using namespace Rcpp;
+
+
+
+
+class dgp_OLS_IV {
+  private:
+    int n_z; 
+    arma::colvec stdnorm_errors, stdnorm_z; 
+    arma::mat errors;
+  public:
+    arma::colvec x; 
+    arma::colvec y; 
+    arma::mat z;
+    //Class constructor
+    dgp_OLS_IV(double, arma::colvec, arma::mat, arma::mat, int);
+};
+
+
+dgp_OLS_IV::dgp_OLS_IV(double b, arma::colvec p, arma::mat Ve, 
+              arma::mat Vz, int n){
+//Constructor for class dgp_OLS_IV
+//Generates simulations from the dgp
+
+  RNGScope scope;
+  n_z = Vz.n_cols;
+      
+  //Generate errors
+  stdnorm_errors = rnorm(n * 2);
+  errors = trans(arma::chol(Ve) * reshape(stdnorm_errors, 2, n));
+      
+  //Generate instruments
+  stdnorm_z = rnorm(n * n_z);
+  z = trans(arma::chol(Vz) * reshape(stdnorm_z, n_z, n));
+
+  //Generate endogenous variables: x and y
+  x = z * p + errors.col(1); //Remember: zero indexing!
+  y = b * x + errors.col(0);   
+}
 
 
 
@@ -60,6 +98,116 @@ arma::mat dgp_cpp(double b, arma::colvec p, arma::mat Ve,
     return (sim_data);
     
 }
+
+
+
+class fmsc_OLS_IV {
+  private:
+    int n_z, n;
+    double xx, g_squared, s_e_squared, s_x_squared, 
+        s_v_squared, tau;
+    arma::colvec tsls_resid, first_stage_coefs, zx;
+    arma::mat Qz, Rz, Rzinv, zz_inv;
+  public:
+    double b_ols;
+    double b_tsls;
+    //class constructor
+    fmsc_OLS_IV(arma::colvec, arma::colvec, arma::mat);
+    //member functions
+    double Tfmsc();
+    double b_fmsc();
+    double b_DHW(double);
+    double b_AVG();
+};
+  
+
+fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y, 
+                          arma::mat z){
+//Class constructor for fmsc_OLS_IV
+//Calculates all "basic" quantities 
+
+  n_z = z.n_cols;
+  n = z.n_rows;
+      
+  //OLS estimator
+  xx = arma::dot(x, x);
+  b_ols = arma::dot(x, y) / xx;
+  
+  //2SLS Estimator
+  first_stage_coefs = arma::solve(z,x);
+  b_tsls = arma::as_scalar(arma::solve(z * first_stage_coefs, y)); 
+  tsls_resid = y - x * b_tsls; 
+  
+  //2SLS Weighting Matrix and "gamma-squared"
+  arma::qr_econ(Qz, Rz, z);
+  Rzinv = arma::inv(arma::trimatu(Rz));
+  zz_inv = Rzinv * arma::trans(Rzinv);
+  zx = arma::trans(z) * x;
+  g_squared = arma::as_scalar(arma::trans(zx) * zz_inv * zx) / n;
+
+  //Remaining quantities needed for FMSC
+  s_e_squared = arma::dot(tsls_resid, tsls_resid) / n;
+  s_x_squared = xx / n;
+  s_v_squared = s_x_squared - g_squared;
+  tau = arma::dot(x, tsls_resid) / sqrt(n);
+}
+
+
+    
+double fmsc_OLS_IV::Tfmsc(){
+//Member function to calculate FMSC "test statistic"
+  return(pow(tau, 2) * g_squared / (s_v_squared * 
+                                  s_e_squared * s_x_squared));      
+}
+    
+    
+double fmsc_OLS_IV::b_fmsc(){
+//Member function of class fmsc_OLS_IV
+//Calculates estimator selected by FMS
+  double out;
+  if(Tfmsc() < 2){
+    out = b_ols;
+  } else {
+    out = b_tsls;
+  }
+  return(out);
+}
+    
+
+double fmsc_OLS_IV::b_DHW(double level){
+//Member function of class fmsc_OLS_IV
+//Calculates DHW pre-test estimator at a given confidence level
+  double out;
+  double DHW_crit = R::qchisq(level, 1, 1, 0);
+  if(Tfmsc() > DHW_crit){
+    out = b_tsls;
+  }else{
+    out = b_ols;
+  }
+  return(out);
+}
+
+
+double fmsc_OLS_IV::b_AVG(){
+//Member function of class fmsc_OLS_IV
+//Calculates feasible version of AMSE-optimal averaging estimator
+  double tau_squared_est = pow(tau, 2) - (s_e_squared * s_x_squared 
+                                        * s_v_squared / g_squared);
+  double sq_bias_est;
+  //If the squared bias estimate is negative, set it to zero
+  //so weight lies in [0,1]
+  if((tau_squared_est / pow(s_x_squared, 2)) >= 0){
+    sq_bias_est = tau_squared_est / pow(s_x_squared, 2);
+  } else {
+    sq_bias_est = 0;
+  }
+  double var_diff = s_e_squared * (1 / g_squared - 1 / s_x_squared);
+  double omega = 1 / (1 + (sq_bias_est / var_diff));  
+  double out = omega * b_ols + (1 - omega) * b_tsls;
+  return(out);
+}
+
+
 
 
 
