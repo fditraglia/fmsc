@@ -168,43 +168,6 @@ arma::colvec fmsc_ols_iv_cpp(arma::mat data){
 
 
 // [[Rcpp::export]]
-NumericVector simple_sim_cpp(double p , double r, int n){
-//Runs the simulation once with "default" values
-//for "uninteresting" parameters.
-
-  double b = 1;
-  arma::colvec p_vec = p * arma::ones(3);
-  arma::mat Vz = arma::eye(3, 3);
-  
-  arma::mat Ve;
-  Ve << 1<< r << arma::endr
-     << r << 1 << arma::endr;
-
-  
-  arma::mat sim_data = dgp_cpp(b, p_vec, Ve, Vz, n);
-  
-  arma::colvec results = fmsc_ols_iv_cpp(sim_data);
-  
-  double b_ols = results(0);
-  double b_tsls = results(1);
-  double b_fmsc = results(2);
-  double b_star = results(3);
-  double b_DHW90 = results(4);
-  double b_DHW95 = results(5);
-  
-  //Create and return vector of results
-  NumericVector out = NumericVector::create(b_ols, b_tsls, b_fmsc, 
-                        b_star, b_DHW90, b_DHW95);
-  out.names() = CharacterVector::create("b.ols", "b.tsls", "b.fmsc", 
-                        "b.star", "b.DHW90", "b.DHW95");
-  return(out);  
-
-  
-}
-
-
-
-// [[Rcpp::export]]
 double MSE_trim_cpp(arma::colvec x, double truth, double trim){
 /*-------------------------------------------------------
 # Calculates trimmed mean-squared error.
