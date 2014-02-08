@@ -19,8 +19,7 @@ using namespace Rcpp;
 
 class dgp_OLS_IV {
 /*--------------------------------------------------
-# Class to store one simulation draw from the dgp
-# for the OLS versus IV example from the paper.
+# Class for simulating from dgp in OLS vs IV example
 #-------------------------------------------------*/
   public:
     arma::colvec x;  //sims for endogenous regressor
@@ -29,7 +28,6 @@ class dgp_OLS_IV {
     //Class constructor
     dgp_OLS_IV(double, arma::colvec, arma::mat, arma::mat, int);
 };
-
 
 dgp_OLS_IV::dgp_OLS_IV(double b, arma::colvec p, arma::mat Ve, 
               arma::mat Vz, int n){
@@ -65,8 +63,7 @@ dgp_OLS_IV::dgp_OLS_IV(double b, arma::colvec p, arma::mat Ve,
 
 class fmsc_OLS_IV {
 /*--------------------------------------------------
-# Class for the FMSC calculations for the OLS
-# versus IV example from the paper.
+# Class for FMSC calculations in OLS vs IV example
 #-------------------------------------------------*/
   private:
     int n_z, n;
@@ -90,8 +87,7 @@ class fmsc_OLS_IV {
 fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y, 
                           arma::mat z){
 /*--------------------------------------------------
-# Constructor: calculates "basic quantities" for OLS
-#              vs IV example
+# Constructor: calculates all "basic quantities"
 #---------------------------------------------------
 # Arguments:
 #  x          vector of obs. for endog regressor
