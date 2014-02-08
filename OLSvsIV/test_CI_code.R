@@ -14,6 +14,12 @@ system.time(bar <- mse_compare_default_cpp(0.3, 0.2, 250, 10000))
 sum(abs(foo - bar))
 
 
+
+system.time(testy <- test_CIs_cpp(1, 0, 250, 10000))
+sum(testy[,1] < 1 & testy[,2] > 1)/nrow(testy)
+
+
+
 r.seq <- seq(0, 0.2, 0.01)
 
 set.seed(4938)

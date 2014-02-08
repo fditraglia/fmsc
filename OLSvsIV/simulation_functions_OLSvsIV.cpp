@@ -79,7 +79,7 @@ class fmsc_OLS_IV {
     double b_fmsc();      //return FMSC-selected estimate
     double b_DHW(double); //return DHW pre-test estimate
     double b_AVG();       //return feasible averaging estimate
-//    arma::rowvec CI_ols(double);  //Confidence interval (CI) for ols
+    arma::rowvec CI_ols(double);  //Confidence interval (CI) for ols
 //    arma::rowvec CI_tsls(double); //CI for tsls
 //    arma::rowvec CI_fmsc_naive(double); //Naive CI post-fmsc
 //    arma::rowvec CI_fmsc_correct(double, int); //Corrected CI post-fmsc
@@ -126,13 +126,11 @@ fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y,
   tau = arma::dot(x, tsls_resid) / sqrt(n);
 }
 
-
 double fmsc_OLS_IV::b_ols(){
 //Member function of class fmsc_OLS_IV
 //Extracts OLS estimate
   return(ols_estimate);
 }
-
 
 double fmsc_OLS_IV::b_tsls(){
 //Member function of class fmsc_OLS_IV
@@ -192,13 +190,21 @@ double fmsc_OLS_IV::b_AVG(){
   return(out);
 }
 
-
-
-//arma::rowvec fmsc_OLS_IV::CI_ols(double level){
-////Member function of class fmsc_OLS_IV
-////Returns confidence interval (lower, upper) for OLS estimator
-////Arguments: level = confidence level (0.95 is a 95% CI)
-//}
+arma::rowvec fmsc_OLS_IV::CI_ols(double level){
+//Member function of class fmsc_OLS_IV
+//Returns confidence interval (lower, upper) for OLS estimator
+//Arguments: level = confidence level (0.95 is a 95% CI)
+  double alpha = 1 - level;
+  double z_quantile = R::qnorm(1 - alpha/2, 0, 1, 1, 0);
+  double SE_ols = sqrt(s_e_sq_ols / (n * s_x_sq));
+  double lower = ols_estimate - z_quantile * SE_ols;
+  double upper = ols_estimate + z_quantile * SE_ols;
+  
+  arma::rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
 
 //arma::rowvec fmsc_OLS_IV::CI_tsls(double level){
 ////Member function of class fmsc_OLS_IV
@@ -298,9 +304,6 @@ NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve,
 
 
 
-
-
-
 // [[Rcpp::export]]
 NumericVector mse_compare_default_cpp(double p , double r, int n, 
                                         int n_reps){
@@ -316,5 +319,29 @@ NumericVector mse_compare_default_cpp(double p , double r, int n,
      << r << 1 << arma::endr;
   
   NumericVector out = mse_compare_cpp(b, p_vec, Ve, Vz, n, n_reps);
+  return(out);  
+}
+
+
+
+
+// [[Rcpp::export]]
+arma::mat test_CIs_cpp(double p , double r, int n, 
+                                        int n_reps){
+  double b = 1;
+  arma::colvec p_vec = p * arma::ones(3);
+  arma::mat Vz = arma::eye(3, 3);
+  
+  arma::mat Ve;
+  Ve << 1<< r << arma::endr
+     << r << 1 << arma::endr;
+
+  arma::mat out(n_reps, 2, arma::fill::zeros);
+  
+  for(int i = 0; i < n_reps; i++){
+    dgp_OLS_IV sim(b, p_vec, Ve, Vz, n);
+    fmsc_OLS_IV est(sim.x, sim.y, sim.z);
+    out.row(i) = est.CI_ols(0.95); 
+  }
   return(out);  
 }
