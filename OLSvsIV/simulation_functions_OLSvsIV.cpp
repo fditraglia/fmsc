@@ -65,7 +65,7 @@ class fmsc_OLS_IV {
 #-------------------------------------------------*/
   private:
     int n_z, n;
-    double xx, g_sq, s_e_sq, s_x_sq, 
+    double xx, g_sq, s_e_sq_tsls, s_x_sq, 
         s_v_sq, tau, ols_estimate, tsls_estimate;
     arma::colvec tsls_resid, first_stage_coefs, zx;
     arma::mat Qz, Rz, Rzinv, zz_inv;
@@ -97,7 +97,7 @@ fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y,
 #  z          matrix of obs. for instruments
 #---------------------------------------------------
 # Initializes:
-#    n_z, n, xx, g_sq, s_e_sq, 
+#    n_z, n, xx, g_sq, s_e_sq_tsls, 
 #    s_x_sq, s_v_sq, tau, ols_estimate,
 #    tsls_estimate, tsls_resid, first_stage_coefs, 
 #    zx, Qz, Rz, Rzinv, zz_inv
@@ -118,7 +118,7 @@ fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y,
   zx = arma::trans(z) * x;
   g_sq = arma::as_scalar(arma::trans(zx) * zz_inv * zx) / n;
 
-  s_e_sq = arma::dot(tsls_resid, tsls_resid) / n;
+  s_e_sq_tsls = arma::dot(tsls_resid, tsls_resid) / n;
   s_x_sq = xx / n;
   s_v_sq = s_x_sq - g_sq;
   tau = arma::dot(x, tsls_resid) / sqrt(n);
@@ -142,7 +142,7 @@ double fmsc_OLS_IV::Tfmsc(){
 //Member function of class fmsc_OLS_IV
 //Calculates FMSC "test statistic"
   return(pow(tau, 2) * g_sq / (s_v_sq * 
-                                  s_e_sq * s_x_sq));      
+                                  s_e_sq_tsls * s_x_sq));      
 }
     
 double fmsc_OLS_IV::b_fmsc(){
@@ -174,7 +174,7 @@ double fmsc_OLS_IV::b_DHW(double level){
 double fmsc_OLS_IV::b_AVG(){
 //Member function of class fmsc_OLS_IV
 //Calculates feasible version of AMSE-optimal averaging estimator
-  double tau_squared_est = pow(tau, 2) - (s_e_sq * s_x_sq 
+  double tau_squared_est = pow(tau, 2) - (s_e_sq_tsls * s_x_sq 
                                         * s_v_sq / g_sq);
   double sq_bias_est;
   //If the squared bias estimate is negative, set it to zero
@@ -184,7 +184,7 @@ double fmsc_OLS_IV::b_AVG(){
   } else {
     sq_bias_est = 0;
   }
-  double var_diff = s_e_sq * (1 / g_sq - 1 / s_x_sq);
+  double var_diff = s_e_sq_tsls * (1 / g_sq - 1 / s_x_sq);
   double omega = 1 / (1 + (sq_bias_est / var_diff));  
   double out = omega * ols_estimate + (1 - omega) * tsls_estimate;
   return(out);
