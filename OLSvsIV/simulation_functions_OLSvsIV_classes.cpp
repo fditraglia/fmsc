@@ -1,7 +1,7 @@
 /*------------------------------------------------------------
 Filename:        simulation_functions_OLSvsIV_classes.cpp
 Author:          Frank DiTraglia
-First Version:   2014-02-07
+First Version:   2014-02-08
 This Version:    2014-02-07
 --------------------------------------------------------------
 C++ code to carry out the OLS vs. IV simulation experiments.
@@ -18,14 +18,14 @@ using namespace Rcpp;
 
 
 class dgp_OLS_IV {
-  private:
-    int n_z; 
-    arma::colvec stdnorm_errors, stdnorm_z; 
-    arma::mat errors;
+/*--------------------------------------------------
+# Class to store one simulation draw from the dgp
+# for the OLS versus IV example from the paper.
+#-------------------------------------------------*/
   public:
-    arma::colvec x; 
-    arma::colvec y; 
-    arma::mat z;
+    arma::colvec x;  //sims for endogenous regressor
+    arma::colvec y;  //sims for outcome
+    arma::mat z;     //sims for instrumental vars
     //Class constructor
     dgp_OLS_IV(double, arma::colvec, arma::mat, arma::mat, int);
 };
@@ -33,21 +33,27 @@ class dgp_OLS_IV {
 
 dgp_OLS_IV::dgp_OLS_IV(double b, arma::colvec p, arma::mat Ve, 
               arma::mat Vz, int n){
-//Constructor for class dgp_OLS_IV
-//Generates simulations from the dgp
-
+/*--------------------------------------------------
+# Constructor: generates simulations from dgp
+#---------------------------------------------------
+# Arguments:
+#  b       coefficient on x in the 2nd stage
+#  PI      vector of coeffs on z in the 1st stage
+#  V.e     var-covar matrix of epsilon and v 
+#  V.z     var-covar matrix z
+#  n       sample size
+#---------------------------------------------------
+# Initializes:
+#     x, y, z
+#-------------------------------------------------*/
   RNGScope scope;
-  n_z = Vz.n_cols;
-      
-  //Generate errors
-  stdnorm_errors = rnorm(n * 2);
-  errors = trans(arma::chol(Ve) * reshape(stdnorm_errors, 2, n));
-      
-  //Generate instruments
-  stdnorm_z = rnorm(n * n_z);
+  int n_z = Vz.n_cols;
+  
+  arma::colvec stdnorm_errors = rnorm(n * 2);
+  arma::mat errors = trans(arma::chol(Ve) * reshape(stdnorm_errors, 2, n));
+  arma::colvec stdnorm_z = rnorm(n * n_z);
+  
   z = trans(arma::chol(Vz) * reshape(stdnorm_z, n_z, n));
-
-  //Generate endogenous variables: x and y
   x = z * p + errors.col(1); //Remember: zero indexing!
   y = b * x + errors.col(0);   
 }
@@ -58,6 +64,10 @@ dgp_OLS_IV::dgp_OLS_IV(double b, arma::colvec p, arma::mat Ve,
 
 
 class fmsc_OLS_IV {
+/*--------------------------------------------------
+# Class for the FMSC calculations for the OLS
+# versus IV example from the paper.
+#-------------------------------------------------*/
   private:
     int n_z, n;
     double xx, g_squared, s_e_squared, s_x_squared, 
@@ -68,45 +78,54 @@ class fmsc_OLS_IV {
     //class constructor
     fmsc_OLS_IV(arma::colvec, arma::colvec, arma::mat);
     //member functions
-    double Tfmsc();
-    double b_ols();
-    double b_tsls();
-    double b_fmsc();
-    double b_DHW(double);
-    double b_AVG();
+    double Tfmsc();       //return FMSC "test statistic"
+    double b_ols();       //return OLS estimate
+    double b_tsls();      //return tsls estimate
+    double b_fmsc();      //return FMSC-selected estimate
+    double b_DHW(double); //return DHW pre-test estimate
+    double b_AVG();       //return feasible averaging estimate
 };
   
 
 fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y, 
                           arma::mat z){
-//Class constructor for fmsc_OLS_IV
-//Calculates all "basic" quantities 
-
+/*--------------------------------------------------
+# Constructor: calculates "basic quantities" for OLS
+#              vs IV example
+#---------------------------------------------------
+# Arguments:
+#  x          vector of obs. for endog regressor
+#  y          vector of obs. for outcome
+#  z          matrix of obs. for instruments
+#---------------------------------------------------
+# Initializes:
+#    n_z, n, xx, g_squared, s_e_squared, 
+#    s_x_squared, s_v_squared, tau, ols_estimate,
+#    tsls_estimate, tsls_resid, first_stage_coefs, 
+#    zx, Qz, Rz, Rzinv, zz_inv
+#-------------------------------------------------*/
   n_z = z.n_cols;
   n = z.n_rows;
-      
-  //OLS estimator
+
   xx = arma::dot(x, x);
   ols_estimate = arma::dot(x, y) / xx;
   
-  //2SLS Estimator
   first_stage_coefs = arma::solve(z,x);
   tsls_estimate = arma::as_scalar(arma::solve(z * first_stage_coefs, y)); 
   tsls_resid = y - x * tsls_estimate; 
   
-  //2SLS Weighting Matrix and "gamma-squared"
   arma::qr_econ(Qz, Rz, z);
   Rzinv = arma::inv(arma::trimatu(Rz));
   zz_inv = Rzinv * arma::trans(Rzinv);
   zx = arma::trans(z) * x;
   g_squared = arma::as_scalar(arma::trans(zx) * zz_inv * zx) / n;
 
-  //Remaining quantities needed for FMSC
   s_e_squared = arma::dot(tsls_resid, tsls_resid) / n;
   s_x_squared = xx / n;
   s_v_squared = s_x_squared - g_squared;
   tau = arma::dot(x, tsls_resid) / sqrt(n);
 }
+
 
 double fmsc_OLS_IV::b_ols(){
 //Member function of class fmsc_OLS_IV
@@ -178,6 +197,7 @@ double fmsc_OLS_IV::b_AVG(){
 
 
 
+
 double MSE_trim(arma::colvec x, double truth, double trim){
 /*-------------------------------------------------------
 # Calculates trimmed mean-squared error.
@@ -208,7 +228,7 @@ double MSE_trim(arma::colvec x, double truth, double trim){
 NumericVector mse_compare_classes(double b, arma::colvec p, arma::mat Ve, 
               arma::mat Vz, int n, int n_reps){
 //Function to run n_reps of the simulation study and calculate the MSE
-//of the various estimators
+//of various estimators
   
   arma::colvec ols(n_reps);
   arma::colvec tsls(n_reps);
@@ -257,8 +277,8 @@ NumericVector mse_compare_classes(double b, arma::colvec p, arma::mat Ve,
 // [[Rcpp::export]]
 NumericVector mse_compare_default_classes(double p , double r, int n, 
                                         int n_reps){
-//Runs the simulation once with "default" values
-//for "uninteresting" parameters.
+//Wrapper for mse_compare_classes
+//Runs simulation once with default values for "uninteresting" params
 
   double b = 1;
   arma::colvec p_vec = p * arma::ones(3);
@@ -269,6 +289,5 @@ NumericVector mse_compare_default_classes(double p , double r, int n,
      << r << 1 << arma::endr;
   
   NumericVector out = mse_compare_classes(b, p_vec, Ve, Vz, n, n_reps);
-  return(out);
-  
+  return(out);  
 }
