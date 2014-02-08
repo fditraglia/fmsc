@@ -97,8 +97,8 @@ fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y,
 #  z          matrix of obs. for instruments
 #---------------------------------------------------
 # Initializes:
-#    n_z, n, xx, g_sq, s_e_sq_tsls, 
-#    s_x_sq, s_v_sq, tau, ols_estimate,
+#    n_z, n, xx, g_sq, s_e_sq_ols, s_e_tsls, 
+#    s_x_sq, s_v_sq, tau, ols_estimate, ols_resid,
 #    tsls_estimate, tsls_resid, first_stage_coefs, 
 #    zx, Qz, Rz, Rzinv, zz_inv
 #-------------------------------------------------*/
