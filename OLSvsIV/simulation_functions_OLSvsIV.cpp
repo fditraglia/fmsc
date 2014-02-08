@@ -221,7 +221,7 @@ NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve,
               arma::mat Vz, int n, int n_reps){
 //Function to run n_reps of the simulation study and calculate the MSE
 //of various estimators
-  
+
   arma::colvec ols(n_reps);
   arma::colvec tsls(n_reps);
   arma::colvec fmsc(n_reps);
@@ -243,12 +243,14 @@ NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve,
     
   }
   
-  double MSE_ols = MSE_trim(ols, b, 0);
-  double MSE_tsls = MSE_trim(tsls, b, 0);
-  double MSE_fmsc = MSE_trim(fmsc, b, 0);
-  double MSE_DHW90 = MSE_trim(DHW90, b, 0);
-  double MSE_DHW95 = MSE_trim(DHW95, b, 0);
-  double MSE_star = MSE_trim(AVG, b, 0);
+  double const trim_frac = 0; //Change this if you want trimmed MSE
+  
+  double MSE_ols = MSE_trim(ols, b, trim_frac);
+  double MSE_tsls = MSE_trim(tsls, b, trim_frac);
+  double MSE_fmsc = MSE_trim(fmsc, b, trim_frac);
+  double MSE_DHW90 = MSE_trim(DHW90, b, trim_frac);
+  double MSE_DHW95 = MSE_trim(DHW95, b, trim_frac);
+  double MSE_star = MSE_trim(AVG, b, trim_frac);
   
   //Create and return vector of results
   NumericVector out = NumericVector::create(MSE_ols, MSE_tsls, MSE_fmsc, 
