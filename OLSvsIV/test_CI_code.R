@@ -1,5 +1,6 @@
 library(Rcpp)
 library(RcppArmadillo)
+library(parallel)
 
 setwd("~/fmsc/OLSvsIV")
 sourceCpp("simulation_functions_OLSvsIV.cpp")
@@ -16,7 +17,7 @@ sum(abs(foo - bar))
 r.seq <- seq(0, 0.2, 0.01)
 
 set.seed(4938)
-bar <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse_compare_default_classes(0.3, r, 250, 10000)}, mc.set.seed = FALSE))
+system.time(bar <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse_compare_default_cpp(0.3, r, 250, 10000)}, mc.set.seed = FALSE)))
 
 
 matplot(r.seq, apply(bar, 2, sqrt), xlab = 'Cor(e,v)', ylab = 'RMSE',
