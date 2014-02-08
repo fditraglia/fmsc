@@ -81,7 +81,7 @@ class fmsc_OLS_IV {
     double b_AVG();       //return feasible averaging estimate
     arma::rowvec CI_ols(double);  //Confidence interval (CI) for ols
     arma::rowvec CI_tsls(double); //CI for tsls
-//    arma::rowvec CI_fmsc_naive(double); //Naive CI post-fmsc
+    arma::rowvec CI_fmsc_naive(double); //Naive CI post-fmsc
 //    arma::rowvec CI_fmsc_correct(double, int); //Corrected CI post-fmsc
 };
   
@@ -221,14 +221,22 @@ arma::rowvec fmsc_OLS_IV::CI_tsls(double level){
   out(1) = upper;
   return(out);
 }
-//
-//arma::rowvec fmsc_OLS_IV::CI_fmsc_naive(double level){
-////Member function of class fmsc_OLS_IV
-////Returns naive confidence interval (lower, upper)
-////for post-FMSC estimator
-////Arguments: level = confidence level (0.95 is a 95% CI)
-//}
-//
+
+arma::rowvec fmsc_OLS_IV::CI_fmsc_naive(double level){
+//Member function of class fmsc_OLS_IV
+//Returns naive confidence interval (lower, upper)
+//for post-FMSC estimator
+//Arguments: level = confidence level (0.95 is a 95% CI)
+    arma::rowvec out(2);
+    if(Tfmsc() < 2){
+      out = CI_ols(level);
+    } else {
+      out = CI_tsls(level);
+    }
+  return(out);
+}
+
+
 //arma::rowvec fmsc_OLS_IV::CI_fmsc_correct(double level, int n_sims){
 ////Member function of class fmsc_OLS_IV
 ////Returns corrected confidence interval (lower, upper)
@@ -351,7 +359,7 @@ arma::mat test_CIs_cpp(double p , double r, int n,
   for(int i = 0; i < n_reps; i++){
     dgp_OLS_IV sim(b, p_vec, Ve, Vz, n);
     fmsc_OLS_IV est(sim.x, sim.y, sim.z);
-    out.row(i) = est.CI_tsls(0.95); 
+    out.row(i) = est.CI_fmsc_naive(0.95); 
   }
   return(out);  
 }

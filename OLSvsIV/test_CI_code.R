@@ -15,7 +15,7 @@ sum(abs(foo - bar))
 
 
 
-system.time(testy <- test_CIs_cpp(1, 0.2, 500, 10000))
+system.time(testy <- test_CIs_cpp(0.3, 0.15, 250, 10000))
 sum(testy[,1] < 1 & testy[,2] > 1)/nrow(testy)
 
 
