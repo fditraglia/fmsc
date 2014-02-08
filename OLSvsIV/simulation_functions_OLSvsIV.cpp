@@ -79,6 +79,10 @@ class fmsc_OLS_IV {
     double b_fmsc();      //return FMSC-selected estimate
     double b_DHW(double); //return DHW pre-test estimate
     double b_AVG();       //return feasible averaging estimate
+//    arma::rowvec CI_ols(double);  //Confidence interval (CI) for ols
+//    arma::rowvec CI_tsls(double); //CI for tsls
+//    arma::rowvec CI_fmsc_naive(double); //Naive CI post-fmsc
+//    arma::rowvec CI_fmsc_correct(double, int); //Corrected CI post-fmsc
 };
   
 
@@ -155,7 +159,8 @@ double fmsc_OLS_IV::b_fmsc(){
     
 double fmsc_OLS_IV::b_DHW(double level){
 //Member function of class fmsc_OLS_IV
-//Calculates DHW pre-test estimator at a given confidence level
+//Calculates DHW pre-test estimator
+//Arguments: level = confidence level (0.95 is a 5% test)
   double out;
   double DHW_crit = R::qchisq(level, 1, 1, 0);
   if(Tfmsc() > DHW_crit){
@@ -187,6 +192,33 @@ double fmsc_OLS_IV::b_AVG(){
 
 
 
+//arma::rowvec fmsc_OLS_IV::CI_ols(double level){
+////Member function of class fmsc_OLS_IV
+////Returns confidence interval (lower, upper) for OLS estimator
+////Arguments: level = confidence level (0.95 is a 95% CI)
+//}
+
+//arma::rowvec fmsc_OLS_IV::CI_tsls(double level){
+////Member function of class fmsc_OLS_IV
+////Returns confidence interval (lower, upper) for TSLS estimator
+////Arguments: level = confidence level (0.95 is a 95% CI)
+//}
+//
+//arma::rowvec fmsc_OLS_IV::CI_fmsc_naive(double level){
+////Member function of class fmsc_OLS_IV
+////Returns naive confidence interval (lower, upper)
+////for post-FMSC estimator
+////Arguments: level = confidence level (0.95 is a 95% CI)
+//}
+//
+//arma::rowvec fmsc_OLS_IV::CI_fmsc_correct(double level, int n_sims){
+////Member function of class fmsc_OLS_IV
+////Returns corrected confidence interval (lower, upper)
+////for post-FMSC estimator
+////Arguments: level = confidence level (0.95 is a 95% CI)
+//}
+
+
 
 
 
@@ -210,8 +242,7 @@ double MSE_trim(arma::colvec x, double truth, double trim){
   arma::colvec errors = x_trimmed - truth_vec;
   double MSE = arma::dot(errors, errors) / errors.n_elem;
   
-  return(MSE);
-  
+  return(MSE);  
 }
 
 
