@@ -1,11 +1,11 @@
 /*------------------------------------------------------------
-Filename:        simulation_functions_OLSvsIV.cpp
-Author:          Frank DiTraglia
-First Version:   2014-02-08
-This Version:    2014-02-07
---------------------------------------------------------------
-C++ code to carry out the OLS vs. IV simulation experiments.
-------------------------------------------------------------*/
+# Filename:        simulation_functions_OLSvsIV.cpp
+# Author:          Frank DiTraglia
+# First Version:   2014-01-22
+# This Version:    2014-02-08
+#--------------------------------------------------------------
+# C++ code to carry out the OLS vs. IV simulation experiments.
+#------------------------------------------------------------*/
   
 // [[Rcpp::depends(RcppArmadillo)]]
 
