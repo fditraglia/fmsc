@@ -271,7 +271,6 @@ double MSE_trim(arma::colvec x, double truth, double trim){
   return(MSE);  
 }
 
-// [[Rcpp::export]]
 double MAD(arma::colvec x, double truth){
 /*-------------------------------------------------------
 # Calculates median absolute deviation.
@@ -285,7 +284,6 @@ double MAD(arma::colvec x, double truth){
 }
 
 
-// [[Rcpp::export]]
 double coverage_prob(arma::mat conf_intervals, double truth){
 /*-------------------------------------------------------
 # Calculates the coverage probability of a matrix of
@@ -309,8 +307,6 @@ double coverage_prob(arma::mat conf_intervals, double truth){
 }
 
 
-
-// [[Rcpp::export]]
 double median_width(arma::mat conf_intervals){
 /*-------------------------------------------------------
 # Calculates the median width of a matrix of confidence
