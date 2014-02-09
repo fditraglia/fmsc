@@ -68,8 +68,8 @@ class fmsc_OLS_IV {
     double xx, g_sq, s_e_sq_ols, s_e_sq_tsls, s_x_sq, 
         s_v_sq, tau, tau_var, ols_estimate, tsls_estimate;
     arma::colvec ols_resid, tsls_resid, first_stage_coefs, zx;
-    arma::mat zz_inv, zz, M_sims;
-    void draw_M(int); //Initialize M_sims for later use
+    arma::mat zz_inv, zz, CI_sims;
+    void draw_CI_sims(int); //Initialize CI_sims for later use
   public:
     //class constructor
     fmsc_OLS_IV(arma::colvec, arma::colvec, arma::mat);
@@ -255,18 +255,31 @@ arma::rowvec fmsc_OLS_IV::CI_tau(double delta){
 }
 
 
-void fmsc_OLS_IV::draw_M(int n_sims){
+void fmsc_OLS_IV::draw_CI_sims(int n_sims){
 //Member function of class fmsc_OLS_IV
-//Initializes the matrix M_sims for use by other member functions
+//Initializes the matrix CI_sims for use by other member functions
   RNGScope scope;
+  
+  //Construct variance matrix of M
   arma::mat Omega(n_z + 1, n_z + 1);
   Omega(0, 0) = s_x_sq;
   Omega(0, arma::span(1, n_z)) = arma::trans(zx) / n;
   Omega(arma::span(0, n_z), 0) = zx / n;
   Omega(arma::span(1, n_z), arma::span(1, n_z)) = zz / n;
   Omega = s_e_sq_tsls * Omega;
-  arma::colvec stdnorm_errors = rnorm(n_sims * Omega.n_rows);
-  M_sims = arma::chol(Omega) * reshape(stdnorm_errors, Omega.n_rows, n);
+  
+  //Construct matrix D that multiplies M
+  arma::mat D(3, n_z + 1);
+  D(0, 0) = 1 / s_x_sq;
+  D(0, arma::span(1, n_z)) = arma::zeros<arma::rowvec>(n_z);
+  D(1, 0) = 0;
+  D(1, arma::span(1, n_z)) = arma::trans(first_stage_coefs) / g_sq;
+  D(2, 0) = 1;
+  D(2, arma::span(1, n_z)) = -1 * s_x_sq * arma::trans(first_stage_coefs) / g_sq;
+  
+  //Draw simulations
+  arma::colvec stdnorm = rnorm(n_sims * Omega.n_rows);
+  CI_sims = D * arma::chol(Omega) * reshape(stdnorm, Omega.n_rows, n);
 }
 
 
