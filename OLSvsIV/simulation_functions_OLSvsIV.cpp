@@ -68,7 +68,8 @@ class fmsc_OLS_IV {
     double xx, g_sq, s_e_sq_ols, s_e_sq_tsls, s_x_sq, 
         s_v_sq, tau, tau_var, ols_estimate, tsls_estimate;
     arma::colvec ols_resid, tsls_resid, first_stage_coefs, zx;
-    arma::mat Qz, Rz, Rzinv, zz_inv;
+    arma::mat zz_inv, zz;//, M_sims;
+//    void draw_M(int); //Initialize M_sims for later use
   public:
     //class constructor
     fmsc_OLS_IV(arma::colvec, arma::colvec, arma::mat);
@@ -101,7 +102,7 @@ fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y,
 #    n_z, n, xx, g_sq, s_e_sq_ols, s_e_tsls, 
 #    s_x_sq, s_v_sq, tau, tau_var, ols_estimate, 
 #    ols_resid, tsls_estimate, tsls_resid, 
-#    first_stage_coefs, zx, Qz, Rz, Rzinv, zz_inv
+#    first_stage_coefs, zx, zz_inv, zz
 #-------------------------------------------------*/
   n_z = z.n_cols;
   n = z.n_rows;
@@ -114,9 +115,11 @@ fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y,
   tsls_estimate = arma::as_scalar(arma::solve(z * first_stage_coefs, y)); 
   tsls_resid = y - x * tsls_estimate; 
   
+  arma::mat Qz, Rz, Rzinv;
   arma::qr_econ(Qz, Rz, z);
   Rzinv = arma::inv(arma::trimatu(Rz));
   zz_inv = Rzinv * arma::trans(Rzinv);
+  zz = trans(Rz) * Rz;
   zx = arma::trans(z) * x;
   g_sq = arma::as_scalar(arma::trans(zx) * zz_inv * zx) / n;
   
@@ -252,6 +255,15 @@ arma::rowvec fmsc_OLS_IV::CI_tau(double delta){
 }
 
 
+//void fmsc_OLS_IV::draw_M(int n_sims){
+////Member function of class fmsc_OLS_IV
+////Initializes the matrix M_sims for use by other member functions
+//  arma::mat Omega(n_z + 1, n_z + 1);
+//  Omega(0, 0) = s_x_sq;
+//  Omega(0, arma::span(1, n_z)) =
+//}
+
+
 //arma::rowvec fmsc_OLS_IV::CI_fmsc_correct(double level, int n_sims){
 ////Member function of class fmsc_OLS_IV
 ////Returns corrected confidence interval (lower, upper)
@@ -272,7 +284,6 @@ double MSE_trim(arma::colvec x, double truth, double trim){
 #  trim     fraction of estimates to discard (half from
 #             each tail) before calculating MSE
 #-------------------------------------------------------*/
-
   int k = x.n_elem;
   int tail_drop = ceil(k * trim / 2);
   
@@ -359,8 +370,8 @@ NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve,
     ols(i) = est.b_ols();
     tsls(i) = est.b_tsls();
     fmsc(i) = est.b_fmsc();
-    DHW90(i) = est.b_DHW(0.90);
-    DHW95(i) = est.b_DHW(0.95);
+    DHW90(i) = est.b_DHW(0.1);
+    DHW95(i) = est.b_DHW(0.05);
     AVG(i) = est.b_AVG();
     
   }
