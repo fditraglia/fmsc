@@ -272,6 +272,20 @@ double MSE_trim(arma::colvec x, double truth, double trim){
 }
 
 
+double MAD(arma::colvec x, double truth){
+/*-------------------------------------------------------
+# Calculates median absolute deviation.
+#--------------------------------------------------------
+#  x        vector of estimates
+#  truth    true value of the parameter
+#-------------------------------------------------------*/
+  arma::colvec truth_vec = truth * arma::ones(x.n_rows);
+  arma::colvec abs_dev = abs(x - truth_vec);
+  return(arma::median(abs_dev)); 
+}
+
+
+
 
 // [[Rcpp::export]]
 NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve, 
