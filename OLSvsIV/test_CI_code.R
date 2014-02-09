@@ -18,7 +18,8 @@ sum(abs(foo - bar))
 system.time(testy <- test_CIs_cpp(0.3, 0.15, 250, 10000))
 sum(testy[,1] < 1 & testy[,2] > 1)/nrow(testy)
 coverage_prob(testy, 1)
-
+median(testy[,2] - testy[,1])
+median_width(testy)
 
 r.seq <- seq(0, 0.2, 0.01)
 

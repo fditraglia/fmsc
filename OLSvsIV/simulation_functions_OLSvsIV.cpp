@@ -284,6 +284,7 @@ double MAD(arma::colvec x, double truth){
   return(arma::median(abs_dev)); 
 }
 
+
 // [[Rcpp::export]]
 double coverage_prob(arma::mat conf_intervals, double truth){
 /*-------------------------------------------------------
@@ -307,6 +308,22 @@ double coverage_prob(arma::mat conf_intervals, double truth){
   return(arma::sum(cover) / cover.n_elem);
 }
 
+
+
+// [[Rcpp::export]]
+double median_width(arma::mat conf_intervals){
+/*-------------------------------------------------------
+# Calculates the median width of a matrix of confidence
+# intervals.
+#--------------------------------------------------------
+#  conf_intervals   matrix of confidence intervals in 
+#                     which each row is a CI, the 1st
+#                     column is the lower limit, and the
+#                     2nd column is the upper limit 
+#-------------------------------------------------------*/
+  arma::colvec width = conf_intervals.col(1) - conf_intervals.col(0);
+  return(arma::median(width));
+}
 
 
 
