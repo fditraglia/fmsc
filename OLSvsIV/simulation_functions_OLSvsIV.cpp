@@ -66,7 +66,7 @@ class fmsc_OLS_IV {
   private:
     int n_z, n;
     double xx, g_sq, s_e_sq_ols, s_e_sq_tsls, s_x_sq, 
-        s_v_sq, tau, ols_estimate, tsls_estimate;
+        s_v_sq, tau, tau_var, ols_estimate, tsls_estimate;
     arma::colvec ols_resid, tsls_resid, first_stage_coefs, zx;
     arma::mat Qz, Rz, Rzinv, zz_inv;
   public:
@@ -99,9 +99,9 @@ fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y,
 #---------------------------------------------------
 # Initializes:
 #    n_z, n, xx, g_sq, s_e_sq_ols, s_e_tsls, 
-#    s_x_sq, s_v_sq, tau, ols_estimate, ols_resid,
-#    tsls_estimate, tsls_resid, first_stage_coefs, 
-#    zx, Qz, Rz, Rzinv, zz_inv
+#    s_x_sq, s_v_sq, tau, tau_var, ols_estimate, 
+#    ols_resid, tsls_estimate, tsls_resid, 
+#    first_stage_coefs, zx, Qz, Rz, Rzinv, zz_inv
 #-------------------------------------------------*/
   n_z = z.n_cols;
   n = z.n_rows;
@@ -125,6 +125,7 @@ fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y,
   s_x_sq = xx / n;
   s_v_sq = s_x_sq - g_sq;
   tau = arma::dot(x, tsls_resid) / sqrt(n);
+  tau_var = s_e_sq_tsls * s_x_sq * (s_x_sq / g_sq - 1);
 }
 
 double fmsc_OLS_IV::b_ols(){
@@ -240,7 +241,7 @@ arma::rowvec fmsc_OLS_IV::CI_tau(double delta){
 //Returns CI (lower, upper) for bias parameter tau
 //Arguments: delta = significance level (0.05 = 95% CI)
   double z_quantile = R::qnorm(1 - delta/2, 0, 1, 1, 0);
-  double SE_tau = sqrt(s_e_sq_tsls * s_x_sq * (s_x_sq / g_sq - 1));
+  double SE_tau = sqrt(tau_var);
   double lower = tau - z_quantile * SE_tau;
   double upper = tau + z_quantile * SE_tau;
   
