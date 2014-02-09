@@ -157,12 +157,12 @@ double fmsc_OLS_IV::b_fmsc(){
   return(out);
 }
     
-double fmsc_OLS_IV::b_DHW(double level){
+double fmsc_OLS_IV::b_DHW(double alpha){
 //Member function of class fmsc_OLS_IV
 //Calculates DHW pre-test estimator
-//Arguments: level = confidence level (0.95 is a 5% test)
+//Arguments: alpha = significance level for test
   double out;
-  double DHW_crit = R::qchisq(level, 1, 1, 0);
+  double DHW_crit = R::qchisq(1 - alpha, 1, 1, 0);
   if(Tfmsc() > DHW_crit){
     out = tsls_estimate;
   }else{
@@ -190,11 +190,10 @@ double fmsc_OLS_IV::b_AVG(){
   return(out);
 }
 
-arma::rowvec fmsc_OLS_IV::CI_ols(double level){
+arma::rowvec fmsc_OLS_IV::CI_ols(double alpha){
 //Member function of class fmsc_OLS_IV
 //Returns confidence interval (lower, upper) for OLS estimator
-//Arguments: level = confidence level (0.95 is a 95% CI)
-  double alpha = 1 - level;
+//Arguments: alpha = significance level (0.05 = 95% CI)
   double z_quantile = R::qnorm(1 - alpha/2, 0, 1, 1, 0);
   double SE_ols = sqrt(s_e_sq_ols / (n * s_x_sq));
   double lower = ols_estimate - z_quantile * SE_ols;
@@ -206,11 +205,10 @@ arma::rowvec fmsc_OLS_IV::CI_ols(double level){
   return(out);
 }
 
-arma::rowvec fmsc_OLS_IV::CI_tsls(double level){
+arma::rowvec fmsc_OLS_IV::CI_tsls(double alpha){
 //Member function of class fmsc_OLS_IV
 //Returns confidence interval (lower, upper) for TSLS estimator
-//Arguments: level = confidence level (0.95 is a 95% CI)
-  double alpha = 1 - level;
+//Arguments: alpha = significance level (0.05 = 95% CI)
   double z_quantile = R::qnorm(1 - alpha/2, 0, 1, 1, 0);
   double SE_tsls = sqrt(s_e_sq_tsls / (n * g_sq));
   double lower = tsls_estimate - z_quantile * SE_tsls;
@@ -222,16 +220,16 @@ arma::rowvec fmsc_OLS_IV::CI_tsls(double level){
   return(out);
 }
 
-arma::rowvec fmsc_OLS_IV::CI_fmsc_naive(double level){
+arma::rowvec fmsc_OLS_IV::CI_fmsc_naive(double alpha){
 //Member function of class fmsc_OLS_IV
 //Returns naive confidence interval (lower, upper)
 //for post-FMSC estimator
-//Arguments: level = confidence level (0.95 is a 95% CI)
+//Arguments: alpha = significance level (0.05 = 95% CI)
     arma::rowvec out(2);
     if(Tfmsc() < 2){
-      out = CI_ols(level);
+      out = CI_ols(alpha);
     } else {
-      out = CI_tsls(level);
+      out = CI_tsls(alpha);
     }
   return(out);
 }
@@ -396,6 +394,7 @@ NumericVector mse_compare_default_cpp(double p , double r, int n,
 // [[Rcpp::export]]
 arma::mat test_CIs_cpp(double p , double r, int n, 
                                         int n_reps){
+//Function to test the confidence interval code
   double b = 1;
   arma::colvec p_vec = p * arma::ones(3);
   arma::mat Vz = arma::eye(3, 3);
@@ -409,7 +408,7 @@ arma::mat test_CIs_cpp(double p , double r, int n,
   for(int i = 0; i < n_reps; i++){
     dgp_OLS_IV sim(b, p_vec, Ve, Vz, n);
     fmsc_OLS_IV est(sim.x, sim.y, sim.z);
-    out.row(i) = est.CI_fmsc_naive(0.95); 
+    out.row(i) = est.CI_fmsc_naive(0.05); 
   }
   return(out);  
 }
