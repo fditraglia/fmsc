@@ -84,6 +84,11 @@ class fmsc_OLS_IV {
     arma::rowvec CI_fmsc_naive(double); //Naive CI post-fmsc
     arma::rowvec CI_tau(double); //CI for bias parameter tau
     void draw_CI_sims(int); //Initialize CI_sims for use by other members
+//    arma::rowvec CI_Lambda_fmsc(double, double); //Simulation-based CI for
+//                    //Lambda post-FMSC evaluated at particular value of tau
+//    arma::rowvec CI_Lambda_AVG(double, double); //Simulation-based CI for
+//                    //Lambda based on the averaging estimator evaluated 
+//                    //at particular value of tau
 //    arma::rowvec CI_fmsc_correct(double, int); //Corrected CI post-fmsc
 };
   
@@ -281,6 +286,32 @@ void fmsc_OLS_IV::draw_CI_sims(int n_sims){
   arma::colvec stdnorm = rnorm(n_sims * Omega.n_rows);
   CI_sims = D * arma::chol(Omega) * reshape(stdnorm, Omega.n_rows, n);
 }
+
+
+//arma::rowvec fmsc_OLS_IV::CI_Lambda_fmsc(double alpha, double tau_star){
+////Member function of class fmsc_OLS_IV
+////Constructs a (1 - alpha) * 100% CI for Lambda at a given value of tau 
+////based on FMSC selection. This function assumes that draw_CI_sims has
+////already been called so that the data member CI_sims is available.
+//  
+//  arma::rowvec out(2);
+//  out(0) = lower;
+//  out(1) = upper;
+//  return(out);
+//}
+//
+//arma::rowvec fmsc_OLS_IV::CI_Lambda_AVG(double alpha, double tau_star){
+////Member function of class fmsc_OLS_IV
+////Constructs a (1 - alpha) * 100% CI for Lambda at a given value of tau 
+////based on the feasible version of optimal AMSE averaging. This function 
+////assumes that draw_CI_sims has already been called so that the data member
+////CI_sims is available.
+//  
+//  arma::rowvec out(2);
+//  out(0) = lower;
+//  out(1) = upper;
+//  return(out);
+//}
 
 
 //arma::rowvec fmsc_OLS_IV::CI_fmsc_correct(double level, int n_sims){

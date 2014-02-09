@@ -28,3 +28,4 @@ system.time(bar <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse_comp
 matplot(r.seq, apply(bar, 2, sqrt), xlab = 'Cor(e,v)', ylab = 'RMSE',
         type = 'l', lty = 1, lwd = 2)
 legend("bottomright", c("OLS", "2SLS", "FMSC", "AVG", "DHW90", "DHW95"), fill = 1:6)
+
