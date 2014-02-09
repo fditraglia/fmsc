@@ -69,7 +69,6 @@ class fmsc_OLS_IV {
         s_v_sq, tau, tau_var, ols_estimate, tsls_estimate;
     arma::colvec ols_resid, tsls_resid, first_stage_coefs, zx;
     arma::mat zz_inv, zz, CI_sims;
-    void draw_CI_sims(int); //Initialize CI_sims for later use
   public:
     //class constructor
     fmsc_OLS_IV(arma::colvec, arma::colvec, arma::mat);
@@ -84,6 +83,7 @@ class fmsc_OLS_IV {
     arma::rowvec CI_tsls(double); //CI for tsls
     arma::rowvec CI_fmsc_naive(double); //Naive CI post-fmsc
     arma::rowvec CI_tau(double); //CI for bias parameter tau
+    void draw_CI_sims(int); //Initialize CI_sims for use by other members
 //    arma::rowvec CI_fmsc_correct(double, int); //Corrected CI post-fmsc
 };
   
@@ -291,8 +291,29 @@ void fmsc_OLS_IV::draw_CI_sims(int n_sims){
 //}
 
 
-
-
+// [[Rcpp::export]]
+double sample_quantile(arma::colvec x, double p){
+/*-------------------------------------------------------
+# Calculates a sample quantile
+#--------------------------------------------------------
+#  x        vector of data
+#  p        probability for desired quantile (e.g. 0.25
+#             gives the first quartile, 0.5 the median)
+#--------------------------------------------------------
+# Details:
+#           There are many competing definitions of
+#           sample quantiles (see Hyndman & Fan, 1996).
+#           Here we simply use the R default definition,
+#           which corresponds to Definition 7 in Hyndman
+#           & Fan. See ?quantile in R for more details.
+#-------------------------------------------------------*/
+  int n = x.n_elem;
+  double m = 1 - p;
+  int j = floor(n * p + m);
+  double g = n * p + m - j;
+  arma::colvec x_sort = arma::sort(x);
+  return((1 - g) * x_sort(j - 1) + g * x_sort(j));
+}
 
 double MSE_trim(arma::colvec x, double truth, double trim){
 /*-------------------------------------------------------
