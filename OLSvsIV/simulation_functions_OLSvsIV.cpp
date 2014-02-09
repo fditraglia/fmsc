@@ -82,6 +82,7 @@ class fmsc_OLS_IV {
     arma::rowvec CI_ols(double);  //Confidence interval (CI) for ols
     arma::rowvec CI_tsls(double); //CI for tsls
     arma::rowvec CI_fmsc_naive(double); //Naive CI post-fmsc
+    arma::rowvec CI_tau(double); //CI for bias parameter tau
 //    arma::rowvec CI_fmsc_correct(double, int); //Corrected CI post-fmsc
 };
   
@@ -231,6 +232,21 @@ arma::rowvec fmsc_OLS_IV::CI_fmsc_naive(double alpha){
     } else {
       out = CI_tsls(alpha);
     }
+  return(out);
+}
+
+arma::rowvec fmsc_OLS_IV::CI_tau(double delta){
+//Member function of class fmsc_OLS_IV
+//Returns CI (lower, upper) for bias parameter tau
+//Arguments: delta = significance level (0.05 = 95% CI)
+  double z_quantile = R::qnorm(1 - delta/2, 0, 1, 1, 0);
+  double SE_tau = sqrt(s_e_sq_tsls * s_x_sq * (s_x_sq / g_sq - 1));
+  double lower = tau - z_quantile * SE_tau;
+  double upper = tau + z_quantile * SE_tau;
+  
+  arma::rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
   return(out);
 }
 
