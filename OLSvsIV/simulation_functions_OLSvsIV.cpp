@@ -291,7 +291,6 @@ void fmsc_OLS_IV::draw_CI_sims(int n_sims){
 //}
 
 
-// [[Rcpp::export]]
 double sample_quantile(arma::colvec x, double p){
 /*-------------------------------------------------------
 # Calculates a sample quantile

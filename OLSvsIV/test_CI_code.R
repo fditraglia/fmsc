@@ -13,12 +13,6 @@ system.time(bar <- mse_compare_default_cpp(0.3, 0.2, 250, 10000))
 
 sum(abs(foo - bar))
 
-#Test the quantile function
-foobar <- rnorm(423)
-quantile(foobar, 0.12345) - sample_quantile(foobar, 0.12345)
-
-
-
 
 system.time(testy <- test_CIs_cpp(0.3, 0.15, 250, 10000))
 sum(testy[,1] < 1 & testy[,2] > 1)/nrow(testy)
