@@ -46,7 +46,7 @@ dgp_OLS_IV::dgp_OLS_IV(double b, arma::colvec p, arma::mat Ve,
   int n_z = Vz.n_cols;
   
   arma::colvec stdnorm_errors = rnorm(n * 2);
-  arma::mat errors = trans(arma::chol(Ve) * reshape(stdnorm_errors, 2, n));
+  arma::mat errors = arma::trans(arma::chol(Ve) * reshape(stdnorm_errors, 2, n));
   arma::colvec stdnorm_z = rnorm(n * n_z);
   
   z = trans(arma::chol(Vz) * reshape(stdnorm_z, n_z, n));
@@ -68,8 +68,8 @@ class fmsc_OLS_IV {
     double xx, g_sq, s_e_sq_ols, s_e_sq_tsls, s_x_sq, 
         s_v_sq, tau, tau_var, ols_estimate, tsls_estimate;
     arma::colvec ols_resid, tsls_resid, first_stage_coefs, zx;
-    arma::mat zz_inv, zz;//, M_sims;
-//    void draw_M(int); //Initialize M_sims for later use
+    arma::mat zz_inv, zz, M_sims;
+    void draw_M(int); //Initialize M_sims for later use
   public:
     //class constructor
     fmsc_OLS_IV(arma::colvec, arma::colvec, arma::mat);
@@ -119,7 +119,7 @@ fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y,
   arma::qr_econ(Qz, Rz, z);
   Rzinv = arma::inv(arma::trimatu(Rz));
   zz_inv = Rzinv * arma::trans(Rzinv);
-  zz = trans(Rz) * Rz;
+  zz = trans(trimatu(Rz)) * trimatu(Rz);
   zx = arma::trans(z) * x;
   g_sq = arma::as_scalar(arma::trans(zx) * zz_inv * zx) / n;
   
@@ -255,13 +255,19 @@ arma::rowvec fmsc_OLS_IV::CI_tau(double delta){
 }
 
 
-//void fmsc_OLS_IV::draw_M(int n_sims){
-////Member function of class fmsc_OLS_IV
-////Initializes the matrix M_sims for use by other member functions
-//  arma::mat Omega(n_z + 1, n_z + 1);
-//  Omega(0, 0) = s_x_sq;
-//  Omega(0, arma::span(1, n_z)) =
-//}
+void fmsc_OLS_IV::draw_M(int n_sims){
+//Member function of class fmsc_OLS_IV
+//Initializes the matrix M_sims for use by other member functions
+  RNGScope scope;
+  arma::mat Omega(n_z + 1, n_z + 1);
+  Omega(0, 0) = s_x_sq;
+  Omega(0, arma::span(1, n_z)) = arma::trans(zx) / n;
+  Omega(arma::span(0, n_z), 0) = zx / n;
+  Omega(arma::span(1, n_z), arma::span(1, n_z)) = zz / n;
+  Omega = s_e_sq_tsls * Omega;
+  arma::colvec stdnorm_errors = rnorm(n_sims * Omega.n_rows);
+  M_sims = arma::chol(Omega) * reshape(stdnorm_errors, Omega.n_rows, n);
+}
 
 
 //arma::rowvec fmsc_OLS_IV::CI_fmsc_correct(double level, int n_sims){
