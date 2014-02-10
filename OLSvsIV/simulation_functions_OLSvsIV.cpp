@@ -187,6 +187,9 @@ class fmsc_OLS_IV {
     void draw_CI_sims(int); //Initialize CI_sims for use by other members
     arma::rowvec CI_Lambda_fmsc(double, double); //Simulation-based CI for
                     //Lambda post-FMSC evaluated at particular value of tau
+    arma::rowvec CI_fmsc_correct_1step(double); //Simulation-based CI for 
+                    //b_fmsc that simply plugs in tau-hat rather than
+                    //constructing a CI for tau and taking the sup and inf
 //    arma::rowvec CI_Lambda_AVG(double, double); //Simulation-based CI for
 //                    //Lambda based on the averaging estimator evaluated 
 //                    //at particular value of tau
@@ -413,6 +416,21 @@ arma::rowvec fmsc_OLS_IV::CI_Lambda_fmsc(double alpha, double tau_star){
   return(out);
 }
 
+arma::rowvec fmsc_OLS_IV::CI_fmsc_correct_1step(double alpha){
+//Member function of class fmsc_OLS_IV
+//Returns 1-step corrected confidence interval (lower, upper)
+//This function assumes that draw_CI_sims has already been called
+  arma::rowvec Lambda_interval = CI_Lambda_fmsc(alpha, tau);
+  double Lambda_lower = Lambda_interval(0);
+  double Lambda_upper = Lambda_interval(1);
+  double lower = b_fmsc() - Lambda_upper / sqrt(n);
+  double upper = b_fmsc() - Lambda_lower / sqrt(n);
+  arma::rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
+
 //arma::rowvec fmsc_OLS_IV::CI_Lambda_AVG(double alpha, double tau_star){
 ////Member function of class fmsc_OLS_IV
 ////Constructs a (1 - alpha) * 100% CI for Lambda at a given value of tau 
@@ -529,7 +547,8 @@ arma::mat test_CIs_cpp(double p , double r, int n,
     fmsc_OLS_IV est(sim.x, sim.y, sim.z);
     
     est.draw_CI_sims(500);
-    out.row(i) = est.CI_Lambda_fmsc(0.05, est.get_tau());
+    out.row(i) = est.CI_fmsc_correct_1step(0.05);
+    //out.row(i) = est.CI_Lambda_fmsc(0.05, est.get_tau());
     //out.row(i) = est.CI_tau(0.1);
     //out.row(i) = est.CI_fmsc_naive(0.05); 
   }
