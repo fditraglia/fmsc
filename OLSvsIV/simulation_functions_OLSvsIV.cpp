@@ -186,11 +186,14 @@ class fmsc_OLS_IV {
                     //Lambda post-FMSC evaluated at particular value of tau
     arma::rowvec CI_fmsc_correct_1step(double); //Simulation-based CI for 
                     //b_fmsc that simply plugs in tau-hat rather than
-                    //constructing a CI for tau and taking the sup and inf
+                    //constructing a CI for tau and taking the max and min
+    arma::rowvec CI_fmsc_correct(double, double, int); //Simulation-based CI for
+                    //b_fmsc based on the two-step procedure that takes the
+                    //max and min of intervals conditional on tau for each 
+                    //value in the CI for tau
 //    arma::rowvec CI_Lambda_AVG(double, double); //Simulation-based CI for
 //                    //Lambda based on the averaging estimator evaluated 
 //                    //at particular value of tau
-//    arma::rowvec CI_fmsc_correct(double, int); //Corrected CI post-fmsc
 };
   
 
@@ -428,6 +431,39 @@ arma::rowvec fmsc_OLS_IV::CI_fmsc_correct_1step(double alpha){
   return(out);
 }
 
+
+arma::rowvec fmsc_OLS_IV::CI_fmsc_correct(double alpha, 
+                                  double delta, int n_grid){
+//Member function of class fmsc_OLS_IV
+//Returns corrected confidence interval (lower, upper)
+//for post-FMSC estimator with asymptotic coverage probability
+//of at least 1 - (alpha + delta)
+//This function assumes that draw_CI_sims has already been called
+//Arguments: 
+//  alpha       significance level for Lambda CI conditional on tau
+//  delta       significance level for tau confidence interval
+  arma::rowvec tau_interval = CI_tau(delta);
+  double tau_lower = tau_interval(0);
+  double tau_upper = tau_interval(1);
+  arma::colvec tau_star = arma::linspace(tau_lower, tau_upper, n_grid);
+  arma::mat Lambda_CIs(n_grid, 2);
+  
+  for(int i = 0; i < n_grid; i++){
+    Lambda_CIs.row(i) = CI_Lambda_fmsc(alpha, tau_star(i));
+  }
+  
+  double Lambda_lower_min = arma::min(Lambda_CIs.col(0));
+  double Lambda_upper_max = arma::max(Lambda_CIs.col(1));
+  
+  double lower = b_fmsc() - Lambda_upper_max / sqrt(n);
+  double upper = b_fmsc() - Lambda_lower_min / sqrt(n);
+  arma::rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
+
+
 //arma::rowvec fmsc_OLS_IV::CI_Lambda_AVG(double alpha, double tau_star){
 ////Member function of class fmsc_OLS_IV
 ////Constructs a (1 - alpha) * 100% CI for Lambda at a given value of tau 
@@ -442,12 +478,6 @@ arma::rowvec fmsc_OLS_IV::CI_fmsc_correct_1step(double alpha){
 //}
 
 
-//arma::rowvec fmsc_OLS_IV::CI_fmsc_correct(double level, int n_sims){
-////Member function of class fmsc_OLS_IV
-////Returns corrected confidence interval (lower, upper)
-////for post-FMSC estimator
-////Arguments: level = confidence level (0.95 is a 95% CI)
-//}
 
 
 
@@ -469,15 +499,15 @@ NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve,
 
   for(int i = 0; i < n_reps; i++){
     
-    dgp_OLS_IV sim(b, p, Ve, Vz, n);
-    fmsc_OLS_IV est(sim.x, sim.y, sim.z);
+    dgp_OLS_IV sim_data(b, p, Ve, Vz, n);
+    fmsc_OLS_IV sim_results(sim_data.x, sim_data.y, sim_data.z);
 
-    ols(i) = est.b_ols();
-    tsls(i) = est.b_tsls();
-    fmsc(i) = est.b_fmsc();
-    DHW90(i) = est.b_DHW(0.1);
-    DHW95(i) = est.b_DHW(0.05);
-    AVG(i) = est.b_AVG();
+    ols(i) = sim_results.b_ols();
+    tsls(i) = sim_results.b_tsls();
+    fmsc(i) = sim_results.b_fmsc();
+    DHW90(i) = sim_results.b_DHW(0.1);
+    DHW95(i) = sim_results.b_DHW(0.05);
+    AVG(i) = sim_results.b_AVG();
     
   }
   
@@ -540,11 +570,12 @@ arma::mat test_CIs_cpp(double p , double r, int n,
   
   for(int i = 0; i < n_reps; i++){
     
-    dgp_OLS_IV sim(b, p_vec, Ve, Vz, n);
-    fmsc_OLS_IV est(sim.x, sim.y, sim.z);
+    dgp_OLS_IV sim_data(b, p_vec, Ve, Vz, n);
+    fmsc_OLS_IV sim_results(sim_data.x, sim_data.y, sim_data.z);
     
-    est.draw_CI_sims(500);
-    out.row(i) = est.CI_fmsc_correct_1step(0.05);
+    sim_results.draw_CI_sims(500);
+    out.row(i) = sim_results.CI_fmsc_correct(0.05, 0.05, 50);
+    //out.row(i) = est.CI_fmsc_correct_1step(0.05);
  
   }
   return(out);  
