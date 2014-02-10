@@ -184,16 +184,23 @@ class fmsc_OLS_IV {
     void draw_CI_sims(int); //Initialize CI_sims for use by other members
     arma::rowvec CI_Lambda_fmsc(double, double); //Simulation-based CI for
                     //Lambda post-FMSC evaluated at particular value of tau
-    arma::rowvec CI_fmsc_correct_1step(double); //Simulation-based CI for 
+    arma::rowvec CI_Lambda_AVG(double, double); //Simulation-based CI for
+                      //Lambda based on the averaging estimator evaluated 
+                      //at particular value of tau
+    arma::rowvec CI_fmsc_1step(double); //Simulation-based CI for 
                     //b_fmsc that simply plugs in tau-hat rather than
+                    //constructing a CI for tau and taking the max and min
+    arma::rowvec CI_AVG_1step(double); //Simulation-based CI for 
+                    //b_AVG that simply plugs in tau-hat rather than
                     //constructing a CI for tau and taking the max and min
     arma::rowvec CI_fmsc_correct(double, double, int); //Simulation-based CI for
                     //b_fmsc based on the two-step procedure that takes the
                     //max and min of intervals conditional on tau for each 
                     //value in the CI for tau
-//    arma::rowvec CI_Lambda_AVG(double, double); //Simulation-based CI for
-//                    //Lambda based on the averaging estimator evaluated 
-//                    //at particular value of tau
+    arma::rowvec CI_AVG_correct(double, double, int); //Simulation-based CI for
+                   //b_fmsc based on the two-step procedure that takes the
+                    //max and min of intervals conditional on tau for each 
+                    //value in the CI for tau
 };
   
 
@@ -416,7 +423,35 @@ arma::rowvec fmsc_OLS_IV::CI_Lambda_fmsc(double alpha, double tau_star){
   return(out);
 }
 
-arma::rowvec fmsc_OLS_IV::CI_fmsc_correct_1step(double alpha){
+arma::rowvec fmsc_OLS_IV::CI_Lambda_AVG(double alpha, double tau_star){
+//Member function of class fmsc_OLS_IV
+//Constructs a (1 - alpha) * 100% CI for Lambda at a given value of tau 
+//based on feasible AMSE averaging. This function assumes draw_CI_sims has
+//already been called so that the data member CI_sims is available.
+  arma::rowvec one_vec = arma::ones<arma::rowvec>(CI_sims.n_cols);
+  arma::rowvec A = (tau_star / s_x_sq) * one_vec + CI_sims.row(0);
+  arma::rowvec B = CI_sims.row(1);
+  arma::rowvec C = tau_star * one_vec + CI_sims.row(2);
+  
+  arma::rowvec sq_bias_est = (pow(C, 2)  - tau_var * one_vec) 
+                                / pow(s_x_sq, 2);
+  arma::rowvec zero_vec = arma::zeros<arma::rowvec>(CI_sims.n_cols);
+  sq_bias_est = max(zero_vec, sq_bias_est);
+  
+  double var_diff = s_e_sq_tsls * (1 / g_sq - 1 / s_x_sq);
+  arma::rowvec w = one_vec / (one_vec + sq_bias_est / var_diff * one_vec);
+  arma::colvec Lambda = arma::conv_to<arma::colvec>
+                          ::from(w % A + (one_vec - w) % B);
+  double lower = sample_quantile(Lambda, alpha/2);
+  double upper = sample_quantile(Lambda, 1 - alpha/2);
+  arma::rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
+
+
+arma::rowvec fmsc_OLS_IV::CI_fmsc_1step(double alpha){
 //Member function of class fmsc_OLS_IV
 //Returns 1-step corrected confidence interval (lower, upper)
 //This function assumes that draw_CI_sims has already been called
@@ -425,6 +460,23 @@ arma::rowvec fmsc_OLS_IV::CI_fmsc_correct_1step(double alpha){
   double Lambda_upper = Lambda_interval(1);
   double lower = b_fmsc() - Lambda_upper / sqrt(n);
   double upper = b_fmsc() - Lambda_lower / sqrt(n);
+  arma::rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
+
+
+
+arma::rowvec fmsc_OLS_IV::CI_AVG_1step(double alpha){
+//Member function of class fmsc_OLS_IV
+//Returns 1-step corrected confidence interval (lower, upper)
+//This function assumes that draw_CI_sims has already been called
+  arma::rowvec Lambda_interval = CI_Lambda_AVG(alpha, tau);
+  double Lambda_lower = Lambda_interval(0);
+  double Lambda_upper = Lambda_interval(1);
+  double lower = b_AVG() - Lambda_upper / sqrt(n);
+  double upper = b_AVG() - Lambda_lower / sqrt(n);
   arma::rowvec out(2);
   out(0) = lower;
   out(1) = upper;
@@ -464,19 +516,37 @@ arma::rowvec fmsc_OLS_IV::CI_fmsc_correct(double alpha,
 }
 
 
-//arma::rowvec fmsc_OLS_IV::CI_Lambda_AVG(double alpha, double tau_star){
-////Member function of class fmsc_OLS_IV
-////Constructs a (1 - alpha) * 100% CI for Lambda at a given value of tau 
-////based on the feasible version of optimal AMSE averaging. This function 
-////assumes that draw_CI_sims has already been called so that the data member
-////CI_sims is available.
-//  
-//  arma::rowvec out(2);
-//  out(0) = lower;
-//  out(1) = upper;
-//  return(out);
-//}
 
+arma::rowvec fmsc_OLS_IV::CI_AVG_correct(double alpha, 
+                                double delta, int n_grid){
+//Member function of class fmsc_OLS_IV
+//Returns corrected confidence interval (lower, upper)
+//for feasible averaging estimator with asymptotic coverage probability
+//of at least 1 - (alpha + delta)
+//This function assumes that draw_CI_sims has already been called
+//Arguments: 
+//  alpha       significance level for Lambda CI conditional on tau
+//  delta       significance level for tau confidence interval
+  arma::rowvec tau_interval = CI_tau(delta);
+  double tau_lower = tau_interval(0);
+  double tau_upper = tau_interval(1);
+  arma::colvec tau_star = arma::linspace(tau_lower, tau_upper, n_grid);
+  arma::mat Lambda_CIs(n_grid, 2);
+  
+  for(int i = 0; i < n_grid; i++){
+    Lambda_CIs.row(i) = CI_Lambda_AVG(alpha, tau_star(i));
+  }
+  
+  double Lambda_lower_min = arma::min(Lambda_CIs.col(0));
+  double Lambda_upper_max = arma::max(Lambda_CIs.col(1));
+  
+  double lower = b_AVG() - Lambda_upper_max / sqrt(n);
+  double upper = b_AVG() - Lambda_lower_min / sqrt(n);
+  arma::rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
 
 
 
@@ -573,9 +643,9 @@ arma::mat test_CIs_cpp(double p , double r, int n,
     dgp_OLS_IV sim_data(b, p_vec, Ve, Vz, n);
     fmsc_OLS_IV sim_results(sim_data.x, sim_data.y, sim_data.z);
     
-    sim_results.draw_CI_sims(500);
-    out.row(i) = sim_results.CI_fmsc_correct(0.05, 0.05, 50);
-    //out.row(i) = est.CI_fmsc_correct_1step(0.05);
+    sim_results.draw_CI_sims(1000);
+    out.row(i) = sim_results.CI_fmsc_correct(0.03, 0.07, 100);
+    //out.row(i) = sim_results.CI_fmsc_1step(0.05);
  
   }
   return(out);  

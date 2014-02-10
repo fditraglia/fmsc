@@ -14,7 +14,7 @@ system.time(bar <- mse_compare_default_cpp(0.3, 0.2, 250, 10000))
 sum(abs(foo - bar))
 
 
-system.time(testy <- test_CIs_cpp(0.3, 0.15, 250, 10000))
+system.time(testy <- test_CIs_cpp(0.8, 0.4, 250, 10000))
 sum(testy[,1] < 1 & testy[,2] > 1)/nrow(testy)
 median(testy[,2] - testy[,1])
 
