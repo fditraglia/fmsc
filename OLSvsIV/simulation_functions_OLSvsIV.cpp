@@ -160,12 +160,6 @@ class fmsc_OLS_IV {
 /*--------------------------------------------------
 # Class for FMSC calculations in OLS vs IV example
 #-------------------------------------------------*/
-  private:
-    int n_z, n;
-    double xx, g_sq, s_e_sq_ols, s_e_sq_tsls, s_x_sq, 
-        s_v_sq, tau, tau_var, ols_estimate, tsls_estimate;
-    arma::colvec ols_resid, tsls_resid, first_stage_coefs, zx;
-    arma::mat zz_inv, zz, CI_sims;
   public:
     //class constructor
     fmsc_OLS_IV(const arma::colvec&, const arma::colvec&, 
@@ -180,27 +174,28 @@ class fmsc_OLS_IV {
     arma::rowvec CI_ols(double);  //Confidence interval (CI) for ols
     arma::rowvec CI_tsls(double); //CI for tsls
     arma::rowvec CI_fmsc_naive(double); //Naive CI post-fmsc
-    arma::rowvec CI_tau(double); //CI for bias parameter tau
     void draw_CI_sims(int); //Initialize CI_sims for use by other members
+    arma::rowvec CI_fmsc_1step(double); //Simulation-based CI for 
+                    //b_fmsc that simply plugs in tau-hat
+    arma::rowvec CI_fmsc_correct(double, double, int); //Simulation-based CI for
+                    //b_fmsc based on the two-step procedure using CI for tau
+    arma::rowvec CI_AVG_1step(double); //Simulation-based CI for 
+                    //b_AVG that simply plugs in tau-hat 
+    arma::rowvec CI_AVG_correct(double, double, int); //Simulation-based CI for
+                   //b_AVG based on the two-step procedure using CI for tau
+  private:
+    int n_z, n;
+    double xx, g_sq, s_e_sq_ols, s_e_sq_tsls, s_x_sq, 
+        s_v_sq, tau, tau_var, ols_estimate, tsls_estimate;
+    arma::colvec ols_resid, tsls_resid, first_stage_coefs, zx;
+    arma::mat zz_inv, zz, CI_sims;
+    //private member functions
+    arma::rowvec CI_tau(double); //CI for bias parameter tau
     arma::rowvec CI_Lambda_fmsc(double, double); //Simulation-based CI for
                     //Lambda post-FMSC evaluated at particular value of tau
     arma::rowvec CI_Lambda_AVG(double, double); //Simulation-based CI for
                       //Lambda based on the averaging estimator evaluated 
                       //at particular value of tau
-    arma::rowvec CI_fmsc_1step(double); //Simulation-based CI for 
-                    //b_fmsc that simply plugs in tau-hat rather than
-                    //constructing a CI for tau and taking the max and min
-    arma::rowvec CI_AVG_1step(double); //Simulation-based CI for 
-                    //b_AVG that simply plugs in tau-hat rather than
-                    //constructing a CI for tau and taking the max and min
-    arma::rowvec CI_fmsc_correct(double, double, int); //Simulation-based CI for
-                    //b_fmsc based on the two-step procedure that takes the
-                    //max and min of intervals conditional on tau for each 
-                    //value in the CI for tau
-    arma::rowvec CI_AVG_correct(double, double, int); //Simulation-based CI for
-                   //b_fmsc based on the two-step procedure that takes the
-                    //max and min of intervals conditional on tau for each 
-                    //value in the CI for tau
 };
   
 
