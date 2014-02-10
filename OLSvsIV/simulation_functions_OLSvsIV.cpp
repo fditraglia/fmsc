@@ -367,7 +367,7 @@ void fmsc_OLS_IV::draw_CI_sims(int n_sims){
   arma::mat Omega(n_z + 1, n_z + 1);
   Omega(0, 0) = s_x_sq;
   Omega(0, arma::span(1, n_z)) = arma::trans(zx) / n;
-  Omega(arma::span(0, n_z), 0) = zx / n;
+  Omega(arma::span(1, n_z), 0) = zx / n;
   Omega(arma::span(1, n_z), arma::span(1, n_z)) = zz / n;
   Omega = s_e_sq_tsls * Omega;
   
@@ -378,7 +378,8 @@ void fmsc_OLS_IV::draw_CI_sims(int n_sims){
   D(1, 0) = 0;
   D(1, arma::span(1, n_z)) = arma::trans(first_stage_coefs) / g_sq;
   D(2, 0) = 1;
-  D(2, arma::span(1, n_z)) = -1 * s_x_sq * arma::trans(first_stage_coefs) / g_sq;
+  D(2, arma::span(1, n_z)) = -1 * s_x_sq * 
+                      arma::trans(first_stage_coefs) / g_sq;
   
   //Draw simulations
   arma::colvec stdnorm = rnorm(n_sims * Omega.n_rows);
@@ -520,9 +521,13 @@ arma::mat test_CIs_cpp(double p , double r, int n,
   arma::mat out(n_reps, 2, arma::fill::zeros);
   
   for(int i = 0; i < n_reps; i++){
+    
     dgp_OLS_IV sim(b, p_vec, Ve, Vz, n);
     fmsc_OLS_IV est(sim.x, sim.y, sim.z);
-    out.row(i) = est.CI_fmsc_naive(0.05); 
+    
+    est.draw_CI_sims(500);
+    out.row(i) = est.CI_tau(0.1);
+    //out.row(i) = est.CI_fmsc_naive(0.05); 
   }
   return(out);  
 }
