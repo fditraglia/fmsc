@@ -14,6 +14,103 @@ using namespace Rcpp;
 
 
 
+double sample_quantile(arma::colvec x, double p){
+/*-------------------------------------------------------
+# Calculates a sample quantile
+#--------------------------------------------------------
+#  x        vector of data
+#  p        probability for desired quantile (e.g. 0.25
+#             gives the first quartile, 0.5 the median)
+#--------------------------------------------------------
+# Details:
+#           There are many competing definitions of
+#           sample quantiles (see Hyndman & Fan, 1996).
+#           Here we simply use the R default definition,
+#           which corresponds to Definition 7 in Hyndman
+#           & Fan. See ?quantile in R for more details.
+#-------------------------------------------------------*/
+  int n = x.n_elem;
+  double m = 1 - p;
+  int j = floor(n * p + m);
+  double g = n * p + m - j;
+  arma::colvec x_sort = arma::sort(x);
+  return((1 - g) * x_sort(j - 1) + g * x_sort(j));
+}
+
+double MSE_trim(arma::colvec x, double truth, double trim){
+/*-------------------------------------------------------
+# Calculates trimmed mean-squared error.
+#--------------------------------------------------------
+#  x        vector of estimates
+#  truth    true value of the parameter
+#  trim     fraction of estimates to discard (half from
+#             each tail) before calculating MSE
+#-------------------------------------------------------*/
+  int k = x.n_elem;
+  int tail_drop = ceil(k * trim / 2);
+  
+  arma::colvec x_trimmed = arma::sort(x);
+  x_trimmed = x_trimmed(arma::span(tail_drop, k - tail_drop - 1));
+  
+  arma::colvec truth_vec = truth * arma::ones(x_trimmed.n_elem);
+  arma::colvec errors = x_trimmed - truth_vec;
+  double MSE = arma::dot(errors, errors) / errors.n_elem;
+  
+  return(MSE);  
+}
+
+double MAD(arma::colvec x, double truth){
+/*-------------------------------------------------------
+# Calculates median absolute deviation.
+#--------------------------------------------------------
+#  x        vector of estimates
+#  truth    true value of the parameter
+#-------------------------------------------------------*/
+  arma::colvec truth_vec = truth * arma::ones(x.n_rows);
+  arma::colvec abs_dev = abs(x - truth_vec);
+  return(arma::median(abs_dev)); 
+}
+
+
+double coverage_prob(arma::mat conf_intervals, double truth){
+/*-------------------------------------------------------
+# Calculates the coverage probability of a matrix of
+# confidence intervals.
+#--------------------------------------------------------
+#  conf_intervals   matrix of confidence intervals in 
+#                     which each row is a CI, the 1st
+#                     column is the lower limit, and the
+#                     2nd column is the upper limit 
+#                           
+#  truth            true value of the parameter for which
+#                       the CIs were constructed
+#-------------------------------------------------------*/
+  arma::colvec truth_vec = truth * arma::ones(conf_intervals.n_rows);
+  arma::colvec cover_lower = arma::conv_to<arma::colvec>
+                    ::from(conf_intervals.col(0) < truth_vec);
+  arma::colvec cover_upper = arma::conv_to<arma::colvec>
+                    ::from(conf_intervals.col(1) > truth_vec);
+  arma::colvec cover = cover_lower % cover_upper;
+  return(arma::sum(cover) / cover.n_elem);
+}
+
+
+double median_width(arma::mat conf_intervals){
+/*-------------------------------------------------------
+# Calculates the median width of a matrix of confidence
+# intervals.
+#--------------------------------------------------------
+#  conf_intervals   matrix of confidence intervals in 
+#                     which each row is a CI, the 1st
+#                     column is the lower limit, and the
+#                     2nd column is the upper limit 
+#-------------------------------------------------------*/
+  arma::colvec width = conf_intervals.col(1) - conf_intervals.col(0);
+  return(arma::median(width));
+}
+
+
+
 
 class dgp_OLS_IV {
 /*--------------------------------------------------
@@ -84,8 +181,8 @@ class fmsc_OLS_IV {
     arma::rowvec CI_fmsc_naive(double); //Naive CI post-fmsc
     arma::rowvec CI_tau(double); //CI for bias parameter tau
     void draw_CI_sims(int); //Initialize CI_sims for use by other members
-//    arma::rowvec CI_Lambda_fmsc(double, double); //Simulation-based CI for
-//                    //Lambda post-FMSC evaluated at particular value of tau
+    arma::rowvec CI_Lambda_fmsc(double, double); //Simulation-based CI for
+                    //Lambda post-FMSC evaluated at particular value of tau
 //    arma::rowvec CI_Lambda_AVG(double, double); //Simulation-based CI for
 //                    //Lambda based on the averaging estimator evaluated 
 //                    //at particular value of tau
@@ -288,18 +385,29 @@ void fmsc_OLS_IV::draw_CI_sims(int n_sims){
 }
 
 
-//arma::rowvec fmsc_OLS_IV::CI_Lambda_fmsc(double alpha, double tau_star){
-////Member function of class fmsc_OLS_IV
-////Constructs a (1 - alpha) * 100% CI for Lambda at a given value of tau 
-////based on FMSC selection. This function assumes that draw_CI_sims has
-////already been called so that the data member CI_sims is available.
-//  
-//  arma::rowvec out(2);
-//  out(0) = lower;
-//  out(1) = upper;
-//  return(out);
-//}
-//
+arma::rowvec fmsc_OLS_IV::CI_Lambda_fmsc(double alpha, double tau_star){
+//Member function of class fmsc_OLS_IV
+//Constructs a (1 - alpha) * 100% CI for Lambda at a given value of tau 
+//based on FMSC selection. This function assumes that draw_CI_sims has
+//already been called so that the data member CI_sims is available.
+  arma::rowvec one_vec = arma::ones<arma::rowvec>(CI_sims.n_cols);
+  arma::rowvec A = (tau_star / s_x_sq) * one_vec + CI_sims.row(0);
+  arma::rowvec B = CI_sims.row(1);
+  arma::rowvec C = tau_star * one_vec + CI_sims.row(2);
+  
+  arma::rowvec w = arma::conv_to<arma::rowvec>
+                    ::from(pow(C, 2) < (2 * tau_var * one_vec));
+                    
+  arma::colvec Lambda = arma::conv_to<arma::colvec>
+                          ::from(w * A + (one_vec - w) * B);
+  double lower = sample_quantile(Lambda, alpha/2);
+  double upper = sample_quantile(Lambda, 1 - alpha/2);
+  arma::rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
+
 //arma::rowvec fmsc_OLS_IV::CI_Lambda_AVG(double alpha, double tau_star){
 ////Member function of class fmsc_OLS_IV
 ////Constructs a (1 - alpha) * 100% CI for Lambda at a given value of tau 
@@ -322,100 +430,7 @@ void fmsc_OLS_IV::draw_CI_sims(int n_sims){
 //}
 
 
-double sample_quantile(arma::colvec x, double p){
-/*-------------------------------------------------------
-# Calculates a sample quantile
-#--------------------------------------------------------
-#  x        vector of data
-#  p        probability for desired quantile (e.g. 0.25
-#             gives the first quartile, 0.5 the median)
-#--------------------------------------------------------
-# Details:
-#           There are many competing definitions of
-#           sample quantiles (see Hyndman & Fan, 1996).
-#           Here we simply use the R default definition,
-#           which corresponds to Definition 7 in Hyndman
-#           & Fan. See ?quantile in R for more details.
-#-------------------------------------------------------*/
-  int n = x.n_elem;
-  double m = 1 - p;
-  int j = floor(n * p + m);
-  double g = n * p + m - j;
-  arma::colvec x_sort = arma::sort(x);
-  return((1 - g) * x_sort(j - 1) + g * x_sort(j));
-}
 
-double MSE_trim(arma::colvec x, double truth, double trim){
-/*-------------------------------------------------------
-# Calculates trimmed mean-squared error.
-#--------------------------------------------------------
-#  x        vector of estimates
-#  truth    true value of the parameter
-#  trim     fraction of estimates to discard (half from
-#             each tail) before calculating MSE
-#-------------------------------------------------------*/
-  int k = x.n_elem;
-  int tail_drop = ceil(k * trim / 2);
-  
-  arma::colvec x_trimmed = arma::sort(x);
-  x_trimmed = x_trimmed(arma::span(tail_drop, k - tail_drop - 1));
-  
-  arma::colvec truth_vec = truth * arma::ones(x_trimmed.n_elem);
-  arma::colvec errors = x_trimmed - truth_vec;
-  double MSE = arma::dot(errors, errors) / errors.n_elem;
-  
-  return(MSE);  
-}
-
-double MAD(arma::colvec x, double truth){
-/*-------------------------------------------------------
-# Calculates median absolute deviation.
-#--------------------------------------------------------
-#  x        vector of estimates
-#  truth    true value of the parameter
-#-------------------------------------------------------*/
-  arma::colvec truth_vec = truth * arma::ones(x.n_rows);
-  arma::colvec abs_dev = abs(x - truth_vec);
-  return(arma::median(abs_dev)); 
-}
-
-
-double coverage_prob(arma::mat conf_intervals, double truth){
-/*-------------------------------------------------------
-# Calculates the coverage probability of a matrix of
-# confidence intervals.
-#--------------------------------------------------------
-#  conf_intervals   matrix of confidence intervals in 
-#                     which each row is a CI, the 1st
-#                     column is the lower limit, and the
-#                     2nd column is the upper limit 
-#                           
-#  truth            true value of the parameter for which
-#                       the CIs were constructed
-#-------------------------------------------------------*/
-  arma::colvec truth_vec = truth * arma::ones(conf_intervals.n_rows);
-  arma::colvec cover_lower = arma::conv_to<arma::colvec>
-                    ::from(conf_intervals.col(0) < truth_vec);
-  arma::colvec cover_upper = arma::conv_to<arma::colvec>
-                    ::from(conf_intervals.col(1) > truth_vec);
-  arma::colvec cover = cover_lower % cover_upper;
-  return(arma::sum(cover) / cover.n_elem);
-}
-
-
-double median_width(arma::mat conf_intervals){
-/*-------------------------------------------------------
-# Calculates the median width of a matrix of confidence
-# intervals.
-#--------------------------------------------------------
-#  conf_intervals   matrix of confidence intervals in 
-#                     which each row is a CI, the 1st
-#                     column is the lower limit, and the
-#                     2nd column is the upper limit 
-#-------------------------------------------------------*/
-  arma::colvec width = conf_intervals.col(1) - conf_intervals.col(0);
-  return(arma::median(width));
-}
 
 
 
