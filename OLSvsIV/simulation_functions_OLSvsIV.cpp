@@ -637,8 +637,8 @@ arma::mat test_CIs_cpp(double p , double r, int n,
     fmsc_OLS_IV sim_results(sim_data.x, sim_data.y, sim_data.z);
     
     sim_results.draw_CI_sims(1000);
-    //out.row(i) = sim_results.CI_fmsc_correct(0.03, 0.07, 100);
-    out.row(i) = sim_results.CI_AVG_1step(0.05);
+    out.row(i) = sim_results.CI_AVG_correct(0.05, 0.05, 100);
+    //out.row(i) = sim_results.CI_AVG_1step(0.05);
  
   }
   return(out);  
