@@ -170,6 +170,9 @@ class fmsc_OLS_IV {
     //class constructor
     fmsc_OLS_IV(const arma::colvec&, const arma::colvec&, 
           const arma::mat&);
+    //Testing functions
+    double get_tau(){return(tau);}
+    arma::mat get_CI_sims(){return(CI_sims);}
     //member functions
     double Tfmsc();       //return FMSC "test statistic"
     double b_ols();       //return OLS estimate
@@ -401,7 +404,7 @@ arma::rowvec fmsc_OLS_IV::CI_Lambda_fmsc(double alpha, double tau_star){
                     ::from(pow(C, 2) < (2 * tau_var * one_vec));
                     
   arma::colvec Lambda = arma::conv_to<arma::colvec>
-                          ::from(w * A + (one_vec - w) * B);
+                          ::from(w % A + (one_vec - w) % B);
   double lower = sample_quantile(Lambda, alpha/2);
   double upper = sample_quantile(Lambda, 1 - alpha/2);
   arma::rowvec out(2);
@@ -526,7 +529,8 @@ arma::mat test_CIs_cpp(double p , double r, int n,
     fmsc_OLS_IV est(sim.x, sim.y, sim.z);
     
     est.draw_CI_sims(500);
-    out.row(i) = est.CI_tau(0.1);
+    out.row(i) = est.CI_Lambda_fmsc(0.05, est.get_tau());
+    //out.row(i) = est.CI_tau(0.1);
     //out.row(i) = est.CI_fmsc_naive(0.05); 
   }
   return(out);  
