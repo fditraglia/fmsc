@@ -168,7 +168,8 @@ class fmsc_OLS_IV {
     arma::mat zz_inv, zz, CI_sims;
   public:
     //class constructor
-    fmsc_OLS_IV(arma::colvec, arma::colvec, arma::mat);
+    fmsc_OLS_IV(const arma::colvec&, const arma::colvec&, 
+          const arma::mat&);
     //member functions
     double Tfmsc();       //return FMSC "test statistic"
     double b_ols();       //return OLS estimate
@@ -190,8 +191,8 @@ class fmsc_OLS_IV {
 };
   
 
-fmsc_OLS_IV::fmsc_OLS_IV(arma::colvec x, arma::colvec y, 
-                          arma::mat z){
+fmsc_OLS_IV::fmsc_OLS_IV(const arma::colvec& x, const arma::colvec& y, 
+                          const arma::mat& z){
 /*--------------------------------------------------
 # Constructor: calculates all "basic quantities"
 #---------------------------------------------------
