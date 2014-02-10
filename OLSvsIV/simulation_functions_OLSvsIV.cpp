@@ -170,9 +170,6 @@ class fmsc_OLS_IV {
     //class constructor
     fmsc_OLS_IV(const arma::colvec&, const arma::colvec&, 
           const arma::mat&);
-    //Testing functions
-    double get_tau(){return(tau);}
-    arma::mat get_CI_sims(){return(CI_sims);}
     //member functions
     double Tfmsc();       //return FMSC "test statistic"
     double b_ols();       //return OLS estimate
@@ -548,9 +545,7 @@ arma::mat test_CIs_cpp(double p , double r, int n,
     
     est.draw_CI_sims(500);
     out.row(i) = est.CI_fmsc_correct_1step(0.05);
-    //out.row(i) = est.CI_Lambda_fmsc(0.05, est.get_tau());
-    //out.row(i) = est.CI_tau(0.1);
-    //out.row(i) = est.CI_fmsc_naive(0.05); 
+ 
   }
   return(out);  
 }
