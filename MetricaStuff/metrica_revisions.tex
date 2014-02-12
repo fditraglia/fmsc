@@ -1249,13 +1249,19 @@ since the $1/n$ in the innermost parentheses cancels the $n$ at the beginning of
 
 The only remaining question is how to estimate $\Omega$. We will assume throughout that  $\epsilon_i \mathbf{z}_i'$ is iid over $i$ so that the expression for $\Omega$ from above simplifies as follows:
 $$\Omega = \frac{1}{n} Var \left( \sum_{i=1}^n \epsilon_i \textbf{z}_i'\right) = \frac{1}{n} \sum_{i=1}^n Var(\epsilon_i \textbf{z}_i') = Var(\epsilon_i \textbf{z}_i')$$
-Now the question is simply how to estimate $Var(\epsilon_i \textbf{z}_i')$. There are various sets of assumptions that lead to different estimators.
-
-
-Provided that the instruments are exogeneous, $E[\epsilon_i \mathbf{z}_i'] = 0$, so we have
+Now the question is simply how to estimate $Var(\epsilon_i \textbf{z}_i')$. There are various sets of assumptions that lead to different estimators. The simplest estimator assumes that the instruments are exogeneous so that $E[\epsilon_i \mathbf{z}_i'] = 0$ and hence
   $$Var(\epsilon_i \textbf{z}_i') = E[\epsilon_i^2 \textbf{z}_i\textbf{z}_i']$$
-Under homoskedasticity, this further simplifies to
+and that the errors are homoscedastic, leading to the further simplification:
   $$Var(\epsilon_i \textbf{z}_i') = E[\epsilon_i^2 \textbf{z}_i\textbf{z}_i'] = E[\epsilon_i^2]E[\textbf{z}_i \textbf{z}_i'] = \sigma_\epsilon^2 E[\textbf{z}_i \textbf{z}_i']$$
+Defining $\widehat{\epsilon} = y - X\widehat{\beta}$ and $\widehat{\sigma}_\epsilon^2= \widehat{\epsilon}' \,\widehat{\epsilon}/n$, it follows under these assumptions that
+  $$\widehat{\Omega} = \widehat{\sigma}_\epsilon^2 Z'Z/n \overset{p}{\rightarrow} \Omega$$
+which implies that 2SLS is the efficient linear GMM estimator. If we are not prepared to assume homoscedasticity, 2SLS is no longer the efficient GMM estimator and we need a more complicated estimator of $\Omega$, namely
+  $$\widehat{\Omega} = \frac{1}{n} \sum_{i=1}^n \widehat{\epsilon}_i^{\, 2} \textbf{z}_i \textbf{z}_i' = Z'DZ/n$$
+Where $D = diag\{\widehat{\epsilon}_i^{\, 2}\}$. (For unbiased estimation, we could divide by $n-k$ rather than $n$ but this usually doesn't make much difference in practice.) One last refinement we can consider is a \emph{centered} variance matrix estimator. While instrumental variables estimation relies on the assumption that $E[\epsilon_i \mathbf{z}_i'] = 0$, there are settings in which we would like a variance matrix estimator that is robust to violations of this assumption. If we do not assume $E[\epsilon_i \mathbf{z}_i'] = 0$, 
+  $$Var(\epsilon_i \textbf{z}_i') = E[\epsilon_i^2 \textbf{z}_i \textbf{z}_i'] - E[\epsilon_i \textbf{z}_i]E[\epsilon_i \textbf{z}_i']$$
+by the shortcut formula. We can continue to estimate $E[\epsilon_i^2 \textbf{z}_i \textbf{z}_i']$ by $Z'DZ/n$, or in the case of homoscedasticity by $\widehat{\sigma}_\epsilon^2 Z'Z/n$, so the question is how to estimate the second term. In the presence of over-identifying restrictions, the moment conditions used to estimate the model will not hold exactly in-sample. This is the principle behind the $J$-test. We can use the same idea here to estimate $E[\epsilon_i \textbf{z}_i]$ by the sample analogue $n^{-1} \sum_{i=1}^n \widehat{\epsilon}_i \textbf{z}_i$. This idea leades to the heteroskedasticity-consistent centered variance matrix estimator:
+  $$\widehat{\Omega} = \frac{1}{n} \sum_{i=1}^n \widehat{\epsilon}_i^{\, 2} \textbf{z}_i \textbf{z}_i' - \left( \frac{1}{n} \sum_{i=1}^n \widehat{\epsilon}_i \textbf{z}_i\right) \left(  \frac{1}{n} \sum_{i=1}^n \widehat{\epsilon}_i \textbf{z}_i'\right) = Z'\left[ \frac{D}{n} - \frac{\widehat{\epsilon}' \widehat{\epsilon}}{n^2} \right] Z$$
+
 
 
 \subsection{Valid Post-Selection Confidence Intervals}
