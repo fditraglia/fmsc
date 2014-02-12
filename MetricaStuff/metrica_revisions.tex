@@ -1128,8 +1128,123 @@ In this case, a natural estimator of $\Omega$ is given by
 
 
 
+\subsection{Stable and Efficient Computation}
+To implement the FMSC for instrument selection we need to repeatedly fit IV regressions and calculate various related quantities. Simply using the formulas from above in the calculations is unwise. For example, it is computational best practice to avoid direct matrix inversion wherever possible. In this section I outline how to carry out stable and efficient calculations using the QR decomposition. Note that in this section $Q_Z$ has a \emph{different meaning} from above.
+
+\paragraph{QR Decomposition} Any $n\times k$ matrix $A$ with full column rank can be decomposed as $A = QR$, where $R$ is an $k\times k$ upper triangular matrix and $Q$ is an $n\times k$ matrix with orthonormal columns. The columns of $A$ are \emph{orthogonalized} in $Q$ via the Gram-Schmidt process. Since $Q$ has orthogonal columns, we have $Q'Q = I_k$. It is \emph{not} in general true that $QQ' = I$, however. In the special case where $A$ is square, $Q^{-1} = Q'$.
+
+\paragraph{Least-Squares via the QR Decomposition} We can calculate the least squares estimator of $\beta$ as follows
+\begin{eqnarray*}
+  \widehat{\beta} &=& (X'X)^{-1} X'y = \left[(QR)' (QR) \right]^{-1} (QR)' y\\
+    &=&\left[ R' Q' Q R\right]^{-1} R'Q' y = (R'R)^{-1} R'Q y\\
+    &=& R^{-1} (R')^{-1} R' Qy = R^{-1} Qy
+\end{eqnarray*}
+In other words, $\widehat{\beta}$ is the solution to $R\beta = Qy$. While it may not be immediately apparent, this is a much easier system to solve that the normal equations $(X'X) \beta = X'y$. Because $R$ is \emph{upper triangular} we can solve $R\beta = Qy$ extremely quickly. The product $Qy$ is simply a vector, call it $v$, so the system is simply
+  $$\left[
+    \begin{array}
+      {cccccc}
+      r_{11} & r_{12}  & r_{13}& \cdots & r_{1,n-1} & r_{1k} \\
+      0 & r_{22} & r_{23}&\cdots & r_{2,n-1} & r_{2k}\\
+      0&  0 &  r_{33}& \cdots & r_{3,n-1} & r_{3k}\\  
+      \vdots & \vdots & \ddots& \ddots & \vdots & \vdots\\
+      0 & 0 & \cdots &0  & r_{k-1, k-1} & r_{k-1, k} \\
+      0 & 0 & \cdots & 0 & 0 & r_{k}
+    \end{array}
+  \right] \left[ \begin{array}
+    {ccc}
+    \beta_1 \\ \beta_2 \\ \beta_3 \\ \vdots \\ \beta_{k-1} \\ \beta_k
+  \end{array}\right] = \left[ \begin{array}
+    {c}
+    v_1  \\ v_2  \\ v_3 \\  \vdots \\ v_{k-1} \\ v_{k}
+  \end{array}\right]
+  $$
+Hence, $\beta_k = v_k / r_k$ which we can immediately substitute into $\beta_{k-1} r_{k-1,k-1} + \beta_k r_{k-1,k} = v_{k-1}$ to solve for $\beta_{k-1}$, and so on. This procedure is called \emph{back substitution}. 
+
+To calculate the variance matrix $\sigma^2 (X'X)^{-1}$ for the least-squares estimator, simply note from the derivation above that $(X'X)^{-1} = R^{-1} (R^{-1})'$ . Inverting $R$, however, is easy: we simply apply back-substitution \emph{repeatedly}. Let $A$ be the inverse of $R$, $\mathbf{a}_j$ be the $j$th column of $A$, and $\mathbf{e}_j$ be the $j$th element of the $k\times k$ identity matrix, i.e.\ the $j$th standard basis vector. Inverting $R$ is equivalent to solving $R \mathbf{a}_1 = \mathbf{e}_1$, followed by $R \mathbf{a}_2 = \mathbf{e}_2$, and so on all the way up to $R \mathbf{a}_k = \mathbf{e}_k$. 
+
+\paragraph{Othogonal Projection Matrices and the QR Decomposition}
+Consider a projection matrix $P_X = X (X'X)^{-1}X'$. Provided that $X$ has full column rank, we have
+begin
+  $$P_X  = QR(R'R)^{-1}R'Q' = QRR^{-1} (R')^{-1}R'Q' = QQ'$$
+Recall that, in general, it is \emph{not} true that $QQ' = I$ even though $Q'Q = I$.
+
+\paragraph{Two-stage Least Squares via QR} The two-stage least squares (2SLS) estimator is given by
+  $$\widehat{\beta}_{2SLS} = (X' P_Z X)^{-1} X' P_Z y$$
+where $P_Z = Z(Z'Z)^{-1}Z'$. First, take the QR decomposition of $Z$, namely $Z = Q_Z R_Z$. Using the result for projection matrices from above, we see that
+\begin{eqnarray*}
+  \widehat{\beta}_{2SLS} &=& (X' Q_Z Q_Z')^{-1} X' Q_Z Q_Z' y=\left[ (Q_Z' X)' (Q_Z' X)\right]^{-1} (Q_Z' X)' Q_Z' y\\
+    &=& \left(\widetilde{X}' \widetilde{X}\right)^{-1} \widetilde{X}' \widetilde{y}
+\end{eqnarray*}
+where $\widetilde{X} = Q_Z' X$ and $\widetilde{y} = Q_Z' y$. Now we simply have a \emph{transformed} system where the matrix $Q_Z'$ has projected both $X$ and $y$ onto the column space of $Z$. Now we use a \emph{second} QR decomposition on the transformed system, namely $\widetilde{X} = \widetilde{Q} \widetilde{R}$. Using our results for least-squares from above, we have 
+  $$\widehat{\beta}_{2SLS} = \widetilde{R}^{-1} \widetilde{Q} \widetilde{y} = \widetilde{R}^{-1} \widetilde{Q} Q_Z' y$$
+Thus the 2SLS estimator $\widehat{\beta}_{2SLS}$ is the solution to the system
+  $$\widetilde{R} \beta = \widetilde{Q} \widetilde{y}$$
+which we can solve by back-substitution. 
+
+\paragraph{Variance Matrix for 2SLS via QR}
+The variance matrix for 2SLS is fairly complicated, as it depends on the product
+  $$C = \left[X'Z(Z'Z)^{-1}Z'X\right]^{-1} X'Z (Z'Z)^{-1}$$
+Fortunately, we can calculate easily calculate $C$ as a side-effect of the intermediate quantities we used in the 2SLS fit above. Again, we first apply carry out a QR decomposition of $Z$, namely $Z = Q_Z R_Z$,  and then carry out a QR decomposition of the transformed regressors $\widetilde{X} = Q_Z' X$, namely $\widetilde{X} = \widetilde{Q} \widetilde{R}$. We have,
+  \begin{eqnarray*}
+    C &=& \left(X' P_Z X \right)^{-1} X'(Q_Z R_Z) \left(R_Z' R_Z\right)^{-1}\\
+      &=& \left(X' Q_Z Q_Z' X \right)^{-1} X'Q_Z R_Z R_Z^{-1} (R_Z')^{-1}\\
+      &=& \left[ (Q_Z' X)' Q_Z'X \right]^{-1} (Q_Z' X)' (R_Z')^{-1}\\
+      &=& \left(\widetilde{X}' \widetilde{X}' \right)^{-1} \widetilde{X}' (R_Z')^{-1}\\
+      &=& \widetilde{R}^{-1} (\widetilde{R}')^{-1} (\widetilde{Q} \widetilde{R})' (R_Z')^{-1}\\
+      &=& \widetilde{R}^{-1} (\widetilde{R}')^{-1} \widetilde{R}' \widetilde{Q}' (R_Z')^{-1}\\
+      &=& \widetilde{R}^{-1}\widetilde{Q}' (R'_Z)^{-1}
+  \end{eqnarray*}
+
+\paragraph{Weighting Matrices, Variance Estimators, etc.}
+The general linear-GMM estimator considered above is 
+  $$\widehat{\beta}_{GMM} = (X'Z W_n Z'X)^{-1}X'Z W_n Z'y$$
+and 2SLS corresponds to the special case in which $W_n = (Z'Z/n)^{-1}$. Under the standard assumptions with $y = X\beta + \epsilon$, we have
+\begin{eqnarray*}
+  \widehat{\beta}_{GMM} &=& (X'Z W_n Z'X)^{-1}X'Z W_n Z'y\\
+      &=& (X'Z W_n Z'X)^{-1}X'Z W_n Z'(X\beta + \epsilon)\\
+      &=&\beta + (X'Z W_n Z'X)^{-1}X'Z W_n Z'\epsilon
+\end{eqnarray*}
+so that 
+\begin{eqnarray*}
+  \sqrt{n} \left(\widehat{\beta} - \beta\right) &=& \sqrt{n} (X'Z W_n Z'X)^{-1}X'Z W_n Z'\epsilon\\
+    &=& \sqrt{n} \left[\left(X'Z\right) W_n \left(\frac{Z'X}{n} \right) \right]^{-1} \left(\frac{X'Z}{n} \right) W_n Z'\epsilon\\
+    &=& \sqrt{n} \cdot \frac{1}{n} \left[\left(\frac{X'Z}{n}\right) W_n \left(\frac{Z'X}{n} \right) \right]^{-1} \left(\frac{X'Z}{n} \right)W_n Z'\epsilon\\
+    &=& \left[\left(\frac{X'Z}{n}\right) W_n \left(\frac{Z'X}{n} \right) \right]^{-1} \left(\frac{X'Z}{n} \right)W_n\left(\frac{Z'\epsilon}{\sqrt{n}}\right)\\
+    &=& n \left(X'Z W_n Z'X\right)^{-1} X'Z W_n\left(\frac{Z'\epsilon}{\sqrt{n}}\right) \\
+    &=& n\,\widehat{C}\left( n^{-1/2} Z'\epsilon\right)
+\end{eqnarray*}
+By the Central Limit Theorem:
+  $$n^{-1/2} Z'\epsilon = \frac{1}{\sqrt{n}} \sum_{i=1}^n \epsilon_i \textbf{z}_i' \overset{d}{\rightarrow} N(0,\Omega)$$
+where 
+  $$\Omega = \lim_{n\rightarrow \infty} Var \left( \frac{1}{\sqrt{n}} \sum_{i=1}^n \epsilon_i \textbf{z}_i'\right) = \frac{1}{n} Var \left( \sum_{i=1}^n \epsilon_i \textbf{z}_i'\right)$$
+and the Law of Large Numbers,
+  \begin{eqnarray*}
+    n\, \widehat{C} &=& n \left(X'Z W_n Z'X\right)^{-1} X'Z W_n\\ 
+        &=& \left[\left(\frac{X'Z}{n}\right) W_n \left(\frac{Z'X}{n} \right) \right]^{-1} \left(\frac{X'Z}{n} \right)W_n\\
+        &\overset{p}{\rightarrow}& C = \left( E[\mathbf{x}\mathbf{z}']\,W \,E[\mathbf{z}\mathbf{x}'] \right)^{-1} E[\mathbf{x}\mathbf{z'}] W
+  \end{eqnarray*}
+In the special case of 2SLS, $W_n = (Z'Z/n)^{-1}$ so $W = E[\mathbf{z}_i\mathbf{z}_i']$. Combining the CLT and the LLN, we have
+  $$\widehat{\beta}_{2SLS} \overset{d}{\rightarrow} N(0, C\Omega C')$$
+If $W_n$ converges in probability to the efficient weighting matrix, namely $\Omega^{-1}$, this simplifies as follows:
+  \begin{eqnarray*}
+    C\Omega C' &=&  \left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1} E[\mathbf{x}\mathbf{z'}] \Omega^{-1}
+  \end{eqnarray*}
+
+Now, we need to estimate the quantities $C$ and $\Omega$. For $C$, we can simply use $n\widehat{C}$, since this converges in probability to $C$. For $\Omega$, we need to consider which assumptions make sense for the problem at hand. Provided that  $\epsilon_i \mathbf{z}_i'$ is iid over $i$, the expression for $\Omega$ simplifies as follows:
+$$\Omega = \frac{1}{n} Var \left( \sum_{i=1}^n \epsilon_i \textbf{z}_i'\right) = \frac{1}{n} \sum_{i=1}^n Var(\epsilon_i \textbf{z}_i') = Var(\epsilon_i \textbf{z}_i')$$
+Provided that the instruments are exogeneous, $E[\epsilon_i \mathbf{z}_i'] = 0$, so we have
+  $$Var(\epsilon_i \textbf{z}_i') = E[\epsilon_i^2 \textbf{z}_i\textbf{z}_i']$$
+Under homoskedasticity, this further simplifies to
+  $$Var(\epsilon_i \textbf{z}_i') = E[\epsilon_i^2 \textbf{z}_i\textbf{z}_i'] = E[\epsilon_i^2]E[\textbf{z}_i \textbf{z}_i'] = \sigma_\epsilon^2 E[\textbf{z}_i \textbf{z}_i']$$
+
+
 \subsection{Valid Post-Selection Confidence Intervals}
 \todo[inline]{Express limit distribution of FMSC criterion for this example in terms of M, write out the moment averaging estimator as a weighted sum, rearrange and write down the limit distribution. Finally, give the simulation-based procedure in terms of the notation of this example.}
+
+
+
+
+
 
 
 
