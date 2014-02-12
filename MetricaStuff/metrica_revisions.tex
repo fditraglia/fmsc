@@ -1224,14 +1224,34 @@ and the Law of Large Numbers,
         &\overset{p}{\rightarrow}& C = \left( E[\mathbf{x}\mathbf{z}']\,W \,E[\mathbf{z}\mathbf{x}'] \right)^{-1} E[\mathbf{x}\mathbf{z'}] W
   \end{eqnarray*}
 In the special case of 2SLS, $W_n = (Z'Z/n)^{-1}$ so $W = E[\mathbf{z}_i\mathbf{z}_i']$. Combining the CLT and the LLN, we have
-  $$\widehat{\beta}_{2SLS} \overset{d}{\rightarrow} N(0, C\Omega C')$$
+  $$\sqrt{n}\left(\widehat{\beta}_{2SLS} - \beta_0\right) \overset{d}{\rightarrow} N(0, C\Omega C')$$
 If $W_n$ converges in probability to the efficient weighting matrix, namely $\Omega^{-1}$, this simplifies as follows:
   \begin{eqnarray*}
-    C\Omega C' &=&  \left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1} E[\mathbf{x}\mathbf{z'}] \Omega^{-1}
+    C\Omega C' &=&  \left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1} E[\mathbf{x}\mathbf{z'}] \Omega^{-1}\Omega \Omega^{-1}E[\mathbf{z}\mathbf{x}']\left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1}\\
+      &=& \left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1} E[\mathbf{x}\mathbf{z'}]\Omega^{-1}
+      E[\mathbf{z}\mathbf{x}']\left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1}\\
+      &=& \left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1}
   \end{eqnarray*}
 
-Now, we need to estimate the quantities $C$ and $\Omega$. For $C$, we can simply use $n\widehat{C}$, since this converges in probability to $C$. For $\Omega$, we need to consider which assumptions make sense for the problem at hand. Provided that  $\epsilon_i \mathbf{z}_i'$ is iid over $i$, the expression for $\Omega$ simplifies as follows:
+
+
+Now, the question is how to estimate $C\Omega C'$ in general.To begin, suppose we have a consistent estimator of $\Omega$, namely $\widehat{\Omega}$. Then, since $n\, \widehat{C} \overset{p}{\rightarrow} C$, it follows that $n^2 \widehat{C} \widehat{\Omega} \widehat{C}\overset{p}{\rightarrow}C\Omega C'$. This gives us an estimate of the asymptotic variance of $\sqrt{n}(\widehat{\beta} - \beta)$. To convert this to an estimate of the asymptotic variance of $\widehat{\beta}$, we need to divide through by $n$, since variance is a quadratic operator. We have
+  $$\widehat{\mbox{AVAR}}(\widehat{\beta}) = n\widehat{C} \widehat{\Omega} \widehat{C}$$
+In the case of the efficient GMM estimator, the problem simplifies considerably since we only need to estimate $ \left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1}$ rather than the more general form of $C\Omega C'$. Again, suppose for the moment that we have a consistent estimator $\widehat{\Omega}$ of $\Omega$. Since $X'Z/n \overset{p}{\rightarrow}E[\mathbf{x}\mathbf{z}']$, it follows that
+  $$\left(X'Z/n  \,\widehat{\Omega}^{-1} Z'X/n\right)^{-1} = n^2 (X'Z \widehat{\Omega}^{-1} Z'X)^{-1} \overset{p}{\rightarrow}\left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1}$$
+Thus $n^2\left(X'Z  \,\widehat{\Omega}^{-1} Z'X\right)^{-1}$ is a consistent estimator of the asymptotic variance of $\sqrt{n}(\widehat{\beta} - \beta)$, and we can convert this into an estimate of the asymptotic variance of $\widehat{\beta}$ as follows
+  $$\widehat{\mbox{AVAR}}(\widehat{\beta}) = n \left(X'Z  \,\widehat{\Omega}^{-1} Z'X\right)^{-1} $$
+again, dividing through by $n$. As we will discuss below, 2SLS is the efficient GMM estimator under homoskedasticity, yielding the estimator  
+    $$\widehat{\Omega} = \widehat{\sigma}^2_\epsilon Z'Z/n$$
+Substituting this into the expression from above gives
+     $$\widehat{\mbox{AVAR}}(\widehat{\beta}) = \widehat{\sigma}^2_\epsilon \left(X'Z (Z'Z)^{-1} Z'X\right)^{-1}  = \widehat{\sigma}^2_\epsilon(X' P_Z X)^{-1}$$ 
+since the $1/n$ in the innermost parentheses cancels the $n$ at the beginning of the expression. The estimator $\widehat{\sigma}^2_\epsilon$ is constructed from the 2SLS residuals in the usual way, as described below. It is important to note that this simplification only occurs in the situations where 2SLS is efficient. More generally, we would simply substitute $(Z'Z/n)^{-1}$ in the expression for $W_n$ and then use $n\widehat{C} \widehat{\Omega} \widehat{C}$ as our estimator.
+
+The only remaining question is how to estimate $\Omega$. We will assume throughout that  $\epsilon_i \mathbf{z}_i'$ is iid over $i$ so that the expression for $\Omega$ from above simplifies as follows:
 $$\Omega = \frac{1}{n} Var \left( \sum_{i=1}^n \epsilon_i \textbf{z}_i'\right) = \frac{1}{n} \sum_{i=1}^n Var(\epsilon_i \textbf{z}_i') = Var(\epsilon_i \textbf{z}_i')$$
+Now the question is simply how to estimate $Var(\epsilon_i \textbf{z}_i')$. There are various sets of assumptions that lead to different estimators.
+
+
 Provided that the instruments are exogeneous, $E[\epsilon_i \mathbf{z}_i'] = 0$, so we have
   $$Var(\epsilon_i \textbf{z}_i') = E[\epsilon_i^2 \textbf{z}_i\textbf{z}_i']$$
 Under homoskedasticity, this further simplifies to
