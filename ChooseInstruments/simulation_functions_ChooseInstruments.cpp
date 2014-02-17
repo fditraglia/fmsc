@@ -6,18 +6,24 @@ using namespace arma;
 
 class LinearGMM {
   public:
-    LinearGMM(mat&, colvec&, mat&);
+    LinearGMM(const mat&, const colvec&, const mat&);
     colvec tsls_est(); //Return tsls estimate
-    colvec twostep_est(); //Return efficient two-step GMM estimate
-  
+    //colvec twostep_est(); //Return efficient two-step GMM estimate
+    
   private:
-  
+    colvec b_tsls;
+    mat Qz, Rz, Xtilde, Qtilde, Rtilde;
+
 }
 
 
 //Class constructor
 LinearGMM::LinearGMM(const mat& X, const colvec& y, const mat& Z){
   
+  qr_econ(Qz, Rz, Z);
+  Xtilde = trans(Qz) * X;
+  qr_econ(Qtilde, Rtilde, Xtilde);
+  b_tsls = solve(Rtilde, Qtilde * trans(Qz) * y);
   
 }
 

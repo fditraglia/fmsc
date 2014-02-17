@@ -1133,6 +1133,15 @@ To implement the FMSC for instrument selection we need to repeatedly fit IV regr
 
 \paragraph{QR Decomposition} Any $n\times k$ matrix $A$ with full column rank can be decomposed as $A = QR$, where $R$ is an $k\times k$ upper triangular matrix and $Q$ is an $n\times k$ matrix with orthonormal columns. The columns of $A$ are \emph{orthogonalized} in $Q$ via the Gram-Schmidt process. Since $Q$ has orthogonal columns, we have $Q'Q = I_k$. It is \emph{not} in general true that $QQ' = I$, however. In the special case where $A$ is square, $Q^{-1} = Q'$.
 
+\paragraph{Note:} The way we have defined things here is here is sometimes called the ``thin'' or ``economical'' form of the QR decomposition, e.g.\ \texttt{qr\_econ} in Armadillo. In our ``thin'' version, $Q$ is an $n\times k$ matrix with orthogonal columns. In the ``thick'' version, $Q$ is an $n\times n$ \emph{orthogonal} matrix. Let $A = QR$ be the ``thick'' version and $A = Q_1 R_1$ be the ``thin'' version. The connection between the two is as follows:
+  $$A = QR = Q \left[\begin{array}
+    {c} R_1 \\ 0 
+  \end{array} \right] = \left[  \begin{array}
+    {cc} Q_1 & Q_2
+  \end{array}\right]\left[\begin{array}
+    {c} R_1 \\ 0 
+  \end{array} \right] = Q_1 R_1$$
+
 \paragraph{Least-Squares via the QR Decomposition} We can calculate the least squares estimator of $\beta$ as follows
 \begin{eqnarray*}
   \widehat{\beta} &=& (X'X)^{-1} X'y = \left[(QR)' (QR) \right]^{-1} (QR)' y\\
@@ -1176,9 +1185,9 @@ where $P_Z = Z(Z'Z)^{-1}Z'$. First, take the QR decomposition of $Z$, namely $Z 
     &=& \left(\widetilde{X}' \widetilde{X}\right)^{-1} \widetilde{X}' \widetilde{y}
 \end{eqnarray*}
 where $\widetilde{X} = Q_Z' X$ and $\widetilde{y} = Q_Z' y$. Now we simply have a \emph{transformed} system where the matrix $Q_Z'$ has projected both $X$ and $y$ onto the column space of $Z$. Now we use a \emph{second} QR decomposition on the transformed system, namely $\widetilde{X} = \widetilde{Q} \widetilde{R}$. Using our results for least-squares from above, we have 
-  $$\widehat{\beta}_{2SLS} = \widetilde{R}^{-1} \widetilde{Q} \widetilde{y} = \widetilde{R}^{-1} \widetilde{Q} Q_Z' y$$
+  $$\widehat{\beta}_{2SLS} = \widetilde{R}^{-1} \widetilde{Q} \widetilde{y} = \widetilde{R}^{-1} \widetilde{Q}' Q_Z' y$$
 Thus the 2SLS estimator $\widehat{\beta}_{2SLS}$ is the solution to the system
-  $$\widetilde{R} \beta = \widetilde{Q} \widetilde{y}$$
+  $$\widetilde{R} \beta = \widetilde{Q}' \widetilde{y}$$
 which we can solve by back-substitution. 
 
 \paragraph{Variance Matrix for 2SLS via QR}
