@@ -7,7 +7,8 @@ using namespace arma;
 class tsls_fit {
   public:
     tsls_fit(const mat&, const colvec&, const mat&);
-    colvec estimate(); //Return tsls estimate
+    colvec est(); 
+    colvec resid();
   private:
     int n, k;
     double s_sq;
@@ -19,9 +20,9 @@ class tsls_fit {
     mat V_textbook();
     mat V_robust();
     mat V_center();
-//    colvec SE_textbook();
-//    colvec SE_robust();
-//    colvec SE_center();
+    colvec SE_textbook();
+    colvec SE_robust();
+    colvec SE_center();
 };
 
 
@@ -59,28 +60,41 @@ mat tsls_fit::Omega_center(){
 
 mat tsls_fit::V_textbook(){
 //Covariance matrix estimator for sqrt(n) * (b_hat - b_true)
-//Assumes heteroskedasticity
   return(n * s_sq * Rtilde_inv * Rtilde_inv.t());
 }
 
 mat tsls_fit::V_robust(){
 //Covariance matrix estimator for sqrt(n) * (b_hat - b_true)
-//Heteroskedasticity-robust
   return(n * n * C * Omega_robust() * C.t());
 }
 
 mat tsls_fit::V_center(){
 //Covariance matrix estimator for sqrt(n) * (b_hat - b_true)
-//Heteroskedasticity-robust and centered
   return(n * n * C * Omega_center() * C.t());
 }
 
-colvec tsls_fit::estimate(){
+colvec tsls_fit::SE_textbook(){
+  return(sqrt(diagvec(V_textbook()) / n));
+}
+
+colvec tsls_fit::SE_robust(){
+  return(sqrt(diagvec(V_robust()) / n));
+}
+
+colvec tsls_fit::SE_center(){
+  return(sqrt(diagvec(V_center()) / n));
+}
+
+colvec tsls_fit::est(){
   return(b);
+}
+
+colvec tsls_fit::resid(){
+  return(residuals);
 }
 
 // [[Rcpp::export]]
 colvec tsls_cpp(mat X, colvec y, mat Z) {
    tsls_fit results(X, y, Z);
-   return(results.estimate());
+   return(results.est());
 }
