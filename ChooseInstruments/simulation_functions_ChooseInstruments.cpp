@@ -4,12 +4,10 @@
 using namespace Rcpp;
 using namespace arma;
 
-class LinearGMM {
+class tsls_fit {
   public:
-    LinearGMM(const mat&, const colvec&, const mat&);
+    tsls_fit(const mat&, const colvec&, const mat&);
     colvec tsls_est(); //Return tsls estimate
-    //colvec twostep_est(); //Return efficient two-step GMM estimate
-    
   private:
     int n, k;
     colvec b_tsls, resid_tsls;
@@ -21,7 +19,7 @@ class LinearGMM {
 
 
 //Class constructor
-LinearGMM::LinearGMM(const mat& X, const colvec& y, const mat& Z){
+tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
   qr_econ(Qz, Rz, Z);
   Xtilde = Qz.t() * X;
   qr_econ(Qtilde, Rtilde, Xtilde);
@@ -34,26 +32,26 @@ LinearGMM::LinearGMM(const mat& X, const colvec& y, const mat& Z){
               solve(trimatl(Rtilde.t()), eye(k, k)));
 }
 
-mat LinearGMM::Omega_tsls(){
+mat tsls_fit::Omega_tsls(){
 //Assumes heteroskedastic errors
   double s_sq = dot(resid_tsls, resid_tsls) / n;
   return(s_sq * Rz.t() * Rz / n);
 }
 
-mat LinearGMM::Omega_tsls_robust(){
+mat tsls_fit::Omega_tsls_robust(){
 //Heteroskedasticity-robust
   mat D = diagmat(pow(resid_tsls, 2));
   return(Z_copy.t() * D * Z_copy / n);
 }
 
-mat LinearGMM::Omega_tsls_center(){
+mat tsls_fit::Omega_tsls_center(){
 //Heteroskedasticity-robust and centered
   mat e_outer = resid_tsls * resid_tsls.t();
   mat D = diagmat(pow(resid_tsls, 2));
   return(Z_copy.t() * (D / n -  e_outer / (n * n)) * Z_copy);
 }
 
-colvec LinearGMM::tsls_est(){
+colvec tsls_fit::tsls_est(){
   return(b_tsls);
 }
 
@@ -65,6 +63,6 @@ colvec LinearGMM::tsls_est(){
 
 // [[Rcpp::export]]
 colvec tsls_cpp(mat X, colvec y, mat Z) {
-   LinearGMM results(X, y, Z);
+   tsls_fit results(X, y, Z);
    return(results.tsls_est());
 }
