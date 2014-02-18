@@ -38,9 +38,6 @@ sem_sim <- function(){
   x1 <- a0 + a1 * z1 + a2 * z2 + rnorm(n)
   x0 <- rep(1, n)
   y <- b0 * x0 + b1 * x1 + rnorm(n) 
-  
-  X <- cbind(x0, x1)
-  Z <- cbind(z0, z1, z2)  
   return(as.matrix(tsls(y ~ x1, ~ z1 + z2)$coef)) 
 }
 
