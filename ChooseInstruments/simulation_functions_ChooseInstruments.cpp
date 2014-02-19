@@ -8,28 +8,29 @@ class tsls_fit {
   public:
     tsls_fit(const mat&, const colvec&, const mat&);
     colvec est(); 
+    colvec SE_textbook();
+    colvec SE_robust();
+    colvec SE_center();
     colvec resid();
-  private:
-    int n, k;
-    double s_sq;
-    colvec b, residuals;
-    mat Z_copy, Qz, Rz, Xtilde, Qtilde, Rtilde, Rtilde_inv, D, C;
     mat Omega_textbook();
     mat Omega_robust();
     mat Omega_center();
     mat V_textbook();
     mat V_robust();
     mat V_center();
-    colvec SE_textbook();
-    colvec SE_robust();
-    colvec SE_center();
+    
+  private:
+    int n, k;
+    double s_sq;
+    colvec b, residuals;
+    mat Z_copy, Qz, Rz, Xtilde, Qtilde, Rtilde, Rtilde_inv, D, C;
 };
 
 
 //Class constructor
 tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
-  n = residuals.n_elem;
-  k = Z.n_rows;
+  n = y.n_elem;
+  k = X.n_cols;
   Z_copy = Z; 
   qr_econ(Qz, Rz, Z);
   Xtilde = Qz.t() * X;
@@ -37,9 +38,10 @@ tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
   b = solve(trimatu(Rtilde), Qtilde.t() * Qz.t() * y);
   residuals = y - X * b;
   D =  diagmat(pow(residuals, 2));
-  s_sq = dot(residuals, residuals) / n;
-  Rtilde_inv = solve(trimatu(Rtilde), 
-            eye(Rtilde.n_rows, Rtilde.n_cols));
+  s_sq = dot(residuals, residuals) / (n - k);
+  Rtilde_inv = inv(trimatu(Rtilde)); 
+  //Rtilde_inv = solve(trimatu(Rtilde), 
+            //eye(Rtilde.n_rows, Rtilde.n_cols));
   //C = solve(trimatu(Rtilde), Qtilde.t() * Rtilde_inv.t());
 }
 
@@ -75,7 +77,7 @@ mat tsls_fit::V_center(){
 }
 
 colvec tsls_fit::SE_textbook(){
-  return(sqrt(diagvec(V_textbook()) / n));
+  return(sqrt(diagvec(V_textbook() / n)));
 }
 
 colvec tsls_fit::SE_robust(){
@@ -100,8 +102,8 @@ colvec tsls_est_cpp(mat X, colvec y, mat Z) {
    return(results.est());
 }
 
-//// [[Rcpp::export]]
-//colvec tsls_SE_cpp(mat X, colvec y, mat Z) {
-//   tsls_fit results(X, y, Z);
-//   return(results.est());
-//}
+// [[Rcpp::export]]
+colvec tsls_SE_cpp(mat X, colvec y, mat Z) {
+   tsls_fit results(X, y, Z);
+   return(results.SE_textbook());
+}

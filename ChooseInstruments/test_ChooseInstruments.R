@@ -48,3 +48,34 @@ set.seed(7436)
 system.time(bar <- replicate(1000, cpp_est_sim()))
 
 all.equal(foo, bar)
+
+
+
+
+cpp_se_sim <- function(){
+  sim_data <- simple_dgp()
+  X <- with(sim_data, cbind(x0, x1))
+  Z <- with(sim_data, cbind(z0, z1, z2))
+  y <- sim_data$y
+  out <- as.vector(tsls_SE_cpp(X, y, Z))
+  return(out)  
+}
+
+
+r_se_sim <- function(){
+  sim_data <- simple_dgp()
+  out <- tsls(y ~ x1, ~ z1 + z2, data = sim_data)$V
+  out <- sqrt(diag(out))
+  names(out) <- NULL
+  return(out)
+}
+
+
+set.seed(7436)
+system.time(foo <- replicate(1000, r_se_sim()))
+
+set.seed(7436)
+system.time(bar <- replicate(1000, cpp_se_sim()))
+
+all.equal(foo, bar)
+
