@@ -7,25 +7,23 @@ using namespace arma;
 class tsls_fit {
   public:
     tsls_fit(const mat&, const colvec&, const mat&);
-    colvec est(); 
-    colvec SE_textbook();
-    colvec SE_robust();
-    colvec SE_center();
-    colvec resid();
-    mat Omega_textbook();
-    mat Omega_robust();
-    mat Omega_center();
-    mat V_textbook();
-    mat V_robust();
-    mat V_center();
-    
+    colvec est() {return(b);} 
+    colvec SE_textbook() {return(sqrt(diagvec(V_textbook() / n)));}
+    colvec SE_robust() {return(sqrt(diagvec(V_robust() / n)));}
+    colvec SE_center() {return(sqrt(diagvec(V_center() / n)));}
+    colvec resid() {return(residuals);}
+    mat Omega_textbook() {return(s_sq * Rz.t() * Rz / n);}
+    mat Omega_robust() {return(Z_copy.t() * D * Z_copy / n);}
+    mat Omega_center() {return(Z_copy.t() * (D / n -  (residuals * residuals.t()) / (n * n)) * Z_copy);};
+    mat V_textbook() {return(n * s_sq * Rtilde_inv * Rtilde_inv.t());}
+    mat V_robust() {return(n * n * C * Omega_robust() * C.t());}
+    mat V_center() {return(n * n * C * Omega_center() * C.t());}
   private:
     int n, k;
     double s_sq;
     colvec b, residuals;
     mat Z_copy, Qz, Rz, Qtilde, Rtilde, Rtilde_inv, D, C;
 };
-
 
 //Class constructor
 tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
@@ -42,56 +40,8 @@ tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
   C = Rtilde_inv * Qtilde.t() * inv(trimatl(Rz.t()));
 }
 
-mat tsls_fit::Omega_textbook(){
-//Assumes heteroskedastic errors
-  return(s_sq * Rz.t() * Rz / n);
-}
 
-mat tsls_fit::Omega_robust(){
-//Heteroskedasticity-robust
-  return(Z_copy.t() * D * Z_copy / n);
-}
 
-mat tsls_fit::Omega_center(){
-//Heteroskedasticity-robust and centered
-  mat e_outer = residuals * residuals.t();
-  return(Z_copy.t() * (D / n -  e_outer / (n * n)) * Z_copy);
-}
-
-mat tsls_fit::V_textbook(){
-//Covariance matrix estimator for sqrt(n) * (b_hat - b_true)
-  return(n * s_sq * Rtilde_inv * Rtilde_inv.t());
-}
-
-mat tsls_fit::V_robust(){
-//Covariance matrix estimator for sqrt(n) * (b_hat - b_true)
-  return(n * n * C * Omega_robust() * C.t());
-}
-
-mat tsls_fit::V_center(){
-//Covariance matrix estimator for sqrt(n) * (b_hat - b_true)
-  return(n * n * C * Omega_center() * C.t());
-}
-
-colvec tsls_fit::SE_textbook(){
-  return(sqrt(diagvec(V_textbook() / n)));
-}
-
-colvec tsls_fit::SE_robust(){
-  return(sqrt(diagvec(V_robust()) / n));
-}
-
-colvec tsls_fit::SE_center(){
-  return(sqrt(diagvec(V_center()) / n));
-}
-
-colvec tsls_fit::est(){
-  return(b);
-}
-
-colvec tsls_fit::resid(){
-  return(residuals);
-}
 
 //Testing code - Make some of the member functions available to R
 // [[Rcpp::export]]
