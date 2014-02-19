@@ -23,7 +23,7 @@ class tsls_fit {
     int n, k;
     double s_sq;
     colvec b, residuals;
-    mat Z_copy, Qz, Rz, Xtilde, Qtilde, Rtilde, Rtilde_inv, D, C;
+    mat Z_copy, Qz, Rz, Qtilde, Rtilde, Rtilde_inv, D, C;
 };
 
 
@@ -33,15 +33,12 @@ tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
   k = X.n_cols;
   Z_copy = Z; 
   qr_econ(Qz, Rz, Z);
-  Xtilde = Qz.t() * X;
-  qr_econ(Qtilde, Rtilde, Xtilde);
+  qr_econ(Qtilde, Rtilde, Qz.t() * X);
   b = solve(trimatu(Rtilde), Qtilde.t() * Qz.t() * y);
   residuals = y - X * b;
   D =  diagmat(pow(residuals, 2));
   s_sq = dot(residuals, residuals) / (n - k);
   Rtilde_inv = inv(trimatu(Rtilde)); 
-  //Rtilde_inv = solve(trimatu(Rtilde), 
-            //eye(Rtilde.n_rows, Rtilde.n_cols));
   //C = solve(trimatu(Rtilde), Qtilde.t() * Rtilde_inv.t());
 }
 
