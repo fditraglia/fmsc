@@ -38,8 +38,9 @@ tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
   residuals = y - X * b;
   D =  diagmat(pow(residuals, 2));
   s_sq = dot(residuals, residuals) / n;
-  //Rtilde_inv = solve(trimatu(Rtilde), eye(k, k));
-  //C = solve(trimatu(Rtilde), Qtilde * Rtilde_inv.t());
+  Rtilde_inv = solve(trimatu(Rtilde), 
+            eye(Rtilde.n_rows, Rtilde.n_cols));
+  //C = solve(trimatu(Rtilde), Qtilde.t() * Rtilde_inv.t());
 }
 
 mat tsls_fit::Omega_textbook(){
@@ -98,7 +99,6 @@ colvec tsls_est_cpp(mat X, colvec y, mat Z) {
    tsls_fit results(X, y, Z);
    return(results.est());
 }
-
 
 //// [[Rcpp::export]]
 //colvec tsls_SE_cpp(mat X, colvec y, mat Z) {
