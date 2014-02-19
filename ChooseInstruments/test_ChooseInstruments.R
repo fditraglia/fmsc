@@ -24,6 +24,8 @@ simple_dgp <- function(){
   return(out)
 }
 
+
+#Test C++ estimates against tsls
 cpp_est_sim <- function(){
   sim_data <- simple_dgp()
   X <- with(sim_data, cbind(x0, x1))
@@ -51,13 +53,13 @@ all.equal(foo, bar)
 
 
 
-
+#Test C++ textbook standard errors against tsls
 cpp_se_sim <- function(){
   sim_data <- simple_dgp()
   X <- with(sim_data, cbind(x0, x1))
   Z <- with(sim_data, cbind(z0, z1, z2))
   y <- sim_data$y
-  out <- as.vector(tsls_SE_cpp(X, y, Z))
+  out <- as.vector(tsls_SE_textbook_cpp(X, y, Z))
   return(out)  
 }
 
@@ -79,3 +81,13 @@ system.time(bar <- replicate(1000, cpp_se_sim()))
 
 all.equal(foo, bar)
 
+#tsls doesn't seem to have an option for robust or centered standard errors so we can't test the C++ against it. However, for this DGP the robust and centered standard errors should be very close to the textbook ones.
+set.seed(821)
+sim_data <- simple_dgp()
+X <- with(sim_data, cbind(x0, x1))
+Z <- with(sim_data, cbind(z0, z1, z2))
+y <- sim_data$y
+
+tsls_SE_textbook_cpp(X, y, Z)
+tsls_SE_robust_cpp(X, y, Z)
+tsls_SE_center_cpp(X, y, Z)

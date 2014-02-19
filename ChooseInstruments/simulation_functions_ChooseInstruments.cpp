@@ -93,6 +93,7 @@ colvec tsls_fit::resid(){
   return(residuals);
 }
 
+//Testing code - Make some of the member functions available to R
 // [[Rcpp::export]]
 colvec tsls_est_cpp(mat X, colvec y, mat Z) {
    tsls_fit results(X, y, Z);
@@ -100,7 +101,20 @@ colvec tsls_est_cpp(mat X, colvec y, mat Z) {
 }
 
 // [[Rcpp::export]]
-colvec tsls_SE_cpp(mat X, colvec y, mat Z) {
+colvec tsls_SE_textbook_cpp(mat X, colvec y, mat Z) {
    tsls_fit results(X, y, Z);
    return(results.SE_textbook());
+}
+
+
+// [[Rcpp::export]]
+colvec tsls_SE_robust_cpp(mat X, colvec y, mat Z) {
+   tsls_fit results(X, y, Z);
+   return(results.SE_robust());
+}
+
+// [[Rcpp::export]]
+colvec tsls_SE_center_cpp(mat X, colvec y, mat Z) {
+   tsls_fit results(X, y, Z);
+   return(results.SE_center());
 }
