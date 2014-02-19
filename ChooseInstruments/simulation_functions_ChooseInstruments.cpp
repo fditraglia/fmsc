@@ -39,7 +39,7 @@ tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
   D =  diagmat(pow(residuals, 2));
   s_sq = dot(residuals, residuals) / (n - k);
   Rtilde_inv = inv(trimatu(Rtilde)); 
-  //C = solve(trimatu(Rtilde), Qtilde.t() * Rtilde_inv.t());
+  C = Rtilde_inv * Qtilde.t() * inv(trimatl(Rz.t()));
 }
 
 mat tsls_fit::Omega_textbook(){
