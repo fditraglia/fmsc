@@ -18,13 +18,13 @@ class tsls_fit {
     mat V_textbook() {return(n * s_sq * Rtilde_inv * Rtilde_inv.t());}
     mat V_robust() {return(n * n * C * Omega_robust() * C.t());}
     mat V_center() {return(n * n * C * Omega_center() * C.t());}
+    mat C;
   private:
     int n, k;
     double s_sq;
     colvec b, residuals;
-    mat Z_copy, Qz, Rz, Qtilde, Rtilde, Rtilde_inv, D, C;
+    mat Z_copy, Qz, Rz, Qtilde, Rtilde, Rtilde_inv, D;
 };
-
 //Class constructor
 tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
   n = y.n_elem;
@@ -61,6 +61,33 @@ dgp::dgp(double b, vec p, double g, double r, mat V,
   z2 = u_e_z2.col(2);
   x = z1 * p + g * z2 + u_e_z2.col(1);
   y = b * x + u_e_z2.col(0);
+}
+
+
+class fmsc {
+  public:
+    fmsc(colvec, colvec, mat, mat);  
+  private:
+    tsls_fit valid, full;
+    colvec tau;
+    mat Psi, Omega, tau_outer_est, Bias_mat;
+    int n, q1, q2, q;
+};
+//Class constructor - need to use initialization list here
+//This ensures that the tsls_fit constructor is called to 
+//set up valid and full *before* we enter the body of the
+//present constructor. 
+fmsc::fmsc(colvec x, colvec y, mat z1, mat z2):
+  valid(x, y, z1), full(x, y, join_rows(z1, z2)){
+    q1 = z1.n_cols;
+    q2 = z2.n_cols;
+    n = y.n_elem;
+    Omega = full.Omega_center();
+    tau = z2.t() * valid.resid();
+    Psi =  join_rows(-1 * z2.t() * valid.C , eye(q2, q2));
+    tau_outer_est = tau * tau.t() - Psi * Omega * Psi.t();
+    Bias_mat = mat(q, q, fill::zeros);
+    Bias_mat(span(q1, q - 1), span(q1, q - 1)) = tau_outer_est;
 }
 
 //Testing code - Make some of the member functions available to R
