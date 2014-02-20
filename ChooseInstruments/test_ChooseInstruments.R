@@ -91,3 +91,8 @@ y <- sim_data$y
 tsls_SE_textbook_cpp(X, y, Z)
 tsls_SE_robust_cpp(X, y, Z)
 tsls_SE_center_cpp(X, y, Z)
+
+
+#Test the dgp function
+set.seed(352)
+test_dgp(0.2, 0.1, 100)

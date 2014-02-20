@@ -42,6 +42,26 @@ tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
 
 
 
+class dgp {
+  public:
+    dgp(double, vec, double, double, mat, mat, int);
+    colvec x, y, z2;
+    mat z1;
+  private: 
+    int n_z1;
+    mat u_e_z2;
+};
+//Class constructor
+dgp::dgp(double b, vec p, double g, double r, mat V, 
+                  mat Q, int n){
+  RNGScope scope;
+  n_z1 = Q.n_cols;
+  z1 = trans(chol(Q) * reshape(colvec(rnorm(n * n_z1)), n_z1, n));
+  u_e_z2 = trans(chol(V) * reshape(colvec(rnorm(3 * n)), 3, n));
+  z2 = u_e_z2.col(2);
+  x = z1 * p + g * z2 + u_e_z2.col(1);
+  y = b * x + u_e_z2.col(0);
+}
 
 //Testing code - Make some of the member functions available to R
 // [[Rcpp::export]]
@@ -67,4 +87,19 @@ colvec tsls_SE_robust_cpp(mat X, colvec y, mat Z) {
 colvec tsls_SE_center_cpp(mat X, colvec y, mat Z) {
    tsls_fit results(X, y, Z);
    return(results.SE_center());
+}
+
+
+// [[Rcpp::export]]
+colvec test_dgp(double g, double r, int n){
+  colvec p = ones(3) / 10;
+  double b = 1;
+  mat Q = eye(3, 3);
+  mat V(3,3); 
+  V << 1 << 0.5 - g * r << r << endr
+    << 0.5  - g * r << 1 << 0 << endr
+    << r << 0 << 1 << endr;
+  dgp sims(b, p, g, r, V, Q, n);
+  tsls_fit valid(sims.x, sims.y, sims.z1);
+  return(valid.est());
 }
