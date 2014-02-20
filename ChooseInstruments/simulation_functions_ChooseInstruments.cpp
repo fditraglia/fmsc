@@ -70,7 +70,7 @@ class fmsc {
   private:
     tsls_fit valid, full;
     colvec tau;
-    mat Psi, Omega, tau_outer_est, Bias_mat;
+    mat Psi, tau_outer_est, Bias_mat;
     int n, q1, q2, q;
 };
 //Class constructor - need to use initialization list here
@@ -82,10 +82,9 @@ fmsc::fmsc(colvec x, colvec y, mat z1, mat z2):
     q1 = z1.n_cols;
     q2 = z2.n_cols;
     n = y.n_elem;
-    Omega = full.Omega_center();
     tau = z2.t() * valid.resid();
     Psi =  join_rows(-1 * z2.t() * valid.C , eye(q2, q2));
-    tau_outer_est = tau * tau.t() - Psi * Omega * Psi.t();
+    tau_outer_est = tau * tau.t() - Psi * full.Omega_center() * Psi.t();
     Bias_mat = mat(q, q, fill::zeros);
     Bias_mat(span(q1, q - 1), span(q1, q - 1)) = tau_outer_est;
 }
