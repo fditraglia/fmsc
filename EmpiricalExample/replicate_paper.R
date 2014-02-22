@@ -1,198 +1,76 @@
 #Frank DiTraglia
-#September 22nd, 2011
+#February 21st 2014
 
-#-------------------------------------------------------#
-# Describe the data! Summary stats! What are the units? #
-#-------------------------------------------------------#
-
-
-#This script replicates the main results from Carstensen and Gundlach (2006) using their dataset.
-
-
-#Work computer
-root.dir <- "C:/Documents and Settings/rt356/My Documents/My Dropbox/PhD Dissertation/Job Market Paper/Empirical Examples/Carstensen and Gundlach (Development)"
-
-
-#Home computer
-#root.dir <- "/Users/Frank/Dropbox/PhD Dissertation/Job Market Paper/Empirical Examples/Carstensen and Gundlach (Development)"
-
+setwd("~/fmsc/EmpiricalExample/")
 
 #Load packages
 library(sem) #contains tsls routine
-library(gmm) #to get the J-stat for Andrews' (1999) criteria
 
-#Read the data. The value -999.999 is used to indicate missing data.
-setwd(root.dir)
-input.data <- read.csv("Carstensen_Gundlach.csv", header = TRUE, na.strings = "-999.999")
-
-#Change country from factor data to character data
-#is.character(data$country) #FALSE
-input.data$country <- as.character(input.data$country)
-
-#Some of the variable names in the dataset don't match those in the paper. Change them so they do.
-attach(input.data)
-rule <- kaufman
-malfal <- mfalrisk
-exprop <- exprop2
-lngdpc <- lngdpc95
-trade <- frarom
-latitude <- lat
-coast <- landsea
-clean.data <- data.frame(country, lngdpc, rule, malfal, malrisk, gadp, exprop, lnmort, maleco, frost, humid, latitude, eurfrac, engfrac, coast, trade)
-detach(input.data)
-clean.data$country <- as.character(clean.data$country)
+#Read the data. The value -999.999 is used to indicate missingness.
+CGdata <- read.csv("Carstensen_Gundlach.csv", header = TRUE, na.strings = "-999.999", stringsAsFactors = FALSE)
 
 
-#-------------------------------------------------------#
-#                  Replicate Table 1                    #
-#-------------------------------------------------------#
+#Rename columns that don't match the variable names from the paper
+paper <- c("rule", "malfal", "exprop", "lngdpc", "trade", "latitude", "coast")
+dataset <- c("kaufman", "mfalrisk", "exprop2", "lngdpc95", "frarom", "lat", "landsea")
+key <- data.frame(paper, dataset, stringsAsFactors = FALSE)
+rm(paper, dataset)
+
+for(i in 1:nrow(key)){
+  col <- which(names(CGdata) == key$dataset[i])
+  names(CGdata)[col] <- key$paper[i]
+}
 
 
-#We have values of lnmort for the following 46 countries:
-countries <- clean.data$country[!is.na(clean.data$lnmort)]
-cbind(1:length(countries), countries)
-# [1,] "Angola"    
-# [2,] "Argentina" 
-# [3,] "Australia" 
-# [4,] "Bangladesh"
-# [5,] "Bolivia"   
-# [6,] "Brazil"    
-# [7,] "Burkina Fa"
-# [8,] "Cameroon"  
-# [9,] "Canada"    
-#[10,] "Chile"     
-#[11,] "Colombia"  
-#[12,] "Costa Rica"
-#[13,] "Dom. Rep." 
-#[14,] "Ecuador"   
-#[15,] "El Salvado"
-#[16,] "Guatemala" 
-#[17,] "Guinea"    
-#[18,] "Honduras"  
-#[19,] "Hong Kong" 
-#[20,] "India"     
-#[21,] "Indonesia" 
-#[22,] "Cote d'Ivo"
-#[23,] "Jamaica"   
-#[24,] "Kenya"     
-#[25,] "Madagascar"
-#[26,] "Malaysia"  
-#[27,] "Mauritania"
-#[28,] "Mexico"    
-#[29,] "Morocco"   
-#[30,] "New Zealan"
-#[31,] "Nigeria"   
-#[32,] "Pakistan"  
-#[33,] "Panama"    
-#[34,] "Paraguay"  
-#[35,] "Peru"      
-#[36,] "Senegal"   
-#[37,] "Singapore" 
-#[38,] "South Afri"
-#[39,] "Sri Lanka" 
-#[40,] "Tanzania"  
-#[41,] "Trinidad a"
-#[42,] "Tunisia"   
-#[43,] "Uruguay"   
-#[44,] "USA"       
-#[45,] "Venezuela" 
-#[46,] "Vietnam"
+#I use the FMSC to examine the instrument selection exercise in Table 2 of the paper. This table uses lngdpc as the dependent variable and rule and malfal as the independent variables throughout. The various entries in the table 
 
-#Now, of these countries there are a few missing values for the data used in the baseline models. 
-baseline.data <- subset(clean.data, !is.na(lnmort))
-baseline.data$country[which(is.na(baseline.data$lngdpc))] #None missing
-baseline.data$country[which(is.na(baseline.data$rule))] #Mauritania missing
-baseline.data$country[which(is.na(baseline.data$malfal))] #None missing
-baseline.data$country[which(is.na(baseline.data$gadp))] #Vietnam missing
-baseline.data$country[which(is.na(baseline.data$exprop))] #Mauritania missing
-baseline.data$country[which(is.na(baseline.data$lnmort))] #None missing
-baseline.data$country[which(is.na(baseline.data$maleco))] #None missing
-#We see that Mauritania is missing a value for rule and exprop, while Vietnam is missing a value for gadp. 
+#This table uses rule and malfal as RHS variables and lngdpc as the outcome variable. The panels of the table look at how adding additional instruments changes the results.
 
-#In the paper, Carstensen and Gundlach report use 45 observations for each of the baseline models. For baseline models 1, 2, and 4 the country excluded from the above list is Mauritania. For baseline model 3 the excluded country is Vietname. This is because Mauritania is missing values for rul and exprop, while Vietnam is missing an observation for gadp.
-
-
-#Formulas for baseline models from Table 1 -- Different measures of institutions and malaria risk as regressors, baseline instrument set
-baseline1 <- tsls(lngdpc ~ rule + malfal, ~ lnmort + maleco, clean.data)
-baseline2 <- tsls(lngdpc ~ rule + malrisk, ~ lnmort + maleco, clean.data)
-baseline3 <- tsls(lngdpc ~ gadp + malfal, ~ lnmort + maleco, clean.data)
-baseline4 <- tsls(lngdpc ~ exprop + malfal, ~ lnmort + maleco, clean.data)
-
-#Function to extract quantities needed to replicate Table 1 of the paper from the tsls objects given above
-reg.table <- function(tsls.object, intercept = FALSE, conf = 0.95, rounded = 2){
-  
-  #Estimated coefficients
-  coeffs <- tsls.object$coefficients
-  
-  #Estimated covariance matrix
-  V <- tsls.object$V
-  
-  #Standard errors (1-a)*100%
-  SE <- sqrt(diag(V))
-  
-  #(1-a) * 100% Confidence Interval
-  a <- 1 - conf
-  N <- tsls.object$n
-  df <- N - length(coeffs)
-  z <- qt(1 - (a/2), df)
-  lower <- coeffs - z * SE
-  upper <- coeffs + z * SE
-  
-  results <- rbind(coeffs, SE, lower, upper) 
-  results <- round(results, rounded)
-  
-  #If the option has been invoked, exclude the intercept from the results
-  if(intercept == FALSE){results <- results[,-1]}
-  
-  return(results)
-  
-}#END reg.table
-
-#Summarize the results of the Baseline Models to replicate Table 1
-baseline.results1 <- reg.table(baseline1)
-baseline.results2 <- reg.table(baseline2)
-baseline.results3 <- reg.table(baseline3)
-baseline.results4 <- reg.table(baseline4)
-
-cbind(baseline.results1, baseline.results2, baseline.results3, baseline.results4) #This matches Table 1 exactly!
-
-
-#-------------------------------------------------------#
-#                  Replicate Table 2                    #
-#-------------------------------------------------------#
-
-#This table uses rule and malfal as regressors and looks at how adding additional instruments changes the results. 
-
-#The baseline set of instruments to which others are added is lnmort and maleco.
-
-#The additional blocks of instruments considered here are:
+#The instrument blocks considered are:
+#     Baseline: lnmort, maleco
 #     Climate:  frost, humid, latitude
 #     Europe:   eurfrac, engfrac
 #     Openness: coast, trade
 
-#Are any values of these missing? 
-attach(clean.data)
-country[is.na(engfrac)] #Vietnam 
-country[is.na(eurfrac)] #Vietnam
-country[is.na(frost)] #Czechoslovakia, East Germany, USSR, Yugoslavia 
-country[is.na(humid)] #Czechoslovakia, East Germanny, USSR, Yugoslavia
-country[is.na(latitude)] #Vietnam 
-country[is.na(coast)] #Czechoslovakia, East Germany, Puerto Rico, USSR
-country[is.na(trade)] #East Germany, Vietnam
+#Note that there are some missing values in the dataset, so Table 2 is based on a subset including only 44 observations
 
-#At least one of these missing:
-something.missing <- is.na(engfrac) | is.na(eurfrac) | is.na(frost) | is.na(humid) | is.na(latitude) | is.na(coast) | is.na(trade)
-country[something.missing] #Czechoslovakia, East Germany, Puerto Rico, USSR, Vietnam, Yugoslavia
+CGdata <- subset(CGdata, !is.na(lngdpc) &
+                         !is.na(rule) & !is.na(malfal) &
+                         !is.na(lnmort) & !is.na(maleco) &   
+                         !is.na(frost) & !is.na(humid) & 
+                         !is.na(eurfrac) & !is.na(engfrac) & 
+                         !is.na(coast) & !is.na(trade))
 
-#Are there any countries missing values for these variables that nonetheless have observations for lnmort, maleco, rule, and maleco?
-missing.baseline <- is.na(lnmort) | is.na(maleco) | is.na(rule) | is.na(maleco)
-country[!missing.baseline & something.missing] #Vietnam
-detach(clean.data)
 
-#So for this Table we're working with the same countries as in the First Baseline Model (namely the 46 for which we have lnmort excluding Mauritania for which we don't have an observation of rule), and Vietnam. 
+#For convenience, drop the columns we won't be using
+keep <- c("lngdpc", "rule", "malfal", "maleco", "lnmort", "frost", "humid", "latitude", "eurfrac", "engfrac", "coast", "trade")
+keep.cols <- which(names(CGdata) %in% keep)
+CGdata <- CGdata[,keep.cols]
+
+rm(keep, keep.cols)
+
+
+#Function to extract quantities needed to replicate Table 1 of the paper from the tsls objects given above
+reg.table <- function(tsls.object){
+  coef <- tsls.object$coefficients
+  SE <- sqrt(diag(tsls.object$V))
+  N <- tsls.object$n
+  z <- qt(0.975, N - length(coef))
+  lower <- coef - z * SE
+  upper <- coef + z * SE
+  results <- round(rbind(coef, SE, lower, upper), 2) 
+  return(results[,-1]) #Don't report intercept
+}
+
+
+
+model <- formula(lngdpc ~ rule + malfal)
+
+#The numbers here correspond to numbered panels of the table
+z1 
 
 #Baseline instruments plus climate block: frost, humid, latitude
-instruments1 <- tsls(lngdpc ~ rule + malfal, ~ lnmort + maleco + frost + humid + latitude, clean.data)
+instruments1 <- tsls(model, ~ lnmort + maleco + frost + humid + latitude, CGdata)
 
 #Baseline instruments plus Europe block: eurfrac, engfrac
 instruments2 <- tsls(lngdpc ~ rule + malfal, ~ lnmort + maleco + eurfrac + engfrac, clean.data)
