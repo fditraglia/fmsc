@@ -6,13 +6,18 @@ setwd("~/fmsc/EmpiricalExample/")
 #Load packages
 library(sem) #contains tsls routine
 
-#Read the data. The value -999.999 is used to indicate missingness.
-CGdata <- read.csv("Carstensen_Gundlach.csv", header = TRUE, na.strings = "-999.999", stringsAsFactors = FALSE)
+#C&G use -999.999 to indicate missingness
+CGdata <- read.csv("Carstensen_Gundlach.csv", 
+                   header = TRUE, 
+                   na.strings = "-999.999", 
+                   stringsAsFactors = FALSE)
 
 
 #Rename columns that don't match the variable names from the paper
-paper <- c("rule", "malfal", "exprop", "lngdpc", "trade", "latitude", "coast")
-dataset <- c("kaufman", "mfalrisk", "exprop2", "lngdpc95", "frarom", "lat", "landsea")
+paper <- c("rule", "malfal", "exprop", "lngdpc", 
+           "trade", "latitude", "coast")
+dataset <- c("kaufman", "mfalrisk", "exprop2", "lngdpc95",
+             "frarom", "lat", "landsea")
 key <- data.frame(paper, dataset, stringsAsFactors = FALSE)
 rm(paper, dataset)
 
@@ -44,10 +49,11 @@ CGdata <- subset(CGdata,
 
 
 #For convenience, drop the columns we won't be using
-keep <- c("lngdpc", "rule", "malfal", "maleco", "lnmort", "frost", "humid", "latitude", "eurfrac", "engfrac", "coast", "trade")
+keep <- c("lngdpc", "rule", "malfal", "maleco", 
+          "lnmort", "frost", "humid", "latitude", 
+          "eurfrac", "engfrac", "coast", "trade")
 keep.cols <- which(names(CGdata) %in% keep)
 CGdata <- CGdata[,keep.cols]
-
 rm(keep, keep.cols)
 
 
@@ -144,4 +150,3 @@ z8 <- model.matrix(set8, CGdata)
 #Valid and full instrument sets
 zvalid <- z1
 zfull <- z8
-
