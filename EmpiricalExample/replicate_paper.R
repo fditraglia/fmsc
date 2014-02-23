@@ -126,3 +126,22 @@ results8 <- reg.table(fit8)
 #Note that there is a very slight discrepancy (0.01) in the standard errors for fit1 compared to those in C&G's paper. This comes from the fact that they include Vietnam when estimating with the baseline instruments. I exclude it since we don't observe the values of any of the other instruments for Vietnam and I want to hold everything constant except the instruments.
 cbind(results1, results2, results3, results4) 
 cbind(results5, results6, results7, results8)
+
+
+#To use the FMSC code, we'll need to convert the formula objects from above into model matrices to pass to C++
+y <- as.matrix(with(CGdata, lngdpc))
+colnames(y) <- 'lngdpc'
+x <- model.matrix(model, CGdata)
+z1 <- model.matrix(set1, CGdata)
+z2 <- model.matrix(set2, CGdata)
+z3 <- model.matrix(set3, CGdata)
+z4 <- model.matrix(set4, CGdata)
+z5 <- model.matrix(set5, CGdata)
+z6 <- model.matrix(set6, CGdata)
+z7 <- model.matrix(set7, CGdata)
+z8 <- model.matrix(set8, CGdata)
+
+#Valid and full instrument sets
+zvalid <- z1
+zfull <- z8
+
