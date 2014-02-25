@@ -1280,9 +1280,12 @@ by the shortcut formula. We can continue to estimate $E[\epsilon_i^2 \textbf{z}_
 Need to write out exactly how we will compute the J-test statistic, which covariance matrix we will use, etc.
 
 \subsection{Canonical Correlation Information Criterion}
-Mardia, Kent \& Bibby (1980).
+Hall \& Peixe (2003), Jana (2005), Hall (2005).
 
-\paragraph{Canonical Correlation Analysis} This discussion follows Mardia, Kent \& Bibby (1980). Let $\mathbf{x}$ be a random $q$-vector and and $\mathbf{y}$ be a random $p$-vector with variance-covariance matrix
+
+
+\paragraph{Canonical Correlation Analysis} 
+To implement the CCIC, we need to know how to calculate the canonical correlations and understand what they mean. The discussion given here follows  Mardia, Kent \& Bibby (1980). Let $\mathbf{x}$ be a random $q$-vector and and $\mathbf{y}$ be a random $p$-vector with variance-covariance matrix
   $$Var\left[\begin{array}
     {c} \textbf{x} \\ \textbf{y}
   \end{array}\right] = \left[ \begin{array}
