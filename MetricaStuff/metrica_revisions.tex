@@ -1280,12 +1280,35 @@ by the shortcut formula. We can continue to estimate $E[\epsilon_i^2 \textbf{z}_
 Need to write out exactly how we will compute the J-test statistic, which covariance matrix we will use, etc.
 
 \subsection{Canonical Correlation Information Criterion}
-Hall \& Peixe (2003), Jana (2005), Hall (2005).
+For more details on the material discussed here see Hall \& Peixe (2003) and Jana (2005), and Hall (2005)
 
+Let $c$ index moment sets and consider moment conditions of the form 
+  $$E[z_t(c)u_t(\theta_0)]=0$$
+where $\theta_0$ is a $p$-vector. In a linear instrumental variables model, this is simply
+  $$E[z_t(c) (y_t - x_t'\theta_0)] = 0$$
+Now, let $\rho_1(c), \hdots, \rho_p(c)$ denote the canonical correlations between $\partial u_t(\theta)/\partial \theta$ and $u_t(\theta)$. For a linear instrumental variables model, 
+  $$\frac{\partial u_t(\theta)}{\partial \theta} = x_t$$
+so $\rho_i(c)$ is the $i$th canonical correlation between $x_t$ and $z_t(c)$. 
+
+Essentially, Hall \& Peixe (2003) use a result of Sargent to express the variance matrix of the GIV estimator, under certain assumptions, in terms of these canonical correlations. Under the standard first-order limit theory, adding extra instruments can never increase the asymptotic variance. However, adding redundant instruments, instruments that are simply a linear combination of the instruments already in the model, creates problems in finite samples. The idea is to eliminate such ``redundant'' instruments. It turns out that redundancy can be related directly to the canonical correlations in this setting. In particular, a collection of instruments $z(c_2)$ is redundant given $z(c_1)$ if the canonical correlations do not change when the instruments in $z(c_2)$ are added to a model that already includes $z(c_1)$. Using their notation, $z_t(c_2)$ is redundant given $z(c_1)$ if and only if
+  $$\rho_i(c_1 + c_2) = \rho_1(c_1) \quad \forall i = 1,2, \hdots, p$$
+The idea behind the CCIC is to consider a similar condition for the sample analogue of the canonical correlations. In some cases, although not in the linear IV model, $\partial u_t(\theta)/\partial \theta$ will depend on $\theta$. Since this is an unknown, when needed we substitute a preliminary estimator $\widetilde{\theta}_T$, yielding $\partial u_t(\widetilde{\theta}_T)/\partial \theta$.
+
+The canonical correlations information criterion (CCIC) is given by
+  $$CCIC(c) = T\sum_{i=1}^p \log\left[1 - r_{i,T}(c)^2 \right] + (|c| - p)\mu_T$$
+where $r_{i,T}(c)$ is the $i$th sample canonical correlation between $\partial u_t(\theta)/\partial \theta$ and $u_t(\theta)$. Again, for a linear IV model, this reduces to the $i$th sample canonical correlation between $x_t$ and $z_t(c)$. For a linear IV model in which $x_t$ is a scalar, there is only a single sample canonical correlation and it equals the \emph{first-stage} $R^2$ using the corresponding set of instruments (Jana, 2005). The quantity $|c| - p$ measures the degree of over-identification provided by the instrument $z_t(c)$ since $|c|$ is the number of instruments, and $p$ the number of regressors. Different choices for $\mu_T$ give rise to different versions of the CCIC by analogy to Andrews' (1999) GMM moment selection criteria. In particular, 
+  \begin{eqnarray*}
+    \mbox{AIC-type} && \mu_T = 2\\
+    \mbox{BIC-type} && \mu_T = \log(T)\\
+    \mbox{Hannan-Quinn-Type} && \mu_T = b \log(\log(T)), \quad b > 2
+  \end{eqnarray*}
 
 
 \paragraph{Canonical Correlation Analysis} 
-To implement the CCIC, we need to know how to calculate the canonical correlations and understand what they mean. The discussion given here follows  Mardia, Kent \& Bibby (1980). Let $\mathbf{x}$ be a random $q$-vector and and $\mathbf{y}$ be a random $p$-vector with variance-covariance matrix
+To implement the CCIC, we need to know how to calculate the canonical correlations and understand what they mean. Since I'll only be looking at linear models, I simply need to consider canonical correlations between $x_t$ and $z_t(c)$. Although I use different notation here, following the notation of Mardia, Kent \& Bibby (1980) upon which this discussion is based, throughout we can think of $\mathbf{x}$ as $x_t$ and $\mathbf{y}$ as $z_t(c)$.
+
+
+Let $\mathbf{x}$ be a random $q$-vector and and $\mathbf{y}$ be a random $p$-vector with variance-covariance matrix
   $$Var\left[\begin{array}
     {c} \textbf{x} \\ \textbf{y}
   \end{array}\right] = \left[ \begin{array}
