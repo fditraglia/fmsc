@@ -1276,6 +1276,77 @@ by the shortcut formula. We can continue to estimate $E[\epsilon_i^2 \textbf{z}_
 \subsection{Valid Post-Selection Confidence Intervals}
 \todo[inline]{Express limit distribution of FMSC criterion for this example in terms of M, write out the moment averaging estimator as a weighted sum, rearrange and write down the limit distribution. Finally, give the simulation-based procedure in terms of the notation of this example.}
 
+\subsection{Andrews (1999) Moment Selection Criterion}
+Need to write out exactly how we will compute the J-test statistic, which covariance matrix we will use, etc.
+
+\subsection{Canonical Correlation Information Criterion}
+Hall \& Peixe (2003) and Jana (2005). Mardia, Kent \& Bibby (1980).
+
+\paragraph{Canonical Correlation Analysis} Let $\mathbf{x}$ be a random $q$-vector and and $\mathbf{y}$ be a random $p$-vector with variance-covariance matrix
+  $$Var\left[\begin{array}
+    {c} \textbf{x} \\ \textbf{y}
+  \end{array}\right] = \left[ \begin{array}
+    {cc} \Sigma_{xx} & \Sigma_{xy}\\
+    \Sigma_{yx} & \Sigma_{yy}
+  \end{array}\right]$$
+and let $\mathbf{a}$ and $\mathbf{b}$ be $q$ and $p$-vectors of weights, respectively. Then,
+\begin{eqnarray*}
+  Corr(\textbf{a}'\textbf{x}, \textbf{b}'\textbf{y}) &=& \frac{Cov(\textbf{a}'\textbf{x}, \textbf{b}'\textbf{y})}{SD(\textbf{a}'\textbf{x})SD(\textbf{b}'\textbf{y})} = \frac{\mathbf{a}'\Sigma_{xy}\mathbf{b}}{\left(\mathbf{a}'\Sigma_{xx}\mathbf{a} \right)^{1/2}\left(\mathbf{b}'\Sigma_{yy}\mathbf{b} \right)^{1/2}}\\
+\end{eqnarray*}
+Since
+\begin{eqnarray*}
+  Var\left[\begin{array}
+    {c} \mathbf{a}'\textbf{x} \\ \mathbf{b}'\textbf{y}
+  \end{array}\right] &=& Var\left(\left[ \begin{array}
+    {cc} \mathbf{a}' & \mathbf{0}_p' \\
+       \mathbf{0}_q' & \mathbf{b}'
+  \end{array}\right] \left[\begin{array}
+    {c} \textbf{x} \\ \textbf{y}
+  \end{array}\right]\right)\\
+  &=& \left[ \begin{array}
+    {cc} \mathbf{a}' & \mathbf{0}_p' \\
+       \mathbf{0}_q' & \mathbf{b}'
+  \end{array}\right]\left[ \begin{array}
+    {cc} \Sigma_{xx} & \Sigma_{xy}\\
+    \Sigma_{yx} & \Sigma_{yy}
+  \end{array}\right] \left[ \begin{array}
+    {cc} \mathbf{a} & \mathbf{0}_q \\
+      \mathbf{0}_p & \mathbf{b}
+  \end{array}\right]\\
+  &=& \left[ \begin{array}
+    {cc} \mathbf{a}' & \mathbf{0}_p' \\
+       \mathbf{0}_q' & \mathbf{b}'
+  \end{array}\right] \left[\begin{array}
+    {cc}
+    \Sigma_{xx} \mathbf{a} & \Sigma_{xy} \mathbf{b}\\
+    \Sigma_{yx} \mathbf{a} & \Sigma_{yy} \mathbf{b}
+  \end{array} \right]\\
+    &=& \left[ \begin{array}
+      {cc}
+      \mathbf{a}'\Sigma_{xx}\mathbf{a} & \mathbf{a}'\Sigma_{xy}\mathbf{b} \\
+      \mathbf{b}'\Sigma_{yx} \mathbf{a}& \mathbf{b}' \Sigma_{yy} \mathbf{b}
+    \end{array}\right]
+\end{eqnarray*}
+Now, define $\rho(\mathbf{a}, \mathbf{b}) = Corr(\textbf{a}'\textbf{x}, \textbf{b}'\textbf{y})$. Canonical Correlation analysis asks which values of $\mathbf{a}$ and $\mathbf{b}$ \emph{maximize} this correlation. This is equivalent to the constrained maximization problem
+$$\max_{\textbf{a}, \textbf{b}} \textbf{a}'\Sigma_{xy}\textbf{b} \quad \mbox{subject to} \quad \textbf{a}'\Sigma_{xx}\textbf{a} = \textbf{b}' \Sigma_{yy} \textbf{b} = 1$$
+Note that the \emph{sign} of the correlation that solves this problem is \emph{not identified} since we can always reverse it by multiplying $\mathbf{a}$ by $-1$. Thus we will maximize the \emph{squared correlation} instead, solving
+$$\max_{\textbf{a}, \textbf{b}} \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right)^2 \quad \mbox{subject to} \quad \textbf{a}'\Sigma_{xx}\textbf{a} = \textbf{b}' \Sigma_{yy} \textbf{b} = 1$$
+Note that we can rewrite the transformed objective function as follows
+  $$ \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right)^2  =  \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right)'  \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right) = \textbf{b}' \Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b}$$
+This is the form we use below. 
+
+We proceed in three steps. In the first step we \emph{fix} $\mathbf{a}$ and maximize over $\mathbf{b}$. In other words, we solve
+$$\max_{\textbf{b}} \textbf{b}' \Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b} \quad \mbox{subject to} \quad  \textbf{b}' \Sigma_{yy} \textbf{b} = 1$$
+The Lagrangian for this problem is
+  $$\mathcal{L}(\textbf{b}, \lambda_b; \textbf{a}) = \textbf{b}'\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} \right)\textbf{b} - \lambda_b \textbf{b}'\left(\Sigma_{yy} \right)\textbf{b}$$
+
+
+
+
+
+
+
+
 
 
 
