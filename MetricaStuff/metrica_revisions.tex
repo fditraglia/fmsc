@@ -1280,9 +1280,9 @@ by the shortcut formula. We can continue to estimate $E[\epsilon_i^2 \textbf{z}_
 Need to write out exactly how we will compute the J-test statistic, which covariance matrix we will use, etc.
 
 \subsection{Canonical Correlation Information Criterion}
-Hall \& Peixe (2003) and Jana (2005). Mardia, Kent \& Bibby (1980).
+Mardia, Kent \& Bibby (1980).
 
-\paragraph{Canonical Correlation Analysis} Let $\mathbf{x}$ be a random $q$-vector and and $\mathbf{y}$ be a random $p$-vector with variance-covariance matrix
+\paragraph{Canonical Correlation Analysis} This discussion follows Mardia, Kent \& Bibby (1980). Let $\mathbf{x}$ be a random $q$-vector and and $\mathbf{y}$ be a random $p$-vector with variance-covariance matrix
   $$Var\left[\begin{array}
     {c} \textbf{x} \\ \textbf{y}
   \end{array}\right] = \left[ \begin{array}
@@ -1338,9 +1338,13 @@ This is the form we use below.
 We proceed in three steps. In the first step we \emph{fix} $\mathbf{a}$ and maximize over $\mathbf{b}$. In other words, we solve
 $$\max_{\textbf{b}} \textbf{b}' \Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b} \quad \mbox{subject to} \quad  \textbf{b}' \Sigma_{yy} \textbf{b} = 1$$
 The Lagrangian for this problem is
-  $$\mathcal{L}(\textbf{b}, \lambda_b; \textbf{a}) = \textbf{b}'\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} \right)\textbf{b} - \lambda_b \textbf{b}'\left(\Sigma_{yy} \right)\textbf{b}$$
-
-
+  $$\mathcal{L}(\textbf{b}, \lambda_b; \textbf{a}) = \textbf{b}'\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} \right)\textbf{b} - \lambda_b\left( \textbf{b}'\Sigma_{yy}\textbf{b} - 1\right)$$
+yielding the following first-order condition for $\mathbf{b}$
+  $$2\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} \right)\textbf{b} - 2\lambda_b \Sigma_{yy} \textbf{b} = \textbf{0}$$
+since both $\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} \right)$ and $\Sigma_{yy}$ are symmetric matrices. Rearranging, this becomes
+  $$\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} - \lambda_b \Sigma_{yy}\right)\textbf{b} = \textbf{0}$$
+Left-multiplying by $\Sigma_{yy}^{-1}$ gives
+  $$\left(\Sigma_{yy}^{-1}\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} - \lambda_b \textbf{I}\right)\textbf{b} = \textbf{0}$$
 
 
 
