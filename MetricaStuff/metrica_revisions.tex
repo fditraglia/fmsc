@@ -1353,12 +1353,25 @@ Since
       \mathbf{b}'\Sigma_{yx} \mathbf{a}& \mathbf{b}' \Sigma_{yy} \mathbf{b}
     \end{array}\right]
 \end{eqnarray*}
-Now, define $\rho(\mathbf{a}, \mathbf{b}) = Corr(\textbf{a}'\textbf{x}, \textbf{b}'\textbf{y})$. Canonical Correlation analysis asks which values of $\mathbf{a}$ and $\mathbf{b}$ \emph{maximize} this correlation. This is equivalent to the constrained maximization problem
+Now, define $\rho(\mathbf{a}, \mathbf{b}) = Corr(\textbf{a}'\textbf{x}, \textbf{b}'\textbf{y})$. Canonical Correlation analysis begins by asking which values of $\mathbf{a}$ and $\mathbf{b}$ \emph{maximize} this correlation. This is equivalent to the constrained maximization problem
 $$\max_{\textbf{a}, \textbf{b}} \textbf{a}'\Sigma_{xy}\textbf{b} \quad \mbox{subject to} \quad \textbf{a}'\Sigma_{xx}\textbf{a} = \textbf{b}' \Sigma_{yy} \textbf{b} = 1$$
 Note that the \emph{sign} of the correlation that solves this problem is \emph{not identified} since we can always reverse it by multiplying $\mathbf{a}$ by $-1$. Thus we will maximize the \emph{squared correlation} instead. Since we can re-write the squared objective function as follows
 $$ \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right)^2  =  \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right)'  \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right) = \textbf{b}' \Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b}$$
 our problem becomes
 $$\max_{\textbf{b}} \textbf{b}' \Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b} \quad \mbox{subject to} \quad  \textbf{a}'\Sigma_{xx}\textbf{a} = \textbf{b}' \Sigma_{yy} \textbf{b} = 1$$
+The solutions $\mathbf{a}_1, \mathbf{b}_1$ of this problem are called the \emph{first canonical vectors} for $\mathbf{x}$ and $\mathbf{y}$. The linear combinations $\mathbf{a}_1' \mathbf{x}$ and $\mathbf{b}_1' \mathbf{y}$ are called the \emph{first canonical correlation variables}.
+
+But we don't have to stop here. After finding the linear combinations that maximize the correlation, it makes sense to ask ``what's left over?'' The way this is phrased in canonical correlation analysis is to ask which vectors $\mathbf{a}_2, \mathbf{b_2}$ solve the same problem as before subject to the \emph{additional constraint} 
+  $$Corr(\mathbf{a}_1' \mathbf{x}, \mathbf{a}_2' \mathbf{x}) = Corr(\mathbf{b}_1' \mathbf{y}, \mathbf{b}_2' \mathbf{y}) =0$$
+In other words, we requires that the \emph{second} canonical correlation variable for $\mathbf{x}$ be uncorrelated with the \emph{first} canonical correlation variable for $\mathbf{x}$ and that the second canonical correlation variable for $\mathbf{y}$ be uncorrelated with the first canonical correlation variable for $\mathbf{y}$. More generally, we can define the \emph{$i$th canonical correlation vectors} $\mathbf{a}_i, \mathbf{b}_i$ as the vectors that maximize $Corr(\mathbf{a}_i \mathbf{x}, \mathbf{b}_i \mathbf{y})$ subject to the constraints,
+  \begin{eqnarray*}
+    Var(\mathbf{a}_i' \mathbf{x}) = Var(\mathbf{b}_i \mathbf{y}) &=& 1 \quad \forall i = 1, \hdots, k\\
+    Corr(\mathbf{a}_i' \mathbf{x}, \mathbf{a}_j' \mathbf{x}) &=& 0 \quad \forall i\neq j\\
+    Corr(\mathbf{b}_i' \mathbf{y}, \mathbf{b}_j' \mathbf{y}) &=& 0 \quad \forall i\neq j
+  \end{eqnarray*}
+We can write the correlation constraints as follows:
+
+
 We will solve this problem in three steps.
 
 \paragraph{Step \#1} In the first step we \emph{fix} $\mathbf{a}$ and maximize over $\mathbf{b}$, solving
