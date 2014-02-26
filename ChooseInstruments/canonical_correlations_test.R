@@ -1,22 +1,28 @@
 #This script tests the R's built-in function for canonical correlation analysis, and creates a "minimialist" version to port to C++
 
 
-#Minimialist R code following the source of cancor and using the defaults. Basically I've just removed all the error-checking and renamed some variables.
+#Minimialist R code following the source of cancor and using the defaults. Basically I've just removed all the error-checking, renamed some variables, and made the code clearer at the expense of speed by adding more temporaries than are strictly necessary.
 cancor_r <- function(x, y){
   n_obs <- nrow(x)
   n_x <- ncol(x)
   n_y <- ncol(y)
   x <- x - rep(colMeans(x), rep(n_obs, n_x))
   y <- y - rep(colMeans(y), rep(n_obs, n_y))
-  qx <- qr(x)
-  qy <- qr(y)
-  dx <- qx$rank
-  dy <- qy$rank
-  z <- svd(qr.qty(qx, qr.qy(qy, diag(1, n, dy)))[1:dx,], dx, dy)
-  xcoef <- backsolve((qx$qr)[1:dx, 1:dx], z$u)
-  ycoef <- backsolve((qy$qr)[1:dy, 1:dy], z$v)
+  QR_x <- qr(x)
+  QR_y <- qr(y)
+  dx <- QR_x$rank
+  dy <- QR_y$rank
+  
+  Qx <- qr.Q(QR_x)
+  Rx <- qr.R(QR_x)
+  Qy <- qr.Q(QR_y)
+  Ry <- qr.R(QR_y) 
+  
+  z <- svd(t(Qx) %*% Qy, dx, dy)
+  xcoef <- backsolve(Rx, z$u)
+  ycoef <- backsolve(Ry, z$v)
   cor <- z$d
-  out <- list(xcoef = xcoef, ycoef = ycoef, cor = cor)
+  out <- list(cor, xcoef = xcoef, ycoef = ycoef)
   return(out)
 }
 
@@ -24,8 +30,9 @@ cancor_r <- function(x, y){
 #Check if the results are the same using the example from the help file for cancor
 pop <- LifeCycleSavings[, 2:3]
 oec <- LifeCycleSavings[, -(2:3)]
-foo <- cancor(pop, oec)
+foo <- cancor(pop, oec)[1:3]
 bar <- cancor_r(pop, oec)
-foo$ycoef - bar$ycoef
-foo$xcoef - bar$xcoef
-foo$cor - bar$cor
+foo
+bar
+all.equal(foo, bar, check.attributes = FALSE)
+

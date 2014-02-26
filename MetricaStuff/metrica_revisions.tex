@@ -1420,11 +1420,26 @@ Hence, this matrix has a most one non-zero eigenvalue, up to multiplicity. To fi
 \end{thm}
 Returning to our example, the role of $A$ is played by $\Sigma_{yy}^{-1}\Sigma_{yx}\mathbf{a}$ and that of $B$ is played by $\mathbf{a}'\Sigma_{xy}$. Hence, to find the non-zero eigenvalue of $\Sigma_{yy}^{-1}\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}$, if it exists, it is equivalent to find the nonzero eigenvalue of $\mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$. But this is easy since $\mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$ is a \emph{scalar} and any scalar is \emph{its own} eigenvalue.\footnote{Recall that eigenvalue-eigenvector pairs are defined by $A \mathbf{v} = \lambda \mathbf{v}$. If $A$ is a scalar, say $a$, this becomes $a \mathbf{v} = \lambda \mathbf{v}$ so clearly $\lambda = a$ unless $\mathbf{v}=\mathbf{0}$.} Hence, $\lambda_b = \mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$.
 
-\paragraph{Step \#2} In the preceding step, we essentially ``concentrated out'' $\mathbf{b}$ from the objective function. That is, we determined that the maximized value of our original objective function, $Corr(\mathbf{a}'\mathbf{x}, \mathbf{b}'\mathbf{y})^2$, equals $\mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$, an expression that does not depend on $\mathbf{b}$. Now we will maximized this \emph{concentrated objective function} subject to the constraints for $\mathbf{a}$.
+\paragraph{Step \#2} In the preceding step, we  ``concentrated out'' $\mathbf{b}$ from the objective function. That is, we determined that the maximized value of our original objective function, $Corr(\mathbf{a}'\mathbf{x}, \mathbf{b}'\mathbf{y})^2$, equals $\mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$, an expression that does not depend on $\mathbf{b}$. Now we will maximized this \emph{concentrated objective function} subject to the constraints for $\mathbf{a}$, namely
+$$\max_\mathbf{a} \; \mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$$
+subject to
+\begin{eqnarray*}
+   \textbf{a}'\Sigma_{xx}\textbf{a} &=& 1\\
+    \mathbf{a}_i' \Sigma_{xx} \mathbf{a}_j &=& 0, \; j = 1, \hdots, i-1
+\end{eqnarray*}
+Now, if $i=1$ so that we are solving for the first canonical correlation vector, the second constraint drops out. In this case the Lagrangian is
+  $$\mathcal{L}(\textbf{a}, \lambda) = \mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a} - \lambda \left(\mathbf{a}' \Sigma_{xx} \mathbf{a}   - 1\right) $$
+yielding the first-order condition
+  $$2\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx} - 2\lambda \Sigma_{xx} \textbf{a} = 0$$
+since $\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx}$ and $\Sigma_{xx}$ are symmetric. Simplifying and rearranging, we have
+  $$\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx} \textbf{a} = \lambda\Sigma_{xx} \textbf{a}$$
+Substituting this into the concentrated objective function along with the constraint $\mathbf{a}'\Sigma_{xx}\mathbf{a} = 1$, it follows that
+  $$\mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx}\mathbf{a}) = \textbf{a}'(\lambda\Sigma_{xx} \textbf{a}) = \lambda(\textbf{a}'\Sigma_{xx}\textbf{a}) = \lambda$$
+Hence, $\lambda$ \emph{equals the maximized value of the concentrated objective function}. Rearranging the first-order condition and left-multiplying by $\Sigma_{xx}^{-1}$ we have
+  $$\left(\Sigma_{xx}^{-1}\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx}  - \lambda \textbf{I}\right)\textbf{a} = \textbf{0}$$
+Therefore, $\lambda$ is an eigenvector of the matrix $\Sigma_{xx}^{-1}\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx}$. The question is, which one? Since it equals the maximized value of the objective function, $\lambda$ must be as large as possible. Therefore, $\lambda$ must be the \emph{largest eigenvalue} of $\Sigma_{xx}^{-1}\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx}$. It follows immediately that the first canonical correlation vector for $\mathbf{x}$, namely $\mathbf{a}_1$, equals the \emph{eigenvector corresponding to the largest eigenvalue of} $\Sigma_{xx}^{-1}\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx}$.
 
-
-
-
+Now, suppose we wanted to find the \emph{second} canonical correlation vector. If we simply \emph{ignored} the correlation constraint, we could proceed exactly as above to show that the Lagrange multiplier will again be an eigenvalue of $\Sigma_{xx}^{-1}\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx}$ and will equal the maximized value of the concentrated objective function. Accordingly, we should make choose $\lambda$ so it is as large as possible. But now we have to consider the correlation constraint: $\mathbf{a}_2 \Sigma_{xx}\mathbf{a}_1 = 0$.
 
 
 \end{document}
