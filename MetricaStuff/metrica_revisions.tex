@@ -1365,18 +1365,41 @@ But we don't have to stop here. After finding the linear combinations that maxim
   $$Corr(\mathbf{a}_1' \mathbf{x}, \mathbf{a}_2' \mathbf{x}) = Corr(\mathbf{b}_1' \mathbf{y}, \mathbf{b}_2' \mathbf{y}) =0$$
 In other words, we requires that the \emph{second} canonical correlation variable for $\mathbf{x}$ be uncorrelated with the \emph{first} canonical correlation variable for $\mathbf{x}$ and that the second canonical correlation variable for $\mathbf{y}$ be uncorrelated with the first canonical correlation variable for $\mathbf{y}$. More generally, we can define the \emph{$i$th canonical correlation vectors} $\mathbf{a}_i, \mathbf{b}_i$ as the vectors that maximize $Corr(\mathbf{a}_i \mathbf{x}, \mathbf{b}_i \mathbf{y})$ subject to the constraints,
   \begin{eqnarray*}
-    Var(\mathbf{a}_i' \mathbf{x}) = Var(\mathbf{b}_i \mathbf{y}) &=& 1 \quad \forall i = 1, \hdots, k\\
-    Corr(\mathbf{a}_i' \mathbf{x}, \mathbf{a}_j' \mathbf{x}) &=& 0 \quad \forall i\neq j\\
-    Corr(\mathbf{b}_i' \mathbf{y}, \mathbf{b}_j' \mathbf{y}) &=& 0 \quad \forall i\neq j
+    Var(\mathbf{a}_i' \mathbf{x}) = Var(\mathbf{b}_i \mathbf{y}) &=& 1 \\
+    Corr(\mathbf{a}_i' \mathbf{x}, \mathbf{a}_j' \mathbf{x}) &=& 0 \quad \forall j = 1, 2, \hdots, i-1\\
+    Corr(\mathbf{b}_i' \mathbf{y}, \mathbf{b}_j' \mathbf{y}) &=& 0 \quad \forall j = 1, 2, \hdots, i-1
   \end{eqnarray*}
-We can write the correlation constraints as follows:
+The variance constraints are the same as above but the correlation constraints are new. To understand them, first write
+$$Corr(\mathbf{a}_i' \mathbf{x}, \mathbf{a}_j' \mathbf{x}) = \frac{Cov(\mathbf{a}_i' \mathbf{x}, \mathbf{a}_j' \mathbf{x})}{SD(\mathbf{a}_i'\mathbf{x}) SD(\mathbf{a}_j \mathbf{x})}$$
+Expressed in matrix form, we have
+  \begin{eqnarray*}
+    Var\left[\begin{array}
+      {c} \mathbf{a}_i'\mathbf{x} \\ \mathbf{a}_j'\mathbf{x}
+    \end{array} \right] &=& Var\left(\left[ \begin{array}
+      {c} \mathbf{a}_i' \\ \mathbf{a}_j'
+    \end{array}\right] \mathbf{x}\right)= \left[ \begin{array}
+      {c} \mathbf{a}_i' \\ \mathbf{a}_j'
+    \end{array}\right] \Sigma_{xx}\left[ \begin{array}
+      {cc} \mathbf{a}_i & \mathbf{a}_j
+    \end{array}\right]\\
+      &=& \left[ \begin{array}
+        {cc} \mathbf{a}_i'\Sigma_{xx} \mathbf{a}_i & \mathbf{a}_i'\Sigma_{xx} \mathbf{a}_j\\
+        \mathbf{a}_j' \Sigma_{xx}\mathbf{a}_i& \mathbf{a}_j' \Sigma_{xx} \mathbf{a}_j
+      \end{array}\right]
+  \end{eqnarray*}
+so the correlation constraint is simply $\mathbf{a}_i' \Sigma_{xx} \mathbf{a}_j = 0$. Using identical reasoning, the equivalent constraint for $\mathbf{y}$ is $\mathbf{b}_i' \Sigma_{yy} \mathbf{b}_j = 0$. It will turn out that we do not need to directly impose the constraint for $\mathbf{y}$ as it will be satisfied automatically provided that we impose the constraint for $\mathbf{x}$. Therefore, to find the $i$th canonical correlation vectors, we solve 
+$$\max_{\textbf{a},\textbf{b}}\; \textbf{b}' \Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b}$$ 
+subject to the constraints
+\begin{eqnarray*}
+   \textbf{a}'\Sigma_{xx}\textbf{a} &=& \textbf{b}' \Sigma_{yy} \textbf{b} = 1\\
+    \mathbf{a}_i' \Sigma_{xx} \mathbf{a}_j &=& 0, \; j = 1, \hdots, i-1
+\end{eqnarray*}
+While we won't impose it as a constraint, it will also turn out that $Corr(\mathbf{a}_i'\mathbf{x}, \mathbf{b}_j \mathbf{y}) = 0$ for all $i,j$. In other words, the canonical correlation variables for $\mathbf{x}$ are uncorrelated with the canonical correlation variables for $\mathbf{y}$. In total, we can construct $k$ canonical correlation vectors, where $k$ is the rank of $\Sigma_{xy}$. We will solve this problem in three steps.
 
-
-We will solve this problem in three steps.
 
 \paragraph{Step \#1} In the first step we \emph{fix} $\mathbf{a}$ and maximize over $\mathbf{b}$, solving
-$$\max_{\textbf{b}} \textbf{b}' \Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b} \quad \mbox{subject to} \quad  \textbf{b}' \Sigma_{yy} \textbf{b} = 1$$
-The Lagrangian for this problem is
+$$\max_{\textbf{b}} \; \textbf{b}' \Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b} \quad \mbox{subject to} \quad  \textbf{b}' \Sigma_{yy} \textbf{b} = 1$$
+Since we have fixed $\mathbf{a}$, we only need to impose the constraints for $\mathbf{b}$. Hence, the Lagrangian is
   $$\mathcal{L}(\textbf{b}, \lambda_b; \textbf{a}) = \textbf{b}'\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} \right)\textbf{b} - \lambda_b\left( \textbf{b}'\Sigma_{yy}\textbf{b} - 1\right)$$
 yielding the following first-order condition for $\mathbf{b}$
   $$2\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} \right)\textbf{b} - 2\lambda_b \Sigma_{yy} \textbf{b} = \textbf{0}$$
@@ -1384,7 +1407,7 @@ since both $\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} \right)$ and $\S
 $$\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b} =\lambda_b \Sigma_{yy} \textbf{b} $$
 Substituting this into the objective function, we have
   $$ \textbf{b}' \left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b}\right) =\textbf{b}' (\lambda_b\Sigma_{yy}\textbf{b}) = \lambda_b (\textbf{b}' \Sigma_{yy} \textbf{b}) = \lambda_b$$
-because of the constraint $\textbf{b}' \Sigma_{yy} \textbf{b} = 1$. In other words, $\lambda_b$ is simply the \emph{the maximized value of the objective function}. 
+because of the constraint $\textbf{b}' \Sigma_{yy} \textbf{b} = 1$. In other words, $\lambda_b$ \emph{equals the maximized value of the objective function}. 
 
 It remains to actually \emph{calculate} $\lambda_b$. Rearranging the first-order condition and left-multiplying by $\Sigma_{yy}^{-1}$, we have
   $$\left(\Sigma_{yy}^{-1}\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} - \lambda_b \textbf{I}\right)\textbf{b} = \textbf{0}$$
@@ -1397,7 +1420,7 @@ Hence, this matrix has a most one non-zero eigenvalue, up to multiplicity. To fi
 \end{thm}
 Returning to our example, the role of $A$ is played by $\Sigma_{yy}^{-1}\Sigma_{yx}\mathbf{a}$ and that of $B$ is played by $\mathbf{a}'\Sigma_{xy}$. Hence, to find the non-zero eigenvalue of $\Sigma_{yy}^{-1}\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}$, if it exists, it is equivalent to find the nonzero eigenvalue of $\mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$. But this is easy since $\mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$ is a \emph{scalar} and any scalar is \emph{its own} eigenvalue.\footnote{Recall that eigenvalue-eigenvector pairs are defined by $A \mathbf{v} = \lambda \mathbf{v}$. If $A$ is a scalar, say $a$, this becomes $a \mathbf{v} = \lambda \mathbf{v}$ so clearly $\lambda = a$ unless $\mathbf{v}=\mathbf{0}$.} Hence, $\lambda_b = \mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$.
 
-\paragraph{Step \#2} In the preceding step, we essentially ``concentrated out'' $\mathbf{b}$ from the objective function. That is, we determined that the maximized value of our original objective function, $Corr(\mathbf{a}'\mathbf{x}, \mathbf{b}'\mathbf{y})^2$, equals $\mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$, an expression that does not depend on $\mathbf{b}$.
+\paragraph{Step \#2} In the preceding step, we essentially ``concentrated out'' $\mathbf{b}$ from the objective function. That is, we determined that the maximized value of our original objective function, $Corr(\mathbf{a}'\mathbf{x}, \mathbf{b}'\mathbf{y})^2$, equals $\mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$, an expression that does not depend on $\mathbf{b}$. Now we will maximized this \emph{concentrated objective function} subject to the constraints for $\mathbf{a}$.
 
 
 
