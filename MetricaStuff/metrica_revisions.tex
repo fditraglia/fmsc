@@ -1304,7 +1304,7 @@ where $r_{i,T}(c)$ is the $i$th sample canonical correlation between $\partial u
   \end{eqnarray*}
 
 
-\paragraph{Canonical Correlation Analysis} 
+\subsection{Canonical Correlation Analysis} 
 To implement the CCIC, we need to know how to calculate the canonical correlations and understand what they mean. Since I'll only be looking at linear models, I simply need to consider canonical correlations between $x_t$ and $z_t(c)$. Although I use different notation here, following the notation of Mardia, Kent \& Bibby (1980) upon which this discussion is based, throughout we can think of $\mathbf{x}$ as $x_t$ and $\mathbf{y}$ as $z_t(c)$.
 
 
@@ -1355,25 +1355,28 @@ Since
 \end{eqnarray*}
 Now, define $\rho(\mathbf{a}, \mathbf{b}) = Corr(\textbf{a}'\textbf{x}, \textbf{b}'\textbf{y})$. Canonical Correlation analysis asks which values of $\mathbf{a}$ and $\mathbf{b}$ \emph{maximize} this correlation. This is equivalent to the constrained maximization problem
 $$\max_{\textbf{a}, \textbf{b}} \textbf{a}'\Sigma_{xy}\textbf{b} \quad \mbox{subject to} \quad \textbf{a}'\Sigma_{xx}\textbf{a} = \textbf{b}' \Sigma_{yy} \textbf{b} = 1$$
-Note that the \emph{sign} of the correlation that solves this problem is \emph{not identified} since we can always reverse it by multiplying $\mathbf{a}$ by $-1$. Thus we will maximize the \emph{squared correlation} instead, solving
-$$\max_{\textbf{a}, \textbf{b}} \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right)^2 \quad \mbox{subject to} \quad \textbf{a}'\Sigma_{xx}\textbf{a} = \textbf{b}' \Sigma_{yy} \textbf{b} = 1$$
-Note that we can rewrite the transformed objective function as follows
-  $$ \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right)^2  =  \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right)'  \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right) = \textbf{b}' \Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b}$$
-This is the form we use below. 
+Note that the \emph{sign} of the correlation that solves this problem is \emph{not identified} since we can always reverse it by multiplying $\mathbf{a}$ by $-1$. Thus we will maximize the \emph{squared correlation} instead. Since we can re-write the squared objective function as follows
+$$ \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right)^2  =  \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right)'  \left(\textbf{a}'\Sigma_{xy}\textbf{b}\right) = \textbf{b}' \Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b}$$
+our problem becomes
+$$\max_{\textbf{b}} \textbf{b}' \Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b} \quad \mbox{subject to} \quad  \textbf{a}'\Sigma_{xx}\textbf{a} = \textbf{b}' \Sigma_{yy} \textbf{b} = 1$$
+We will solve this problem in three steps.
 
-We proceed in three steps. In the first step we \emph{fix} $\mathbf{a}$ and maximize over $\mathbf{b}$. In other words, we solve
+\paragraph{Step \#1} In the first step we \emph{fix} $\mathbf{a}$ and maximize over $\mathbf{b}$, solving
 $$\max_{\textbf{b}} \textbf{b}' \Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}\textbf{b} \quad \mbox{subject to} \quad  \textbf{b}' \Sigma_{yy} \textbf{b} = 1$$
 The Lagrangian for this problem is
   $$\mathcal{L}(\textbf{b}, \lambda_b; \textbf{a}) = \textbf{b}'\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} \right)\textbf{b} - \lambda_b\left( \textbf{b}'\Sigma_{yy}\textbf{b} - 1\right)$$
 yielding the following first-order condition for $\mathbf{b}$
   $$2\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} \right)\textbf{b} - 2\lambda_b \Sigma_{yy} \textbf{b} = \textbf{0}$$
-since both $\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} \right)$ and $\Sigma_{yy}$ are symmetric matrices. Rearranging, this becomes
-  $$\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} - \lambda_b \Sigma_{yy}\right)\textbf{b} = \textbf{0}$$
-Left-multiplying by $\Sigma_{yy}^{-1}$ gives
+since both $\left(\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} \right)$ and $\Sigma_{yy}$ are symmetric matrices. Rearranging and left-multiplying by $\Sigma_{yy}^{-1}$ gives 
   $$\left(\Sigma_{yy}^{-1}\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy} - \lambda_b \textbf{I}\right)\textbf{b} = \textbf{0}$$
-
-
-
+Hence, $\lambda_b$ and $\mathbf{b}$ are an \emph{eigenvalue-eigenvector pair} of the matrix $\Sigma_{yy}^{-1}\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}$. 
+Note that, since it is simply the outer-product of the vector $\mathbf{a}$, the matrix $\mathbf{a}\mathbf{a}'$ has rank one.\footnote{Its $j$th column is simply $a_j \mathbf{a}$, where $a_j$ is the $j$th element of $\mathbf{a}$.} 
+Since the rank of a product of matrices cannot exceed the \emph{minimum} rank of the matrices that are being multiplied, it follows that $\Sigma_{yy}^{-1}\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}$ has rank \emph{no greater than} one. 
+Hence, this matrix has a most one non-zero eigenvalue, up to multiplicity. To find it, we will use the following result from Mardia, Kent \& Bibby (A.6.2)
+\begin{thm}
+  Let $A$ be an $m\times n$ matrix and $B$ be a $n \times m$ matrix. Then the non-zero eigenvalues of $AB$ and $BA$ are the same and have the same multiplicity. If $\mathbf{v}$ is a non-trivial, i.e.\ nonzero, eigenvector of $AB$ corresponding to eigenvalue $\lambda \neq 0$, then $B \mathbf{v}$ is a non-trivial eigenvector of $BA$.
+\end{thm}
+Returning to our example, the role of $A$ is played by $\Sigma_{yy}^{-1}\Sigma_{yx}\mathbf{a}$ and that of $B$ is played by $\mathbf{a}'\Sigma_{xy}$. Hence, to find the non-zero eigenvalue of $\Sigma_{yy}^{-1}\Sigma_{yx} \textbf{a}\textbf{a}' \Sigma_{xy}$, if it exists, it is equivalent to find the nonzero eigenvalue of $\mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$. But this is easy since $\mathbf{a}'(\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx})\mathbf{a}$ is a \emph{scalar} and any scalar is \emph{its own} eigenvalue.\footnote{Recall that eigenvalue-eigenvector pairs are defined by $A \mathbf{v} = \lambda \mathbf{v}$. If $A$ is a scalar, say $a$, this becomes $a \mathbf{v} = \lambda \mathbf{v}$ so clearly $\lambda = a$ unless $\mathbf{v}=\mathbf{0}$.} 
 
 
 
