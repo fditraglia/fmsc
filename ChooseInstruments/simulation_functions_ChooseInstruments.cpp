@@ -4,6 +4,26 @@
 using namespace Rcpp;
 using namespace arma;
 
+
+class cancor {
+  public: 
+    cancor(const mat&, const mat&);
+    rowvec cor;
+    colvec d;
+    mat xcoef, ycoef;
+  private:
+    mat Qx, Rx, Qy, Ry, U, V;
+};
+//Class constructor
+cancor::cancor(const mat& X, const mat& Y){
+  qr_econ(Qx, Rx, X - repmat(mean(X), X.n_rows, 1));
+  qr_econ(Qy, Ry, Y - repmat(mean(Y), Y.n_rows, 1));
+  svd_econ(U, d, V, Qx.t() * Qy);
+  xcoef = solve(trimatu(Rx), U);
+  ycoef = solve(trimatu(Ry), V);
+  cor = d.t();
+}
+
 class tsls_fit {
   public:
     tsls_fit(const mat&, const colvec&, const mat&);
@@ -128,4 +148,13 @@ colvec test_dgp(double g, double r, int n){
   dgp sims(b, p, g, r, V, Q, n);
   tsls_fit valid(sims.x, sims.y, sims.z1);
   return(valid.est());
+}
+
+
+// [[Rcpp::export]]
+List cancor_cpp(mat X, mat Y){
+  cancor results(X, Y);
+  return List::create(Named("cor") = results.cor,
+                      Named("xcoef") = results.xcoef,
+                      Named("ycoef") = results.ycoef);
 }

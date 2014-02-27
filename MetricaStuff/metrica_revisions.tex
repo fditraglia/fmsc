@@ -1439,7 +1439,34 @@ Hence, $\lambda$ \emph{equals the maximized value of the concentrated objective 
   $$\left(\Sigma_{xx}^{-1}\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx}  - \lambda \textbf{I}\right)\textbf{a} = \textbf{0}$$
 Therefore, $\lambda$ is an eigenvector of the matrix $\Sigma_{xx}^{-1}\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx}$. The question is, which one? Since it equals the maximized value of the objective function, $\lambda$ must be as large as possible. Therefore, $\lambda$ must be the \emph{largest eigenvalue} of $\Sigma_{xx}^{-1}\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx}$. It follows immediately that the first canonical correlation vector for $\mathbf{x}$, namely $\mathbf{a}_1$, equals the \emph{eigenvector corresponding to the largest eigenvalue of} $\Sigma_{xx}^{-1}\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx}$.
 
-Now, suppose we wanted to find the \emph{second} canonical correlation vector. If we simply \emph{ignored} the correlation constraint, we could proceed exactly as above to show that the Lagrange multiplier will again be an eigenvalue of $\Sigma_{xx}^{-1}\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx}$ and will equal the maximized value of the concentrated objective function. Accordingly, we should make choose $\lambda$ so it is as large as possible. But now we have to consider the correlation constraint: $\mathbf{a}_2 \Sigma_{xx}\mathbf{a}_1 = 0$.
+Now, suppose we wanted to find the \emph{second} canonical correlation vector. If we simply \emph{ignored} the correlation constraint, we could proceed exactly as above to show that the Lagrange multiplier will again be an eigenvalue of $\Sigma_{xx}^{-1}\Sigma_{xy}\Sigma_{yy}^{-1} \Sigma_{yx}$ and will equal the maximized value of the concentrated objective function. Accordingly, we should make choose $\lambda$ so it is as large as possible. But now we have to consider the correlation constraint: $\mathbf{a}_2 \Sigma_{xx}\mathbf{a}_1 = 0$. If we choose $\mathbf{a}_2$ to be the eigenvector corresponding to the \emph{second largest} eigenvalue of 
+
+
+\paragraph{Calculating Canonical Correlations}
+The exposition above involved the \emph{population} variance-covariance matrix for $\mathbf{x}$ and $\mathbf{y}$, but since this is unknown, to apply canonical correlation analysis to real-data problems we'll need to work with the sample analogue. Rather than using the formulas from above, however, it turns out that we can calculate sample canonical correlations quickly and reliably using the QR decomposition followed by the Singular Value Decomposition. The algorithm is as follows
+\begin{alg}[Sample Canonical Correlations Analysis]
+Let $X$ be the $n\times q$ matrix of observations of $\mathbf{x}$-observations  and $Y$ be the $n\times p$ matrix of $\mathbf{y}$-observations. Assume that both $X$ and $Y$ have full column rank.
+   \begin{enumerate}
+     \item Center $X$ and $Y$ by subtracting their respective column means. Call the centered matrices $\widetilde{X}$ and $\widetilde{Y}$.
+     \item Calculate the \emph{economical} QR decompositions of the centered data matrices $\widetilde{X}$ and $\widetilde{Y}$ (e.g. \texttt{qr\_econ} in Armadillo)
+      \begin{eqnarray*}
+        \underset{(n\times q)}{\widetilde{X}} &=& \underset{(n\times q)}{Q_x} \underset{(q\times q)}{R_x}\\
+        \underset{(n\times p)}{\widetilde{Y}} &=& \underset{(n\times p)}{Q_y} \underset{(p\times p)}{R_y}\\
+      \end{eqnarray*}
+    \item Calculate the \emph{economical} Singular Value Decomposition of $Q_x'Q_y$ (e.g.\ \texttt{svd\_econ} in Armadillo) where $r$ is the rank of $Q_x'Q_y$
+      $$\underset{(q\times p)}{Q_x'Q_y} = \underset{(q\times r)}{U}\underset{(r\times r)}{D}\underset{(r\times p)}{V'}$$
+    \item The non-zero elements of the diagonal matrix $D$, in order from largest to smallest, are the \emph{canonical correlations}.
+    \item The canonical correlation vectors for $\mathbf{x}$, in order, are the columns of the matrix $A$ that solves
+        $$\underset{(q\times q)(q\times r)}{R_xA} = \underset{(q\times r)}{U}$$
+    Since $R_x$ is upper-triangular, this system can be solved by back-substitution.
+    \item The canonical correlation vectors for $\mathbf{y}$, in order, are the columns of the matrix $B$ that solves
+        $$\underset{(p\times p)(p\times r)}{R_y A} = \underset{(p\times r)}{V}$$
+    Since $R_y$ is upper-triangular, this system can be solved by back-substitution.
+   \end{enumerate}
+ \end{alg} 
+
+
+\todo[inline]{Why is this formula correct? I have verified that it works, but I still don't fully understand where it comes from. For example, why don't we have to divide through by $n$? Ignoring the factor of $n$, $R_x'Q_x'Q_yR_y$ is the sample covariance between $\mathbf{x}$ and $\mathbf{y}$.}
 
 
 \end{document}

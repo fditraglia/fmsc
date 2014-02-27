@@ -28,11 +28,27 @@ cancor_r <- function(x, y){
 
 
 #Check if the results are the same using the example from the help file for cancor
-pop <- LifeCycleSavings[, 2:3]
-oec <- LifeCycleSavings[, -(2:3)]
+pop <- as.matrix(LifeCycleSavings[, 2:3])
+oec <- as.matrix(LifeCycleSavings[, -(2:3)])
 foo <- cancor(pop, oec)[1:3]
 bar <- cancor_r(pop, oec)
 foo
 bar
 all.equal(foo, bar, check.attributes = FALSE)
+
+
+#Test C++ version
+library(Rcpp)
+library(RcppArmadillo)
+setwd("~/fmsc/ChooseInstruments")
+sourceCpp("simulation_functions_ChooseInstruments.cpp")
+
+baz <- cancor_cpp(pop, oec)
+baz
+foo
+all.equal(as.vector(baz$cor), foo$cor, check.attributes = FALSE)
+all.equal(baz$xcoef, foo$xcoef, check.attributes = FALSE)
+all.equal(baz$ycoef, foo$ycoef[,1:2], check.attributes = FALSE)
+
+
 
