@@ -5,13 +5,14 @@ using namespace Rcpp;
 using namespace arma;
 
 
+//A C++ version of R's cancor function for canonical correlation analysis
 class cancor {
   public: 
     cancor(const mat&, const mat&);
     rowvec cor;
-    colvec d;
     mat xcoef, ycoef;
   private:
+    colvec d;
     mat Qx, Rx, Qy, Ry, U, V;
 };
 //Class constructor
@@ -23,6 +24,8 @@ cancor::cancor(const mat& X, const mat& Y){
   ycoef = solve(trimatu(Ry), V);
   cor = d.t();
 }
+
+
 
 class tsls_fit {
   public:
