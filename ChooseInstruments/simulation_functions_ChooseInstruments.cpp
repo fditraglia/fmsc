@@ -25,8 +25,35 @@ cancor::cancor(const mat& X, const mat& Y){
   cor = d.t();
 }
 
+//Class for calculating the canonical correlation information criterion (CCIC)
+//of Hall & Peixe (2003). The argument Z_c is the instrument matrix, while 
+//D_resid is a matrix containing the partial derivatives of the GMM residuals
+//with respect to the parameter vector. For a linear GMM model, D_resid is
+//simply the matrix of regressors, X.
+class CCIC {
+  public:
+    CCIC(const mat&, const mat&);
+    double CCIC_BIC(){return(first_term + n_overid * log(double(n_obs)));}
+    double CCIC_AIC(){return(first_term + n_overid * 2.0);}
+    double CCIC_HQ(){return(first_term + n_overid * 2.01 * log(log(double(n_obs))));}
+  private:
+    int n_obs;
+    int n_overid;
+    double first_term;
+    cancor cc_results;
+    vec r;
+};
+//Class constructor
+CCIC::CCIC(const mat& D_resid, const mat& Z): cc_results(D_resid, Z){
+  n_obs = Z.n_rows;
+  n_overid = Z.n_cols - D_resid.n_cols;
+  r = cc_results.cor;
+  first_term = double(n_obs) * sum(log(ones(r.n_elem) - pow(r, 2)));
+}
 
 
+//Class for carrying out two-stage least squares with various options for
+//variance matrix estimation
 class tsls_fit {
   public:
     tsls_fit(const mat&, const colvec&, const mat&);
