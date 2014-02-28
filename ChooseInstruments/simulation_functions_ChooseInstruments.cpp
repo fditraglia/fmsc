@@ -113,7 +113,9 @@ linearGMM_msc::linearGMM_msc(const mat& X, const colvec y,
   b_twostep = solve(trimatu(R), Q.t() * 
                     solve(trimatl(L), Z.t() * y));
   resid_twostep = y - X * b_twostep;
-  L_tilde = trans(chol())
+  //Calculate updated variance matrix with centering
+  //then take its cholesky decomposition
+  //L_tilde = trans(chol())
   v = solve( Z.t() * resid_twostep)
 }
 
