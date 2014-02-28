@@ -1232,7 +1232,7 @@ and the Law of Large Numbers,
         &=& \left[\left(\frac{X'Z}{n}\right) W_n \left(\frac{Z'X}{n} \right) \right]^{-1} \left(\frac{X'Z}{n} \right)W_n\\
         &\overset{p}{\rightarrow}& C = \left( E[\mathbf{x}\mathbf{z}']\,W \,E[\mathbf{z}\mathbf{x}'] \right)^{-1} E[\mathbf{x}\mathbf{z'}] W
   \end{eqnarray*}
-In the special case of 2SLS, $W_n = (Z'Z/n)^{-1}$ so $W = E[\mathbf{z}_i\mathbf{z}_i']$. Combining the CLT and the LLN, we have
+For example, in the special case of 2SLS, $W_n = (Z'Z/n)^{-1}$ so $W = E[\mathbf{z}_i\mathbf{z}_i']$. Returning to the general version and combining the CLT and the LLN, 
   $$\sqrt{n}\left(\widehat{\beta}_{2SLS} - \beta_0\right) \overset{d}{\rightarrow} N(0, C\Omega C')$$
 If $W_n$ converges in probability to the efficient weighting matrix, namely $\Omega^{-1}$, this simplifies as follows:
   \begin{eqnarray*}
@@ -1271,7 +1271,17 @@ Where $D = diag\{\widehat{\epsilon}_i^{\, 2}\}$. (For unbiased estimation, we co
 by the shortcut formula. We can continue to estimate $E[\epsilon_i^2 \textbf{z}_i \textbf{z}_i']$ by $Z'DZ/n$, or in the case of homoscedasticity by $\widehat{\sigma}_\epsilon^2 Z'Z/n$, so the question is how to estimate the second term. In the presence of over-identifying restrictions, the moment conditions used to estimate the model will not hold exactly in-sample. This is the principle behind the $J$-test. We can use the same idea here to estimate $E[\epsilon_i \textbf{z}_i]$ by the sample analogue $n^{-1} \sum_{i=1}^n \widehat{\epsilon}_i \textbf{z}_i$. This idea leades to the heteroskedasticity-consistent centered variance matrix estimator:
   $$\widehat{\Omega} = \frac{1}{n} \sum_{i=1}^n \widehat{\epsilon}_i^{\, 2} \textbf{z}_i \textbf{z}_i' - \left( \frac{1}{n} \sum_{i=1}^n \widehat{\epsilon}_i \textbf{z}_i\right) \left(  \frac{1}{n} \sum_{i=1}^n \widehat{\epsilon}_i \textbf{z}_i'\right) = Z'\left[ \frac{D}{n} - \frac{\widehat{\epsilon}' \widehat{\epsilon}}{n^2} \right] Z$$
 
-
+\paragraph{Two-step Efficient GMM via Cholesky and QR}
+To calculate the J-test statistic, which we'll need for the Andrews (1999) Moment Selection Criterion described below, we first need to compute the efficient two-step GMM estimator. Suppose $\widehat{\Omega}$ is a consistent estimator of the variance matrix from the CLT for $n^{-1/2}Z'\epsilon$. A natural choice for $\widehat{\Omega}$ is the estimator based on the two-stage least squares residuals, namely $Z'DZ/n$ as described above. Another possiblity is the centered version of the same, which is what we'll use for the Andrews (1999) criteria. The efficient linear GMM estimator is
+  $$\widehat{\beta}_{GMM} = \left(X'Z \widehat{\Omega}^{-1} Z'X\right)X'Z \widehat{\Omega}^{-1}Z'y$$
+Now suppose we take the Cholesky decomposition of $\widehat{\Omega}$  
+  $$\widehat{\Omega} = LL'$$
+Then, the GMM estimator becomes
+  \begin{eqnarray*}
+    \widehat{\beta}_{GMM} &=& \left(X'Z \left(LL'\right)^{-1} Z'X\right)X'Z \left(LL'\right)^{-1}Z'y\\
+      &=&  \left(X'Z (L^{-1})' L^{-1} Z'X\right)X'Z (L^{-1})' L^{-1} Z'y\\
+      &=&\left[\left(L^{-1}Z' X \right)' \left(L^{-1}Z'X \right)\right]^{-1} \left(L^{-1}Z'X \right)'\left(L^{-1}Z y\right)
+  \end{eqnarray*}
 
 \subsection{Valid Post-Selection Confidence Intervals}
 \todo[inline]{Express limit distribution of FMSC criterion for this example in terms of M, write out the moment averaging estimator as a weighted sum, rearrange and write down the limit distribution. Finally, give the simulation-based procedure in terms of the notation of this example.}
