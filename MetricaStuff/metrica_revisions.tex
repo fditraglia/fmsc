@@ -1242,8 +1242,6 @@ If $W_n$ converges in probability to the efficient weighting matrix, namely $\Om
       &=& \left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1}
   \end{eqnarray*}
 
-
-
 Now, the question is how to estimate $C\Omega C'$ in general.To begin, suppose we have a consistent estimator of $\Omega$, namely $\widehat{\Omega}$. Then, since $n\, \widehat{C} \overset{p}{\rightarrow} C$, it follows that $n^2 \widehat{C} \widehat{\Omega} \widehat{C}\overset{p}{\rightarrow}C\Omega C'$. This gives us an estimate of the asymptotic variance of $\sqrt{n}(\widehat{\beta} - \beta)$. To convert this to an estimate of the asymptotic variance of $\widehat{\beta}$, we need to divide through by $n$, since variance is a quadratic operator. We have
   $$\widehat{\mbox{AVAR}}(\widehat{\beta}) = n\widehat{C} \widehat{\Omega} \widehat{C}$$
 In the case of the efficient GMM estimator, the problem simplifies considerably since we only need to estimate $ \left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1}$ rather than the more general form of $C\Omega C'$. Again, suppose for the moment that we have a consistent estimator $\widehat{\Omega}$ of $\Omega$. Since $X'Z/n \overset{p}{\rightarrow}E[\mathbf{x}\mathbf{z}']$, it follows that
@@ -1273,15 +1271,56 @@ by the shortcut formula. We can continue to estimate $E[\epsilon_i^2 \textbf{z}_
 
 \paragraph{Two-step Efficient GMM via Cholesky and QR}
 To calculate the J-test statistic, which we'll need for the Andrews (1999) Moment Selection Criterion described below, we first need to compute the efficient two-step GMM estimator. Suppose $\widehat{\Omega}$ is a consistent estimator of the variance matrix from the CLT for $n^{-1/2}Z'\epsilon$. A natural choice for $\widehat{\Omega}$ is the estimator based on the two-stage least squares residuals, namely $Z'DZ/n$ as described above. Another possiblity is the centered version of the same, which is what we'll use for the Andrews (1999) criteria. The efficient linear GMM estimator is
-  $$\widehat{\beta}_{GMM} = \left(X'Z \widehat{\Omega}^{-1} Z'X\right)X'Z \widehat{\Omega}^{-1}Z'y$$
+  $$\widehat{\beta}_{GMM} = \left(X'Z \widehat{\Omega}^{-1} Z'X\right)^{-1}X'Z \widehat{\Omega}^{-1}Z'y$$
 Now suppose we take the Cholesky decomposition of $\widehat{\Omega}$  
   $$\widehat{\Omega} = LL'$$
 Then, the GMM estimator becomes
   \begin{eqnarray*}
-    \widehat{\beta}_{GMM} &=& \left(X'Z \left(LL'\right)^{-1} Z'X\right)X'Z \left(LL'\right)^{-1}Z'y\\
-      &=&  \left(X'Z (L^{-1})' L^{-1} Z'X\right)X'Z (L^{-1})' L^{-1} Z'y\\
-      &=&\left[\left(L^{-1}Z' X \right)' \left(L^{-1}Z'X \right)\right]^{-1} \left(L^{-1}Z'X \right)'\left(L^{-1}Z y\right)
+    \widehat{\beta}_{GMM} &=& \left(X'Z \left(LL'\right)^{-1} Z'X\right)^{-1}X'Z \left(LL'\right)^{-1}Z'y\\
+      &=&  \left(X'Z (L^{-1})' L^{-1} Z'X\right)^{-1}X'Z (L^{-1})' L^{-1} Z'y\\
+      &=&\left[\left(L^{-1}Z' X \right)' \left(L^{-1}Z'X \right)\right]^{-1} \left(L^{-1}Z'X \right)'\left(L^{-1}Z y\right)\\
+      &=& (\widetilde{X}'\widetilde{X})^{-1} \widetilde{X}\widetilde{y}
   \end{eqnarray*}
+where $\widetilde{X} = L^{-1}Z' X$ and $\widetilde{y} = L^{-1}Z'y$. These expressions can be rewritten as
+  \begin{eqnarray*}
+    L\widetilde{X} = Z'X \\
+    L\widetilde{y} = Z'y
+  \end{eqnarray*}
+and since $L$ is lower triangular, we can efficiently solve for $\widetilde{X}$ and $\widetilde{y}$ as follows:
+  \begin{eqnarray*}
+      \widetilde{X} &=& \texttt{forwardsolve}(L, Z'X)\\
+      \widetilde{y} &=& \texttt{forwardsolve}(L, Z'y)
+  \end{eqnarray*}
+Finally, we can calculte $\widehat{\beta}_{GMM}$ via a the QR decomposition $\widetilde{X}=QR$
+\begin{eqnarray*}
+   \widehat{\beta}_{GMM} = (\widetilde{X}'\widetilde{X})^{-1} \widetilde{X}\widetilde{y}&=& \left((QR)'QR\right)^{-1}(QR)'\widetilde{y}\\
+    &=& (R'Q'QR)^{-1}R'Q'\widetilde{y} =  (R'R)^{-1}R'Q \widetilde{y}\\
+    &=&  R^{-1} (R')^{-1}R'Q'\widetilde{y} = R^{-1}Q'\widetilde{y}
+\end{eqnarray*}
+It follows that $\widehat{\beta}_{GMM}$ is the solution to $R\widehat{\beta}_{GMM} = Q'\widetilde{y}$, which we can easily calculate via backsubstitution. Hence, the full algorithm is
+  \begin{enumerate}
+    \item $L = \texttt{chol}(\widehat{\Omega})$ 
+    \item $\widetilde{X} = \texttt{forwardsolve}(L, Z'X)$
+    \item $\widetilde{y} = \texttt{forwardsolve}(L, Z'y)$
+    \item $(Q, R) = \texttt{qr}(\widetilde{X})$
+    \item $\widehat{\beta}_{GMM} = \texttt{backsolve}(R, Q\widetilde{y})$
+  \end{enumerate}
+Now, as discussed above, if we use the efficient weighting matrix, the asymptotic variance matrix of the linear GMM estimator reduces to
+  $$C\Omega C' =\left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1}$$
+We already have a consistent estimator of $\Omega$, namely $\widehat{\Omega}$ which we used to estimate $\widehat{\beta}_{GMM}$. It is more common, however, to construct a \emph{new} estimator of $\Omega$ using the residuals from the efficient estimator. Define:
+  $$\widehat{u} = y - X\widehat{\beta}_{GMM}$$
+Using these residuals, we can construct estimators of $\Omega$ exactly as we did above using the two-stage least squares residuals. Let $\widetilde{\Omega}$ be such an estimator. Then we can use $X'Z/n$ to estimate $E[\mathbf{x}\mathbf{z}']$ and calculate the variance matrix. Rather than directly inverting, we can use the Cholesky and QR decompositions as above. Finally, to calculate the J-test statistic we need to use both $\widetilde{\Omega}$ and $\widehat{u}$. For the Andrews (1999) criteria, we will use a centered, heteroskedasticity-robust estimator, as described above. If we take a Cholesky Decomposition of $\widetilde{\Omega}$, namely $\widetilde{\Omega} = \widetilde{L}\widetilde{L}'$, we can calculate the statistic as follows
+  \begin{eqnarray*}
+    J &=& n^{-1} (\widehat{u}'Z) \widetilde{\Omega}^{-1}(Z' \widehat{u})\\
+      &=& n^{-1} (\widehat{u}'Z) \left(\widetilde{L}\widetilde{L}'\right)^{-1}(Z'\widetilde{u})\\
+      &=& n^{-1} (\widehat{u}'Z) (\widetilde{L}')^{-1}\widetilde{L}^{-1}(Z'\widetilde{u})\\
+      &=& n^{-1} \left(\widetilde{L}^{-1}Z' \widehat{u} \right)'\left(\widetilde{L}^{-1}Z' \widehat{u} \right)\\
+      &=& v'v/n
+  \end{eqnarray*}
+where $v=\widetilde{L}^{-1}Z' \widehat{u}$ solves $\widetilde{L}v = Z'\widehat{u}$. Since $\widetilde{L}$ is lower-triangular, we can calculate $v$ by forward substitution, namely $v = \texttt{forwardsolve}(\widetilde{L}, Z'\widehat{u})$. 
+
+
+
 
 \subsection{Valid Post-Selection Confidence Intervals}
 \todo[inline]{Express limit distribution of FMSC criterion for this example in terms of M, write out the moment averaging estimator as a weighted sum, rearrange and write down the limit distribution. Finally, give the simulation-based procedure in terms of the notation of this example.}
