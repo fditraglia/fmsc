@@ -1303,7 +1303,7 @@ It follows that $\widehat{\beta}_{GMM}$ is the solution to $R\widehat{\beta}_{GM
     \item $\widetilde{X} = \texttt{forwardsolve}(L, Z'X)$
     \item $\widetilde{y} = \texttt{forwardsolve}(L, Z'y)$
     \item $(Q, R) = \texttt{qr}(\widetilde{X})$
-    \item $\widehat{\beta}_{GMM} = \texttt{backsolve}(R, Q\widetilde{y})$
+    \item $\widehat{\beta}_{GMM} = \texttt{backsolve}(R, Q'\widetilde{y})$
   \end{enumerate}
 Now, as discussed above, if we use the efficient weighting matrix, the asymptotic variance matrix of the linear GMM estimator reduces to
   $$C\Omega C' =\left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1}$$

@@ -91,6 +91,34 @@ tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
 }
 
 
+//Class for calculating Andrews (1999) GMM moment selection
+//criteria in linear GMM models 
+class linearGMM_msc {
+  public:
+    linearGMM_msc(const mat&, const mat&, const mat&);
+  private:
+    tsls_fit first_step;
+    colvec b_twostep, resid_twostep, v;
+    mat L, R, Q, L_tilde;
+    double J;
+    int n_obs, n_overid;
+};
+//Class constructor
+linearGMM_msc::linearGMM_msc(const mat& X, const colvec y,
+                             const mat& Z): first_step(X, y, Z){
+  n_obs = X.n_rows;
+  n_overid = Z.n_cols - X.n_cols;
+  L = trans(chol(first_step.Omega_center()));
+  qr_econ(Q, R, solve(trimatl(L), Z.t() * X));
+  b_twostep = solve(trimatu(R), Q.t() * 
+                    solve(trimatl(L), Z.t() * y));
+  resid_twostep = y - X * b_twostep;
+  L_tilde = trans(chol())
+  v = solve( Z.t() * resid_twostep)
+}
+
+
+
 
 class dgp {
   public:
