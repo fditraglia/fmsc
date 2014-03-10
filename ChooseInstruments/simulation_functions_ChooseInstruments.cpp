@@ -96,6 +96,12 @@ tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
 class linearGMM_msc {
   public:
     linearGMM_msc(const mat&, const colvec&, const mat&);
+    double Jstat(){return(J);}
+    double pJtest(){return(R::pchisq(J, n_overid, 1, 0));}
+    //the arguments of R::chisq are (q, df, lower.tail, log.p)
+    double GMM_AIC(){return(J - 2 * n_overid);}
+    double GMM_BIC(){return(J - log(n_obs) * n_overid);}
+    double GMM_HQ(){return(J - 2.01 * log(log(n_obs)) * n_overid);}
   private:
     tsls_fit first_step;
     colvec b_2step, resid_2step, v;
