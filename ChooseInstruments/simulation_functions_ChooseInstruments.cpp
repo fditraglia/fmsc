@@ -102,6 +102,7 @@ class linearGMM_msc {
     double GMM_AIC(){return(J - 2 * n_overid);}
     double GMM_BIC(){return(J - log(n_obs) * n_overid);}
     double GMM_HQ(){return(J - 2.01 * log(log(n_obs)) * n_overid);}
+    colvec est_2step(){return(b_2step);}
   private:
     tsls_fit first_step;
     colvec b_2step, resid_2step, v;
