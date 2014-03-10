@@ -135,7 +135,7 @@ linearGMM_msc::linearGMM_msc(const mat& X, const colvec& y,
 //using the Andrews (1999) criteria and CCIC of Hall & Peixe (2003)
 class linearGMM_select{
   public:
-    linearGMM_msc_select(const mat&, const colvec&, 
+    linearGMM_select(const mat&, const colvec&, 
                                      const mat&, const umat&);
   private:
     int n_candidates, n_params;
