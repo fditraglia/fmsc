@@ -33,9 +33,9 @@ cancor::cancor(const mat& X, const mat& Y){
 class CCIC {
   public:
     CCIC(const mat&, const mat&);
-    double CCIC_BIC(){return(first_term + n_overid * log(double(n_obs)));}
-    double CCIC_AIC(){return(first_term + n_overid * 2.0);}
-    double CCIC_HQ(){return(first_term + n_overid * 2.01 * log(log(double(n_obs))));}
+    double BIC(){return(first_term + n_overid * log(double(n_obs)));}
+    double AIC(){return(first_term + n_overid * 2.0);}
+    double HQ(){return(first_term + n_overid * 2.01 * log(log(double(n_obs))));}
   private:
     int n_obs;
     int n_overid;
