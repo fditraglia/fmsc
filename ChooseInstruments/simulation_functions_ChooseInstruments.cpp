@@ -102,10 +102,11 @@ class linearGMM_msc {
     double GMM_AIC(){return(J - 2 * n_overid);}
     double GMM_BIC(){return(J - log(n_obs) * n_overid);}
     double GMM_HQ(){return(J - 2.01 * log(log(n_obs)) * n_overid);}
+    colvec est_1step(){return(b_1step);}
     colvec est_2step(){return(b_2step);}
   private:
     tsls_fit first_step;
-    colvec b_2step, resid_2step, v;
+    colvec b_1step, b_2step, resid_2step, v;
     mat L, R, Q, Omega_tilde, L_tilde;
     double J;
     int n_obs, n_overid;
@@ -115,6 +116,7 @@ linearGMM_msc::linearGMM_msc(const mat& X, const colvec& y,
                              const mat& Z): first_step(X, y, Z){
   n_obs = X.n_rows;
   n_overid = Z.n_cols - X.n_cols;
+  b_1step = first_step.est();
   L = trans(chol(first_step.Omega_center()));
   qr_econ(Q, R, solve(trimatl(L), Z.t() * X));
   b_2step = solve(trimatu(R), Q.t() * 
