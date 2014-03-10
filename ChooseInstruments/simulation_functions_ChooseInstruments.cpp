@@ -132,8 +132,8 @@ linearGMM_msc::linearGMM_msc(const mat& X, const colvec& y,
 
 
 //Class to carry out moment selection for linear GMM models
-//using the Andrews (1999) criteria
-class linearGMM_msc_select{
+//using the Andrews (1999) criteria and CCIC of Hall & Peixe (2003)
+class linearGMM_select{
   public:
     linearGMM_msc_select(const mat&, const colvec&, 
                                      const mat&, const umat&);
@@ -143,7 +143,7 @@ class linearGMM_msc_select{
     mat estimates_1step, estimates_2step;
 };
 //Class constructor
-linearGMM_msc_select::linearGMM_msc_select(const mat& X,
+linearGMM_select::linearGMM_select(const mat& X,
       const colvec& y, const mat& Z_full, const umat& moment_sets){
   //Each column of the matrix moment_sets is a moment set, namely
   //a vector of zeros and ones that indicates which columns of Z 
