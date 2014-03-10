@@ -139,7 +139,7 @@ class linearGMM_select{
                                      const mat&, const umat&);
   private:
     int n_candidates, n_params;
-    colvec J, AIC, BIC, HQ;
+    colvec J, AIC, BIC, HQ, AIC_CCIC, BIC_CCIC, HQ_CCIC;
     mat estimates_1step, estimates_2step;
 };
 //Class constructor
@@ -154,17 +154,27 @@ linearGMM_select::linearGMM_select(const mat& X,
   AIC.zeros(n_candidates);
   BIC.zeros(n_candidates);
   HQ.zeros(n_candidates);
+  AIC_CCIC.zeros(n_candidates);
+  BIC_CCIC.zeros(n_candidates);
+  HQ_CCIC.zeros(n_candidates);
   estimates_1step.zeros(n_params, n_candidates);
   estimates_2step.zeros(n_params, n_candidates);
   
   for(int i = 0; i < n_candidates; i++){
+    //Andrews (1999) Criteria
     linearGMM_msc candidate(X, y, Z_full.cols(moment_sets.col(i)));
     J(i) = candidate.Jstat();
     AIC(i) = candidate.GMM_AIC();
     BIC(i) = candidate.GMM_BIC();
     HQ(i) = candidate.GMM_HQ();
+    //Parameter Estimates
     estimates_1step.col(i) = candidate.est_1step();
     estimates_2step.col(i) = candidate.est_2step();
+    //Hall & Peixe (2003) Criteria
+    CCIC candidate_CCIC(X, Z_full.cols(moment_sets.col(i)));
+    AIC_CCIC(i) = candidate_CCIC.AIC();
+    BIC_CCIC(i) = candidate_CCIC.BIC();
+    HQ_CCIC(i) = candidate_CCIC.HQ();
   }
 }
 
