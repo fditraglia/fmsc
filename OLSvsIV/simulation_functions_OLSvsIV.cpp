@@ -278,7 +278,9 @@ double fmsc_OLS_IV::b_DHW(double alpha){
 //Calculates DHW pre-test estimator
 //Arguments: alpha = significance level for test
   double out;
-  double DHW_crit = R::qchisq(1 - alpha, 1, 1, 0);
+  double DHW_crit = R::qchisq(1 - alpha, 1, 1, 0); 
+  //The arguments in the preceding are (q, df, lower.tail, log.p)
+  //For details of the C internals, enter qchisq at the R command line
   if(Tfmsc() > DHW_crit){
     out = tsls_estimate;
   }else{
