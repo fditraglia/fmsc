@@ -95,7 +95,7 @@ tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
 //criteria in linear GMM models 
 class linearGMM_msc {
   public:
-    linearGMM_msc(const mat&, const mat&, const mat&);
+    linearGMM_msc(const mat&, const colvec&, const mat&);
   private:
     tsls_fit first_step;
     colvec b_2step, resid_2step, v;
@@ -104,7 +104,7 @@ class linearGMM_msc {
     int n_obs, n_overid;
 };
 //Class constructor
-linearGMM_msc::linearGMM_msc(const mat& X, const colvec y,
+linearGMM_msc::linearGMM_msc(const mat& X, const colvec& y,
                              const mat& Z): first_step(X, y, Z){
   n_obs = X.n_rows;
   n_overid = Z.n_cols - X.n_cols;
@@ -115,7 +115,7 @@ linearGMM_msc::linearGMM_msc(const mat& X, const colvec y,
   resid_2step = y - X * b_2step;
   //Centered robust var matrix using second step residuals
   Omega_tilde = Z.t() * ( diagmat(pow(resid_2step, 2)) / n_obs   
-        - (resid_2step * resid_2step.t()) / (n_obs * n_obs)) * Z );
+        - ( resid_2step * resid_2step.t() ) / (n_obs * n_obs) ) * Z ;
   L_tilde = trans(chol(Omega_tilde));
   v = solve(trimatl(L_tilde), Z.t() * resid_2step);
   J = dot(v, v) / n_obs;
