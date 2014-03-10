@@ -131,6 +131,44 @@ linearGMM_msc::linearGMM_msc(const mat& X, const colvec& y,
 }
 
 
+//Class to carry out moment selection for linear GMM models
+//using the Andrews (1999) criteria
+class linearGMM_msc_select{
+  public:
+    linearGMM_msc_select(const mat&, const colvec&, 
+                                     const mat&, const umat&);
+  private:
+    int n_candidates, n_params;
+    colvec J, AIC, BIC, HQ;
+    mat estimates_1step, estimates_2step;
+};
+//Class constructor
+linearGMM_msc_select::linearGMM_msc_select(const mat& X,
+      const colvec& y, const mat& Z_full, const umat& moment_sets){
+  //Each column of the matrix moment_sets is a moment set, namely
+  //a vector of zeros and ones that indicates which columns of Z 
+  //to use in estimation  
+  n_candidates = moment_sets.n_elem;
+  n_params = X.n_cols;
+  J.zeros(n_candidates);
+  AIC.zeros(n_candidates);
+  BIC.zeros(n_candidates);
+  HQ.zeros(n_candidates);
+  estimates_1step.zeros(n_params, n_candidates);
+  estimates_2step.zeros(n_params, n_candidates);
+  
+  for(int i = 0; i < n_candidates; i++){
+    linearGMM_msc candidate(X, y, Z_full.cols(moment_sets.col(i)));
+    J(i) = candidate.Jstat();
+    AIC(i) = candidate.GMM_AIC();
+    BIC(i) = candidate.GMM_BIC();
+    HQ(i) = candidate.GMM_HQ();
+    estimates_1step.col(i) = candidate.est_1step();
+    estimates_2step.col(i) = candidate.est_2step();
+  }
+}
+
+
 
 
 class dgp {
