@@ -64,7 +64,7 @@ class tsls_fit {
     colvec resid() {return(residuals);}
     mat Omega_textbook() {return(s_sq * Rz.t() * Rz / n);}
     mat Omega_robust() {return(Z_copy.t() * D * Z_copy / n);}
-    mat Omega_center() {return(Z_copy.t() * (D / n -  (residuals * residuals.t()) / (n * n)) * Z_copy);};
+    mat Omega_center() {return(Z_copy.t() * (D / n -  (residuals * residuals.t()) / (n * n)) * Z_copy);}
     mat V_textbook() {return(n * s_sq * Rtilde_inv * Rtilde_inv.t());}
     mat V_robust() {return(n * n * C * Omega_robust() * C.t());}
     mat V_center() {return(n * n * C * Omega_center() * C.t());}
