@@ -137,12 +137,6 @@ class linearGMM_select{
   public:
     linearGMM_select(const mat&, const colvec&, 
                                      const mat&, const umat&);
-    //Next step is to write member functions that return the
-    //estimators selected by the various GMM and CCIC criteria
-    //as well as pre-test estimators based on the J-test
-    //Should also create member functions that simply return the
-    //selected moment set, or at least the indices that correspond
-    //to it.
   private:
     int n_candidates, n_params;
     colvec J, pJtest, AIC, BIC, HQ, AIC_CCIC, BIC_CCIC, HQ_CCIC;
