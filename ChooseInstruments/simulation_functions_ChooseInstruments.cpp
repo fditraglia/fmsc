@@ -131,15 +131,15 @@ linearGMM_msc::linearGMM_msc(const mat& X, const colvec& y,
 }
 
 
+
 //Class to carry out moment selection for linear GMM models
 //using the Andrews (1999) criteria and CCIC of Hall & Peixe (2003)
 class linearGMM_select{
   public:
     linearGMM_select(const mat&, const colvec&, 
                                      const mat&, const umat&);
-  private:
-    int n_candidates, n_params;
     colvec J, pJtest, AIC, BIC, HQ, AIC_CCIC, BIC_CCIC, HQ_CCIC;
+  
     mat estimates_1step, estimates_2step;
     colvec est_AIC(){return(est_selected(AIC, estimates_1step));}
     colvec est_BIC(){return(moments_selected(BIC, estimates_1step));}
