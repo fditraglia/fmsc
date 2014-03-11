@@ -145,7 +145,7 @@ class linearGMM_select{
     //to it.
   private:
     int n_candidates, n_params;
-    colvec J, AIC, BIC, HQ, AIC_CCIC, BIC_CCIC, HQ_CCIC;
+    colvec J, pJtest, AIC, BIC, HQ, AIC_CCIC, BIC_CCIC, HQ_CCIC;
     mat estimates_1step, estimates_2step;
 };
 //Class constructor
@@ -157,6 +157,7 @@ linearGMM_select::linearGMM_select(const mat& X,
   n_candidates = moment_sets.n_elem;
   n_params = X.n_cols;
   J.zeros(n_candidates);
+  pJtest.zeros(n_candidates);
   AIC.zeros(n_candidates);
   BIC.zeros(n_candidates);
   HQ.zeros(n_candidates);
@@ -170,6 +171,7 @@ linearGMM_select::linearGMM_select(const mat& X,
     //Andrews (1999) Criteria
     linearGMM_msc candidate(X, y, Z_full.cols(moment_sets.col(i)));
     J(i) = candidate.Jstat();
+    pJtest(i) = candidate.pJtest();
     AIC(i) = candidate.GMM_AIC();
     BIC(i) = candidate.GMM_BIC();
     HQ(i) = candidate.GMM_HQ();
