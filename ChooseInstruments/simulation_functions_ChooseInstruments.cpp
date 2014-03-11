@@ -237,7 +237,7 @@ class fmsc {
     tsls_fit valid, full;
     colvec tau;
     mat Psi, tau_outer_est, Bias_mat;
-    int n, q1, q2, q;
+    int n_obs, n_z1, n_z2, n_z;
 };
 //Class constructor - need to use initialization list here
 //This ensures that the tsls_fit constructor is called to 
@@ -245,14 +245,15 @@ class fmsc {
 //present constructor. 
 fmsc::fmsc(colvec x, colvec y, mat z1, mat z2):
   valid(x, y, z1), full(x, y, join_rows(z1, z2)){
-    q1 = z1.n_cols;
-    q2 = z2.n_cols;
-    n = y.n_elem;
+    n_z1 = z1.n_cols;
+    n_z2 = z2.n_cols;
+    n_z = n_z1 + n_z2;
+    n_obs = y.n_elem;
     tau = z2.t() * valid.resid();
-    Psi =  join_rows(-1 * z2.t() * valid.C , eye(q2, q2));
+    Psi =  join_rows(-1 * z2.t() * valid.C , eye(n_z2, n_z2));
     tau_outer_est = tau * tau.t() - Psi * full.Omega_center() * Psi.t();
-    Bias_mat = mat(q, q, fill::zeros);
-    Bias_mat(span(q1, q - 1), span(q1, q - 1)) = tau_outer_est;
+    Bias_mat = mat(n_z, n_z, fill::zeros);
+    Bias_mat(span(n_z1, n_z - 1), span(n_z1, n_z - 1)) = tau_outer_est;
 }
 
 //Testing code - Make some of the member functions available to R
