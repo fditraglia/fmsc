@@ -156,6 +156,7 @@ linearGMM_select::linearGMM_select(const mat& X,
   //to use in estimation  
   n_candidates = moment_sets.n_elem;
   n_params = X.n_cols;
+  moment_sets_copy = moment_sets;
   J.zeros(n_candidates);
   pJtest.zeros(n_candidates);
   AIC.zeros(n_candidates);
