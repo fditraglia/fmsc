@@ -250,6 +250,7 @@ fmsc::fmsc(colvec x, colvec y, mat z1, mat z2):
     n_z = n_z1 + n_z2;
     n_obs = y.n_elem;
     tau = z2.t() * valid.resid();
+    //Note that valid.C equals K1.hat / n in the notation of the paper
     Psi =  join_rows(-1 * z2.t() * valid.C , eye(n_z2, n_z2));
     tau_outer_est = tau * tau.t() - Psi * full.Omega_center() * Psi.t();
     Bias_mat = mat(n_z, n_z, fill::zeros);
