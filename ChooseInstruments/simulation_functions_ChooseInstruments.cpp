@@ -139,32 +139,31 @@ class linearGMM_select{
     linearGMM_select(const mat&, const colvec&, 
                                      const mat&, const umat&);
     colvec J, pJtest, AIC, BIC, HQ, AIC_CCIC, BIC_CCIC, HQ_CCIC;
-  
     mat estimates_1step, estimates_2step;
     colvec est_AIC(){return(est_selected(AIC, estimates_1step));}
-    colvec est_BIC(){return(moments_selected(BIC, estimates_1step));}
-    colvec est_HQ(){return(moments_selected(HQ, estimates_1step));}
-    colvec est_CCIC_AIC(){return(moments_selected(AIC_CCIC, estimates_1step));}
-    colvec est_CCIC_BIC(){return(moments_selected(BIC_CCIC, estimates_1step));}
-    colvec est_CCIC_HQ(){return(moments_selected(HQ_CCIC, estimates_1step));}
-    colvec moments_AIC(){return(moments_selected(AIC, estimates_1step));}
-    colvec moments_BIC(){return(moments_selected(BIC, estimates_1step));}
-    colvec moments_HQ(){return(moments_selected(HQ, estimates_1step));}
-    colvec moments_CCIC_AIC(){return(moments_selected(AIC_CCIC, estimates_1step));}
-    colvec moments_CCIC_BIC(){return(moments_selected(BIC_CCIC, estimates_1step));}
-    colvec moments_CCIC_HQ(){return(moments_selected(HQ_CCIC, estimates_1step));}
+    colvec est_BIC(){return(est_selected(BIC, estimates_1step));}
+    colvec est_HQ(){return(est_selected(HQ, estimates_1step));}
+    colvec est_CCIC_AIC(){return(est_selected(AIC_CCIC, estimates_1step));}
+    colvec est_CCIC_BIC(){return(est_selected(BIC_CCIC, estimates_1step));}
+    colvec est_CCIC_HQ(){return(est_selected(HQ_CCIC, estimates_1step));}
+    uvec moments_AIC(){return(moments_selected(AIC));}
+    uvec moments_BIC(){return(moments_selected(BIC));}
+    uvec moments_HQ(){return(moments_selected(HQ));}
+    uvec moments_CCIC_AIC(){return(moments_selected(AIC_CCIC));}
+    uvec moments_CCIC_BIC(){return(moments_selected(BIC_CCIC));}
+    uvec moments_CCIC_HQ(){return(moments_selected(HQ_CCIC));}
   private:
     int n_candidates, n_params;
     umat moment_sets_copy;
-    colvec moments_selected(mat est, colvec criterion){
-      uword which_min;
-      criterion.min(which_min);
-      return(moment_sets_copy.col(which_min));
-    }
     colvec est_selected(mat est, colvec criterion){
-      uword which_min;
-      criterion.min(which_min);
-      return(est.col(which_min));
+        uword which_min;
+        criterion.min(which_min);
+        return(est.col(which_min));
+    }
+    uvec moments_selected(colvec criterion){
+        uword which_min;
+        criterion.min(which_min);
+        return(moment_sets_copy.col(which_min));
     }
 };
 //Class constructor
