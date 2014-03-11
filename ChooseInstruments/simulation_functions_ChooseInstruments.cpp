@@ -141,6 +141,7 @@ class linearGMM_select{
     int n_candidates, n_params;
     colvec J, pJtest, AIC, BIC, HQ, AIC_CCIC, BIC_CCIC, HQ_CCIC;
     mat estimates_1step, estimates_2step;
+    umat moment_sets_copy;
 };
 //Class constructor
 linearGMM_select::linearGMM_select(const mat& X,
