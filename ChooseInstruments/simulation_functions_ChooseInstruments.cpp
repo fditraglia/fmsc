@@ -255,6 +255,14 @@ fmsc::fmsc(colvec x, colvec y, mat z1, mat z2):
     tau_outer_est = tau * tau.t() - Psi * full.Omega_center() * Psi.t();
     Bias_mat = mat(n_z, n_z, fill::zeros);
     Bias_mat(span(n_z1, n_z - 1), span(n_z1, n_z - 1)) = tau_outer_est;
+    //Next step is to loop over instrument sets and construct
+    //the K_S matrices and estimated variance matrices
+    //and store them in a cube (field?). Use a temporary 
+    //tsls object declared inside the constructor. Finally we have
+    //All the basic quantities we need and can use member functions
+    //to actually calculate the FMSC. Need to think carefully about
+    //how to handle the valid and full models: as special cases?
+    //Via the general formula? Also, different target parameters?
 }
 
 //Testing code - Make some of the member functions available to R
