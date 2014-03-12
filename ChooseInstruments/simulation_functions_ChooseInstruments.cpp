@@ -208,9 +208,9 @@ linearGMM_select::linearGMM_select(const mat& X,
 
 
 
-class fmsc {
+class fmsc_chooseIV {
   public:
-    fmsc(const mat&, const colvec&, const mat&, const mat&, umat); 
+    fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
     colvec est_valid(){return(estimates.col(0));}
     colvec est_full(){return(estimates.col(estimates.n_col));}
   private:
@@ -223,7 +223,7 @@ class fmsc {
 };
 //Class constructor - initialization list ensures tsls_fit constructor 
 //is called before entering body of the present constuctor 
-fmsc::fmsc(const mat& x, const colvec& y, const mat& z1, 
+fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1, 
            const mat& z2, umat candidates = zeros(1,1)): 
                 valid(x, y, z1), full(x, y, join_rows(z1, z2)){
     //Each column of candidates is an indicator vector that corresponds
