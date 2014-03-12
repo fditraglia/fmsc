@@ -242,10 +242,8 @@ class fmsc {
     mat Psi, tau_outer_est, Bias_mat;
     int n_obs, n_z1, n_z2, n_z;
 };
-//Class constructor - need to use initialization list here
-//This ensures that the tsls_fit constructor is called to 
-//set up valid and full *before* we enter the body of the
-//present constructor. 
+//Class constructor - initialization list ensures tsls_fit constructor 
+//is called before entering body of the present constuctor 
 fmsc::fmsc(const mat& x, const colvec& y, const mat& Z1, 
            const mat& Z2, umat candidates = zeros(1,1)): 
                 valid(x, y, z1), full(x, y, join_rows(z1, z2)){
