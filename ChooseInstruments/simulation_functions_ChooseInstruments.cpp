@@ -233,6 +233,8 @@ dgp::dgp(double b, vec p, double g, double r, mat V,
 class fmsc {
   public:
     fmsc(colvec, colvec, mat, mat);  
+    colvec est_full(){return(full.est();)}
+    colvec est_valid(){return(valid.est());}
   private:
     tsls_fit valid, full;
     colvec tau;
