@@ -234,18 +234,20 @@ dgp::dgp(double b, vec p, double g, double r, mat V,
 class fmsc {
   public:
     fmsc(const mat&, const colvec&, const mat&, const mat&, umat); 
-    colvec est_full(){return(full.est();)}
+    colvec est_full(){return(full.est());}
     colvec est_valid(){return(valid.est());}
   private:
     tsls_fit valid, full;
     colvec tau;
-    mat Psi, tau_outer_est, Bias_mat;
-    int n_obs, n_z1, n_z2, n_z;
+    mat Psi, tau_outer_est, Bias_mat, estimates;
+    umat candidate_indicators; 
+    field<mat> K, Omega;
+    int n_obs, n_z1, n_z2, n_z, n_params;
 };
 //Class constructor - initialization list ensures tsls_fit constructor 
 //is called before entering body of the present constuctor 
-fmsc::fmsc(const mat& x, const colvec& y, const mat& Z1, 
-           const mat& Z2, umat candidates = zeros(1,1)): 
+fmsc::fmsc(const mat& x, const colvec& y, const mat& z1, 
+           const mat& z2, umat candidates = zeros(1,1)): 
                 valid(x, y, z1), full(x, y, join_rows(z1, z2)){
     //Each column of candidates is an indicator vector that corresponds
     //to the columns of z2 used in estimation for that candidate. 
@@ -255,13 +257,63 @@ fmsc::fmsc(const mat& x, const colvec& y, const mat& Z1,
     n_z2 = z2.n_cols;
     n_z = n_z1 + n_z2;
     n_obs = y.n_elem;
+    n_params = x.n_cols;
+    uvec valid_indicator = zeros<uvec>(n_z2);
+    uvec full_indicator = ones<uvec>(n_z2);
+    
+    mat K_valid = n_obs * valid.C;
+    mat Omega_valid = valid.Omega_robust(); //no centering needed
+    mat K_full = n_obs * full.C;
+    mat Omega_full = full.Omega_center();
+    Psi =  join_rows(-1 * z2.t() * K_valid / n_obs, eye(n_z2, n_z2));
     tau = z2.t() * valid.resid();
-    Psi =  join_rows(-1 * z2.t() * valid.C , eye(n_z2, n_z2));
-    tau_outer_est = tau * tau.t() - Psi * full.Omega_center() * Psi.t();
+    tau_outer_est = tau * tau.t() - Psi * Omega_full * Psi.t();
     Bias_mat = mat(n_z, n_z, fill::zeros);
     Bias_mat(span(n_z1, n_z - 1), span(n_z1, n_z - 1)) = tau_outer_est;
+    
     if(all(vectorise(candidates) == 0)){
+      //Default: Valid and Full only - no additional candidates
+      field<mat> K_temp(2);
+      field<mat> Omega_temp(2);
+      mat estimates_temp(n_params, 2);
+      K_temp(0) = K_valid;
+      K_temp(1) = K_full;
+      Omega_temp(0) = Omega_valid;
+      Omega_temp(1) = Omega_full;
+      estimates_temp.col(0) = valid.est();
+      estimates_temp.col(1) = full.est();
+      K = K_temp;
+      Omega = Omega_temp;
+      estimates = estimates_temp;
+      candidate_indicators = join_rows(valid_indicator, full_indicator);
+      
     }else{
+      //Additional candidates besides Valid and Full
+      int n_cand = candidates.n_cols;
+      field<mat> K_temp(n_cand + 2);
+      field<mat> Omega_temp(n_cand + 2);
+      mat estimates_temp(n_params, n_cand + 2);
+      K_temp(0) = K_valid;
+      K_temp(n_cand + 1) = K_full;
+      Omega_temp(0) = Omega_valid;
+      Omega_temp(n_cand + 1) = Omega_full;
+      estimates_temp.col(0) = valid.est();
+      estimates_temp.col(n_cand + 1) = full.est();
+      
+      for(int i = 0; i < n_cand; i++){
+        mat z2_candidate = z2.cols(candidates.col(i));
+        tsls_fit candidate_fit(x, y, join_rows(z1, z2_candidate));
+        mat K_candidate = n_obs * candidate_fit.C;
+        mat Omega_candidate = candidate_fit.Omega_center();
+        K_temp(i + 1) = K_candidate;
+        Omega_temp(i + 1) = Omega_candidate;
+        estimates_temp.col(i + 1) = candidate_fit.est();
+      }
+      candidate_indicators = join_rows(valid_indicator, candidates);
+      candidate_indicators = join_rows(candidate_indicators, full_indicator);
+      K = K_temp;
+      Omega = Omega_temp;
+      estimates = estimates_temp;
     }
 }
 
