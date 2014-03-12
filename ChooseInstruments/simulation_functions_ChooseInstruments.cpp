@@ -211,8 +211,8 @@ linearGMM_select::linearGMM_select(const mat& X,
 class fmsc {
   public:
     fmsc(const mat&, const colvec&, const mat&, const mat&, umat); 
-    colvec est_full(){return(full.est());}
-    colvec est_valid(){return(valid.est());}
+    colvec est_valid(){return(estimates.col(0));}
+    colvec est_full(){return(estimates.col(estimates.n_col));}
   private:
     tsls_fit valid, full;
     colvec tau;
