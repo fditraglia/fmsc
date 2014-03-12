@@ -212,7 +212,7 @@ class fmsc_chooseIV {
   public:
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
     colvec est_valid(){return(estimates.col(0));}
-    colvec est_full(){return(estimates.col(estimates.n_col));}
+    colvec est_full(){return(estimates.col(estimates.n_cols));}
     //colvec abias_sq(function_pointer){return();}
     //colvec abias_sq_pos(function_pointer){call abias_sq, max 0}
     //colvec avar(function_pointer){return();}
