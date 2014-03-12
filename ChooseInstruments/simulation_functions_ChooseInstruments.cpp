@@ -232,7 +232,7 @@ dgp::dgp(double b, vec p, double g, double r, mat V,
 
 class fmsc {
   public:
-    fmsc(colvec, colvec, mat, mat);  
+    fmsc(const colvec&, const colvec&, const mat&, const mat&, umat); 
     colvec est_full(){return(full.est();)}
     colvec est_valid(){return(valid.est());}
   private:
@@ -245,8 +245,9 @@ class fmsc {
 //This ensures that the tsls_fit constructor is called to 
 //set up valid and full *before* we enter the body of the
 //present constructor. 
-fmsc::fmsc(colvec x, colvec y, mat z1, mat z2):
-  valid(x, y, z1), full(x, y, join_rows(z1, z2)){
+fmsc::fmsc(const colvec& x, const colvec& y, const mat& z1, 
+           const mat& z2, umat candidates = zeros(1,1)): 
+                valid(x, y, z1), full(x, y, join_rows(z1, z2)){
     n_z1 = z1.n_cols;
     n_z2 = z2.n_cols;
     n_z = n_z1 + n_z2;
@@ -257,6 +258,15 @@ fmsc::fmsc(colvec x, colvec y, mat z1, mat z2):
     tau_outer_est = tau * tau.t() - Psi * full.Omega_center() * Psi.t();
     Bias_mat = mat(n_z, n_z, fill::zeros);
     Bias_mat(span(n_z1, n_z - 1), span(n_z1, n_z - 1)) = tau_outer_est;
+    //Do the calculations for the full and valid models: K, Omega
+    if(all(vectorise(candidates) == 0)){
+      //Set up moment indicator matrix and list of K and Omega matrices
+      //with only the full and valid
+    }else{
+      //Loop over the candidates to calculate K and Omega
+      //Set up moment indicator matrix and list of K and Omega matrices
+      //for all the candidates in additional to the full and valid
+    }
     //Next step is to loop over instrument sets and construct
     //the K_S matrices and estimated variance matrices
     //and store them in a cube (field?). Use a temporary 
