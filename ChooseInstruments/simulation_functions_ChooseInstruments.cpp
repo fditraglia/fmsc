@@ -213,6 +213,14 @@ class fmsc_chooseIV {
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
     colvec est_valid(){return(estimates.col(0));}
     colvec est_full(){return(estimates.col(estimates.n_col));}
+    //colvec abias_sq(function_pointer){return();}
+    //colvec abias_sq_pos(function_pointer){call abias_sq, max 0}
+    //colvec avar(function_pointer){return();}
+    //colvec fmsc(function_pointer){call abias_sq and avar}
+    //colvec fmsc_pos(function_pointer){call abias_sq_pos and avar}
+    //colvec fmsc_indicator(which_index){call fmsc with Dmu_indicator}
+    //colvec fmsc_pos_indicator(which_index){call fmsc_pos with Dmu_indicator}
+    //double est_fmsc(){write functions to get selected estimator}
   private:
     tsls_fit valid, full;
     colvec tau;
@@ -220,6 +228,10 @@ class fmsc_chooseIV {
     umat candidate_indicators; 
     field<mat> K, Omega;
     int n_obs, n_z1, n_z2, n_z, n_params;
+    //colvec Dmu_indicator(which_element){return();}
+    //Function to pass to fmsc etc that chooses one of the betas
+    //as the focus parameter: i.e. it returns a vector of zeros
+    //with a single one in the right place and with the right dimension
 };
 //Class constructor - initialization list ensures tsls_fit constructor 
 //is called before entering body of the present constuctor 
