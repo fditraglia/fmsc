@@ -232,7 +232,7 @@ dgp::dgp(double b, vec p, double g, double r, mat V,
 
 class fmsc {
   public:
-    fmsc(const colvec&, const colvec&, const mat&, const mat&, umat); 
+    fmsc(const mat&, const colvec&, const mat&, const mat&, umat); 
     colvec est_full(){return(full.est();)}
     colvec est_valid(){return(valid.est());}
   private:
@@ -245,8 +245,8 @@ class fmsc {
 //This ensures that the tsls_fit constructor is called to 
 //set up valid and full *before* we enter the body of the
 //present constructor. 
-fmsc::fmsc(const colvec& x, const colvec& y, const mat& z1, 
-           const mat& z2, umat candidates = zeros(1,1)): 
+fmsc::fmsc(const mat& x, const colvec& y, const mat& Z1, 
+           const mat& Z2, umat candidates = zeros(1,1)): 
                 valid(x, y, z1), full(x, y, join_rows(z1, z2)){
     n_z1 = z1.n_cols;
     n_z2 = z2.n_cols;
