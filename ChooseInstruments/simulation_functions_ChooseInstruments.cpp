@@ -208,29 +208,6 @@ linearGMM_select::linearGMM_select(const mat& X,
 
 
 
-
-class dgp {
-  public:
-    dgp(double, vec, double, double, mat, mat, int);
-    colvec x, y, z2;
-    mat z1;
-  private: 
-    int n_z1;
-    mat u_e_z2;
-};
-//Class constructor
-dgp::dgp(double b, vec p, double g, double r, mat V, 
-                  mat Q, int n){
-  RNGScope scope;
-  n_z1 = Q.n_cols;
-  z1 = trans(chol(Q) * reshape(colvec(rnorm(n * n_z1)), n_z1, n));
-  u_e_z2 = trans(chol(V) * reshape(colvec(rnorm(3 * n)), 3, n));
-  z2 = u_e_z2.col(2);
-  x = z1 * p + g * z2 + u_e_z2.col(1);
-  y = b * x + u_e_z2.col(0);
-}
-
-
 class fmsc {
   public:
     fmsc(const mat&, const colvec&, const mat&, const mat&, umat); 
@@ -316,6 +293,35 @@ fmsc::fmsc(const mat& x, const colvec& y, const mat& z1,
       estimates = estimates_temp;
     }
 }
+
+
+
+
+
+
+class dgp {
+  public:
+    dgp(double, vec, double, double, mat, mat, int);
+    colvec x, y, z2;
+    mat z1;
+  private: 
+    int n_z1;
+    mat u_e_z2;
+};
+//Class constructor
+dgp::dgp(double b, vec p, double g, double r, mat V, 
+                  mat Q, int n){
+  RNGScope scope;
+  n_z1 = Q.n_cols;
+  z1 = trans(chol(Q) * reshape(colvec(rnorm(n * n_z1)), n_z1, n));
+  u_e_z2 = trans(chol(V) * reshape(colvec(rnorm(3 * n)), 3, n));
+  z2 = u_e_z2.col(2);
+  x = z1 * p + g * z2 + u_e_z2.col(1);
+  y = b * x + u_e_z2.col(0);
+}
+
+
+
 
 //Testing code - Make some of the member functions available to R
 // [[Rcpp::export]]
