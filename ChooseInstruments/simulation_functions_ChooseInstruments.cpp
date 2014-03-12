@@ -138,8 +138,6 @@ class linearGMM_select{
   public:
     linearGMM_select(const mat&, const colvec&, 
                                      const mat&, const umat&);
-    colvec J, pJtest, AIC, BIC, HQ, AIC_CCIC, BIC_CCIC, HQ_CCIC;
-    mat estimates_1step, estimates_2step;
     colvec est_AIC(){return(est_selected(AIC, estimates_1step));}
     colvec est_BIC(){return(est_selected(BIC, estimates_1step));}
     colvec est_HQ(){return(est_selected(HQ, estimates_1step));}
@@ -152,6 +150,9 @@ class linearGMM_select{
     uvec moments_CCIC_AIC(){return(moments_selected(AIC_CCIC));}
     uvec moments_CCIC_BIC(){return(moments_selected(BIC_CCIC));}
     uvec moments_CCIC_HQ(){return(moments_selected(HQ_CCIC));}
+    //Public data members
+    colvec J, pJtest, AIC, BIC, HQ, AIC_CCIC, BIC_CCIC, HQ_CCIC;
+    mat estimates_1step, estimates_2step;
   private:
     int n_candidates, n_params;
     umat moment_sets_copy;
