@@ -247,6 +247,10 @@ class fmsc {
 fmsc::fmsc(const mat& x, const colvec& y, const mat& Z1, 
            const mat& Z2, umat candidates = zeros(1,1)): 
                 valid(x, y, z1), full(x, y, join_rows(z1, z2)){
+    //Each column of candidates is an indicator vector that corresponds
+    //to the columns of z2 used in estimation for that candidate. 
+    //We always calculate the Valid and Full estimators which use none
+    //and all columns of z2, respectively.
     n_z1 = z1.n_cols;
     n_z2 = z2.n_cols;
     n_z = n_z1 + n_z2;
