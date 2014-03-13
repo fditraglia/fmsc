@@ -213,7 +213,23 @@ class fmsc_chooseIV {
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
     colvec est_valid(){return(estimates.col(0));}
     colvec est_full(){return(estimates.col(estimates.n_cols));}
-    //colvec abias_sq(function_pointer){return();}
+    //Constructor is generic. To use the FMSC we need to specify
+    //the target parameter: a function mu of the parameter vector
+    //beta. The FMSC uses the derivative of this function evaluated
+    //at a consistent estimator of beta. We'll use the valid estimator
+    colvec abias_sq(colvec (*pt2Function)(colvec)){
+      colvec D_mu = pt2Function(valid.est());
+      colvec out(z2_indicators.n_cols);
+      uvec z1_indicator = ones<uvec>(n_z1); //Always include z1 
+      uvec candidate(n_z);
+      mat inner;
+      for(int i = 0; i < K.n_elem; i++){
+        candidate = join_cols(z1_indicator, z2_indicators.col(i));
+        inner = Bias_mat.submat(candidate, candidate);
+        out(i) = D_mu.t() * K(i) * inner  * K(i).t() * D_mu;
+      }
+      return(out);
+    }
     //colvec abias_sq_pos(function_pointer){call abias_sq, max 0}
     //colvec avar(function_pointer){return();}
     //colvec fmsc(function_pointer){call abias_sq and avar}
