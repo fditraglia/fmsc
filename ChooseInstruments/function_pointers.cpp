@@ -86,4 +86,15 @@ double baz3 (colvec b_valid, mat Omega){
     return quadratic_form(b_valid, Omega, &squares);  
 }
 
+//One more example: make sure we can pass a function pointer *through*
+//one function and *into* another.
+double EmptyShell (double a, double b, 
+                   double (*pt2Function)(double, double)){
+  double answer = ResultPlusOne(a, b, *pt2Function);
+  return(answer);
+}
 
+// [[Rcpp::export]]
+double PassThrough (double a, double b){
+  return(EmptyShell(a, b, Plus));
+}
