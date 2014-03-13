@@ -226,12 +226,18 @@ class fmsc_chooseIV {
       for(int i = 0; i < K.n_elem; i++){
         candidate = join_cols(z1_indicator, z2_indicators.col(i));
         inner = Bias_mat.submat(candidate, candidate);
-        out(i) = D_mu.t() * K(i) * inner  * K(i).t() * D_mu;
+        out(i) = as_scalar(D_mu.t() * K(i) * inner  * K(i).t() * D_mu);
       }
       return(out);
     }
-    //colvec abias_sq_pos(function_pointer){call abias_sq, max 0}
-    //colvec avar(function_pointer){return();}
+    colvec avar(colvec (*pt2Function)(colvec)){
+      colvec D_mu = pt2Function(valid.est());
+      colvec out(z2_indicators.n_cols);
+      for(int i = 0; i < K.n_elem; i++){
+        out(i) = as_scalar(D_mu.t() * K(i) * Omega(i) * K(i).t() * D_mu);
+      }
+      return(out);
+    }
     //colvec fmsc(function_pointer){call abias_sq and avar}
     //colvec fmsc_pos(function_pointer){call abias_sq_pos and avar}
     //colvec fmsc_indicator(which_index){call fmsc with Dmu_indicator}
