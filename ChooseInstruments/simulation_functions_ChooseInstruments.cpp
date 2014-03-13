@@ -213,11 +213,8 @@ class fmsc_chooseIV {
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
     colvec est_valid(){return(estimates.col(0));}
     colvec est_full(){return(estimates.col(estimates.n_cols));}
-    //Constructor is generic. To use the FMSC we need to specify
-    //the target parameter: a function mu of the parameter vector
-    //beta. The FMSC uses the derivative of this function evaluated
-    //at a consistent estimator of beta. We'll use the valid estimator
     colvec abias_sq(colvec (*pt2Function)(colvec)){
+      //Loop over candidates and calculate squared ABIAS
       colvec D_mu = pt2Function(valid.est());
       colvec out(z2_indicators.n_cols);
       uvec z1_indicator = ones<uvec>(n_z1); //Always include z1 
@@ -231,6 +228,7 @@ class fmsc_chooseIV {
       return(out);
     }
     colvec avar(colvec (*pt2Function)(colvec)){
+      //Loop over candidates and calculate AVAR
       colvec D_mu = pt2Function(valid.est());
       colvec out(z2_indicators.n_cols);
       for(int i = 0; i < K.n_elem; i++){
