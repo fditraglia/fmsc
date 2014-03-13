@@ -214,6 +214,15 @@ class fmsc_chooseIV {
     colvec est_valid(){return(estimates.col(0));}
     colvec est_full(){return(estimates.col(estimates.n_cols));}
     
+    colvec mu_estimates(double (*pt2mu)(colvec)){
+      //Estimates of target parameter for each candidate
+      colvec mu(z2_indicators.n_cols);
+      for(int i = 0; i < mu.n_elem; i++){
+        mu(i) = pt2mu(estimates.col(i));
+      }
+      return(mu);
+    }
+
     colvec abias_sq(colvec (*pt2D_mu)(colvec)){
       //Loop over candidates and calculate squared ABIAS
       colvec D_mu = pt2D_mu(valid.est());
@@ -257,8 +266,27 @@ class fmsc_chooseIV {
       colvec second_term = avar(*pt2D_mu);
       return(first_term + second_term);
     }
-    //double est_fmsc(){get selected estimator}
-    //double est_fmsc_pos(){get selected estimator}
+    
+    double est_fmsc(colvec (*pt2D_mu)(colvec), 
+                      double (*pt2mu)(colvec)){
+    //FMSC-selected target parameter estimate
+    colvec criterion_values = fmsc(*pt2D_mu);
+    uword which_min;
+    criterion_values.min(which_min);
+    colvec target_estimates = mu_estimates(*pt2mu);
+    return(target_estimates(which_min));
+    }
+
+    double est_fmsc_pos(colvec (*pt2D_mu)(colvec), 
+                      double (*pt2mu)(colvec)){
+    //FMSC-selected target parameter estimate
+    colvec criterion_values = fmsc_pos(*pt2D_mu);
+    uword which_min;
+    criterion_values.min(which_min);
+    colvec target_estimates = mu_estimates(*pt2mu);
+    return(target_estimates(which_min));
+    }
+
   private:
     tsls_fit valid, full;
     colvec tau;
