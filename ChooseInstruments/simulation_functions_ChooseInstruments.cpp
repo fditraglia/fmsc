@@ -227,13 +227,8 @@ class fmsc_chooseIV {
       //Loop over candidates and calculate squared ABIAS
       colvec D_mu = pt2D_mu(valid.est());
       colvec out(z2_indicators.n_cols);
-      uvec z1_indicator = ones<uvec>(n_z1); //Always include z1 
-      uvec candidate(n_z);
-      mat inner;
       for(int i = 0; i < K.n_elem; i++){
-        candidate = join_cols(z1_indicator, z2_indicators.col(i));
-        inner = Bias_mat.submat(candidate, candidate);
-        out(i) = as_scalar(D_mu.t() * K(i) * inner  * K(i).t() * D_mu);
+        out(i) = as_scalar(D_mu.t() * sqbias_inner(i) * D_mu);
       }
       return(out);
     }
@@ -250,7 +245,7 @@ class fmsc_chooseIV {
       colvec D_mu = pt2D_mu(valid.est());
       colvec out(z2_indicators.n_cols);
       for(int i = 0; i < K.n_elem; i++){
-        out(i) = as_scalar(D_mu.t() * K(i) * Omega(i) * K(i).t() * D_mu);
+        out(i) = as_scalar(D_mu.t() * avar_inner(i) * D_mu);
       }
       return(out);
     }
@@ -293,6 +288,7 @@ class fmsc_chooseIV {
     mat Psi, tau_outer_est, Bias_mat, estimates;
     umat z2_indicators; 
     field<mat> K, Omega;
+    cube sqbias_inner, avar_inner; 
     int n_obs, n_z1, n_z2, n_z, n_params;
 };
 //Class constructor - initialization list ensures tsls_fit constructor 
@@ -324,7 +320,6 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     
     //Are there any additional candidates besides valid and full?
     int n_add_cand;
-    
     if(all(vectorise(candidates) == 0)){
       n_add_cand = 0;
       z2_indicators = join_rows(valid_indicator, full_indicator);
@@ -337,14 +332,23 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     
     field<mat> K_temp(n_add_cand + 2);
     field<mat> Omega_temp(n_add_cand + 2);
+    cube sqbias_inner_temp(n_params, n_params, n_add_cand + 2);
+    cube avar_inner_temp(n_params, n_params, n_add_cand + 2);
     mat estimates_temp(n_params, n_add_cand + 2);
+    uvec z1_indicator = ones<uvec>(n_z1); //Always include z1
+    mat inner;
+    uvec candidate(n_z);
+    
+    //Results for valid estimator - outside loop since already fitted
     K_temp(0) = K_valid;
-    K_temp(n_add_cand + 1) = K_full;
     Omega_temp(0) = Omega_valid;
-    Omega_temp(n_add_cand + 1) = Omega_full;
     estimates_temp.col(0) = valid.est();
-    estimates_temp.col(n_add_cand + 1) = full.est();
-      
+    candidate = join_cols(z1_indicator, valid_indicator);
+    inner = Bias_mat.submat(candidate, candidate);
+    sqbias_inner_temp.slice(0) = K_valid * inner * K_valid.t();
+    avar_inner_temp.slice(0) =  K_valid * Omega_valid * K_valid.t();
+    
+    //Results for any candidates besides valid and full
     for(int i = 0; i < n_add_cand; i++){
       mat z2_candidate = z2.cols(candidates.col(i));
       tsls_fit candidate_fit(x, y, join_rows(z1, z2_candidate));
@@ -353,11 +357,29 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
       K_temp(i + 1) = K_candidate;
       Omega_temp(i + 1) = Omega_candidate;
       estimates_temp.col(i + 1) = candidate_fit.est();
+      candidate = join_cols(z1_indicator, candidates.col(i));
+      inner = Bias_mat.submat(candidate, candidate);
+      sqbias_inner_temp.slice(i + 1) = K_candidate * inner * 
+                                                     K_candidate.t();
+      avar_inner_temp.slice(i + 1) =  K_candidate * Omega_candidate * 
+                                                    K_candidate.t();
     }
     
+    //Results for full estimator - outside loop since already fitted
+    K_temp(n_add_cand + 1) = K_full;
+    Omega_temp(n_add_cand + 1) = Omega_full;
+    estimates_temp.col(n_add_cand + 1) = full.est();
+    candidate = join_cols(z1_indicator, full_indicator);
+    inner = Bias_mat.submat(candidate, candidate);
+    sqbias_inner_temp.slice(0) = K_full * inner * K_full.t();
+    avar_inner_temp.slice(n_add_cand + 1) = K_full * Omega_full * 
+                                                     K_full.t();
+    //Store results in private data members                                       
     K = K_temp;
     Omega = Omega_temp;
     estimates = estimates_temp;
+    sqbias_inner = sqbias_inner_temp;
+    avar_inner = avar_inner_temp;
 }
 
 
