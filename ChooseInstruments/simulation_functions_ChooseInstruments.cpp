@@ -225,7 +225,7 @@ class fmsc_chooseIV {
     tsls_fit valid, full;
     colvec tau;
     mat Psi, tau_outer_est, Bias_mat, estimates;
-    umat candidate_indicators; 
+    umat z2_indicators; 
     field<mat> K, Omega;
     int n_obs, n_z1, n_z2, n_z, n_params;
     //colvec Dmu_indicator(which_element){return();}
@@ -274,7 +274,7 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
       K = K_temp;
       Omega = Omega_temp;
       estimates = estimates_temp;
-      candidate_indicators = join_rows(valid_indicator, full_indicator);
+      z2_indicators = join_rows(valid_indicator, full_indicator);
       
     }else{
       //Additional candidates besides Valid and Full
@@ -298,8 +298,8 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
         Omega_temp(i + 1) = Omega_candidate;
         estimates_temp.col(i + 1) = candidate_fit.est();
       }
-      candidate_indicators = join_rows(valid_indicator, candidates);
-      candidate_indicators = join_rows(candidate_indicators, full_indicator);
+      z2_indicators = join_rows(valid_indicator, candidates);
+      z2_indicators = join_rows(z2_indicators, full_indicator);
       K = K_temp;
       Omega = Omega_temp;
       estimates = estimates_temp;
