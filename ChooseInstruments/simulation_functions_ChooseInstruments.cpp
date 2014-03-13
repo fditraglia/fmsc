@@ -211,8 +211,9 @@ linearGMM_select::linearGMM_select(const mat& X,
 class fmsc_chooseIV {
   public:
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
-    colvec est_valid(){return(estimates.col(0));}
-    colvec est_full(){return(estimates.col(estimates.n_cols));}
+    //Really want to be able to return mu_valid and mu_full
+    //colvec est_valid(){return(estimates.col(0));}
+    //colvec est_full(){return(estimates.col(estimates.n_cols));}
     
     colvec mu_estimates(double (*pt2mu)(colvec)){
       //Estimates of target parameter for each candidate
