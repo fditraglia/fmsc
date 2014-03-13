@@ -215,6 +215,9 @@ class fmsc_chooseIV {
     //colvec est_valid(){return(estimates.col(0));}
     //colvec est_full(){return(estimates.col(estimates.n_cols));}
     
+    //I can probably eliminate most of this stuff with the function
+    //pointers, but I should leave an example in case I ever want
+    //to extend this functionality or figure out how to use std::bind
     colvec mu_estimates(double (*pt2mu)(colvec)){
       //Estimates of target parameter for each candidate
       colvec mu(z2_indicators.n_cols);
