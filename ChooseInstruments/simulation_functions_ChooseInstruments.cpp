@@ -214,9 +214,9 @@ class fmsc_chooseIV {
     colvec est_valid(){return(estimates.col(0));}
     colvec est_full(){return(estimates.col(estimates.n_cols));}
     
-    colvec abias_sq(colvec (*pt2Function)(colvec)){
+    colvec abias_sq(colvec (*pt2D_mu)(colvec)){
       //Loop over candidates and calculate squared ABIAS
-      colvec D_mu = pt2Function(valid.est());
+      colvec D_mu = pt2D_mu(valid.est());
       colvec out(z2_indicators.n_cols);
       uvec z1_indicator = ones<uvec>(n_z1); //Always include z1 
       uvec candidate(n_z);
@@ -229,16 +229,16 @@ class fmsc_chooseIV {
       return(out);
     }
     
-    colvec abias_sq_pos(colvec (*pt2Function)(colvec)){
+    colvec abias_sq_pos(colvec (*pt2D_mu)(colvec)){
       //Set negative squared bias estimate to zero
-      colvec result = abias_sq(*pt2Function);
+      colvec result = abias_sq(*pt2D_mu);
       colvec out = max(result, zeros<colvec>(result.n_elem));
       return(out);
     }
     
-    colvec avar(colvec (*pt2Function)(colvec)){
+    colvec avar(colvec (*pt2D_mu)(colvec)){
       //Loop over candidates and calculate AVAR
-      colvec D_mu = pt2Function(valid.est());
+      colvec D_mu = pt2D_mu(valid.est());
       colvec out(z2_indicators.n_cols);
       for(int i = 0; i < K.n_elem; i++){
         out(i) = as_scalar(D_mu.t() * K(i) * Omega(i) * K(i).t() * D_mu);
@@ -246,15 +246,15 @@ class fmsc_chooseIV {
       return(out);
     }
     
-    colvec fmsc(colvec (*pt2Function)(colvec)){
-      colvec first_term = abias_sq(*pt2Function);
-      colvec second_term = avar(*pt2Function);
+    colvec fmsc(colvec (*pt2D_mu)(colvec)){
+      colvec first_term = abias_sq(*pt2D_mu);
+      colvec second_term = avar(*pt2D_mu);
       return(first_term + second_term);
     }
     
-    colvec fmsc_pos(colvec (*pt2Function)(colvec)){
-      colvec first_term = abias_sq_pos(*pt2Function);
-      colvec second_term = avar(*pt2Function);
+    colvec fmsc_pos(colvec (*pt2D_mu)(colvec)){
+      colvec first_term = abias_sq_pos(*pt2D_mu);
+      colvec second_term = avar(*pt2D_mu);
       return(first_term + second_term);
     }
     //double est_fmsc(){get selected estimator}
