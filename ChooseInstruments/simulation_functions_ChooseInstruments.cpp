@@ -262,6 +262,10 @@ class fmsc_chooseIV {
       return(first_term + second_term);
     }
     
+//    colvec fmsc_simple(colvec weights){
+//      return();
+//    }
+    
     double est_fmsc(colvec (*pt2D_mu)(colvec), 
                       double (*pt2mu)(colvec)){
     //FMSC-selected target parameter estimate
@@ -281,6 +285,10 @@ class fmsc_chooseIV {
     colvec target_estimates = mu_estimates(*pt2mu);
     return(target_estimates(which_min));
     }
+    
+//    double est_fmsc_simple(colvec weights){
+//      return();
+//    }
 
   private:
     tsls_fit valid, full;
@@ -323,7 +331,6 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     if(all(vectorise(candidates) == 0)){
       n_add_cand = 0;
       z2_indicators = join_rows(valid_indicator, full_indicator);
-      
     }else{
       n_add_cand = candidates.n_cols;
       z2_indicators = join_rows(valid_indicator, candidates);
