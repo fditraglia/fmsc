@@ -213,6 +213,7 @@ class fmsc_chooseIV {
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
     colvec est_valid(){return(estimates.col(0));}
     colvec est_full(){return(estimates.col(estimates.n_cols));}
+    
     colvec abias_sq(colvec (*pt2Function)(colvec)){
       //Loop over candidates and calculate squared ABIAS
       colvec D_mu = pt2Function(valid.est());
@@ -227,6 +228,14 @@ class fmsc_chooseIV {
       }
       return(out);
     }
+    
+    colvec abias_sq_pos(colvec (*pt2Function)(colvec)){
+      //Set negative squared bias estimate to zero
+      colvec result = abias_sq(*pt2Function);
+      colvec out = max(result, zeros<colvec>(result.n_elem));
+      return(out);
+    }
+    
     colvec avar(colvec (*pt2Function)(colvec)){
       //Loop over candidates and calculate AVAR
       colvec D_mu = pt2Function(valid.est());
@@ -236,11 +245,20 @@ class fmsc_chooseIV {
       }
       return(out);
     }
-    //colvec fmsc(function_pointer){call abias_sq and avar}
-    //colvec fmsc_pos(function_pointer){call abias_sq_pos and avar}
-    //colvec fmsc_indicator(which_index){call fmsc with Dmu_indicator}
-    //colvec fmsc_pos_indicator(which_index){call fmsc_pos with Dmu_indicator}
-    //double est_fmsc(){write functions to get selected estimator}
+    
+    colvec fmsc(colvec (*pt2Function)(colvec)){
+      colvec first_term = abias_sq(*pt2Function);
+      colvec second_term = avar(*pt2Function);
+      return(first_term + second_term);
+    }
+    
+    colvec fmsc_pos(colvec (*pt2Function)(colvec)){
+      colvec first_term = abias_sq_pos(*pt2Function);
+      colvec second_term = avar(*pt2Function);
+      return(first_term + second_term);
+    }
+    //double est_fmsc(){get selected estimator}
+    //double est_fmsc_pos(){get selected estimator}
   private:
     tsls_fit valid, full;
     colvec tau;
@@ -248,20 +266,16 @@ class fmsc_chooseIV {
     umat z2_indicators; 
     field<mat> K, Omega;
     int n_obs, n_z1, n_z2, n_z, n_params;
-    //colvec Dmu_indicator(which_element){return();}
-    //Function to pass to fmsc etc that chooses one of the betas
-    //as the focus parameter: i.e. it returns a vector of zeros
-    //with a single one in the right place and with the right dimension
 };
 //Class constructor - initialization list ensures tsls_fit constructor 
 //is called before entering body of the present constuctor 
 fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1, 
            const mat& z2, umat candidates = zeros(1,1)): 
                 valid(x, y, z1), full(x, y, join_rows(z1, z2)){
-    //Each column of candidates is an indicator vector that corresponds
-    //to the columns of z2 used in estimation for that candidate. 
-    //We always calculate the Valid and Full estimators which use none
-    //and all columns of z2, respectively.
+    //If specified, each column of candidates is an indicator vector 
+    //that corresponds to the columns of z2 used in estimation for that 
+    //candidate. We always calculate the Valid and Full. The default
+    //is to calculate *only* these.
     n_z1 = z1.n_cols;
     n_z2 = z2.n_cols;
     n_z = n_z1 + n_z2;
