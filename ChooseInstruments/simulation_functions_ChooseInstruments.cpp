@@ -322,51 +322,44 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     Bias_mat = mat(n_z, n_z, fill::zeros);
     Bias_mat(span(n_z1, n_z - 1), span(n_z1, n_z - 1)) = tau_outer_est;
     
+    //Are there any additional candidates besides valid and full?
+    int n_add_cand;
+    
     if(all(vectorise(candidates) == 0)){
-      //Default: Valid and Full only - no additional candidates
-      field<mat> K_temp(2);
-      field<mat> Omega_temp(2);
-      mat estimates_temp(n_params, 2);
-      K_temp(0) = K_valid;
-      K_temp(1) = K_full;
-      Omega_temp(0) = Omega_valid;
-      Omega_temp(1) = Omega_full;
-      estimates_temp.col(0) = valid.est();
-      estimates_temp.col(1) = full.est();
-      K = K_temp;
-      Omega = Omega_temp;
-      estimates = estimates_temp;
+      n_add_cand = 0;
       z2_indicators = join_rows(valid_indicator, full_indicator);
       
     }else{
-      //Additional candidates besides Valid and Full
-      int n_cand = candidates.n_cols;
-      field<mat> K_temp(n_cand + 2);
-      field<mat> Omega_temp(n_cand + 2);
-      mat estimates_temp(n_params, n_cand + 2);
-      K_temp(0) = K_valid;
-      K_temp(n_cand + 1) = K_full;
-      Omega_temp(0) = Omega_valid;
-      Omega_temp(n_cand + 1) = Omega_full;
-      estimates_temp.col(0) = valid.est();
-      estimates_temp.col(n_cand + 1) = full.est();
-      
-      for(int i = 0; i < n_cand; i++){
-        mat z2_candidate = z2.cols(candidates.col(i));
-        tsls_fit candidate_fit(x, y, join_rows(z1, z2_candidate));
-        mat K_candidate = n_obs * candidate_fit.C;
-        mat Omega_candidate = candidate_fit.Omega_center();
-        K_temp(i + 1) = K_candidate;
-        Omega_temp(i + 1) = Omega_candidate;
-        estimates_temp.col(i + 1) = candidate_fit.est();
-      }
+      n_add_cand = candidates.n_cols;
       z2_indicators = join_rows(valid_indicator, candidates);
       z2_indicators = join_rows(z2_indicators, full_indicator);
-      K = K_temp;
-      Omega = Omega_temp;
-      estimates = estimates_temp;
     }
+    
+    field<mat> K_temp(n_add_cand + 2);
+    field<mat> Omega_temp(n_add_cand + 2);
+    mat estimates_temp(n_params, n_add_cand + 2);
+    K_temp(0) = K_valid;
+    K_temp(n_add_cand + 1) = K_full;
+    Omega_temp(0) = Omega_valid;
+    Omega_temp(n_add_cand + 1) = Omega_full;
+    estimates_temp.col(0) = valid.est();
+    estimates_temp.col(n_add_cand + 1) = full.est();
+      
+    for(int i = 0; i < n_add_cand; i++){
+      mat z2_candidate = z2.cols(candidates.col(i));
+      tsls_fit candidate_fit(x, y, join_rows(z1, z2_candidate));
+      mat K_candidate = n_obs * candidate_fit.C;
+      mat Omega_candidate = candidate_fit.Omega_center();
+      K_temp(i + 1) = K_candidate;
+      Omega_temp(i + 1) = Omega_candidate;
+      estimates_temp.col(i + 1) = candidate_fit.est();
+    }
+    
+    K = K_temp;
+    Omega = Omega_temp;
+    estimates = estimates_temp;
 }
+
 
 
 
