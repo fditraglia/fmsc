@@ -214,7 +214,7 @@ class fmsc_chooseIV {
     //Really want to be able to return mu_valid and mu_full
     //colvec est_valid(){return(estimates.col(0));}
     //colvec est_full(){return(estimates.col(estimates.n_cols));}
-    colvec abias_sq_simple(colvec weights){
+    colvec abias_sq(colvec weights){
         colvec out(z2_indicators.n_cols);
         for(int i = 0; i < K.n_elem; i++){
           out(i) = as_scalar(weights.t() * sqbias_inner(i) * weights);
@@ -222,7 +222,8 @@ class fmsc_chooseIV {
         return(out);
     }
       
-    colvec avar_simple(colvec weights){
+    
+    colvec avar(colvec weights){
       colvec out(z2_indicators.n_cols);
       for(int i = 0; i < K.n_elem; i++){
         out(i) = as_scalar(weights.t() * avar_inner(i) * weights);
@@ -233,12 +234,12 @@ class fmsc_chooseIV {
     colvec fmsc_simple(colvec weights){
       colvec first_term = abias_sq_simple(weights);
       first_term = max(first_term, zeros<colvec>(first_term.n_elem));
-      colvec second_term = avar_simple(weights);
+      colvec second_term = avar(weights);
       return(first_term + second_term);
     }
     
-    double est_fmsc_simple(colvec weights){
-      colvec criterion_values = fmsc_simple(weights);
+    double mu_fmsc(colvec weights){
+      colvec criterion_values = fmsc(weights);
       uword which_min;
       criterion_values.min(which_min);
       colvec b_fmsc = estimates.col(which_min);
