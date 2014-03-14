@@ -360,7 +360,9 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
 
 
 
-
+//Now it's time to run the simulation! Don't worry about the
+//post-selection CIs for the moment. Come back to those later.
+//Need to add C++ functions for coverage, MSE etc. to this file.
 
 
 
