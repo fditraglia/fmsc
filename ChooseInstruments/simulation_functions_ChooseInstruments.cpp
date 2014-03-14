@@ -243,8 +243,8 @@ class fmsc_chooseIV {
       return(out);
     }
     
-    colvec fmsc_simple(colvec weights){
-      colvec first_term = abias_sq_simple(weights);
+    colvec fmsc(colvec weights){
+      colvec first_term = abias_sq(weights);
       first_term = max(first_term, zeros<colvec>(first_term.n_elem));
       colvec second_term = avar(weights);
       return(first_term + second_term);
