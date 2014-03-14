@@ -215,9 +215,7 @@ class fmsc_chooseIV {
     //colvec est_valid(){return(estimates.col(0));}
     //colvec est_full(){return(estimates.col(estimates.n_cols));}
     
-    //I can probably eliminate most of this stuff with the function
-    //pointers, but I should leave an example in case I ever want
-    //to extend this functionality or figure out how to use std::bind
+
     colvec mu_estimates(double (*pt2mu)(colvec)){
       //Estimates of target parameter for each candidate
       colvec mu(z2_indicators.n_cols);
@@ -266,10 +264,6 @@ class fmsc_chooseIV {
       return(first_term + second_term);
     }
     
-//    colvec fmsc_simple(colvec weights){
-//      return();
-//    }
-    
     double est_fmsc(colvec (*pt2D_mu)(colvec), 
                       double (*pt2mu)(colvec)){
     //FMSC-selected target parameter estimate
@@ -279,20 +273,37 @@ class fmsc_chooseIV {
     colvec target_estimates = mu_estimates(*pt2mu);
     return(target_estimates(which_min));
     }
-
-    double est_fmsc_pos(colvec (*pt2D_mu)(colvec), 
-                      double (*pt2mu)(colvec)){
-    //FMSC-selected target parameter estimate
-    colvec criterion_values = fmsc_pos(*pt2D_mu);
-    uword which_min;
-    criterion_values.min(which_min);
-    colvec target_estimates = mu_estimates(*pt2mu);
-    return(target_estimates(which_min));
+    
+    colvec abias_sq_simple(colvec weights){
+        colvec out(z2_indicators.n_cols);
+        for(int i = 0; i < K.n_elem; i++){
+          out(i) = as_scalar(weights.t() * sqbias_inner(i) * weights);
+        }
+        return(out);
+    }
+      
+    colvec avar_simple(colvec weights){
+      colvec out(z2_indicators.n_cols);
+      for(int i = 0; i < K.n_elem; i++){
+        out(i) = as_scalar(weights.t() * avar_inner(i) * weights);
+      }
+      return(out);
     }
     
-//    double est_fmsc_simple(colvec weights){
-//      return();
-//    }
+    colvec fmsc_simple(colvec weights){
+      colvec first_term = abias_sq_simple(weights);
+      first_term = max(first_term, zeros<colvec>(first_term.n_elem));
+      second_term = avar_simple(weights);
+      return(first_term + second_term);
+    }
+    
+    double est_fmsc_simple(colvec weights){
+      criterion_values = fmsc_simple(weights);
+      uword which_min;
+      criterion_values.min(which_min);
+      colvec b_fmsc = estimates.col(which_min);
+      return(dot(weights, b_fmsc));
+    }    
 
   private:
     tsls_fit valid, full;
