@@ -207,7 +207,6 @@ linearGMM_select::linearGMM_select(const mat& X,
 }
 
 
-
 //The member functions as given here only allow for target parameters
 //that are a linear function of beta. I've created a branch of this
 //project with more general code using function pointers, but it's 
@@ -215,6 +214,19 @@ linearGMM_select::linearGMM_select(const mat& X,
 class fmsc_chooseIV {
   public:
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
+    
+    colvec mu_est(colvec weights){return(weights.t() * estimates);}
+    
+    double mu_valid(colvec weights){
+      colvec mu = mu_est(weights);
+      return(mu(0));
+    }
+    
+    double mu_full(colvec weights){
+      colvec mu = mu_est(weights);
+      return(mu(mu.n_elem - 1));
+    }
+    
     colvec abias_sq(colvec weights){
         colvec out(z2_indicators.n_cols);
         for(int i = 0; i < K.n_elem; i++){
@@ -222,7 +234,6 @@ class fmsc_chooseIV {
         }
         return(out);
     }
-      
     
     colvec avar(colvec weights){
       colvec out(z2_indicators.n_cols);
