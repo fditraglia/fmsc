@@ -214,66 +214,6 @@ class fmsc_chooseIV {
     //Really want to be able to return mu_valid and mu_full
     //colvec est_valid(){return(estimates.col(0));}
     //colvec est_full(){return(estimates.col(estimates.n_cols));}
-    
-
-    colvec mu_estimates(double (*pt2mu)(colvec)){
-      //Estimates of target parameter for each candidate
-      colvec mu(z2_indicators.n_cols);
-      for(int i = 0; i < mu.n_elem; i++){
-        mu(i) = pt2mu(estimates.col(i));
-      }
-      return(mu);
-    }
-
-    colvec abias_sq(colvec (*pt2D_mu)(colvec)){
-      //Loop over candidates and calculate squared ABIAS
-      colvec D_mu = pt2D_mu(valid.est());
-      colvec out(z2_indicators.n_cols);
-      for(int i = 0; i < K.n_elem; i++){
-        out(i) = as_scalar(D_mu.t() * sqbias_inner(i) * D_mu);
-      }
-      return(out);
-    }
-    
-    colvec abias_sq_pos(colvec (*pt2D_mu)(colvec)){
-      //Set negative squared bias estimate to zero
-      colvec result = abias_sq(*pt2D_mu);
-      colvec out = max(result, zeros<colvec>(result.n_elem));
-      return(out);
-    }
-    
-    colvec avar(colvec (*pt2D_mu)(colvec)){
-      //Loop over candidates and calculate AVAR
-      colvec D_mu = pt2D_mu(valid.est());
-      colvec out(z2_indicators.n_cols);
-      for(int i = 0; i < K.n_elem; i++){
-        out(i) = as_scalar(D_mu.t() * avar_inner(i) * D_mu);
-      }
-      return(out);
-    }
-    
-    colvec fmsc(colvec (*pt2D_mu)(colvec)){
-      colvec first_term = abias_sq(*pt2D_mu);
-      colvec second_term = avar(*pt2D_mu);
-      return(first_term + second_term);
-    }
-    
-    colvec fmsc_pos(colvec (*pt2D_mu)(colvec)){
-      colvec first_term = abias_sq_pos(*pt2D_mu);
-      colvec second_term = avar(*pt2D_mu);
-      return(first_term + second_term);
-    }
-    
-    double est_fmsc(colvec (*pt2D_mu)(colvec), 
-                      double (*pt2mu)(colvec)){
-    //FMSC-selected target parameter estimate
-    colvec criterion_values = fmsc(*pt2D_mu);
-    uword which_min;
-    criterion_values.min(which_min);
-    colvec target_estimates = mu_estimates(*pt2mu);
-    return(target_estimates(which_min));
-    }
-    
     colvec abias_sq_simple(colvec weights){
         colvec out(z2_indicators.n_cols);
         for(int i = 0; i < K.n_elem; i++){
