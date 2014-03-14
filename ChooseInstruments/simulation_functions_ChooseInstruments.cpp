@@ -244,6 +244,7 @@ class fmsc_chooseIV {
     }
     
     colvec fmsc(colvec weights){
+    //Calculate fmsc with non-negative squared bias estimator
       colvec first_term = abias_sq(weights);
       first_term = max(first_term, zeros<colvec>(first_term.n_elem));
       colvec second_term = avar(weights);
