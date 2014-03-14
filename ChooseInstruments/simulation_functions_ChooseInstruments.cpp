@@ -293,12 +293,12 @@ class fmsc_chooseIV {
     colvec fmsc_simple(colvec weights){
       colvec first_term = abias_sq_simple(weights);
       first_term = max(first_term, zeros<colvec>(first_term.n_elem));
-      second_term = avar_simple(weights);
+      colvec second_term = avar_simple(weights);
       return(first_term + second_term);
     }
     
     double est_fmsc_simple(colvec weights){
-      criterion_values = fmsc_simple(weights);
+      colvec criterion_values = fmsc_simple(weights);
       uword which_min;
       criterion_values.min(which_min);
       colvec b_fmsc = estimates.col(which_min);
