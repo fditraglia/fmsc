@@ -589,6 +589,20 @@ colvec CCIC_test(double g, double r, int n = 500){
   out(2) = HallPeixe.HQ();
   return(out);
 }
+
+// [[Rcpp::export]]
+colvec Andrews_test(double g, double r, int n = 500){
+  
+  //This is the simulation setup from the original 
+  //version of the paper (Section 3.4)
+  double b = 1;
+  colvec p = 0.1 * ones(3);
+  mat Q = eye(3, 3);
+  mat V(3,3); 
+  V << 1 << 0.5 - g * r << r << endr
+    << 0.5  - g * r << 1 << 0 << endr
+    << r << 0 << 1 << endr;
+  
   //Only two candidate specifications
   umat valid_full(4,2);
   valid_full << 1 << 1 << endr
@@ -598,10 +612,15 @@ colvec CCIC_test(double g, double r, int n = 500){
   
   dgp sims(b, p, g, V, Q, n);
   
-  CCIC HallPeixe(sims.x, join_rows(sims.z1, sims.z2));
-  colvec out(3);
-  out(0) = HallPeixe.BIC();
-  out(1) = HallPeixe.AIC();
-  out(2) = HallPeixe.HQ();
+  linearGMM_msc Andrews(sims.x, sims.y,
+                        join_rows(sims.z1, sims.z2));
+  colvec out(7);
+  out(0) = as_scalar(Andrews.est_1step());
+  out(1) = as_scalar(Andrews.est_2step());
+  out(2) = Andrews.Jstat();
+  out(3) = Andrews.pJtest();
+  out(4) = Andrews.GMM_AIC();
+  out(5) = Andrews.GMM_BIC();
+  out(6) = Andrews.GMM_HQ();
   return(out);
 }

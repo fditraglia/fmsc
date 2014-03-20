@@ -121,8 +121,36 @@ all.equal(foo, baz)
 
 #Test linearGMM_msc class
 set.seed(389)
-baz <- Andrews_test(1,0.1)
+baz <- Andrews_test(1,0)
 baz #1-step est, 2-step est, J-stat, J-pvalue, AIC, BIC, HQ
 
 set.seed(389)
-testy <- dgp_cpp(1,0.1)
+testy <- dgp_cpp(1,0)
+overid <- ncol(cbind(testy$z1, testy$z2)) - ncol(testy$x)
+all.equal(pchisq(baz[3], 3), baz[4]) #Check chi-squared p-value
+#Check first-step estimator
+step1 <- tsls(testy$y ~ testy$x - 1, ~ testy$z1 + testy$z2 - 1)
+all.equal(baz[1], step1$coef, check.attributes = FALSE)
+#check second-step estimator
+e1 <- testy$y - step1$coef * testy$x
+n <- length(e1)
+D1 <- diag(as.vector(e1)^2, n, n)
+e1.outer <- e1 %*% t(e1)
+Z <- cbind(testy$z1, testy$z2)
+X <- testy$x
+y <- testy$y
+Omega1 <- t(Z) %*% (D1 / n - e1.outer / (n^2)) %*% Z
+Omega1.inv <- solve(Omega1)
+step2 <- solve(t(X) %*% Z %*% Omega1.inv %*% t(Z) %*% X) %*% t(X) %*% Z %*% Omega1.inv %*% t(Z) %*% y
+all.equal(as.vector(step2), baz[2], check.attributes = FALSE)
+#Check J-statistic
+e2 <- y - as.vector(step2) * X
+n <- length(e2)
+D2 <- diag(as.vector(e2)^2, n, n)
+e2.outer <- e2 %*% t(e2)
+Omega2 <- t(Z) %*% (D2 / n - e2.outer / (n^2)) %*% Z
+J <- t(e2) %*% Z %*% solve(Omega2) %*% t(Z) %*% e2 / n
+all.equal(as.vector(J), baz[3], check.attributes = FALSE)
+#Check GMM-AIC, BIC and HQ
+bonus <- overid * c(2, log(n), 2.01 * log(log(n)))
+all.equal(J - bonus, baz[5:7])
