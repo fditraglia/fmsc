@@ -530,7 +530,7 @@ colvec test_dgp(double g, double r, int n){
   V << 1 << 0.5 - g * r << r << endr
     << 0.5  - g * r << 1 << 0 << endr
     << r << 0 << 1 << endr;
-  dgp sims(b, p, g, r, V, Q, n);
+  dgp sims(b, p, g, V, Q, n);
   tsls_fit valid(sims.x, sims.y, sims.z1);
   return(valid.est());
 }
