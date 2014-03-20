@@ -154,3 +154,7 @@ all.equal(as.vector(J), baz[3], check.attributes = FALSE)
 #Check GMM-AIC, BIC and HQ
 bonus <- overid * c(2, log(n), 2.01 * log(log(n)))
 all.equal(J - bonus, baz[5:7])
+
+#Test linearGMM_select
+#Lots of member functions to test here but they'r
+#mostly pretty simple
