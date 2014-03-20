@@ -467,7 +467,7 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
 
 class dgp {
   public:
-    dgp(double, vec, double, double, mat, mat, int);
+    dgp(double, vec, double, mat, mat, int);
     colvec x, y, z2;
     mat z1;
   private: 
@@ -475,8 +475,13 @@ class dgp {
     mat u_e_z2;
 };
 //Class constructor
-dgp::dgp(double b, vec p, double g, double r, mat V, 
-                  mat Q, int n){
+dgp::dgp(double b, vec p, double g, mat V, mat Q, int n){
+//b = scalar coef for single endog regressor
+//p = vector of first-stage coeffs for exog instruments
+//g = scalar first-stage coeff for potentially endog instrument w
+//V = variance matrix for (u, epsilon, w)'
+//Q = variance matrix for exog instruments
+//n = sample size
   RNGScope scope;
   n_z1 = Q.n_cols;
   z1 = trans(chol(Q) * reshape(colvec(rnorm(n * n_z1)), n_z1, n));
@@ -537,4 +542,12 @@ List cancor_cpp(mat X, mat Y){
   return List::create(Named("cor") = results.cor,
                       Named("xcoef") = results.xcoef,
                       Named("ycoef") = results.ycoef);
+}
+
+
+// [[Rcpp::export]]
+mat sim_test(double b, vec p, double g, double r, mat V, mat Q, int n){
+  
+  dgp sim_data()
+  
 }
