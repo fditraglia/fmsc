@@ -580,6 +580,15 @@ colvec CCIC_test(double g, double r, int n = 500){
     << 0.5  - g * r << 1 << 0 << endr
     << r << 0 << 1 << endr;
   
+  dgp sims(b, p, g, V, Q, n);
+  
+  CCIC HallPeixe(sims.x, join_rows(sims.z1, sims.z2));
+  colvec out(3);
+  out(0) = HallPeixe.BIC();
+  out(1) = HallPeixe.AIC();
+  out(2) = HallPeixe.HQ();
+  return(out);
+}
   //Only two candidate specifications
   umat valid_full(4,2);
   valid_full << 1 << 1 << endr

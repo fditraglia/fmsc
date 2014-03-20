@@ -119,3 +119,10 @@ foo
 baz
 all.equal(foo, baz)
 
+#Test linearGMM_msc class
+set.seed(389)
+baz <- Andrews_test(1,0.1)
+baz #1-step est, 2-step est, J-stat, J-pvalue, AIC, BIC, HQ
+
+set.seed(389)
+testy <- dgp_cpp(1,0.1)
