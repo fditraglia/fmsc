@@ -96,3 +96,26 @@ tsls_SE_center_cpp(X, y, Z)
 #Test the dgp function
 set.seed(352)
 test_dgp(0.2, 0.1, 100)
+
+
+#Test CCIC class
+set.seed(389)
+baz <- CCIC_test(1,0.1)
+
+set.seed(389)
+testy <- dgp_cpp(1,0.1)
+cc <- cancor(testy$x, cbind(testy$z1, testy$z2))
+n <- length(testy$x)
+r <- cc$cor
+bar <- lm(testy$x ~ testy$z1 + testy$z2 - 1)
+all.equal(r^2, summary(bar)$r.squared)
+first.term <- n * log(1 - r^2)
+overid <- ncol(cbind(testy$z1, testy$z2)) - ncol(testy$x)
+CC.BIC <- first.term + overid * log(n)
+CC.AIC <- first.term + overid * 2
+CC.HQ <- first.term + overid * 2.01 * log(log(n))
+foo <- matrix(c(CC.BIC, CC.AIC, CC.HQ), 3, 1)
+foo
+baz
+all.equal(foo, baz)
+
