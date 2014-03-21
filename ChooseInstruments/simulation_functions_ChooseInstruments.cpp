@@ -272,7 +272,7 @@ linearGMM_select::linearGMM_select(const mat& X,
   //Each column of the matrix moment_sets is a moment set, namely
   //a vector of zeros and ones that indicates which columns of Z 
   //to use in estimation  
-  n_candidates = moment_sets.n_elem;
+  n_candidates = moment_sets.n_cols;
   n_params = X.n_cols;
   moment_sets_copy = moment_sets;
   J.zeros(n_candidates);
