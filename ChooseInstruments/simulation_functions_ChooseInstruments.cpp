@@ -288,7 +288,8 @@ linearGMM_select::linearGMM_select(const mat& X,
   
   for(int i = 0; i < n_candidates; i++){
     //Andrews (1999) Criteria
-    linearGMM_msc candidate(X, y, Z_full.cols(moment_sets.col(i)));
+    uvec cand_ind = find(moment_sets.col(i)); //indices of non-zeros
+    linearGMM_msc candidate(X, y, Z_full.cols(cand_ind));
     J(i) = candidate.Jstat();
     pJtest(i) = candidate.pJtest();
     AIC(i) = candidate.GMM_AIC();
@@ -298,7 +299,7 @@ linearGMM_select::linearGMM_select(const mat& X,
     estimates_1step.col(i) = candidate.est_1step();
     estimates_2step.col(i) = candidate.est_2step();
     //Hall & Peixe (2003) Criteria
-    CCIC candidate_CCIC(X, Z_full.cols(moment_sets.col(i)));
+    CCIC candidate_CCIC(X, Z_full.cols(cand_ind));
     AIC_CCIC(i) = candidate_CCIC.AIC();
     BIC_CCIC(i) = candidate_CCIC.BIC();
     HQ_CCIC(i) = candidate_CCIC.HQ();
