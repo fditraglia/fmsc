@@ -640,35 +640,32 @@ List GMMselect_test(double g, double r, int n = 500){
   linearGMM_select results(sims.x, sims.y,
                            join_rows(sims.z1, sims.z2),
                            valid_full);
-                        
-    return List::create(Named("x") = sims.x,
-                        Named("y") = sims.y,
-                        Named("z1") = sims.z1,
-                        Named("z2") = sims.z2,
-                        Named("J") = results.J,
-                        Named("pJtest") = results.pJtest,
-                        Named("AIC") = results.AIC,
-                        Named("BIC") = results.BIC,
-                        Named("HQ") = results.HQ,
-                        Named("AIC_CCIC") = results.AIC_CCIC,
-                        Named("BIC_CCIC") = results.BIC_CCIC,
-                        Named("HQ_CCIC") = results.HQ_CCIC,
-                        Named("onestep") = results.estimates_1step,
-                        Named("twostep") = results.estimates_2step,
-                        Named("estAIC") = results.est_AIC(),
-                        Named("estBIC") = results.est_BIC(), 
-                        Named("estHQ") = results.est_HQ(),
-                        Named("estCCIC_AIC") = results.est_CCIC_AIC(),
-                        Named("estCCIC_HQ") = results.est_CCIC_HQ(),
-                        Named("estCCIC_BIC") = results.est_CCIC_BIC());
-
-//Something is wrong with the .moments member functions
-//but I'm not yet sure what. Everything else works correctly.
-
-//                        Named("momentsAIC") = conv_to<vec>::from(results.moments_AIC()));
-//                        Named("momentsBIC") = results.moments_BIC(),
-//                        Named("momentsHQ") = results.moments_HQ(),
-//                        Named("momentsCCIC_AIC") = results.moments_CCIC_AIC(),
-//                        Named("momentsCCIC_BIC") = results.moments_CCIC_BIC(),
-//                        Named("momentsCCIC_HQ") = results.moments_CCIC_HQ());                       
+//  colvec testy = conv_to<colvec>::from(results.moments_BIC());          
+  return List::create(
+//                      Named("x") = sims.x,
+//                      Named("y") = sims.y,
+//                      Named("z1") = sims.z1,
+//                      Named("z2") = sims.z2,
+                      Named("J") = results.J,
+                      Named("pJtest") = results.pJtest,
+                      Named("AIC") = results.AIC,
+                      Named("BIC") = results.BIC,
+                      Named("HQ") = results.HQ,
+//                      Named("AIC_CCIC") = results.AIC_CCIC,
+//                      Named("BIC_CCIC") = results.BIC_CCIC,
+//                      Named("HQ_CCIC") = results.HQ_CCIC,
+                      Named("onestep") = results.estimates_1step,
+//                      Named("twostep") = results.estimates_2step,
+                      Named("estAIC") = results.est_AIC(),
+                      Named("estBIC") = results.est_BIC(), 
+                      Named("estHQ") = results.est_HQ(),
+//                      Named("estCCIC_AIC") = results.est_CCIC_AIC(),
+//                      Named("estCCIC_HQ") = results.est_CCIC_HQ(),
+//                      Named("estCCIC_BIC") = results.est_CCIC_BIC(),
+                      Named("momentsAIC") = results.moments_AIC(),
+                      Named("momentsBIC") = results.moments_BIC(),
+                      Named("momentsHQ") = results.moments_HQ());
+//                      Named("momentsCCIC_AIC") = results.moments_CCIC_AIC(),
+//                      Named("momentsCCIC_BIC") = results.moments_CCIC_BIC(),
+//                      Named("momentsCCIC_HQ") = results.moments_CCIC_HQ());                       
 }

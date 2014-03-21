@@ -18,3 +18,12 @@ colvec est_selected(mat est, colvec criterion){
         criterion.min(which_min);
         return(est.col(which_min));
     }
+    
+
+// [[Rcpp::export]]
+uvec moments_selected(colvec criterion){
+        uword which_min;
+        criterion.min(which_min);
+        umat M = eye<umat>(criterion.n_elem, criterion.n_elem);
+        return(M.col(which_min));
+    }

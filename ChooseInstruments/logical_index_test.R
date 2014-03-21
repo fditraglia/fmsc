@@ -31,3 +31,8 @@ min(criterion)
 which.min(criterion)
 M[,which.min(criterion)]
 est_selected(M, criterion)
+
+set.seed(948)
+criterion <- rnorm(10)
+which.min(criterion)
+moments_selected(criterion)

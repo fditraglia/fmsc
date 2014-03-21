@@ -156,41 +156,33 @@ bonus <- overid * c(2, log(n), 2.01 * log(log(n)))
 all.equal(J - bonus, baz[5:7])
 
 #Test linearGMM_select
+r <- 0.4
 set.seed(389)
-results <- GMMselect_test(1, 0)
+results <- GMMselect_test(1, r)
 names(results)
 set.seed(389)
-baz <- Andrews_test(1,0) #1-step est, 2-step est, J-stat, J-pvalue, AIC, BIC, HQ
+baz <- Andrews_test(1, r) #1-step est, 2-step est, J-stat, J-pvalue, AIC, BIC, HQ
 set.seed(389)
-baz2 <- CCIC_test(1,0) #CCIC-BIC, CCIC-AIC, CCIC-HQ
+baz2 <- CCIC_test(1, r) #CCIC-BIC, CCIC-AIC, CCIC-HQ
+
+results$onestep
+baz
+
+results$J
 
 #Test AIC
-results$onestep
 results$AIC
+results$momentsAIC
 results$estAIC
 
 #Test BIC
-results$onestep
 results$BIC
+results$momentsBIC
 results$estBIC
 
 #Test HQ
-results$onestep
 results$HQ
-results$estHQ
+results$momentsHQ
 
-#Test CCIC-AIC
-results$onestep
-results$AIC_CCIC
-results$estCCIC_AIC
 
-#Test CCIC-BIC
-results$onestep
-results$BIC_CCIC
-results$estCCIC_BIC
-
-#Test CCIC-BIC
-results$onestep
-results$HQ_CCIC
-results$estCCIC_HQ
 
