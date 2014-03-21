@@ -661,6 +661,10 @@ List GMMselect_test(double g, double r, int n = 500){
                         Named("estCCIC_AIC") = results.est_CCIC_AIC(),
                         Named("estCCIC_HQ") = results.est_CCIC_HQ(),
                         Named("estCCIC_BIC") = results.est_CCIC_BIC());
+
+//Something is wrong with the .moments member functions
+//but I'm not yet sure what. Everything else works correctly.
+
 //                        Named("momentsAIC") = conv_to<vec>::from(results.moments_AIC()));
 //                        Named("momentsBIC") = results.moments_BIC(),
 //                        Named("momentsHQ") = results.moments_HQ(),
