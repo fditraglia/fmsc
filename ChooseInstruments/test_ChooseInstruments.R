@@ -164,11 +164,33 @@ baz <- Andrews_test(1,0) #1-step est, 2-step est, J-stat, J-pvalue, AIC, BIC, HQ
 set.seed(389)
 baz2 <- CCIC_test(1,0) #CCIC-BIC, CCIC-AIC, CCIC-HQ
 
-
-results$J
-results$pJtest
+#Test AIC
 results$onestep
-results$twostep
 results$AIC
+results$estAIC
+
+#Test BIC
+results$onestep
 results$BIC
+results$estBIC
+
+#Test HQ
+results$onestep
 results$HQ
+results$estHQ
+
+#Test CCIC-AIC
+results$onestep
+results$AIC_CCIC
+results$estCCIC_AIC
+
+#Test CCIC-BIC
+results$onestep
+results$BIC_CCIC
+results$estCCIC_BIC
+
+#Test CCIC-BIC
+results$onestep
+results$HQ_CCIC
+results$estCCIC_HQ
+
