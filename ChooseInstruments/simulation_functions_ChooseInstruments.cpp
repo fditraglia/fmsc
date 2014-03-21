@@ -646,4 +646,25 @@ colvec GMMselect_test(double g, double r, int n = 500){
                            join_rows(sims.z1, sims.z2),
                            valid_full);
   return(results.J);
+  return(results.est_AIC());                         
+//    return List::create(Named("x") = sims.x,
+//                        Named("y") = sims.y,
+//                        Named("z1") = sims.z1,
+//                        Named("z2") = sims.z2,
+//                        Named("J") = results.J,
+//                        Named("pJtest") = results.pJtest,
+//                        Named("AIC") = results.AIC,
+//                        Named("BIC") = results.BIC,
+//                        Named("HQ") = results.HQ,
+//                        Named("AIC_CCIC") = results.AIC_CCIC,
+//                        Named("BIC_CCIC") = results.BIC_CCIC,
+//                        Named("HQ_CCIC") = results.HQ_CCIC,
+//                        Named("onestep") = results.estimates_1step,
+//                      Named("estAIC") = results.est_AIC());
+//                      Named("estBIC") = results.est_BIC(), 
+//                      Named("estCCIC_HQ") = results.est_CCIC_HQ(),
+//                      Named("momentsAIC") = results.moments_AIC(),
+//                      Named("momentsHQ") = results.moments_HQ(),
+//                      Named("momentsCCIC_BIC") = results.moments_CCIC_BIC());
+//                      Named("momentsCCIC_HQ") = results.moments_CCIC_HQ());                       
 }
