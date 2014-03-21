@@ -255,7 +255,7 @@ class linearGMM_select{
   private:
     int n_candidates, n_params;
     umat moment_sets_copy;
-    colvec est_selected(mat est, colvec criterion){
+    colvec est_selected(colvec criterion, mat est){
         uword which_min;
         criterion.min(which_min);
         return(est.col(which_min));
