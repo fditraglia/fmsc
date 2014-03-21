@@ -619,35 +619,7 @@ colvec Andrews_test(double g, double r, int n = 500){
 }
 
 
-//// [[Rcpp::export]]
-//colvec GMMselect_test(double g, double r, int n = 500){
-//  
-//  //This is the simulation setup from the original 
-//  //version of the paper (Section 3.4)
-//  double b = 1;
-//  colvec p = 0.1 * ones(3);
-//  mat Q = eye(3, 3);
-//  mat V(3,3); 
-//  V << 1 << 0.5 - g * r << r << endr
-//    << 0.5  - g * r << 1 << 0 << endr
-//    << r << 0 << 1 << endr;
-//  
-//  //Only two candidate specifications
-//  umat valid_full(4,2);
-//  valid_full << 1 << 1 << endr
-//             << 1 << 1 << endr
-//             << 1 << 1 << endr
-//             << 0 << 1 << endr;
-//  
-//  dgp sims(b, p, g, V, Q, n);
-//  
-//  linearGMM_select results(sims.x, sims.y,
-//                           join_rows(sims.z1, sims.z2),
-//                           valid_full);
-//  colvec out();
-//
-//  return(out);
-//}// [[Rcpp::export]]
+// [[Rcpp::export]]
 colvec GMMselect_test(double g, double r, int n = 500){
   
   //This is the simulation setup from the original 
