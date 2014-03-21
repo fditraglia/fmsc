@@ -183,6 +183,6 @@ results$estBIC
 #Test HQ
 results$HQ
 results$momentsHQ
-
+results$estHQ
 
 
