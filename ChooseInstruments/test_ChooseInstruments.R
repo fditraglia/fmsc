@@ -162,10 +162,13 @@ names(results)
 set.seed(389)
 baz <- Andrews_test(1,0) #1-step est, 2-step est, J-stat, J-pvalue, AIC, BIC, HQ
 set.seed(389)
+baz2 <- CCIC_test(1,0) #CCIC-BIC, CCIC-AIC, CCIC-HQ
 
 
 results$J
+results$pJtest
 results$onestep
 results$twostep
+results$AIC
 results$BIC
 results$HQ
