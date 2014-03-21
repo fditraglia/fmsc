@@ -24,3 +24,10 @@ M[,col_indices[,4]]
 
 #Aha! 
 logical_subset(M, c(TRUE, FALSE, TRUE, FALSE, TRUE))
+
+set.seed(752)
+criterion <- rnorm(5)
+min(criterion)
+which.min(criterion)
+M[,which.min(criterion)]
+est_selected(M, criterion)
