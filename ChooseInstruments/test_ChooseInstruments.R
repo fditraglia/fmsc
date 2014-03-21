@@ -156,5 +156,10 @@ bonus <- overid * c(2, log(n), 2.01 * log(log(n)))
 all.equal(J - bonus, baz[5:7])
 
 #Test linearGMM_select
-#Lots of member functions to test here but they'r
+#Lots of member functions to test here but they're
 #mostly pretty simple
+set.seed(389)
+GMMselect_test(1, 0)
+set.seed(389)
+Andrews_test(1,0)
+
