@@ -11,7 +11,14 @@
 \usepackage{threeparttable}
 \usepackage{caption}
 \usepackage{subcaption}
-
+\usepackage{todonotes}
+\usepackage[margin=1.25in]{geometry}
+	
+\usepackage{setspace}
+% \singlespacing
+\onehalfspacing
+% \doublespacing
+% \setstretch{<factor>} % for custom spacing
 
 \RequirePackage{natbib}
 \RequirePackage[colorlinks]{hyperref}
@@ -37,6 +44,8 @@
 
 \begin{document}
 
+
+
 \title{Using Invalid Instruments on Purpose: Focused Moment Selection and Averaging for GMM\footnote{I thank Gerda Claeskens, Bruce Hansen, Byunghoon Kang, Toru Kitagawa, Hannes Leeb, Serena Ng, Alexei Onatski, Hashem Pesaran, Benedikt P\"{o}tscher, Neil Shephard,  Richard J.\ Smith, Stephen Thiele, Melvyn Weeks, as well as seminar participants at Cambridge, the University of Vienna, Queen Mary, St Andrews, George Washington, UPenn, Columbia, Oxford, and the 2011 Econometric Society European Meetings for their many helpful comments and suggestions. I thank Kai Carstensen for providing data for my empirical example.}}
 
 \author{Francis J.\ DiTraglia \\ University of Pennsylvania}
@@ -46,7 +55,6 @@
 In finite samples, the use of a slightly endogenous but highly relevant instrument can reduce mean-squared error (MSE). Building on this observation, I propose a moment selection criterion for GMM in which over-identifying restrictions are chosen based on the MSE of their associated estimators rather than their validity: the focused moment selection criterion (FMSC). I then show how the framework used to derive the FMSC can address the problem of inference post-moment selection. Treating post-selection estimators as a special case of moment-averaging, in which estimators based on different moment sets are given data-dependent weights, I propose a simulation-based procedure to construct valid confidence intervals. In a Monte Carlo experiment, the FMSC outperforms alternatives suggested in the literature, and the simulation-based procedure achieves its stated minimum coverage. I conclude with an empirical example examining the effect of instrument selection on the estimated relationship between malaria transmission and economic development.
 \end{abstract}
 %Wordcount: 148
-
 
 
 
@@ -72,6 +80,8 @@ The literature on post-selection, or ``pre-test'' estimators is vast. \citet{Lee
 
 
 The remainder of the paper is organized as follows. Section \ref{sec:asymp} describes the local mis-specification framework and gives the main limiting results used later in the paper. Section \ref{sec:FMSC} derives FMSC as an asymptotically unbiased estimator of AMSE, presents specialized results for 2SLS, and examines their performance in a Monte Carlo experiment. Section \ref{sec:avg} describes a simulation-based procedure to construct valid confidence intervals for moment average estimators and examines its performance in a Monte Carlo experiment. Section \ref{sec:application} presents the empirical application and Section \ref{sec:conclude} concludes. Proofs appear in the Appendix.
+
+\todo[inline]{The last thing will be to rewrite the abstract and introduction. The main additions are as follows: (1) Add some of the additional references that the referees suggested, (2) Add some further references backing up my approach and some more recent FIC-style work, (3) mention the limitation of strong identification but try to suggest that the simulation studies partially address this, (4) stress the large gains to be had from using this procedure.}
 
 
 \section{Notation and Asymptotic Framework}\label{sec:asymp}
