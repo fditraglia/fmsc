@@ -11,7 +11,14 @@
 \usepackage{threeparttable}
 \usepackage{caption}
 \usepackage{subcaption}
-
+\usepackage{todonotes}
+\usepackage[margin=1.25in]{geometry}
+	
+\usepackage{setspace}
+% \singlespacing
+\onehalfspacing
+% \doublespacing
+% \setstretch{<factor>} % for custom spacing
 
 \RequirePackage{natbib}
 \RequirePackage[colorlinks]{hyperref}
@@ -37,6 +44,8 @@
 
 \begin{document}
 
+
+
 \title{Using Invalid Instruments on Purpose: Focused Moment Selection and Averaging for GMM\footnote{I thank Gerda Claeskens, Bruce Hansen, Byunghoon Kang, Toru Kitagawa, Hannes Leeb, Serena Ng, Alexei Onatski, Hashem Pesaran, Benedikt P\"{o}tscher, Neil Shephard,  Richard J.\ Smith, Stephen Thiele, Melvyn Weeks, as well as seminar participants at Cambridge, the University of Vienna, Queen Mary, St Andrews, George Washington, UPenn, Columbia, Oxford, and the 2011 Econometric Society European Meetings for their many helpful comments and suggestions. I thank Kai Carstensen for providing data for my empirical example.}}
 
 \author{Francis J.\ DiTraglia \\ University of Pennsylvania}
@@ -50,12 +59,12 @@ In finite samples, the use of a slightly endogenous but highly relevant instrume
 
 
 
-
 \section{Introduction}
 %For consistent estimates, instrumental variables must be exogenous and relevant: correlated with the endogenous regressors but uncorrelated with the error term.
 
 In finite samples, the use of an endogenous but sufficiently relevant instrument can improve inference, reducing estimator variance by far more than bias is increased. Building on this observation, I propose a new moment selection criterion for generalized method of moments (GMM) estimation: the focused moment selection criterion (FMSC). Rather than selecting only valid moment conditions, the FMSC chooses from a set of potentially mis-specified moment conditions to yield the smallest mean squared error (MSE) GMM estimator of a user-specified target parameter. I derive FMSC using asymptotic mean squared error (AMSE) to approximate finite-sample MSE. To ensure that AMSE remains finite, I employ a drifting asymptotic framework in which mis-specification, while present for any fixed sample size, vanishes in the limit. In the presence of such \emph{locally mis-specified} moment conditions, GMM remains consistent although, centered and rescaled, its limiting distribution displays an asymptotic bias. Adding an additional mis-specified moment condition introduces a further source of bias while reducing asymptotic variance. The idea behind FMSC is to trade off these two effects in the limit as an approximation to finite sample behavior. %While estimating asymptotic variance is straightforward, even under local mis-specification, estimating asymptotic bias requires over-identifying information. 
 I consider a setting in which two blocks of moment conditions are available: one that is assumed correctly specified, and another that may not be. When the correctly specified block identifies the model, I derive an asymptotically unbiased estimator of AMSE: the FMSC. When this is not the case, it remains possible to use the AMSE framework to carry out a sensitivity analysis. 
+\todo[inline]{Should relate this to Andrews-style papers as well as Liao and Cheng.}
 
 Continuing under the local mis-specification assumption, I show how the ideas used to derive FMSC can be applied to the important problem of inference post-moment selection. Because they use the same data twice, first to choose a moment set and then to carry out estimation, post-selection estimators are randomly weighted averages of many individual estimators. While this is typically ignored in practice, its effects can be dramatic: coverage probabilities of traditional confidence intervals are generally far too low, even for consistent moment selection. I treat post-selection estimators as a special case of moment averaging: combining estimators based on different moment sets with data-dependent weights. By deriving the limiting distribution of moment average estimators, I propose a simulation-based procedure for constructing valid confidence intervals. This technique can be applied to moment averaging and post-selection estimators based on a variety of criteria including FMSC. 
 
@@ -73,6 +82,8 @@ The literature on post-selection, or ``pre-test'' estimators is vast. \citet{Lee
 
 The remainder of the paper is organized as follows. Section \ref{sec:asymp} describes the local mis-specification framework and gives the main limiting results used later in the paper. Section \ref{sec:FMSC} derives FMSC as an asymptotically unbiased estimator of AMSE, presents specialized results for 2SLS, and examines their performance in a Monte Carlo experiment. Section \ref{sec:avg} describes a simulation-based procedure to construct valid confidence intervals for moment average estimators and examines its performance in a Monte Carlo experiment. Section \ref{sec:application} presents the empirical application and Section \ref{sec:conclude} concludes. Proofs appear in the Appendix.
 
+\todo[inline]{The last thing will be to rewrite the abstract and introduction. The main additions are as follows: (1) Add some of the additional references that the referees suggested, (2) Add some further references backing up my approach and some more recent FIC-style work, (3) mention the limitation of strong identification but try to suggest that the simulation studies partially address this, (4) stress the large gains to be had from using this procedure. Most importantly, try to make it clear why I'm doing conservative/efficient model selection rather than consistent model selection. Maybe try to refer to the Hansen shrinkage paper.}
+ 
 
 \section{Notation and Asymptotic Framework}\label{sec:asymp}
 Let $f(\cdot,\cdot)$ be a $(p+q)$-vector of moment functions of a random vector $Z$ and $r$-dimensional parameter vector $\theta$, partitioned according to $f(\cdot,\cdot) = \left(g(\cdot,\cdot)', h(\cdot,\cdot)'  \right)'$ where $g(\cdot,\cdot)$ and $h(\cdot,\cdot)$ are $p$- and $q$-vectors of moment functions. The moment condition associated with $g(\cdot,\cdot)$ is assumed to be correct whereas that associated with $h(\cdot,\cdot)$ is locally mis-specified. More precisely,
@@ -90,66 +101,70 @@ For any fixed sample size $n$, the expectation of $h$ evaluated at the true para
 
 Define the sample analogue of the expectations in Assumption \ref{assump:drift} as follows:
 $$f_n(\theta) = \frac{1}{n}\sum_{i=1}^n f(Z_{ni},\theta) = \left[\begin{array}{c} g_n(\theta)\\ h_n(\theta) \end{array} \right]=\left[\begin{array}{c}n^{-1}\sum_{i=1}^n g(Z_{ni},\theta) \\ n^{-1}\sum_{i=1}^n h(Z_{ni},\theta) \end{array}\right]$$
-where $g_n$ is the sample analogue of the correctly specified moment conditions and $h_n$ is that of the mis-specified moment conditions. Let $\widetilde{W}$ be a $(q+p)\times(q+p)$, positive semi-definite weight matrix partitioned into blocks $\widetilde{W}_{gg}$, $\widetilde{W}_{gh}$, $\widetilde{W}_{hg}$, and $\widetilde{W}_{hh}$ conformably to the partition of $f$ by $g$ and $h$.
+where $g_n$ is the sample analogue of the correctly specified moment conditions and $h_n$ is that of the mis-specified moment conditions. 
 
 
-The \emph{valid} estimator uses only those moment conditions known to be correctly specified, that is $\widehat{\theta}_v = \argmin_{\theta \in \Theta}\; g_n(\theta)' \widetilde{W}_{gg} \; g_n(\theta)$.
-For estimation based on $g$ alone to be possible, we must have $p \geq r$. With the exception of Section \ref{subsec:digress}, this assumption is maintained throughout.
+A candidate GMM estimator $\widehat{\theta}_S$ uses some subset $S$ of the moment conditions contained in $f$ in estimation. Let $|S|$ denote the number of moment conditions used. For $\widehat{\theta}_S$ to be identified, we require that $|S|>r$. Let $\Xi_S$ be the $|S| \times(p +q)$ \emph{moment selection matrix} corresponding to $S$. That is, $\Xi_S$ is a matrix of ones and zeros arranged such that $\Xi_S f_n(\theta)$ contains only the sample moment conditions used to estimate $\widehat{\theta}_S$. Thus, the GMM estimator of $\theta$ based on moment set $S$ is given by 
+$$\widehat{\theta}_S = \argmin_{\theta \in \Theta}\; \left[\Xi_S f_n(\theta)\right]' \widetilde{W}_S \; \left[ \Xi_S f_n(\theta)\right].$$
+where $\widetilde{W}_S$ is an $|S|\times |S|$, positive semi-definite weight matrix. Note we place no restrictions on $S$ other than $|S| >r$ so that the estimator exists. In particular, $S$ may \emph{exclude} some or all of the valid moment conditions contained in $g$. While this may seem strange, it allows us to accomodate a wider range of examples, including choosing between OLS and IV.
 
-The \emph{full} estimator uses all moment functions, including the possibly invalid ones contained in $h$, namely $\widehat{\theta}_f = \argmin_{\theta \in \Theta}\; f_n(\theta)' \widetilde{W} \; f_n(\theta)$. For this estimator to be feasible, we must have $(p+q)\geq r$. Note that the same weights are used for $g$ in both the valid and full estimation criteria. Although not strictly necessary, this simplifies the notation and is appropriate for the efficient GMM estimator.
-
-To consider the limit distributions of $\widehat{\theta}_{f}$ and $\widehat{\theta}_{v}$ we require some further notation. Let $G = \expect\left[\nabla_{\theta} \; g(Z,\theta_0)\right]$, $H = \expect\left[\nabla_{\theta} \; h(Z,\theta_0)\right]$, and $F = (G', H')'$. Similarly, let $\Omega = Var\left[ f(Z,\theta_0) \right]$ where $\Omega$ is partitioned into blocks $\Omega_{gg}$, $\Omega_{gh}$, $\Omega_{hg}$, and $\Omega_{hh}$ conformably with the partition of $f$ by $g$ and $h$. Notice that each of these expressions involves the limit random variable $Z$ rather than $Z_{ni}$, so that the corresponding expectations are taken with respect to a distribution for which all moment conditions are correctly specified. The following high level assumptions are sufficient for the consistency and asymptotic normality of the full and valid estimators. 
+To consider the limit distribution of $\widehat{\theta}_S$, we require some further notation. First define the derivative matrices
+	$$G = \expect\left[\nabla_{\theta} \; g(Z,\theta_0)\right], \quad H = \expect\left[\nabla_{\theta} \; h(Z,\theta_0)\right], \quad F = (G', H')'$$
+and let $\Omega = Var\left[ f(Z,\theta_0) \right]$ where $\Omega$ is partitioned into blocks $\Omega_{gg}$, $\Omega_{gh}$, $\Omega_{hg}$, and $\Omega_{hh}$ conformably with the partition of $f$ by $g$ and $h$. Notice that each of these expressions involves the \emph{limiting random variable} $Z$ rather than $Z_{ni}$, so that the corresponding expectations are taken with respect to a distribution for which all moment conditions are correctly specified. Finally, to avoid repeatedly writing out pre- and post-multiplication by $\Xi_S$, define $F_S = \Xi_S F$ and $\Omega_S = \Xi_S \Omega\Xi_S'$. The following high level assumptions are sufficient for the consistency and asymptotic normality of the candidate GMM estimator $\widehat{\theta}_S$. 
 \begin{assump}[High Level Sufficient Conditions]
 \label{assump:highlevel} 
 \mbox{}
 	\begin{enumerate}[(a)]
 		\item $\theta_0$ lies in the interior of $\Theta$, a compact set
-		\item $\widetilde{W} \rightarrow_{p} W$, a positive definite matrix partitioned in the same way as $\widetilde{W}$
-		\item $W\expect[f(Z,\theta)]=0$ and $W_{gg}\expect[g(Z,\theta)]=0$  if and only if $\theta = \theta_0$
+		\item $\widetilde{W}_S \rightarrow_{p} W_S$, a positive definite matrix
+		\item $W_S \Xi_S \expect[f(Z,\theta)]=0$ if and only if $\theta = \theta_0$
 		\item $\expect[f(Z,\theta)]$ is continuous on $\Theta$
 		\item $\sup_{\theta \in \Theta}\| f_n(\theta)- \expect[f(Z,\theta)]\|\rightarrow_{p} 0$
 		\item $f$ is Z-almost surely differentiable in an open neighborhood $\mathcal{B}$ of $\theta_0$
 		\item $\sup_{\theta \in \Theta} \|\nabla_{\theta}f_n(\theta) - F(\theta)\|\rightarrow_{p} 0$
 		\item $\sqrt{n}f_n(\theta_0) \rightarrow_d\mathcal{N}_{p+q}\left( \left[\begin{array}{c}0\\ \tau \end{array} \right], \Omega \right)$
-		\item $F'WF$ and $G'W_{gg}G$ are invertible
+		\item $F_S'W_SF_S$ is invertible
 	\end{enumerate}
 \end{assump}
-Although Assumption \ref{assump:highlevel} closely approximates the standard regularity conditions for GMM estimation, establishing primitive conditions for Assumptions \ref{assump:highlevel} (d), (e), (g) and (h) is somewhat more involved under local mis-specification. For more details, see \cite{Andrews1988} Theorem 2 and \cite{Andrews1992} Theorem 4.  Notice that identification, (c), and continuity, (d), are conditions on the distribution of $Z$, the marginal law to which each $Z_{ni}$ converges. 
-%%%%%%%%%%%%%%%
-%Need to put together an appendix explaining the regularity conditions in more detail!
-%%%%%%%%%%%%%%%
 
-Under Assumptions \ref{assump:drift} and \ref{assump:highlevel} both the valid and full estimators are consistent and asymptotically normal. The full estimator, however, shows an asymptotic bias. Let
-\begin{equation}
-	\label{eq:M}
-	M = \left[\begin{array}{c} M_g \\ M_h\end{array} \right] \sim \mathcal{N}_{p+q}\left( \left[\begin{array}{c}0\\ \tau \end{array} \right], \Omega \right)
-\end{equation}
+Although Assumption \ref{assump:highlevel} closely approximates the standard regularity conditions for GMM estimation, establishing primitive conditions for Assumptions \ref{assump:highlevel} (d), (e), (g) and (h) is somewhat more involved under local mis-specification. Low-level sufficient conditions for the two running examples considered in this paper appear below.\todo{where do they apper below?} For more general results, see \cite{Andrews1988} Theorem 2 and \cite{Andrews1992} Theorem 4.  Notice that identification, (c), and continuity, (d), are conditions on the distribution of $Z$, the marginal law to which each $Z_{ni}$ converges. 
 
 \begin{thm}[Consistency]
-\label{pro:consist}
-Under Assumptions \ref{assump:drift} and \ref{assump:highlevel} (a)--(e), $\widehat{\theta}_f \rightarrow_{p} \theta_0$ and $\widehat{\theta}_v\rightarrow_{p} \theta_0$.
+\label{thm:consist}
+Under Assumptions \ref{assump:drift} and \ref{assump:highlevel} (a)--(e), $\widehat{\theta}_S \rightarrow_{p} \theta_0$.
 \end{thm}
 
 \begin{thm}[Asymptotic Normality]
-\label{pro:normality}
+\label{thm:normality}
 Under Assumptions \ref{assump:drift} and \ref{assump:highlevel}
-	\begin{eqnarray*}
-	\sqrt{n}\left(\widehat{\theta}_v - \theta_0 \right) &\rightarrow_d&-[G' W_{gg}G]^{-1}G' W_{gg} M_h\\
-	\sqrt{n}\left(\widehat{\theta}_f - \theta_0 \right) &\rightarrow_d&-[F'WF]^{-1} F'W M
-	\end{eqnarray*}
+$$\sqrt{n}(\widehat{\theta}_S - \theta_0 ) \rightarrow_d -K_S \Xi_S  \left(M + \left[\begin{array}
+	{c} 0 \\ \tau
+\end{array} \right]\right)$$
+where $K_S  = [F_S'W_SF_S]^{-1} F_S'W_S$ and $M \sim N(0,\Omega)$.
 \end{thm}
 
-To study moment selection generally, we need to describe the limit behavior of estimators based on any subset of the moment conditions contained in $h$. Define an arbitrary moment set $S$ by the components of $h$ that it includes. We will always include the moment conditions contained in $g$. Since $h$ is $q$-dimensional, $S\subseteq \{1,2,\hdots,q\}$. For $S=\emptyset$, we have the valid moment set; for $S=\{1,2,\hdots,q\}$, the full moment set. Denote the number of components from $h$ included in $S$ by $|S|$. Let $\Xi_S$ be the $(p+|S|)\times (p+q)$ selection matrix that 
-extracts those elements of a $(p+q)$-vector corresponding to the moment set $S$: all $p$ of the first $1,\hdots, p$ components and the specified subset of the $p+1, \hdots, p+q$ remaining components. Accordingly, define the GMM estimator based on moment set $S$ by
-$\widehat{\theta}_S = \argmin_{\theta \in \Theta}\; \left[\Xi_S f_n(\theta)\right]' \left[ \Xi_S \widetilde{W} \Xi_S'\right] \; \left[ \Xi_S f_n(\theta)\right]$. To simplify the notation let $F_S = \Xi_S F$, $W_S = \Xi_S W\Xi_S'$, $M_S = \Xi_S M$, $\Omega_S = \Xi_S \Omega\Xi_S'$, and define $K_S  = [F_S'W_SF_S]^{-1} F_S'W_S$. By an argument nearly identical to the proof of Theorem \ref{pro:normality}, we have the following.
-\begin{cor}[Estimators for Arbitrary Moment Sets] 
-\label{cor:submodel}
-Assume that $W_S \Xi_S \expect[f(Z,\theta)]=0$ if and only if $\theta = \theta_0$, and
-$F_S'W_SF_S$ is invertible. Then, under Assumptions \ref{assump:drift} and \ref{assump:highlevel}, $\sqrt{n}(\widehat{\theta}_S - \theta_0 ) \rightarrow_d-K_S  M_S$.
-\end{cor}
-The conditions of Corollary  \ref{cor:submodel} are analogous to Assumption \ref{assump:highlevel} (c), (i).
+As we see from Theorems \ref{thm:consist} and \ref{thm:normality}, \emph{any} candidate GMM estimator $\widehat{\theta}_S$ is consistent for $\theta_0$ under local mis-specification. Unless $S$ excludes \emph{all} of the moment conditions contained in $h$, however, $\widehat{\theta}_S$ inherits an asymptotic bias from the mis-specification parameter $\tau$. The local mis-specification framework is useful precisely because it results in a limit distribution for $\widehat{\theta}_S$ with both a bias \emph{and} a variance. This captures in asymptotic form the bias-variance tradeoff that we see in finite sample simulations. In constrast, fixed mis-specification results in a \emph{degenerate} bias-variance tradeoff in the limit: scaling up by $\sqrt{n}$ to yield an asymptotic variance causes the bias component to \emph{diverge}. 
 
 
+Any form of moment selection requires an identifying assumption. One approach, following \cite{Andrews1999}, is to assume that there exists a unique, maximal set of correctly specified moment conditions that identifies $\theta_0$. In the notation of the present paper this is equivalent to assuming that there exists an $S^*$ satisfying the following three conditions:
+	\begin{enumerate}
+		\item $|S^*|\geq r$
+	 	\item $\Xi_{S^*} E[f(Z_{ni},\theta_0)]= 0$
+	 	\item For any $S' \neq S^*$ such that $\Xi_{S'} E[f(Z_{ni},\theta')]= 0$ for some $\theta' \in \Theta$, $|S^*| > |S'|$.
+	 \end{enumerate}
+\cite{AndrewsLu} and \cite{HongPrestonShum} take the same basic approach to identification, with appropriate modifications to allow simultaneous model and moment selection. An advantage of this kind of identification assumption is that it allows consistent selection of $S^*$ without \emph{any} prior knowledge of which moment conditions are correct. In the notation of the present paper, this corresponds to having \emph{no} moment conditions in the $g$ block. As \citet[p.\ 254]{Hallbook} points out, however, the \cite{Andrews1999} identification assumption can easily fail, even in simple examples. When it does, the selected GMM estimator may no longer be consistent for $\theta_0$. 
+
+\todo[inline]{Explain the alternative identification assumption that I use here. Relate it to Liao and Cheng. Explain how it rests on the valid estimator being identified. Perhaps list this as an actual stand-alone assumption.}
+
+
+The \emph{valid} estimator uses only those moment conditions known to be correctly specified, that is $\widehat{\theta}_v = \argmin_{\theta \in \Theta}\; g_n(\theta)' \widetilde{W}_{gg} \; g_n(\theta)$.
+For estimation based on $g$ alone to be possible, we must have $p \geq r$. With the exception of Section \ref{subsec:digress}, this assumption is maintained throughout. The \emph{full} estimator uses all moment functions, including the possibly invalid ones contained in $h$, namely $\widehat{\theta}_f = \argmin_{\theta \in \Theta}\; f_n(\theta)' \widetilde{W} \; f_n(\theta)$. For this estimator to be feasible, we must have $(p+q)\geq r$. 
+
+
+\todo[inline]{Put a corollary with the distribution of the valid estimator and make sure to update the cross-refs later in the paper to reflect this.}
+
+
+\subsection{Examples}
 
 
 \section{The Focused Moment Selection Criterion}\label{sec:FMSC}
@@ -165,7 +180,7 @@ In particular
 \end{cor}
 For the full moment set, $K_f = [F'WF]^{-1} F'W$ and $\Xi_f = \mathbf{I}_{p+q}$. For the valid moment set, $K_v = \left[G'W_{gg}G\right]^{-1}G' W_{gg}$ and $\Xi_v =\left[\begin{array}{cc} \mathbf{I}_p& \mathbf{0}_{p\times q} \end{array} \right]$. Thus, the valid estimator $\widehat{\mu}_v$ of $\mu$ has zero asymptotic bias while the full estimator, $\widehat{\mu}_f$, inherits a bias from each component of $\tau$. Typically, however, $\widehat{\mu}_f$ has the smallest asymptotic variance. In particular, the usual proof that adding moment conditions cannot increase asymptotic variance under efficient GMM continues to hold under local mis-specification, because all moment conditions are correctly specified in the limit.\footnote{See, for example \citet[chapter 6]{Hallbook}.} Estimators based on other moment sets lie between these two extremes: the precise nature of the bias-variance tradeoff is governed by the size of the respective components of $\tau$ and the action of the matrix $K_S$. Thus, local mis-specification gives an asymptotic analogue of the finite-sample observation that adding a slightly invalid but highly relevant instrument can decrease MSE.
 
-To use this framework for moment selection, we need to construct estimators of the unknown quantities: $\theta_0$, $K_S$, $\Omega$, and $\tau$. Under local mis-specification, the estimator of $\theta$ under \emph{any} moment set is consistent. In particular, Theorem \ref{pro:consist} establishes that both the valid and full estimators yield a consistent estimate of $\theta_0$. 
+To use this framework for moment selection, we need to construct estimators of the unknown quantities: $\theta_0$, $K_S$, $\Omega$, and $\tau$. Under local mis-specification, the estimator of $\theta$ under \emph{any} moment set is consistent. In particular, Theorem \ref{thm:consist} establishes that both the valid and full estimators yield a consistent estimate of $\theta_0$. 
 Recall that $K_S = [F_S'W_SF_S]^{-1} F_S'W_S \Xi_S$. Now, $\Xi_S$ is known because it is simply the selection matrix defining moment set $S$. The remaining quantities $F_S$ and $W_S$ that make up $K_S$ are consistently estimated by their sample analogues under Assumption \ref{assump:highlevel}. Similarly, consistent estimators of $\Omega$ are readily available under local mis-specification, although the precise form depends on the situation. Section \ref{sec:2sls} considers this point in more detail for 2SLS and the case of micro-data.
 
 The only remaining unknown is $\tau$. Local mis-specification is essential for making meaningful comparisons of AMSE, but prevents us from consistently estimating this asymptotic bias parameter. When the correctly specified moment conditions in $g$ identify $\theta$, however, we can construct an asymptotically unbiased estimator $\widehat{\tau}$ of $\tau$ by substituting $\widehat{\theta}_v$, the estimator of $\theta_0$ that uses only correctly specified moment conditions, into $h_n$, the sample analogue of the mis-specified moment conditions. That is,  $\widehat{\tau} = \sqrt{n} h_n(\widehat{\theta}_v)$. Returning to Corollary $\ref{cor:target}$, we see that it is $\tau \tau'$ rather than $\tau$ that enters the expression for AMSE. Although $\widehat{\tau}$ is an asymptotically unbiased estimator of $\tau$, the limiting expectation of $\widehat{\tau} \widehat{\tau}'$ is not $\tau\tau'$ because $\widehat{\tau}$ has an asymptotic variance.  To obtain an asymptotically unbiased estimator of $\tau\tau'$ we proceed as follows, subtracting a consistent estimate of the asymptotic variance.
@@ -191,6 +206,13 @@ provides an asymptotically unbiased estimator of AMSE.
 \subsection{Digression: The Case of $r > p$}
 \label{subsec:digress}
 When $r > p$,  $\theta_0$ is not estimable by $\widehat{\theta}_v$ so $\widehat{\tau}$ is an infeasible estimator of $\tau$. A na\"{i}ve approach to this problem would be to substitute another consistent estimator of $\theta_0$, e.g.\ $\widehat{\theta}_f$, and proceed analogously. Unfortunately, this approach fails. To understand why, consider the case in which all moment conditions are potentially invalid so the full moment set is $h$. By an argument similar to that used in the proof of Theorem \ref{pro:tau}, $\sqrt{n}h_n(\widehat{\theta}_f) \rightarrow_d\Gamma  \mathcal{N}_q(\tau, \Omega)$ where $\Gamma = \mathbf{I}_q - H \left(H'WH\right)^{-1}H'W$. The mean, $\Gamma \tau$, of the resulting limit distribution does not equal $\tau$, and because $\Gamma$ has rank $q-r$ we cannot pre-multiply by its inverse to extract an estimate of $\tau$. Intuitively, $q-r$ over-identifying restrictions are insufficient to estimate a $q$-vector: $\tau$ is not identified unless we have a minimum of $r$ valid moment conditions. However, the limiting distribution of $\sqrt{n}h_n(\widehat{\theta}_f)$ partially identifies $\tau$ even when we have no valid moment conditions at our disposal. A combination of this information with prior restrictions on the magnitude of the components of $\tau$ allows the use of the FMSC framework to carry out a sensitivity analysis when $r>p$. For example, the worst-case estimate of AMSE over values of $\tau$ in the identified region could still allow certain moment sets to be ruled out. This idea shares certain similarities with \citet{Kraay} and \citet{Conleyetal}.%, two recent papers that suggest methods for evaluating the robustness of conclusions drawn from IV regressions when the instruments used may be invalid.
+
+
+
+\subsection{Example I: 2SLS Instrument Selection}
+\todo[inline]{In this example we're choosing overidentifying restrictions}
+
+\subsection{Example II: OLS versus IV}
 
 \subsection{The FMSC for 2SLS Instrument Selection}\label{sec:2sls}
 This section specializes FMSC to a case of particular applied interest: instrument selection for 2SLS in a micro-data setting. The expressions given here are used in the simulation studies and empirical example that appear later in the paper. Consider a linear IV regression model with response variable $y_{ni}$, regressors $\mathbf{x}_{ni}$, valid instruments $\mathbf{z}^{(1)}_{ni}$ and potentially invalid instruments $\mathbf{z}^{(2)}_{ni}$. Define $\mathbf{z}_{ni} = (\mathbf{z}^{(1)}_{ni},\mathbf{z}^{(2)}_{ni})'$. We assume that $\{(y_{ni}, \mathbf{x}_{ni}',\mathbf{z}_{ni}')'\}_{i=1}^n$ is iid across $i$ for fixed sample size $n$, but allow the distribution to change with $n$.
@@ -555,7 +577,7 @@ The limiting behavior of $\widehat{\mu}$ follows almost immediately from Corolla
 \label{assump:weights}
 \begin{enumerate}[(a)]
 	\item $\sum_{S \in \mathcal{A}} \widehat{\omega}_S = 1$ 
-	\item For each $S\in \mathcal{A}$, $\widehat{\omega}_S \rightarrow_d\varphi(M|S)$, a function of $M$ (the normal random vector defined in Theorem \ref{pro:normality}) and constants only.
+	\item For each $S\in \mathcal{A}$, $\widehat{\omega}_S \rightarrow_d\varphi(M|S)$, a function of $M$ (the normal random vector defined in Theorem \ref{thm:normality}) and constants only.
 \end{enumerate}
 \end{assump}
 
@@ -590,7 +612,7 @@ Consider a moment selection criterion of the form $MSC(S) = J_n(S) - h(|S|)\kapp
 \subsection{Valid Confidence Intervals}
 While Corollary \ref{cor:momentavg} characterizes the limiting behavior of moment-average, and hence post-selection estimators, the limiting random variable $\Lambda(\tau)$ is a complicated function of the normal random vector $M$. Because this distribution is analytically intractable, I adapt a suggestion from \cite{ClaeskensHjortbook} and approximate it by simulation. The result is a conservative procedure that provides asymptotically valid confidence intervals.\footnote{Although I originally developed this procedure by analogy to \cite{ClaeskensHjortbook}, \cite{Leeb} kindly pointed out that constructions of the kind given here have appeared elsewhere in the statistics literature, notably in \cite{Loh1985}, \cite{Berger1994}, and \cite{Silvapulle1996}. More recently, \cite{McCloskey} uses a similar approach to study non-standard testing problems.}
  
-First, suppose that $K_S$, $\varphi(\cdot|S)$, $\theta_0$, $\Omega$ and $\tau$ were known. Then, by simulating from $M$, as defined in Theorem \ref{pro:normality}, the distribution of $\Lambda(\tau)$, defined in Corollary \ref{eq:avg}, could be approximated to arbitrary precision. To operationalize this procedure, substitute consistent estimators of $K_S$, $\theta_0$, and $\Omega$, e.g.\ those used to calculate FMSC. To estimate $\varphi(\cdot|S)$, we first need to derive the limit distribution of $\widehat{\omega}_S$, the data-based weights specified by the user. As an example, consider the case of moment selection based on the FMSC. Here $\widehat{\omega}_S$ is simply the indicator function
+First, suppose that $K_S$, $\varphi(\cdot|S)$, $\theta_0$, $\Omega$ and $\tau$ were known. Then, by simulating from $M$, as defined in Theorem \ref{thm:normality}, the distribution of $\Lambda(\tau)$, defined in Corollary \ref{eq:avg}, could be approximated to arbitrary precision. To operationalize this procedure, substitute consistent estimators of $K_S$, $\theta_0$, and $\Omega$, e.g.\ those used to calculate FMSC. To estimate $\varphi(\cdot|S)$, we first need to derive the limit distribution of $\widehat{\omega}_S$, the data-based weights specified by the user. As an example, consider the case of moment selection based on the FMSC. Here $\widehat{\omega}_S$ is simply the indicator function
 \begin{equation}
 	\label{eq:FMSCindicate}
 	\widehat{\omega}_S = \mathbf{1}\left\{\mbox{FMSC}_n(S) = \min_{S'\in \mathcal{A}} \mbox{FMSC}_n(S')\right\}
@@ -1012,7 +1034,7 @@ This paper has introduced the FMSC, a proposal to choose moment conditions using
 
 
 
-\begin{proof}[Proof of Theorems \ref{pro:consist},\ref{pro:normality}]
+\begin{proof}[Proof of Theorems \ref{thm:consist},\ref{thm:normality}]
 Essentially identical to the proofs of \cite{NeweyMcFadden1994} Theorems 2.6 and 3.1.
 \end{proof}
 
