@@ -172,11 +172,11 @@ For estimation based on $g$ alone to be possible, we must have $p \geq r$. With 
 \section{The Focused Moment Selection Criterion}\label{sec:FMSC}
 
 \subsection{The General Case}
-FMSC chooses among the potentially invalid moment conditions contained in $h$ to minimize estimator AMSE for a target parameter. Denote this target parameter by $\mu$, a real-valued, $Z$-almost continuous function of the parameter vector $\theta$ that is differentiable in a neighborhood of $\theta_0$. Further, define the GMM estimator of $\mu$ based on $\widehat{\theta}_S$ by $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ and the true value of $\mu$ by $\mu_0 = \mu(\theta_0)$. Applying the delta method to Corollary \ref{cor:submodel} gives the AMSE of $\widehat{\mu}_S$.
+FMSC chooses among the potentially invalid moment conditions contained in $h$ to minimize estimator AMSE for a target parameter. Denote this target parameter by $\mu$, a real-valued, $Z$-almost continuous function of the parameter vector $\theta$ that is differentiable in a neighborhood of $\theta_0$. Further, define the GMM estimator of $\mu$ based on $\widehat{\theta}_S$ by $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ and the true value of $\mu$ by $\mu_0 = \mu(\theta_0)$. Applying the delta method to Theorem \ref{thm:normality} gives the AMSE of $\widehat{\mu}_S$.
 
 \begin{cor}[AMSE of Target Parameter]
 \label{cor:target}
-Under the hypotheses of Corollary \ref{cor:submodel}, $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S M_S$.
+Under the hypotheses of Theorem \ref{thm:normality}, $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S M_S$.
 In particular
 	$$\mbox{AMSE}\left(\widehat{\mu}_S\right) = \nabla_\theta\mu(\theta_0)'K_S \Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\tau\tau'\end{array}\right] + \Omega\right\}\Xi_S'K_S'\nabla_\theta\mu(\theta_0).$$
 \end{cor}
@@ -574,7 +574,7 @@ To account for the effects of moment selection on inference, I extend a framewor
 \end{equation}
 where $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ is an estimator of the target parameter $\mu$ under moment set $S$, $\mathcal{A}$ is the collection of all moment sets under consideration, and $\widehat{\omega}_S$ is shorthand for the value of a data-dependent weight function  $\widehat{\omega}_S=\omega(\cdot| \cdot)$ evaluated at moment set $S$ and the sample observations $Z_{n1}, \hdots, Z_{nn}$.  As above $\mu(\cdot)$ is a $\mathbb{R}$-valued, $Z$-almost surely continuous function of $\theta$ that is differentiable in an open neighborhood of $\theta_0$. When $\widehat{\omega}_S$ is an indicator, taking on the value one at the moment set moment set that minimizes some moment selection criterion, $\widehat{\mu}$ is a post-moment selection estimator. More generally, $\widehat{\mu}$ is a moment average estimator.
 
-The limiting behavior of $\widehat{\mu}$ follows almost immediately from Corollary \ref{cor:submodel}, which states that asymptotic distribution of $\widehat{\theta}_S$ depends only on $K_S$ and $M$. Because $K_S$ is a matrix of constants, the random variable $M$ governs the joint limiting behavior of $\widehat{\theta}_S$, $S\in \mathcal{A}$. Under certain conditions on the $\widehat{\omega}_S$, we can fully characterize the limit distribution of $\widehat{\mu}$.
+The limiting behavior of $\widehat{\mu}$ follows almost immediately from Theorem \ref{thm:normality}, which states that asymptotic distribution of $\widehat{\theta}_S$ depends only on $K_S$ and $M$. Because $K_S$ is a matrix of constants, the random variable $M$ governs the joint limiting behavior of $\widehat{\theta}_S$, $S\in \mathcal{A}$. Under certain conditions on the $\widehat{\omega}_S$, we can fully characterize the limit distribution of $\widehat{\mu}$.
 \begin{assump}[Conditions on the Weights]\mbox{}
 \label{assump:weights}
 \begin{enumerate}[(a)]
@@ -585,7 +585,7 @@ The limiting behavior of $\widehat{\mu}$ follows almost immediately from Corolla
 
 \begin{cor}[Asymptotic Distribution of Moment-Average Estimators]
 \label{cor:momentavg}
-Under Assumption \ref{assump:weights} and the conditions of Corollary \ref{cor:submodel},
+Under Assumption \ref{assump:weights} and the conditions of Theorem \ref{thm:normality},
 	$$\sqrt{n}\left(\widehat{\mu} -  \mu_0\right) \rightarrow_{d}\Lambda(\tau) =  -\nabla_\theta\mu(\theta_0)'\left[\sum_{S \in \mathcal{A}} \varphi(M|S) K_S\Xi_S\right] M.$$
 \end{cor}
 Notice that the limit random variable, denoted $\Lambda(\tau)$, is a randomly weighted average of the multivariate normal vector $M$. Hence, $\Lambda(\tau)$ is non-normal. 
@@ -598,7 +598,7 @@ Although it restricts the convergence of the weight functions, Assumption \ref{a
 Under local mis-specification, the $J$-test statistic converges to a non-central $\chi^2$ distribution. This limit distribution, too, can be expressed in terms of $M$ and constants only, as the following result shows.
 \begin{thm}[Distribution of $J$-Statistic under Local Mis-Specification] 
 \label{pro:jstat}
-	Let $J_n(S)  = n \left[\Xi_S f_n(\widehat{\theta}_S)\right]' \widehat{\Omega}^{-1}\left[\Xi_S f_n(\widehat{\theta}_S)\right]$ where $\widehat{\Omega}^{-1}_S$ is a consistent estimator of $\Omega_S^{-1}$. Then, under the conditions of Corollary \ref{cor:submodel}, $J_n(S) \rightarrow_dJ(M|S)$, where
+	Let $J_n(S)  = n \left[\Xi_S f_n(\widehat{\theta}_S)\right]' \widehat{\Omega}^{-1}\left[\Xi_S f_n(\widehat{\theta}_S)\right]$ where $\widehat{\Omega}^{-1}_S$ is a consistent estimator of $\Omega_S^{-1}$. Then, under the conditions of Theorem \ref{thm:normality}, $J_n(S) \rightarrow_dJ(M|S)$, where
 		$$J(M|S)=(\Omega_S^{-1/2}M_S)' (I - P_S)(\Omega_S^{-1/2}M_S),$$
 $P_S$ is the projection matrix formed from the GMM the identifying restrictions $\Omega^{-1/2}_S F_S$, and $M_S = \Xi_S M$.
 \end{thm}
@@ -607,7 +607,7 @@ To connect these results to estimators post-selection, consider the weight funct
 satisfying Assumption \ref{assump:weights} (b). Thus, post-selection estimators based on the FMSC, the downward $J$-test procedure, GMM-BIC, GMM-HQ, and GMM-AIC all fall within the ambit of \ref{cor:momentavg}. GMM-BIC and GMM-HQ, however, are not particularly interesting under local mis-specification. Intuitively, because they aim to select all valid moment conditions w.p.a.1, we would expect that under Assumption \ref{assump:drift} they simply choose the full moment set in the limit. The following result states that this intuition is correct. Because moment selection using the GMM-BIC or HQ leads to weights with a degenerate asymptotic distribution, these  are not considered further below. 
 \begin{thm}[Consistent Criteria under Local Mis-Specification]
 \label{pro:andrews}
-Consider a moment selection criterion of the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $h$ is strictly increasing,  $\lim_{n\rightarrow \infty}\kappa_n = \infty$, and $\kappa_n = o(n)$. Under the conditions of Corollary \ref{cor:submodel}, $MSC(S)$ selects the full moment set w.p.a.1.
+Consider a moment selection criterion of the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $h$ is strictly increasing,  $\lim_{n\rightarrow \infty}\kappa_n = \infty$, and $\kappa_n = o(n)$. Under the conditions of Theorem \ref{thm:normality}, $MSC(S)$ selects the full moment set w.p.a.1.
 \end{thm}
 
 
