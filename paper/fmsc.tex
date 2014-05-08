@@ -143,10 +143,12 @@ Under Assumptions \ref{assump:drift} and \ref{assump:highlevel} (a)--(e), $\wide
 \begin{thm}[Asymptotic Normality]
 \label{thm:normality}
 Under Assumptions \ref{assump:drift} and \ref{assump:highlevel}
-$$\sqrt{n}(\widehat{\theta}_S - \theta_0 ) \rightarrow_d -K_S \Xi_S  \left(M + \left[\begin{array}
+$$\sqrt{n}(\widehat{\theta}_S - \theta_0 ) \rightarrow_d -K_S \Xi_S  \left(\left[\begin{array}
+	{c} M_g \\ M_h
+\end{array} \right]  + \left[\begin{array}
 	{c} 0 \\ \tau
 \end{array} \right]\right)$$
-where $K_S  = [F_S'W_SF_S]^{-1} F_S'W_S$ and $M \sim N(0,\Omega)$.
+where $K_S  = [F_S'W_SF_S]^{-1} F_S'W_S$, $M = (M_g', M_h')'$, and $M \sim N(0,\Omega)$.
 \end{thm}
 
 As we see from Theorems \ref{thm:consist} and \ref{thm:normality}, \emph{any} candidate GMM estimator $\widehat{\theta}_S$ is consistent for $\theta_0$ under local mis-specification. Unless $S$ excludes \emph{all} of the moment conditions contained in $h$, however, $\widehat{\theta}_S$ inherits an asymptotic bias from the mis-specification parameter $\tau$. The local mis-specification framework is useful precisely because it results in a limit distribution for $\widehat{\theta}_S$ with both a bias \emph{and} a variance. This captures in asymptotic form the bias-variance tradeoff that we see in finite sample simulations. In constrast, fixed mis-specification results in a degenerate bias-variance tradeoff in the limit: scaling up by $\sqrt{n}$ to yield an asymptotic variance causes the bias component to diverge. An alternative identifying assumption
@@ -156,16 +158,16 @@ Any form of moment selection requires an identifying assumption in order for us 
 
 \begin{assump}[\cite{Andrews1999} Identification Condition]
 	\label{assump:Andrews}
-There exists a subset $S^*$ of at least $r$ moment conditions satisfying:
+There exists a subset $S_{max}$ of at least $r$ moment conditions satisfying:
 	\begin{enumerate}
-	 	\item $\Xi_{S^*} E[f(Z_{ni},\theta_0)]= 0$
-	 	\item For any $S' \neq S^*$ such that $\Xi_{S'} E[f(Z_{ni},\theta')]= 0$ for some $\theta' \in \Theta$, $|S^*| > |S'|$.
+	 	\item $\Xi_{S_{max}} E[f(Z_{ni},\theta_0)]= 0$
+	 	\item For any $S' \neq S_{max}$ such that $\Xi_{S'} E[f(Z_{ni},\theta')]= 0$ for some $\theta' \in \Theta$, $|S_{max}| > |S'|$.
 	 \end{enumerate}
 \end{assump}
 
-\cite{AndrewsLu} and \cite{HongPrestonShum} take the same basic approach to identification, with appropriate modifications to allow for simultaneous model and moment selection. An advantage Assumption \ref{assump:Andrews} is that, under fixed mis-specification, it allows consistent selection of $S^*$ without any prior knowledge of \emph{which} moment conditions are correct. In the notation of the present paper this corresponds to having \emph{no} moment conditions in the $g$ block. As \citet[p.\ 254]{Hallbook} points out, however, the second part of Assumption \ref{assump:Andrews} can easily fail, even in simple settings such as linear instrumental variables estimation. When it does fail, the selected GMM estimator may no longer be consistent for $\theta_0$. 
+\cite{AndrewsLu} and \cite{HongPrestonShum} take the same basic approach to identification, with appropriate modifications to allow for simultaneous model and moment selection. An advantage of Assumption \ref{assump:Andrews} is that, under fixed mis-specification, it allows consistent selection of $S_{max}$ without any prior knowledge of \emph{which} moment conditions are correct. In the notation of the present paper this corresponds to having no moment conditions in the $g$ block. As \citet[p.\ 254]{Hallbook} points out, however, the second part of Assumption \ref{assump:Andrews} can fail even in simple settings such as linear instrumental variables estimation. When it does fail, the selected GMM estimator may no longer be consistent for $\theta_0$. 
 
-A different approach to identification is to assume that there is a minimal set of at least $r$ moment conditions \emph{known} to be correctly specified. This is the approach we will follow here, one shared by \cite{Liao} and \cite{ChengLiao}.
+A different approach to identification is to assume that there is a minimal set of at least $r$ moment conditions \emph{known} to be correctly specified. This is the approach we follow here, one shared by \cite{Liao} and \cite{ChengLiao}. With the exception of Section \ref{subsec:digress}, we maintain the following assumption throughout: 
 
 \begin{assump}[FMSC Identification Condition] 
 \label{assump:Identification}
@@ -174,13 +176,16 @@ $$\widehat{\theta}_v = \argmin_{\theta \in \Theta}\; g_n(\theta)' \widetilde{W}_
 We call this the ``valid estimator'' and assume that it is identified, i.e.\ that $p\geq r$.
 \end{assump}
 
-Both Assumptions \ref{assump:Andrews} and \ref{assump:Identification} are strong, and neither fully nests the other. Which should be preferred is both a matter of taste and of the particular application one has in mind. In the context of this paper, Assumption \ref{assump:Identification} is meant to represent a situation that is common in empirical practice.
+Assumption \ref{assump:Identification} and Theorem \ref{thm:normality} immediately imply that the valid estimator shows no asymptotic bias. For convenience, we state its limit distribution in the following Corollary: 
+\begin{cor}[Limit Distribution of Valid Estimator]
+	\label{cor:valid}
+	Let $S_{v}$ include only the moment conditions contained in $g$. Then, under Assumption \ref{assump:Identification} we have
+		$$\sqrt{n}\left(\widehat{\theta}_v - \theta_0\right) \rightarrow_d -K_v M_g$$
+	by applying Theorem \ref{thm:normality} to $S_{v}$, where $K_v = [G'W_vG]^{-1}G'W_v$ and $M_g \sim N(0,\Omega_{gg})$. 
+\end{cor}
 
+Both Assumptions \ref{assump:Andrews} and \ref{assump:Identification} are strong, and neither fully nests the other. Which should be preferred is both a matter of taste and of the particular application one has in mind. In the context of the present paper, Assumption \ref{assump:Identification} is meant to represent a situation that is common in empirical practice. The $g$--block of moment conditions contains the ``baseline'' assumptions that an empirical researcher would be prepared to defend in a seminar, while the $h$--block represents a set of stronger, more controversial assumptions. In the FMSC framework, moment selection exercise is carried out \emph{conditional} on the baseline assumptions: we use the $g$--block to help us decide whether to include any of the moment conditions contained in the $h$--block. But why would we ever consider using controversial assumptions? The FMSC is designed for settings in which the $h$--block is expected to contain a substantial amount of information beyond that already contained in the $g$--block. The idea is that, if we knew the $h$--block was correctly specified, we would expect a large gain in efficiency by including it in estimation. This motivates the idea of trading off the variance reduction from including $h$ against the potential increase in bias. Not all applications have the structure, but many important ones do. We now consider two simple but relevant examples. 
 
-
-With the exception of Section \ref{subsec:digress}, we will maintain Assumption \ref{assump:Identification} throughout. 
-
-\todo[inline]{For convenience give a corollary with the distribution of the valid estimator and make sure to update the cross-refs later in the paper to reflect this.}
 
 \subsection{Example: Choosing IVs}
 
