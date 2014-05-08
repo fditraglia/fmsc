@@ -151,7 +151,7 @@ where $K_S  = [F_S'W_SF_S]^{-1} F_S'W_S$, $M = (M_g', M_h')'$, and $M \sim N(0,\
 As we see from Theorems \ref{thm:consist} and \ref{thm:normality}, \emph{any} candidate GMM estimator $\widehat{\theta}_S$ is consistent for $\theta_0$ under local mis-specification. Unless $S$ excludes \emph{all} of the moment conditions contained in $h$, however, $\widehat{\theta}_S$ inherits an asymptotic bias from the mis-specification parameter $\tau$. The local mis-specification framework is useful precisely because it results in a limit distribution for $\widehat{\theta}_S$ with both a bias \emph{and} a variance. This captures in asymptotic form the bias-variance tradeoff that we see in finite sample simulations. In constrast, fixed mis-specification results in a degenerate bias-variance tradeoff in the limit: scaling up by $\sqrt{n}$ to yield an asymptotic variance causes the bias component to diverge.
 
 \subsection{Identification}
-Any form of moment selection requires an identifying assumption in order for us to make sense of which parameter value counts as the truth: $\theta_0$. One approach, following \cite{Andrews1999}, is to assume that there exists a unique, maximal set of correctly specified moment conditions that identifies $\theta_0$. In the notation of the present paper\footnote{Although \cite{Andrews1999}, \cite{AndrewsLu}, and \cite{HongPrestonShum} consider \emph{fixed} mis-specification, we can view this as a version of local mis-specification in which $\tau \rightarrow \infty$.}  this is equivalent to the following:
+Any form of moment selection requires an identifying assumption: we need to make clear which parameter value $\theta_0$ counts as the ``truth.'' One approach, following \cite{Andrews1999}, is to assume that there exists a unique, maximal set of correctly specified moment conditions that identifies $\theta_0$. In the notation of the present paper\footnote{Although \cite{Andrews1999}, \cite{AndrewsLu}, and \cite{HongPrestonShum} consider \emph{fixed} mis-specification, we can view this as a version of local mis-specification in which $\tau \rightarrow \infty$.}  this is equivalent to the following:
 
 \begin{assump}[\cite{Andrews1999} Identification Condition]
 	\label{assump:Andrews}
@@ -187,6 +187,19 @@ Both Assumptions \ref{assump:Andrews} and \ref{assump:Identification} are strong
 \subsection{Example: Choosing Instrumental Variables}
 
 \subsection{Example: OLS versus 2SLS}
+The preceding example had a simple, nested structure: it amounted to choosing \emph{overidentifying restrictions}. The FMSC, however, does not rely upon this structure. It is entirely possible to carry out selection over estimators that are all just identified and which are based on \emph{non-nested} collections of moment conditions. The simplest interesting example of non-nested moment sets is choosing between ordinary least squares (OLS) and two-stage least squares (2SLS) to estimate the effect $\beta$ of a single endogenous regressor $x$ on an outcome of interest $y$. Assume without loss of generality that there are no exogenous regressors, or equivalently that they have been ``projected out,'' so that the data generating process is
+    \begin{eqnarray}
+			y_{i} &=& \beta x_{i}  + \epsilon_{i}\\
+	x_{i} &=& \mathbf{z}_{i}' \boldsymbol{\pi} + v_{i}
+	\end{eqnarray}
+where $\beta$ and $\pi$ are unknown constants, $\mathbf{z}_i$ is a vector of instruments, $x_i$ is the endogenous regressor, $y_i$ is the outcome of interest, and $\epsilon_i, v_i$ are unobservable error terms. For simplicity we will consider an iid, homoskedastic setting but all of the results presented here are readily generalized to other settings.	
+
+\begin{assump}[Primitive Conditions for OLS versus 2SLS Example]
+	\label{assump:OLSvsIVlocal}
+
+\end{assump}
+
+\todo[inline]{Mention Lemma for CLT under local mis-spec. Conditions can undoubtedly be weakened. Merely a simple example of how to derive a CLT for these kind of models in a simple setting.}
 
 \subsection{Sufficient Conditions for the Examples}
 \label{sec:sufficient}
