@@ -273,7 +273,7 @@ To use this framework for moment selection, we need to construct estimators of t
 The only remaining unknown is $\tau$. Local mis-specification is essential for making meaningful comparisons of AMSE because it prevents the bias term from dominating the comparison. Unfortunately, it also prevents us from consistently estimating this asymptotic bias parameter. Under Assumption \ref{assump:Identification}, however, we can construct an \emph{asymptotically unbiased} estimator $\widehat{\tau}$ of $\tau$ by substituting $\widehat{\theta}_v$, the estimator of $\theta_0$ that uses only correctly specified moment conditions, into $h_n$, the sample analogue of the (potentially) mis-specified moment conditions. In other words,  $\widehat{\tau} = \sqrt{n} h_n(\widehat{\theta}_v)$. 
 
 \begin{thm}[Asymptotic Distribution of $\widehat{\tau}$] 
-\label{pro:tau}
+\label{thm:tau}
 Let $\widehat{\tau} = \sqrt{n} h_n(\widehat{\theta}_v)$ where $\widehat{\theta}_v$ is the valid estimator, based only on the moment conditions contained in $g$. Then under Assumptions \ref{assump:drift}, \ref{assump:highlevel} and \ref{assump:Identification}
 $$\widehat{\tau} \rightarrow_d \Psi\left( M + \left[\begin{array}
 	{c} 0 \\ \tau
@@ -299,7 +299,7 @@ provides an asymptotically unbiased estimator of AMSE.
 
 \subsection{Digression: The Case of $r > p$}
 \label{subsec:digress}
-When $r > p$,  $\theta_0$ is not estimable by $\widehat{\theta}_v$ so $\widehat{\tau}$ is an infeasible estimator of $\tau$. A na\"{i}ve approach to this problem would be to substitute another consistent estimator of $\theta_0$ and proceed analogously. Unfortunately, this approach fails. To understand why, consider the case in which all moment conditions are potentially invalid so that the $g$--block is empty. Letting $\widehat{\theta}_f$ denote the estimator based on the full set of moment conditions in $h$, we have $\sqrt{n}h_n(\widehat{\theta}_f) \rightarrow_d\Gamma  \mathcal{N}_q(\tau, \Omega)$ where $\Gamma = \mathbf{I}_q - H \left(H'WH\right)^{-1}H'W$, using an argument similar to that in the proof of Theorem \ref{pro:tau}. The mean, $\Gamma \tau$, of the resulting limit distribution does not equal $\tau$, and because $\Gamma$ has rank $q-r$ we cannot pre-multiply by its inverse to extract an estimate of $\tau$. Intuitively, $q-r$ over-identifying restrictions are insufficient to estimate a $q$-vector: $\tau$ is not identified unless we have a minimum of $r$ valid moment conditions. However, the limiting distribution of $\sqrt{n}h_n(\widehat{\theta}_f)$ partially identifies $\tau$ even when we have no valid moment conditions at our disposal. A combination of this information with prior restrictions on the magnitude of the components of $\tau$ allows the use of the FMSC framework to carry out a sensitivity analysis when $r>p$. For example, the worst-case estimate of AMSE over values of $\tau$ in the identified region could still allow certain moment sets to be ruled out. This idea shares similarities with \citet{Kraay} and \citet{Conleyetal}, two recent papers that suggest methods for evaluating the robustness of conclusions drawn from IV regressions when the instruments used may be invalid.
+When $r > p$,  $\theta_0$ is not estimable by $\widehat{\theta}_v$ so $\widehat{\tau}$ is an infeasible estimator of $\tau$. A na\"{i}ve approach to this problem would be to substitute another consistent estimator of $\theta_0$ and proceed analogously. Unfortunately, this approach fails. To understand why, consider the case in which all moment conditions are potentially invalid so that the $g$--block is empty. Letting $\widehat{\theta}_f$ denote the estimator based on the full set of moment conditions in $h$, we have $\sqrt{n}h_n(\widehat{\theta}_f) \rightarrow_d\Gamma  \mathcal{N}_q(\tau, \Omega)$ where $\Gamma = \mathbf{I}_q - H \left(H'WH\right)^{-1}H'W$, using an argument similar to that in the proof of Theorem \ref{thm:tau}. The mean, $\Gamma \tau$, of the resulting limit distribution does not equal $\tau$, and because $\Gamma$ has rank $q-r$ we cannot pre-multiply by its inverse to extract an estimate of $\tau$. Intuitively, $q-r$ over-identifying restrictions are insufficient to estimate a $q$-vector: $\tau$ is not identified unless we have a minimum of $r$ valid moment conditions. However, the limiting distribution of $\sqrt{n}h_n(\widehat{\theta}_f)$ partially identifies $\tau$ even when we have no valid moment conditions at our disposal. A combination of this information with prior restrictions on the magnitude of the components of $\tau$ allows the use of the FMSC framework to carry out a sensitivity analysis when $r>p$. For example, the worst-case estimate of AMSE over values of $\tau$ in the identified region could still allow certain moment sets to be ruled out. This idea shares similarities with \citet{Kraay} and \citet{Conleyetal}, two recent papers that suggest methods for evaluating the robustness of conclusions drawn from IV regressions when the instruments used may be invalid.
 
 
 
@@ -310,17 +310,22 @@ $$\mbox{AMSE(OLS)} = \frac{\tau^2}{\sigma_x^4} + \frac{\sigma_\epsilon^2}{\sigma
   \mbox{AMSE(2SLS)} = \frac{\sigma_\epsilon^2}{\gamma^2}$$
  Rearranging, we see that the AMSE of the OLS estimator is strictly less than that of the 2SLS estimator whenever
  $$\tau^2  < \sigma_x^2 \sigma_\epsilon^2\left(\frac{\sigma_v^2}{\gamma^2}\right)$$
- To implement this expression, we need to estimate the unknowns. The familiar estimators of $\sigma_x^2, \gamma^2$, and $\sigma_v^2$ remain consistent under Assumption \ref{assump:OLSvsIV}
- \begin{eqnarray*}
-  	\widehat{\sigma}_x^2 &=& n^{-1}\mathbf{x}'\mathbf{x} \rightarrow_p \boldsymbol{\pi}Q_z \boldsymbol{\pi} + \sigma_v^2\\
-  	\widehat{\gamma}^2 &=& n^{-1}\mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x} \rightarrow_p \boldsymbol{\pi}Q_z \boldsymbol{\pi}\\
-  	\widehat{\sigma}_v^2 &=&  \widehat{\sigma}_x^2 - \widehat{\gamma}^2 \rightarrow_p \sigma_v^2
-  \end{eqnarray*} 
-so all that remains is to estimate the squared bias parameter $\tau^2$.
+ To use this expression for moment selection we need to estimate the unknown parameters. Fortunately, the familiar estimators of $\sigma_x^2, \gamma^2$, and $\sigma_v^2$ remain consistent under Assumption \ref{assump:OLSvsIV} so we set
+ $$\widehat{\sigma}_x^2 = n^{-1}\mathbf{x}'\mathbf{x}, \quad \widehat{\gamma}^2 = n^{-1}\mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x}, \quad \widehat{\sigma}_v^2 =  \widehat{\sigma}_x^2 - \widehat{\gamma}^2$$
+To estimate $\sigma_\epsilon^2$ we have two choices: we can either use the residuals from the OLS estimator or those from the 2SLS estimator. Under local mis-specification, both provide a consistent estimator of $\sigma_\epsilon^2$. We would expect the estimator based on the 2SLS residuals to be more robust, however, unless the instruments are quite weak. This is because the exogeneity of $x$, even though it disappears in the limit, is non-zero in finite samples. Thus, we use 
+	$$\widehat{\sigma}_\epsilon^2 = n^{-1}\left(\textbf{y} - \textbf{x}\widetilde{\beta}_{2SLS} \right)'\left(\textbf{y} - \textbf{x}\widetilde{\beta}_{2SLS} \right)$$
+to estimate $\sigma_\epsilon^2$ below. All that remains is to estimate the squared bias parameter $\tau^2$. Specializing Theorem \ref{thm:tau} and Corollary \ref{cor:tautau} to the present example, we have the following.
+\begin{thm}
+	\label{thm:tauOLSvsIV}
+	Let $\widehat{\tau} =  n^{-1/2} \mathbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta}_{2SLS})$. Under Assumption \ref{assump:OLSvsIV} we have 
+	$$\widehat{\tau}\rightarrow_d N(\tau,V)$$ 
+	where $V =\sigma_\epsilon^2 \sigma_x^2(\sigma_x^2/\gamma^2 - 1) =  \sigma_\epsilon^2 \sigma_x^2(\sigma_v^2/\gamma^2)$.
+\end{thm}
+It follows that $\widehat{\tau}^2 -  \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2 \left(\widehat{\sigma}_v^2/\widehat{\gamma}^2}\right)$ is an asymptotically unbiased estimator of $\tau^2$ and hence, substituting into the AMSE inequality from above and rearranging, the FMSC instructs us to choose OLS whenever
+	$$\widehat{T}_{FMSC} = \frac{\widehat{\tau}^2 \widehat{\gamma}^2}{\widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2} < 2$$
+The quantity $\widehat{T}_{FMSC}$ looks very much like a test statistic and indeed it can be viewed as such. Rewriting it as $\widehat{T}_{FMSC} = \widehat{\tau}^2/\widehat{V}$ where $\widehat{V} = \widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2/\widehat{\gamma}^2$ we see immediately that $\widehat{T}_{FMSC} \rightarrow_d \chi^2(1)$ by Theorem \ref{thm:tauOLSvsIV} and the continuous mapping theorem. This means that we can interpret the FMSC as a test of the null hypothesis $H_0\colon \tau = 0$ against the two-sided alternative with a critical value of $2$. Roughly speaking, this corresponds to a significance level of $\alpha \approx 0.16$.
 
-$\widehat{\tau} =  n^{-1/2} \mathbf{x}'\left(\mathbf{y} - \mathbf{x}\widetilde{\beta}_{2SLS}\right) \rightarrow_d N(\tau,V)$
-
-$V =\sigma_\epsilon^2 \sigma_x^2(\sigma_x^2/\gamma^2 - 1) =  \sigma_\epsilon^2 \sigma_x^2(\sigma_v^2/\gamma^2)$
+\todo[inline]{Indeed, a little algebra shows that this test statistic is \emph{identical} to the Hausman test. Give outline of the algebra. Doesn't hold in all examples, but it does in this simple case. Give OLS the benefit of the doubt, but not free to choose critical value. Theoretical justification for empirical practice.}
 
 \subsection{FMSC for Instrument Selection Example}
 \todo[inline]{In this example we're choosing overidentifying restrictions} As in the preceding example, the target parameter here is $\beta$.
@@ -1026,7 +1031,7 @@ upper&1.11&-0.62&1.10&-0.58&1.26&-0.46&1.33&-0.30&1.32&-0.40&1.12&-0.57\tabularn
 
 Table \ref{tab:replicate} presents FMSC results for instrument sets 1--8  as defined in Table \ref{tab:fullresults}. Results are presented for two cases: the first takes the effect of \emph{malfal}, a measure of malaria transmission, as the target parameter while the second uses the effect of \emph{rule}, a measure of institutions. In each case, the FMSC selects instrument set 8: the full instrument set containing the baseline, climate, Europe and openness blocks. The rankings, however, differ depending on the target parameter.  When the target is \emph{rule} instrument sets 8 and 5 are virtually identical in terms of FMSC: 0.26 versus 0.23. In Table 2 of their paper, \cite{Carstensen2006} report GMM-BIC and HQ results for selection over instrument sets 2--4 and 8 that also favor instrument set 8. However, the authors do not consider instrument sets 5--7. Although the FMSC also selects instrument set 8, the FMSC values of instrument set 5 are small enough to suggest that including the openness block does little to reduce MSE.
 
-The bottom panel of Table \ref{tab:replicate} presents a number of alternative 95\% confidence intervals for the effects of \emph{malfal} and \emph{rule}, respectively. The first row gives the traditional asymptotic confidence interval from Table \ref{tab:fullresults}, while the following three give simulation-based intervals accounting for the effects of instrument selection. I do not present intervals for the conservative procedure given in Algorithm \ref{alg:conf} because the results in this example are so insensitive to the value of $\tau$ that the minimization and maximization problems given in Step 2 of the Algorithm are badly behaved. To illustrate this, I instead present intervals that use the same simulation procedure as Algorithm \ref{alg:conf} but treat $\tau$ as fixed. I consider four possible values of the bias parameter. When $\tau = \widehat{\tau}$, we have the one-step corrected interval considered in Table \ref{tab:FMSCnaive}. When $\tau = 0$, we have an interval that assumes all instruments are valid. The remaining two values $\widehat{\tau}_{min}$ and $\widehat{\tau}_{max}$ correspond to the lower and upper bounds of \emph{elementwise} 95\% confidence intervals for $\tau$ based on the distributional result given in Theorem \ref{pro:tau}. These result in a region with greater than 95\% coverage for $\tau$ considered jointly. Corrected 95\% intervals for the effect of \emph{malfal} are similar regardless of the value of $\tau$ used in the simulation, and the same is true for \emph{rule}. We find no evidence that accounting for the effects of instrument selection changes our conclusions about the sign or significance of \emph{malfal} or \emph{rule}.
+The bottom panel of Table \ref{tab:replicate} presents a number of alternative 95\% confidence intervals for the effects of \emph{malfal} and \emph{rule}, respectively. The first row gives the traditional asymptotic confidence interval from Table \ref{tab:fullresults}, while the following three give simulation-based intervals accounting for the effects of instrument selection. I do not present intervals for the conservative procedure given in Algorithm \ref{alg:conf} because the results in this example are so insensitive to the value of $\tau$ that the minimization and maximization problems given in Step 2 of the Algorithm are badly behaved. To illustrate this, I instead present intervals that use the same simulation procedure as Algorithm \ref{alg:conf} but treat $\tau$ as fixed. I consider four possible values of the bias parameter. When $\tau = \widehat{\tau}$, we have the one-step corrected interval considered in Table \ref{tab:FMSCnaive}. When $\tau = 0$, we have an interval that assumes all instruments are valid. The remaining two values $\widehat{\tau}_{min}$ and $\widehat{\tau}_{max}$ correspond to the lower and upper bounds of \emph{elementwise} 95\% confidence intervals for $\tau$ based on the distributional result given in Theorem \ref{thm:tau}. These result in a region with greater than 95\% coverage for $\tau$ considered jointly. Corrected 95\% intervals for the effect of \emph{malfal} are similar regardless of the value of $\tau$ used in the simulation, and the same is true for \emph{rule}. We find no evidence that accounting for the effects of instrument selection changes our conclusions about the sign or significance of \emph{malfal} or \emph{rule}.
 
 \begin{table}[htbp]
 \caption{FMSC values and confidence intervals for instrument sets 1--8.}
@@ -1156,7 +1161,7 @@ Essentially identical to the proofs of \cite{NeweyMcFadden1994} Theorems 2.6 and
 
 
 
-\begin{proof}[Proof of Theorem \ref{pro:tau}]
+\begin{proof}[Proof of Theorem \ref{thm:tau}]
 By a mean-value expansion:
 	\begin{eqnarray*}
 	\widehat{\tau} &=& \sqrt{n} h_n\left(\widehat{\theta}_{v}\right) = \sqrt{n}h_n(\theta_0) + H \sqrt{n}\left(\widehat{\theta}_{v} - \theta_0\right) + o_p(1)\\
@@ -1170,7 +1175,7 @@ The result follows since $\sqrt{n}f_n(\theta_0) \rightarrow_d M + (0', \tau')'$ 
 
 
 \begin{proof}[Proof of Corollary \ref{cor:tautau}]
-By Theorem \ref{pro:tau} and the Continuous Mapping Theorem, we have $\widehat{\tau}\widehat{\tau}' \rightarrow_d UU'$  where $U =\Psi M + \tau$. Since $E[M]=0$, $E[UU'] = \Psi \Omega \Psi' + \tau\tau'$. 
+By Theorem \ref{thm:tau} and the Continuous Mapping Theorem, we have $\widehat{\tau}\widehat{\tau}' \rightarrow_d UU'$  where $U =\Psi M + \tau$. Since $E[M]=0$, $E[UU'] = \Psi \Omega \Psi' + \tau\tau'$. 
 \end{proof}
 
 
@@ -1217,7 +1222,7 @@ Rearranging,
 		\p\left\{\mu_{true} \in \mbox{CI}_{sim} \right\} %&=& \p\left\{ \widehat{\mu} - \widehat{b}_0(\widehat{\tau})/\sqrt{n}\leq \mu_{true}\leq \widehat{\mu} - \widehat{a}_0(\widehat{\tau})/\sqrt{n} \right\}\\
 		&=& \p\left\{\widehat{a}_0(\widehat{\tau}) \leq  \sqrt{n}\left(\widehat{\mu} - \mu_{true}\right) \leq \widehat{b}_0(\widehat{\tau}) \right\}
 \end{eqnarray*}
-By Theorem \ref{pro:tau} and Corollary \ref{cor:momentavg}, we have \emph{joint} convergence in distribution of $\sqrt{n}(\hat{\mu} - \mu_{true})$ to $\Lambda(\tau)$, $\widehat{\Delta}(\widehat{\tau},\tau)$ to $\Delta(\Psi M,\tau)$, $\widehat{a}_{min}(\widehat{\tau})$ to $a_{min}(\Psi M)$ and $\widehat{b}_{max}(\widehat{\tau})$ to $b_{max}(\Psi M)$ where
+By Theorem \ref{thm:tau} and Corollary \ref{cor:momentavg}, we have \emph{joint} convergence in distribution of $\sqrt{n}(\hat{\mu} - \mu_{true})$ to $\Lambda(\tau)$, $\widehat{\Delta}(\widehat{\tau},\tau)$ to $\Delta(\Psi M,\tau)$, $\widehat{a}_{min}(\widehat{\tau})$ to $a_{min}(\Psi M)$ and $\widehat{b}_{max}(\widehat{\tau})$ to $b_{max}(\Psi M)$ where
 $a_{min}(\Psi M)=\min \left\{a(\tau)\colon \tau \in T(\delta)\right\}$, $b_{max}(\Psi M)=\max \left\{b(\tau)\colon \tau \in T(\delta)\right\}$, $T(\delta) = \left\{\tau \colon  \Delta(\Psi M, \tau) \leq \chi^2_q(\delta) \right\}$ and $\Delta(\Psi M, \tau)=\left(\Psi M - \tau \right)'\left(\Psi \Omega \Psi'\right)^{-1}\left(\Psi M - \tau \right)$.
 By the Continuous Mapping Theorem,
 	$$\p\left[  \widehat{a}_{min}(\widehat{\tau}) \leq \sqrt{n}\left( \widehat{\mu}-\mu_{true}\right)\leq  \widehat{b}_{max}(\widehat{\tau}) \right] \rightarrow\p \left[ a_{min}(\Psi M) \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right]$$
