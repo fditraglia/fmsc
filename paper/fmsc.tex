@@ -26,7 +26,6 @@
 
 
 \newcommand{\p}{\mathbb{P}}
-\newcommand{\expect}{\mathbb{E}}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
 \newtheorem{assump}{Assumption}[section]
@@ -50,7 +49,7 @@
 
 
 
-\title{Using Invalid Instruments on Purpose: Focused Moment Selection and Averaging for GMM\footnote{I thank Gerda Claeskens, Bruce Hansen, Byunghoon Kang, Toru Kitagawa, Hannes Leeb, Serena Ng, Alexei Onatski, Hashem Pesaran, Benedikt P\"{o}tscher, Neil Shephard,  Richard J.\ Smith, Stephen Thiele, Melvyn Weeks, as well as seminar participants at Cambridge, the University of Vienna, Queen Mary, St Andrews, George Washington, UPenn, Columbia, Oxford, and the 2011 Econometric Society European Meetings for their many helpful comments and suggestions. I thank Kai Carstensen for providing data for my empirical example.}}
+\title{Using Invalid Instruments on Purpose: Focused Moment Selection and Averaging for GMM\footnote{I thank Aislinn Bohren, Gerda Claeskens, Bruce Hansen, Byunghoon Kang, Toru Kitagawa, Hannes Leeb, Serena Ng, Alexei Onatski, Hashem Pesaran, Benedikt P\"{o}tscher, Frank Schorfheide, Neil Shephard,  Richard J.\ Smith, Stephen Thiele, Melvyn Weeks, as well as seminar participants at Cambridge, the University of Vienna, Queen Mary, St Andrews, George Washington, UPenn, Columbia, Oxford, and the 2011 Econometric Society European Meetings for their many helpful comments and suggestions. I thank Kai Carstensen for providing data for my empirical example.}}
 
 \author{Francis J.\ DiTraglia \\ University of Pennsylvania}
 
@@ -100,13 +99,13 @@ Let $f(\cdot,\cdot)$ be a $(p+q)$-vector of moment functions of a random vector 
 \label{assump:drift}
 Let $\{Z_{ni}\colon 1\leq i \leq n, n =1, 2, \hdots\}$ be a triangular array of random vectors defined on a probability space $(\Upsilon, \mathcal{F}, \p)$ satisfying
 	\begin{enumerate}[(a)]
-		\item $\expect[g(Z_{ni},\theta_0)] = 0$,
-		\item $\expect[h(Z_{ni},\theta_0)] = n^{-1/2}\tau$, where $\tau$ is an unknown constant vector, 
+		\item $E[g(Z_{ni},\theta_0)] = 0$,
+		\item $E[h(Z_{ni},\theta_0)] = n^{-1/2}\tau$, where $\tau$ is an unknown constant vector, 
 		\item $\{f(Z_{ni},\theta_0)\colon 1\leq i \leq n, n = 1, 2, \hdots\}$ is uniformly integrable, and
 		\item $Z_{ni} \rightarrow_dZ_i$, where the $Z_i$ are identically distributed.
 	\end{enumerate}
 \end{assump}
-For any fixed sample size $n$, the expectation of $h$ evaluated at the true parameter value value $\theta_0$ depends on the unknown constant vector $\tau$. Unless all components of $\tau$ are zero, some of the moment conditions contained in $h$ are mis-specified. In the limit however, this mis-specification vanishes, as $\tau/\sqrt{n}$ converges to zero. Uniform integrability combined with weak convergence implies convergence of expectations, so that $\expect[g(Z_i, \theta_0)]=0$ and $\expect[h(Z_i, \theta_0)]=0$. Because the limiting random vectors $Z_i$ are identically distributed, we suppress the $i$ subscript and simply write $Z$ to denote their common marginal law, e.g.\ $\expect[h(Z,\theta_0)]=0$. It is important to note that local mis-specification is \emph{not} intended as a literal description of real-world datasets: it is merely a device that gives asymptotic bias-variance trade-off that mimics the finite-sample intuition. 
+For any fixed sample size $n$, the expectation of $h$ evaluated at the true parameter value value $\theta_0$ depends on the unknown constant vector $\tau$. Unless all components of $\tau$ are zero, some of the moment conditions contained in $h$ are mis-specified. In the limit however, this mis-specification vanishes, as $\tau/\sqrt{n}$ converges to zero. Uniform integrability combined with weak convergence implies convergence of expectations, so that $E[g(Z_i, \theta_0)]=0$ and $E[h(Z_i, \theta_0)]=0$. Because the limiting random vectors $Z_i$ are identically distributed, we suppress the $i$ subscript and simply write $Z$ to denote their common marginal law, e.g.\ $E[h(Z,\theta_0)]=0$. It is important to note that local mis-specification is \emph{not} intended as a literal description of real-world datasets: it is merely a device that gives asymptotic bias-variance trade-off that mimics the finite-sample intuition. 
 
 \subsection{Candidate GMM Estimators}
 Define the sample analogue of the expectations in Assumption \ref{assump:drift} as follows:
@@ -116,7 +115,7 @@ $$\widehat{\theta}_S = \argmin_{\theta \in \Theta}\; \left[\Xi_S f_n(\theta)\rig
 where $\widetilde{W}_S$ is an $|S|\times |S|$, positive semi-definite weight matrix. Note we place no restrictions on $S$ other than $|S| >r$ so that the estimator exists. In particular, $S$ may \emph{exclude} some or all of the valid moment conditions contained in $g$. While this may seem strange, it allows us to accomodate a wider range of examples, including choosing between least squares and instrumental variables estimators.
 
 To consider the limit distribution of $\widehat{\theta}_S$, we require some further notation. First define the derivative matrices
-	$$G = \expect\left[\nabla_{\theta} \; g(Z,\theta_0)\right], \quad H = \expect\left[\nabla_{\theta} \; h(Z,\theta_0)\right], \quad F = (G', H')'$$
+	$$G = E\left[\nabla_{\theta} \; g(Z,\theta_0)\right], \quad H = E\left[\nabla_{\theta} \; h(Z,\theta_0)\right], \quad F = (G', H')'$$
 and let $\Omega = Var\left[ f(Z,\theta_0) \right]$ where $\Omega$ is partitioned into blocks $\Omega_{gg}$, $\Omega_{gh}$, $\Omega_{hg}$, and $\Omega_{hh}$ conformably with the partition of $f$ by $g$ and $h$. Notice that each of these expressions involves the \emph{limiting random variable} $Z$ rather than $Z_{ni}$, so that the corresponding expectations are taken with respect to a distribution for which all moment conditions are correctly specified. Finally, to avoid repeatedly writing out pre- and post-multiplication by $\Xi_S$, define $F_S = \Xi_S F$ and $\Omega_S = \Xi_S \Omega\Xi_S'$. The following high level assumptions are sufficient for the consistency and asymptotic normality of the candidate GMM estimator $\widehat{\theta}_S$. 
 \begin{assump}[High Level Sufficient Conditions]
 \label{assump:highlevel} 
@@ -124,9 +123,9 @@ and let $\Omega = Var\left[ f(Z,\theta_0) \right]$ where $\Omega$ is partitioned
 	\begin{enumerate}[(a)]
 		\item $\theta_0$ lies in the interior of $\Theta$, a compact set
 		\item $\widetilde{W}_S \rightarrow_{p} W_S$, a positive definite matrix
-		\item $W_S \Xi_S \expect[f(Z,\theta)]=0$ if and only if $\theta = \theta_0$
-		\item $\expect[f(Z,\theta)]$ is continuous on $\Theta$
-		\item $\sup_{\theta \in \Theta}\| f_n(\theta)- \expect[f(Z,\theta)]\|\rightarrow_{p} 0$
+		\item $W_S \Xi_S E[f(Z,\theta)]=0$ if and only if $\theta = \theta_0$
+		\item $E[f(Z,\theta)]$ is continuous on $\Theta$
+		\item $\sup_{\theta \in \Theta}\| f_n(\theta)- E[f(Z,\theta)]\|\rightarrow_{p} 0$
 		\item $f$ is Z-almost surely differentiable in an open neighborhood $\mathcal{B}$ of $\theta_0$
 		\item $\sup_{\theta \in \Theta} \|\nabla_{\theta}f_n(\theta) - F(\theta)\|\rightarrow_{p} 0$
 		\item $\sqrt{n}f_n(\theta_0) \rightarrow_d  M + \left[\begin{array}{c}0\\ \tau \end{array} \right]$ where $M \sim N_{p+q}\left(0, \Omega \right)$
@@ -225,7 +224,7 @@ where $\mathbf{0}$ is a vector of zeros, and $\tau$ is an unknown constant that 
 	\end{enumerate}
 \end{assump}
 
-\todo[inline]{Comment on the assumptions. Basically standard. Which ones are for the CLT? Assumption (e) is the homoskedasticity assumption: it only places an asymptotic restriction. Proof of following is standard and hence omitted. Just substitute DGP, use Lindeberg-Feller, and $L_2$ WLLN. Only step worth commenting on is checking the Lindeberg condition.}
+\todo[inline]{Comment on the assumptions. Basically standard. Which ones are for the CLT? Assumption (e) is the homoskedasticity assumption: it only places an asymptotic restriction. Note that when the errors are normally distributed, this follows immediately from Isserli's Theorem. See Wiki. Proof of following Theorem is standard and hence omitted. Just substitute DGP, use Lindeberg-Feller, and $L_2$ WLLN. Only step worth commenting on is checking the Lindeberg condition.}
 
 \begin{thm}[OLS and 2SLS Limit Distributions]
 	\label{thm:OLSvsIV} Under Assumption \ref{assump:OLSvsIV},
@@ -249,10 +248,9 @@ N\left(
   \end{array}\right]
   \right)
 $$
-where $\sigma_x^2 = \gamma^2 + \sigma_v^2$ and $\gamma^2 = \boldsymbol{\pi}'Q_z \boldsymbol{\pi}$.
+where $\sigma_x^2 = \gamma^2 + \sigma_v^2$, $\gamma^2 = \boldsymbol{\pi}'Q_z \boldsymbol{\pi}$, and $Q_z$, $ \sigma_\epsilon^2$, and $\sigma_v^2$ are defined in Assumption \ref{assump:OLSvsIV}.
 \end{thm}
-
-\todo[inline]{Comment on the asymptotics. See how OLS has a lower variance for sure but is asymptotically biased unless $\tau = 0$.}
+We see from the preceding result that the variance of the OLS estimator is always strictly lower than that of the 2SLS estimator since $\sigma^2_\epsilon/\sigma_x^2 = \sigma^2_\epsilon/(\gamma^2 + \sigma_v^2)$. Unless $\tau = 0$, however, OLS shows an asymptotic bias. In contrast, the 2SLS estimator is asymptotically unbiased regardless of the value of $\tau$. 
 
 \section{The Focused Moment Selection Criterion}
 \label{sec:FMSC}
@@ -305,10 +303,27 @@ When $r > p$,  $\theta_0$ is not estimable by $\widehat{\theta}_v$ so $\widehat{
 
 
 
-\subsection{FMSC for Instrument Selection Example}
-\todo[inline]{In this example we're choosing overidentifying restrictions}
 
 \subsection{FMSC for OLS versus 2SLS Example}
+The FMSC has a particularly convenient and transparent form in the OLS versus 2SLS example. Since the target parameter in this case is simply $\beta$, the FMSC amounts to comparing the AMSE of OLS to that of 2SLS. As an immediate consequence of Theorem \ref{thm:OLSvsIV}, we have
+$$\mbox{AMSE(OLS)} = \frac{\tau^2}{\sigma_x^4} + \frac{\sigma_\epsilon^2}{\sigma_x^2},\quad \quad
+  \mbox{AMSE(2SLS)} = \frac{\sigma_\epsilon^2}{\gamma^2}$$
+ Rearranging, we see that the AMSE of the OLS estimator is strictly less than that of the 2SLS estimator whenever
+ $$\tau^2  < \sigma_x^2 \sigma_\epsilon^2\left(\frac{\sigma_v^2}{\gamma^2}\right)$$
+ To implement this expression, we need to estimate the unknowns. The familiar estimators of $\sigma_x^2, \gamma^2$, and $\sigma_v^2$ remain consistent under Assumption \ref{assump:OLSvsIV}
+ \begin{eqnarray*}
+  	\widehat{\sigma}_x^2 &=& n^{-1}\mathbf{x}'\mathbf{x} \rightarrow_p \boldsymbol{\pi}Q_z \boldsymbol{\pi} + \sigma_v^2\\
+  	\widehat{\gamma}^2 &=& n^{-1}\mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x} \rightarrow_p \boldsymbol{\pi}Q_z \boldsymbol{\pi}\\
+  	\widehat{\sigma}_v^2 &=&  \widehat{\sigma}_x^2 - \widehat{\gamma}^2 \rightarrow_p \sigma_v^2
+  \end{eqnarray*} 
+so all that remains is to estimate the squared bias parameter $\tau^2$.
+
+$\widehat{\tau} =  n^{-1/2} \mathbf{x}'\left(\mathbf{y} - \mathbf{x}\widetilde{\beta}_{2SLS}\right) \rightarrow_d N(\tau,V)$
+
+$V =\sigma_\epsilon^2 \sigma_x^2(\sigma_x^2/\gamma^2 - 1) =  \sigma_\epsilon^2 \sigma_x^2(\sigma_v^2/\gamma^2)$
+
+\subsection{FMSC for Instrument Selection Example}
+\todo[inline]{In this example we're choosing overidentifying restrictions} As in the preceding example, the target parameter here is $\beta$.
 
 \subsection{OLD VERSION: FMSC for 2SLS Instrument Selection}\label{sec:2sls}
 \todo[inline]{This section will eventually be replaced by the example I'll merge in from \texttt{metrica\_revisions.tex}.}
@@ -316,11 +331,11 @@ This section specializes FMSC to a case of particular applied interest: instrume
 In this case Assumption \ref{assump:drift} becomes
 \begin{equation}
 \label{eq:linear}
-	\expect\left[\begin{array}{c} \mathbf{z}^{(1)}_{ni} \left(y_{ni} - \mathbf{x}_{ni}' \theta_0  \right)  \\ \mathbf{z}^{(2)}_{ni} \left(y_{ni} - \mathbf{x}_{ni}' \theta_0  \right) \end{array}  \right] = \left[\begin{array}{c} \mathbf{0}\\ \tau/\sqrt{n}  \end{array}\right]
+	E\left[\begin{array}{c} \mathbf{z}^{(1)}_{ni} \left(y_{ni} - \mathbf{x}_{ni}' \theta_0  \right)  \\ \mathbf{z}^{(2)}_{ni} \left(y_{ni} - \mathbf{x}_{ni}' \theta_0  \right) \end{array}  \right] = \left[\begin{array}{c} \mathbf{0}\\ \tau/\sqrt{n}  \end{array}\right]
 \end{equation}
 where $(y_{ni},\mathbf{x}_{ni}',\mathbf{z}_{ni}')\rightarrow_d(y_i,\mathbf{x}_{i}',\mathbf{z}_{i}')$ for each $i$, and the $(y_i,\mathbf{x}_{i}',\mathbf{z}_{i}')$ are iid. Stacking observations, let $X = \left(\mathbf{x}_{n1}, \hdots, \mathbf{x}_{nn} \right)'$, $y = \left( y_{n1}, \hdots, y_{nn}\right)'$, $Z_1 = (\mathbf{z}^{(1)}_{n1}, \hdots, \mathbf{z}^{(1)}_{nn} )'$, $Z_2 = (\mathbf{z}^{(2)}_{n1}, \hdots, \mathbf{z}^{(2)}_{nn})'$, and $Z = (Z_1, Z_2)$. Further define $u_{ni}(\theta) = y_{ni} - \mathbf{x}_{ni}'\theta$ and $u(\theta) = y - X\theta$. The 2SLS estimator of $\theta_0$ under instrument set $S$ is given by $\widehat{\theta}_{S} = \left[X'P_SX\right]^{-1} X'P_S y$ where $Z_S = Z\Xi_S'$ and $P_S = Z_S(Z_S'Z_S)^{-1}Z_S'$. Similarly, the full estimator is $\widehat{\theta}_{f} = \left[X' P_Z X\right]^{-1} X' P_Z y$ while the valid estimator is $\widehat{\theta}_{v} = \left[X' P_{Z_1} X\right]^{-1} X' P_{Z_1}y$. Let $\mathbf{z}_S = \Xi_S \mathbf{z}$. Then, the matrix $K_S$ becomes
 \begin{equation}
-	K_S = - \left( \expect\left[\mathbf{x}\mathbf{z}'_S\right]\left(\expect[\mathbf{z}_S\mathbf{z}'_S] \right)^{-1} \expect\left[\mathbf{z}'_S \mathbf{x}\right]\right)^{-1} \expect\left[\mathbf{x}\mathbf{z}'_S\right]\left(\expect[\mathbf{z}_S\mathbf{z}'_S]\right)^{-1}. 
+	K_S = - \left( E\left[\mathbf{x}\mathbf{z}'_S\right]\left(E[\mathbf{z}_S\mathbf{z}'_S] \right)^{-1} E\left[\mathbf{z}'_S \mathbf{x}\right]\right)^{-1} E\left[\mathbf{x}\mathbf{z}'_S\right]\left(E[\mathbf{z}_S\mathbf{z}'_S]\right)^{-1}. 
 \end{equation}
 where $\left(\mathbf{x}', \mathbf{z}'\right)$ is shorthand for $\left(\mathbf{x}_i', \mathbf{z}_i'\right)$, the limiting law of  $\left(\mathbf{x}_{ni}', \mathbf{z}_{ni}'\right)$. Because the observations are iid for fixed $n$, $\Omega = \lim_{n\rightarrow \infty} Var\left[\mathbf{z}_{ni}u_{ni}(\theta_0)  \right]$. This allows for conditional but not unconditional heteroscedasticity.
 
