@@ -213,27 +213,46 @@ where $\mathbf{0}$ is a vector of zeros, and $\tau$ is an unknown constant that 
 
 
 \todo[inline]{Simple sufficient conditions. Many of these could be easily weakened. These are merely illustrative.}
-\begin{assump}[OLS versus 2SLS]\label{assump:OLSvsIVlocal}
-
+\begin{assump}[OLS versus 2SLS]\label{assump:OLSvsIV}
 	Let $\{(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})\colon 1\leq i \leq n, n = 1, 2, \hdots\}$ be a triangular array of random variables such that
 	\begin{enumerate}[(a)]
 		\item $(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni}) \sim$ iid and mean zero within each row of the array (i.e.\ for fixed $n$)
-		\item $E[\mathbf{z}_{ni} \epsilon_{ni}]=\mathbf{0}$ and $E[\epsilon_{ni}v_{ni}] = \tau/\sqrt{n}$ for all $n$
-		\item $E[\mathbf{z}_{ni} \mathbf{z}_{ni}]$
+		\item $E[\mathbf{z}_{ni} \epsilon_{ni}]=\mathbf{0}$, and $E[\epsilon_{ni}v_{ni}] = \tau/\sqrt{n}$ for all $n$
 		\item $E[\left|\mathbf{z}_{ni}\right|^{4+\eta}] <C$, $E[\left|\epsilon_{ni}\right|^{4+\eta}] <C$, and $E[\left|v_{ni}\right|^{4+\eta}] <C$ for some $\eta >0$, $C <\infty$
+		\item $E[\mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow Q_z>0$, $E[v_{ni}^2]\rightarrow \sigma_v^2 >0$, and $E[\epsilon_{ni}^2] \rightarrow \sigma_\epsilon^2 >0$ as $n\rightarrow \infty$
+		\item $\left(E[v_{ni}\epsilon_{ni}^2] - E[v_{ni}]E[\epsilon_{ni}^2]\right) \rightarrow 0$ and $\left(E[v_{ni}^2 \epsilon_{ni}^2] - E[v_{ni}^2]E[\epsilon_{ni}^2]\right)\rightarrow 0$ as $n\rightarrow \infty$
 		\item $x_{ni} = \mathbf{z}_{ni}'\boldsymbol{\pi} + v_i$ where $\boldsymbol{\pi} \neq \mathbf{0}$, and $y_{ni} = \beta x_{ni} + \epsilon_{ni}$
 	\end{enumerate}
 \end{assump}
 
-\begin{thm}[Limit Distribution of OLS and 2SLS Estimators]
-	
+\todo[inline]{Comment on the assumptions. Basically standard. Which ones are for the CLT? Assumption (e) is the homoskedasticity assumption: it only places an asymptotic restriction. Proof of following is standard and hence omitted. Just substitute DGP, use Lindeberg-Feller, and $L_2$ WLLN. Only step worth commenting on is checking the Lindeberg condition.}
+
+\begin{thm}[OLS and 2SLS Limit Distributions]
+	\label{thm:OLSvsIV} Under Assumption \ref{assump:OLSvsIV},
+	$$
+\left[
+\begin{array}{c}
+  \sqrt{n}(\widehat{\beta}_{OLS} - \beta) \\
+  \sqrt{n}(\widetilde{\beta}_{2SLS} - \beta)
+\end{array}
+\right] \overset{d}{\rightarrow}
+N\left(
+\left[
+\begin{array}{c}
+\tau/\sigma_x^2 \\ 
+0
+\end{array}
+\right],\;
+\sigma_\epsilon^2 \left[ \begin{array}{cc}
+  1/\sigma_x^2 & 1/\sigma_x^2\\
+  1/\sigma_x^2 & 1/\gamma^2 
+  \end{array}\right]
+  \right)
+$$
+where $\sigma_x^2 = \gamma^2 + \sigma_v^2$ and $\gamma^2 = \boldsymbol{\pi}'Q_z \boldsymbol{\pi}$.
 \end{thm}
 
-
-
-\subsection{Sufficient Conditions for the Examples}
-\label{sec:sufficient}
-
+\todo[inline]{Comment on the asymptotics. See how OLS has a lower variance for sure but is asymptotically biased unless $\tau = 0$.}
 
 \section{The Focused Moment Selection Criterion}
 \label{sec:FMSC}
