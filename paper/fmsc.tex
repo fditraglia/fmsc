@@ -191,12 +191,13 @@ Both Assumptions \ref{assump:Andrews} and \ref{assump:Identification} are strong
 \subsection{Example: Choosing Instrumental Variables}
 
 \subsection{Example: OLS versus 2SLS}
-The preceding example had a simple, nested structure: it amounted to choosing \emph{overidentifying restrictions}. The FMSC, however, does not rely upon this structure. It is entirely possible to carry out selection over estimators that are all just identified and which are based on \emph{non-nested} collections of moment conditions. The simplest interesting example of non-nested moment sets is choosing between ordinary least squares (OLS) and two-stage least squares (2SLS) to estimate the effect $\beta$ of a single endogenous regressor $x$ on an outcome of interest $y$. Assume without loss of generality that there are no exogenous regressors, or equivalently that they have been ``projected out,'' so that the data generating process is
+The preceding example had a simple, nested structure: it amounted to choosing \emph{overidentifying restrictions}. The FMSC, however, does not rely upon this structure. To illustrate how the FMSC can be used to choose between non-nested moment sets and and estimators that may be just identified, we consider a familiar example: choosing between 
+ordinary least squares (OLS) and two-stage least squares (2SLS) estimators. To keep the presentation simple, suppose that our goal is to estimate the effect $\beta$ of a single endogenous regressor $x$ on an outcome of interest $y$ in an iid, homoskedastic setting.\footnote{The results presented here are readily generalized to other settings.} Without loss of generality we may assume that there are no exogenous regressors, or equivalently that they have been ``projected out of the system,'' so that the data generating process is given by
     \begin{eqnarray}
 			y_{i} &=& \beta x_{i}  + \epsilon_{i}\\
 	x_{i} &=& \mathbf{z}_{i}' \boldsymbol{\pi} + v_{i}
 	\end{eqnarray}
-where $\beta$ and $\pi$ are unknown constants, $\mathbf{z}_i$ is a vector of instruments, $x_i$ is the endogenous regressor, $y_i$ is the outcome of interest, and $\epsilon_i, v_i$ are unobservable error terms. For simplicity we will consider an iid, homoskedastic setting but all of the results presented here are readily generalized to other settings.	
+where $\beta$ and $\pi$ are unknown constants, $\mathbf{z}_i$ is a vector of instruments, $x_i$ is the endogenous regressor, $y_i$ is the outcome of interest, and $\epsilon_i, v_i$ are unobservable error terms. 	
 
 \begin{assump}[Primitive Conditions for OLS versus 2SLS Example]
 	\label{assump:OLSvsIVlocal}
