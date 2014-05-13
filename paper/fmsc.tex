@@ -312,8 +312,8 @@ The FMSC has a particularly convenient and transparent form in the OLS versus 2S
 $$\mbox{AMSE(OLS)} = \frac{\tau^2}{\sigma_x^4} + \frac{\sigma_\epsilon^2}{\sigma_x^2},\quad \quad
   \mbox{AMSE(2SLS)} = \frac{\sigma_\epsilon^2}{\gamma^2}$$
  Rearranging, we see that the AMSE of the OLS estimator is strictly less than that of the 2SLS estimator whenever $\tau^2  < \sigma_x^2 \sigma_\epsilon^2\sigma_v^2/\gamma^2$. To use this expression for moment selection we need to estimate the unknown parameters. Fortunately, the familiar estimators of $\sigma_x^2, \gamma^2$, and $\sigma_v^2$ remain consistent under Assumption \ref{assump:OLSvsIV} so we set
- $$\widehat{\sigma}_x^2 = n^{-1}\mathbf{x}'\mathbf{x}, \quad \widehat{\gamma}^2 = n^{-1}\mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x}, \quad \widehat{\sigma}_v^2 =  \widehat{\sigma}_x^2 - \widehat{\gamma}^2$$
-To estimate $\sigma_\epsilon^2$ we have two choices: we can either use the residuals from the OLS estimator or those from the 2SLS estimator. Under local mis-specification, both provide a consistent estimator of $\sigma_\epsilon^2$. We would expect the estimator based on the 2SLS residuals to be more robust, however, unless the instruments are quite weak. This is because the exogeneity of $x$, even though it disappears in the limit, is non-zero in finite samples. Thus, we use 
+ $$\widehat{\sigma}_x^2 = n^{-1}\mathbf{x}'\mathbf{x}, \quad \widehat{\gamma}^2 = n^{-1}\mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x}, \quad \widehat{\sigma}_v^2 =  \widehat{\sigma}_x^2 - \widehat{\gamma}^2.$$
+To estimate $\sigma_\epsilon^2$ we have two choices: we can either use the residuals from the OLS estimator or those from the 2SLS estimator. Under local mis-specification, both provide a consistent estimator of $\sigma_\epsilon^2$. We would expect the estimator based on the 2SLS residuals to be more robust, however, unless the instruments are quite weak. This is because the exogeneity of $x$, even though it disappears in the limit under our asymptotics, is non-zero in finite samples. Thus, we use 
 	$$\widehat{\sigma}_\epsilon^2 = n^{-1}\left(\textbf{y} - \textbf{x}\widetilde{\beta}_{2SLS} \right)'\left(\textbf{y} - \textbf{x}\widetilde{\beta}_{2SLS} \right)$$
 to estimate $\sigma_\epsilon^2$ below. All that remains is to estimate $\tau^2$. Specializing Theorem \ref{thm:tau} and Corollary \ref{cor:tautau} to the present example gives the following result.
 \begin{thm}
@@ -324,14 +324,14 @@ to estimate $\sigma_\epsilon^2$ below. All that remains is to estimate $\tau^2$.
 It follows that $\widehat{\tau}^2 -  \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2 \left(\widehat{\sigma}_v^2/\widehat{\gamma}^2\right)$ is an asymptotically unbiased estimator of $\tau^2$ and hence, substituting into the AMSE inequality from above and rearranging, the FMSC instructs us to choose OLS whenever $\widehat{T}_{FMSC} = \widehat{\tau}^2/\widehat{V} < 2$
 where $\widehat{V} = \widehat{\sigma}_v^2 \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2/\widehat{\gamma}^2$. The quantity $\widehat{T}_{FMSC}$ looks very much like a test statistic and indeed it can be viewed as such. By Theorem \ref{thm:tauOLSvsIV} and the continuous mapping theorem, $\widehat{T}_{FMSC} \rightarrow_d \chi^2(1)$. This means that we can interpret the FMSC as a test of the null hypothesis $H_0\colon \tau = 0$ against the two-sided alternative with a critical value of $2$. This corresponds to a significance level of $\alpha \approx 0.16$. 
 
-But how does this novel test statistic compare to something more familiar, say the Durbin-Hausman-Wu (DHW) test? It turns out that in this example, although not in others, the FMSC is \emph{numerically equivalent} to carrying out a DHW test with a critical value of 2. We can see this as follows. First, by Theorem \ref{thm:tauOLSvsIV}, 
+But how does this novel ``test'' compare to something more familiar, say the Durbin-Hausman-Wu (DHW) test? It turns out that in this particular example, although not in general, carrying out moment selection via the FMSC is \emph{numerically equivalent} to using OLS unless the DHW test rejects at the 16\% level. In other words, $\widehat{T}_{FMSC} = \widehat{T}_{DHW}$. To see why this is so first note that 
 $$ \sqrt{n}\left(\widehat{\beta}_{OLS} - \widetilde{\beta}_{2SLS}\right) =\left[\begin{array}{cc}
     1 & -1
     \end{array}\right] \sqrt{n} \left(\begin{array}{c}
     \widehat{\beta}_{OLS} - \beta  \\ \widetilde{\beta}_{2SLS} - \beta
     \end{array} \right) \rightarrow_d N\left(\tau/\sigma_x^2, \Sigma
     \right).$$
-where
+by Theorem \ref{thm:tauOLSvsIV}, where
 	$$\Sigma = \mbox{AVAR(2SLS)} - \mbox{AVAR(OLS)} = \sigma_\epsilon^2 \left(1/\gamma^2 - 1/\sigma_x^2 \right).$$
 Thus, under $H_0 \colon \tau = 0$, the DHW test statistic 
 $$\widehat{T}_{DHW} = n\, \widehat{\Sigma}^{-1}(\widehat{\beta}_{OLS} - \widetilde{\beta}_{2SLS})^2 = \frac{n(\widehat{\beta}_{OLS} - \widetilde{\beta}_{2SLS})^2}{ \widehat{\sigma}_\epsilon^2 \left(1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2 \right)}$$
@@ -340,11 +340,8 @@ $$\widehat{V} = \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2\left(\frac{\wid
 using the fact that $\widehat{\sigma}_v = \widehat{\sigma}_x^2 - \widehat{\gamma}^2$. Thus, to show that $\widehat{T}_{FMSC} = \widehat{T}_{DHW}$, all that remains is to establish that $\widehat{\tau}^2 = n\widehat{\sigma}_x^4 (\widehat{\beta}_{OLS} - \widetilde{\beta}_{2SLS})^2$, which we obtain as follows:
     $$\widehat{\tau}^2  =  \left[n^{-1/2} \textbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})\right]^2 = n^{-1}\left[\mathbf{x}'\mathbf{x} \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2 = n^{-1}\left[n \widehat{\sigma}_x^2 \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2.$$
 
+The equivalence between FMSC selection and a DHW test in the OLS versus 2SLS example has two useful implications. First, it provides a novel justification for the use of the DHW test to select between OLS and 2SLS. So long as it is carried out with $\alpha \approx 16\%$, the DHW test is equivalent to selecting the estimator that minimizes an asymptotically unbiased estimator of AMSE. Note that this significance level differs from the more usual values of 5 or 10\% in that it leads us to select 2SLS \emph{more often}: OLS should indeed be given the benefit of the doubt, but not by so wide a margin as tradition suggests. Second, this equivalence shows that the FMSC can be viewed as an \emph{extension} of the machinery behind the familiar DHW test to more general GMM environments. Naturally each application of the FMSC should be evaluated on its own merits, but it is reassuring that the local mis-specification framework leads to a ``reasonable'' procedure in situations where it is possible to make a comparison with more familiar techniques.
 
-
-
-
-\todo[inline]{Novel justification for the familiar DHW test to select between OLS and 2SLS, but the critical value should be 2, corresponding to $\alpha \approx 0.16$ rather than more familiar values such as 0.05 and 0.1. This also means that we have reason to believe that the FMSC is doing something reasonable. }
 
 \subsection{FMSC for Instrument Selection Example}
 \todo[inline]{In this example we're choosing overidentifying restrictions} As in the preceding example, the target parameter here is $\beta$.
