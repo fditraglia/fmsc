@@ -199,7 +199,7 @@ Consider a linear instrumental variables (IV) model of the form
 where $y$ is an outcome of interest, $\mathbf{x}$ is a $p$-vector of regressors, some of which are endogenous, $\mathbf{z}^{(1)}$ is a $q_1$-vector of instruments known to be exogenous, and $\mathbf{z}^{(2)}$ is a $q_2$-vector  of \emph{potentially endogenous} instruments. The $p$-vector $\beta$, $q_1\times p$ matrix $\Pi_1$, and $q_2\times p$ matrix $\Pi_2$ contain unknown constants. Stacking observations in the usual way, let $\mathbf{y}' = (y_1, \hdots, y_n)$, $X' = (\mathbf{x}_1, \hdots, \mathbf{x}_n)$, $\boldsymbol{\epsilon} = (\epsilon_1, \hdots, \epsilon_n)$, 
 $Z_1' = (\mathbf{z}_{1}^{(1)}, \hdots, \mathbf{z}_{n}^{(1)})$, $Z_2' = (\mathbf{z}_{1}^{(2)}, \hdots, \mathbf{z}_{n}^{(2)})$, and $V' = (\mathbf{v}_1, \hdots, \mathbf{v}_n)$ where $n$ is the sample size. Using this notation, $\mathbf{y} = X\beta +\boldsymbol{\epsilon}$ and $X =  Z \Pi + V$, where $Z = (Z_1, Z_2)$ and $\Pi = (\Pi_1', \Pi_2')'$. 
 
-The question is whether to use any of the instruments contained in $Z_2$ in estimation. Tradeoff between plausibility of exclusion restriction and desire for strong instruments to reduce variance. 
+The question is whether to use any of the instruments contained in $Z_2$ in estimation. Tradeoff between plausibility of exclusion restriction and desire for strong instruments to reduce variance. In this example we will always include the instruments in $Z_1$ so selection is only carried out over $Z_2$.
 
 General linear GMM estimator:
 $$\widehat{\beta}_S = (X'Z_S \widetilde{W}_S Z_S' X)^{-1}X'Z_S \widetilde{W}_S  Z_S' \mathbf{y}$$
@@ -207,7 +207,7 @@ where $S$ indexes which, if any, of the instruments in $Z_2$ are used in estimat
 \begin{equation}
   E\left[\begin{array}
     {c}
-    \textbf{z}_{ni}^{(2)} (y_i - \textbf{x}_i\beta) \\
+    \textbf{z}_{ni}^{(1)} (y_i - \textbf{x}_i\beta) \\
     \textbf{z}_{ni}^{(2)} (y_i - \textbf{x}_i \beta)
 \end{array}\right] = \left[
   \begin{array}
@@ -217,6 +217,30 @@ where $S$ indexes which, if any, of the instruments in $Z_2$ are used in estimat
 \right]
 \end{equation}
 where $\mathbf{0}$ is a $q_1$-vector of zeros, and $\boldsymbol{\tau}$ is a $q_2$-vector of unknown constants.
+
+
+\begin{assump}[Choosing IVs]
+\label{assump:chooseIV} 
+	Let $\{(\mathbf{z}_{ni}, \mathbf{v}_{ni}, \epsilon_{ni})\colon 1\leq i \leq n, n = 1, 2, \hdots\}$ be a triangular array of random variables with $\mathbf{z}_{ni}' = (\mathbf{z}_{ni}^{(1)'}, \mathbf{z}_{ni}^{(1)'}) $ such that
+	\begin{enumerate}[(a)]
+		\item $(\mathbf{z}_{ni}, \mathbf{v}_{ni}, \epsilon_{ni}) \sim$ iid within each row of the array (i.e.\ for fixed $n$)
+		\item $E[\mathbf{v}_{ni}\mathbf{z}_{ni}']=\mathbf{0}$, $E[\mathbf{z}^{(1)}_{ni} \epsilon_{ni}]=\mathbf{0}$, and $E[\mathbf{z}^{(2)}_{ni} \epsilon_{ni}] = \boldsymbol{\tau}/\sqrt{n}$ for all $n$
+		\item $E[\left|\mathbf{z}_{ni}\right|^{4+\eta}] <C$, $E[\left|\epsilon_{ni}\right|^{4+\eta}] <C$, and $E[\left|\mathbf{v}_{ni}\right|^{4+\eta}] <C$ for some $\eta >0$, $C <\infty$
+		\item $E[\mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow Q>0$ and $E[\epsilon_{ni}^2 \mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow \Omega >0$ as $n\rightarrow \infty$
+		\item $\mathbf{x}_{ni} =  \Pi_1' \mathbf{z}_{ni}^{(1)} + \Pi_2'\mathbf{z}_{ni}^{(2)} + \mathbf{v}_{ni}$ where $\Pi_1 \neq \mathbf{0}$, $\Pi_2 \neq \mathbf{0}$, and $y_i = \mathbf{x}_{ni}' \beta +  \epsilon_{ni}$
+	\end{enumerate}
+\end{assump}
+
+\begin{thm}[Choosing IVs Limit Distribution] Suppose that $\widetilde{W}_S \rightarrow_p W_S >0$. Then, under Assumption \ref{assump:chooseIV}
+ $$\sqrt{n}\left(\widehat{\beta}_S - \beta \right) \overset{d}{\rightarrow} -K_S \Xi_S \left(\left[\begin{array}
+           {c} \mathbf{0} \\ \boldsymbol{\tau}
+         \end{array}\right] + M \right)$$
+  where $Q_S = Q_Z \Xi_S'$
+      \begin{eqnarray*}
+        -K_S &=& \left(\Pi' Q_S W_S Q_S'\Pi\right)^{-1} \Pi'Q_SW_S
+      \end{eqnarray*}
+and $Q, \Omega$ are defined in Assumption \ref{assump:chooseIV}.
+\end{thm}
 
 
 
@@ -252,7 +276,7 @@ where $\mathbf{0}$ is a vector of zeros, and $\tau$ is an unknown constant that 
 		\item $(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni}) \sim$ iid and mean zero within each row of the array (i.e.\ for fixed $n$)
 		\item $E[\mathbf{z}_{ni} \epsilon_{ni}]=\mathbf{0}$, and $E[\epsilon_{ni}v_{ni}] = \tau/\sqrt{n}$ for all $n$
 		\item $E[\left|\mathbf{z}_{ni}\right|^{4+\eta}] <C$, $E[\left|\epsilon_{ni}\right|^{4+\eta}] <C$, and $E[\left|v_{ni}\right|^{4+\eta}] <C$ for some $\eta >0$, $C <\infty$
-		\item $E[\mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow Q_z>0$, $E[v_{ni}^2]\rightarrow \sigma_v^2 >0$, and $E[\epsilon_{ni}^2] \rightarrow \sigma_\epsilon^2 >0$ as $n\rightarrow \infty$
+		\item $E[\mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow Q>0$, $E[v_{ni}^2]\rightarrow \sigma_v^2 >0$, and $E[\epsilon_{ni}^2] \rightarrow \sigma_\epsilon^2 >0$ as $n\rightarrow \infty$
 		\item $\left(E[v_{ni}\epsilon_{ni}^2] - E[v_{ni}]E[\epsilon_{ni}^2]\right) \rightarrow 0$ and $\left(E[v_{ni}^2 \epsilon_{ni}^2] - E[v_{ni}^2]E[\epsilon_{ni}^2]\right)\rightarrow 0$ as $n\rightarrow \infty$
 		\item $x_{ni} = \mathbf{z}_{ni}'\boldsymbol{\pi} + v_i$ where $\boldsymbol{\pi} \neq \mathbf{0}$, and $y_{ni} = \beta x_{ni} + \epsilon_{ni}$
 	\end{enumerate}
@@ -282,7 +306,7 @@ N\left(
   \end{array}\right]
   \right)
 $$
-where $\sigma_x^2 = \gamma^2 + \sigma_v^2$, $\gamma^2 = \boldsymbol{\pi}'Q_z \boldsymbol{\pi}$, and $Q_z$, $ \sigma_\epsilon^2$, and $\sigma_v^2$ are defined in Assumption \ref{assump:OLSvsIV}.
+where $\sigma_x^2 = \gamma^2 + \sigma_v^2$, $\gamma^2 = \boldsymbol{\pi}'Q \boldsymbol{\pi}$, and $Q$, $ \sigma_\epsilon^2$, and $\sigma_v^2$ are defined in Assumption \ref{assump:OLSvsIV}.
 \end{thm}
 \todo[inline]{Add a proof sketch to the appendix.}
 We see from the preceding result that the variance of the OLS estimator is always strictly lower than that of the 2SLS estimator since $\sigma^2_\epsilon/\sigma_x^2 = \sigma^2_\epsilon/(\gamma^2 + \sigma_v^2)$. Unless $\tau = 0$, however, OLS shows an asymptotic bias. In contrast, the 2SLS estimator is asymptotically unbiased regardless of the value of $\tau$. 
