@@ -376,6 +376,31 @@ we have,
     \end{eqnarray*}
 \end{proof}
 
+\paragraph{Unpacking the Homoskedasticity Assumption}
+The assumption
+  $$\Omega \equiv \lim_{n\rightarrow \infty} E_n \left[
+    \begin{array}{cc}
+      \epsilon_i^2 x_i^2 & \epsilon_i^2 x_i \mathbf{z}_i' \\
+      \epsilon_i^2 x_i \mathbf{z}_i& \epsilon_i^2 \mathbf{z}_i \mathbf{z}_i'
+    \end{array}
+    \right] =\sigma_\epsilon^2 \left(\lim_{n\rightarrow \infty} E_n \left[
+    \begin{array}{cc}
+      x_i^2 & x_i \mathbf{z}_i' \\
+       x_i \mathbf{z}_i& \mathbf{z}_i \mathbf{z}_i'
+    \end{array}
+    \right]\right)$$
+places asymptotic restrictions on the joint distribution of $\epsilon, v, \mathbf{z}$. First write:
+\begin{eqnarray*}
+  \epsilon_i^2 x_i^2 &=& \epsilon_i^2\left(\mathbf{z}_i'\boldsymbol{\pi} + v_i\right)^2 = \epsilon_i^2\left(\boldsymbol{\pi}'\mathbf{z}_i \mathbf{z}_i' \boldsymbol{\pi} + 2 v_i\mathbf{z}_i'\boldsymbol{\pi} + v_i^2\right) \\
+  \epsilon_i^2 x_i \mathbf{z}_i'&=& \epsilon_i^2 \left(\mathbf{z}_i'\boldsymbol{\pi} + v_i\right)\mathbf{z}_i' = \epsilon_i^2 \left(\boldsymbol{\pi}'\mathbf{z}_i\mathbf{z}_i' + v_i\mathbf{z}_i'\right)
+\end{eqnarray*}
+Thus, we see that the following conditions are sufficient:
+\begin{eqnarray*}
+  E[\epsilon_i^2 \mathbf{z}_i \mathbf{z}_i']- E[\epsilon_i^2]E[ \mathbf{z}_i \mathbf{z}_i'] \rightarrow 0\\
+  E[\epsilon_i^2 v_i \mathbf{z}_i'] - E[\epsilon_i^2]E[v_i \mathbf{z}_i'] \rightarrow 0\\
+  E[\epsilon_i^2 v_i^2] - E[\epsilon_i^2]E[v_i^2] \rightarrow 0
+\end{eqnarray*}
+
 \subsection{Infeasible FMSC: OLS versus 2SLS}
 We see that the variance of the OLS estimator is always strictly lower than that of the 2SLS estimator since $\sigma^2_\epsilon/\sigma_x^2 = \sigma^2_\epsilon/(\gamma^2 + \sigma_v^2)$. The AMSE of the OLS and 2SLS estimators takes a particularly simple form:
   \begin{eqnarray}
