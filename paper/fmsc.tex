@@ -112,7 +112,7 @@ Define the sample analogue of the expectations in Assumption \ref{assump:drift} 
 $$f_n(\theta) = \frac{1}{n}\sum_{i=1}^n f(Z_{ni},\theta) = \left[\begin{array}{c} g_n(\theta)\\ h_n(\theta) \end{array} \right]=\left[\begin{array}{c}n^{-1}\sum_{i=1}^n g(Z_{ni},\theta) \\ n^{-1}\sum_{i=1}^n h(Z_{ni},\theta) \end{array}\right]$$
 where $g_n$ is the sample analogue of the correctly specified moment conditions and $h_n$ is that of the (potentially) mis-specified moment conditions. A candidate GMM estimator $\widehat{\theta}_S$ uses some subset $S$ of the moment conditions contained in $f$ in estimation. Let $|S|$ denote the number of moment conditions used. For $\widehat{\theta}_S$ to be identified, we require that $|S|>r$. Let $\Xi_S$ be the $|S| \times(p +q)$ \emph{moment selection matrix} corresponding to $S$. That is, $\Xi_S$ is a matrix of ones and zeros arranged such that $\Xi_S f_n(\theta)$ contains only the sample moment conditions used to estimate $\widehat{\theta}_S$. Thus, the GMM estimator of $\theta$ based on moment set $S$ is given by 
 $$\widehat{\theta}_S = \argmin_{\theta \in \Theta}\; \left[\Xi_S f_n(\theta)\right]' \widetilde{W}_S \; \left[ \Xi_S f_n(\theta)\right].$$
-where $\widetilde{W}_S$ is an $|S|\times |S|$, positive semi-definite weight matrix. Note we place no restrictions on $S$ other than $|S| >r$ so that the estimator exists. In particular, $S$ may \emph{exclude} some or all of the valid moment conditions contained in $g$. While this may seem strange, it allows us to accomodate a wider range of examples, including choosing between least squares and instrumental variables estimators.
+where $\widetilde{W}_S$ is an $|S|\times |S|$, positive semi-definite weight matrix. Note that we place no restrictions on $S$ other than $|S| >r$ so that the estimator exists. In particular, $S$ may \emph{exclude} some or all of the valid moment conditions contained in $g$. While this may seem strange, it allows us to accomodate a wider range of examples, including choosing between least squares and instrumental variables estimators.
 
 To consider the limit distribution of $\widehat{\theta}_S$, we require some further notation. First define the derivative matrices
 	$$G = E\left[\nabla_{\theta} \; g(Z,\theta_0)\right], \quad H = E\left[\nabla_{\theta} \; h(Z,\theta_0)\right], \quad F = (G', H')'$$
@@ -133,7 +133,7 @@ and let $\Omega = Var\left[ f(Z,\theta_0) \right]$ where $\Omega$ is partitioned
 	\end{enumerate}
 \end{assump}
 
-Although Assumption \ref{assump:highlevel} closely approximates the standard regularity conditions for GMM estimation, establishing primitive conditions for Assumptions \ref{assump:highlevel} (d), (e), (g) and (h) is slightly more involved under local mis-specification. Low-level sufficient conditions for the two running examples considered in this paper appear in Sections \ref{sec:chooseIVlowlevel} and \ref{sec:OLSvsIVlowlevel} below. For more general results, see \cite{Andrews1988} Theorem 2 and \cite{Andrews1992} Theorem 4.  Notice that identification, (c), and continuity, (d), are conditions on the distribution of $Z$, the marginal law to which each $Z_{ni}$ converges. 
+Although Assumption \ref{assump:highlevel} closely approximates the standard regularity conditions for GMM estimation, establishing primitive conditions for Assumptions \ref{assump:highlevel} (d), (e), (g) and (h) is slightly more involved under local mis-specification. Low-level sufficient conditions for the two running examples considered in this paper appear in Sections \ref{sec:OLSvsIVlowlevel} and  \ref{sec:chooseIVlowlevel} below. For more general results, see \cite{Andrews1988} Theorem 2 and \cite{Andrews1992} Theorem 4.  Notice that identification, (c), and continuity, (d), are conditions on the distribution of $Z$, the marginal law to which each $Z_{ni}$ converges. 
 
 \begin{thm}[Consistency]
 \label{thm:consist}
@@ -167,7 +167,7 @@ There exists a subset $S_{max}$ of at least $r$ moment conditions satisfying:
 
 \cite{AndrewsLu} and \cite{HongPrestonShum} take the same basic approach to identification, with appropriate modifications to allow for simultaneous model and moment selection. An advantage of Assumption \ref{assump:Andrews} is that, under fixed mis-specification, it allows consistent selection of $S_{max}$ without any prior knowledge of \emph{which} moment conditions are correct. In the notation of the present paper this corresponds to having no moment conditions in the $g$ block. As \citet[p.\ 254]{Hallbook} points out, however, the second part of Assumption \ref{assump:Andrews} can fail even in simple settings such as linear instrumental variables estimation. When it does fail, the selected GMM estimator may no longer be consistent for $\theta_0$. 
 
-A different approach to identification is to assume that there is a minimal set of at least $r$ moment conditions \emph{known} to be correctly specified. This is the approach we follow here, one shared by \cite{Liao} and \cite{ChengLiao}. With the exception of Section \ref{subsec:digress}, we maintain the following assumption throughout: 
+A different approach to identification is to assume that there is a minimal set of at least $r$ moment conditions \emph{known} to be correctly specified. This is the approach we follow here, one shared by \cite{Liao} and \cite{ChengLiao}. With the exception of Section \ref{subsec:digress}, we maintain the following assumption throughout.
 
 \begin{assump}[FMSC Identification Condition] 
 \label{assump:Identification}
@@ -184,13 +184,13 @@ Assumption \ref{assump:Identification} and Theorem \ref{thm:normality} immediate
 	by applying Theorem \ref{thm:normality} to $S_{v}$, where $K_v = [G'W_vG]^{-1}G'W_v$ and $M_g \sim N(0,\Omega_{gg})$. 
 \end{cor}
 
-Both Assumptions \ref{assump:Andrews} and \ref{assump:Identification} are strong, and neither fully nests the other. Which should be preferred is both a matter of taste and of the particular application one has in mind. In the context of the present paper, Assumption \ref{assump:Identification} is meant to represent a situation that is common in empirical practice. The $g$--block of moment conditions contains the ``baseline'' assumptions that an empirical researcher would be prepared to defend in a seminar, while the $h$--block represents a set of stronger, more controversial assumptions. In the FMSC framework, moment selection exercise is carried out \emph{conditional} on the baseline assumptions: we use the $g$--block to help us decide whether to include any of the moment conditions contained in the $h$--block. But why would we ever consider using controversial assumptions? FMSC is designed for settings in which the $h$--block is expected to contain a substantial amount of information beyond that already contained in the $g$--block. The idea is that, if we knew the $h$--block was correctly specified, we would expect a large gain in efficiency by including it in estimation. This motivates the idea of trading off the variance reduction from including $h$ against the potential increase in bias. Not all applications have the structure, but many important ones do. We now consider two simple examples. 
+Both Assumptions \ref{assump:Andrews} and \ref{assump:Identification} are strong, and neither fully nests the other. Which should be preferred is both a matter of taste and of the particular application one has in mind. In the context of the present paper, Assumption \ref{assump:Identification} is meant to represent a situation that is common in empirical practice. The $g$--block of moment conditions contains the ``baseline'' assumptions that an empirical researcher would be prepared to defend in a seminar, while the $h$--block represents a set of stronger, more controversial assumptions. In the FMSC framework, moment selection is carried out \emph{conditional} on the baseline assumptions: we use the $g$--block to help us decide whether to include any of the moment conditions contained in the $h$--block. But why would we ever consider using controversial assumptions? FMSC is designed for settings in which the $h$--block is expected to contain a substantial amount of information beyond that already contained in the $g$--block. The idea is that, if we knew the $h$--block was correctly specified, we would expect a large gain in efficiency by including it in estimation. This motivates the idea of trading off the variance reduction from including $h$ against the potential increase in bias. Not all applications have the structure, but many important ones do. We now consider two motivating examples. 
 
 
 
 \subsection{Example: OLS versus 2SLS}
 \label{sec:OLSvsIVlowlevel}
-The simplest interesting problem on which the FMSC can be brought to bear is selecting between ordinary least squares (OLS) and two-stage least squares (2SLS) estimators of the effect $\beta$ of a single endogenous regressor $x$ on an outcome of interest $y$. To keep the presentation transparent, we will work within an iid, homoskedastic setting. Neither of these restrictions, however, is necessary. Without loss of generality we may assume that there are no exogenous regressors, or equivalently that they have been ``projected out of the system,'' so that the data generating process is given by
+The simplest interesting application of the FMSC is choosing between ordinary least squares (OLS) and two-stage least squares (2SLS) estimators of the effect $\beta$ of a single endogenous regressor $x$ on an outcome of interest $y$. To keep the presentation transparent, we will work within an iid, homoskedastic setting. Neither of these restrictions, however, is necessary. Without loss of generality we may assume that there are no exogenous regressors, or equivalently that they have been ``projected out of the system,'' so that the data generating process is given by
     \begin{eqnarray}
 			y_{i} &=& \beta x_{i}  + \epsilon_{i}\\
 	x_{i} &=& \mathbf{z}_{i}' \boldsymbol{\pi} + v_{i}
@@ -201,7 +201,7 @@ $\mathbf{z}' = (z_{1}, \hdots, z_{n})$, $Z' = (\mathbf{z}_{1}, \hdots, \mathbf{z
 		\widehat{\beta}_{OLS} &=& \left(\mathbf{x}'\mathbf{x}\right)^{-1}\mathbf{x}'\mathbf{y}\\
 		\widetilde{\beta}_{2SLS} &=& \left(\mathbf{x}'P_Z\mathbf{x}\right)^{-1}\mathbf{x}'P_Z\mathbf{y}
 	\end{eqnarray}
-where $P_Z = Z(Z'Z)^{-1}Z'$. But why should we even \emph{consider} using OLS if $x$ is endogenous and we have valid instruments at our disposal? The answer is simple: 2SLS is a high variance estimator. Depending on the degree of endogeneity present in $x$ and the strength of the instruments, $\widehat{\beta}_{OLS}$ could easily have the lower mean-squared error of the two estimators.\footnote{Because the moments of the 2SLS estimator only exist up to the order of overidentificiation \citep{Phillips1980} this statement should be understood to refer to ``trimmed'' mean-squared error when the number of instruments is two or less. For more discussion of this point, see the simulation results below.} We can embed this intuition within the local mis-specification framework as follows
+where $P_Z = Z(Z'Z)^{-1}Z'$. But why should we even \emph{consider} using OLS if $x$ is endogenous and we have valid instruments at our disposal? The answer is simple: 2SLS is a high variance estimator. Depending on the degree of endogeneity present in $x$ and the strength of the instruments, $\widehat{\beta}_{OLS}$ could easily have the lower mean-squared error of the two estimators.\footnote{Because the moments of the 2SLS estimator only exist up to the order of overidentificiation \citep{Phillips1980} this statement should be understood to refer to ``trimmed'' mean-squared error when the number of instruments is two or fewer. For more discussion of this point, see the simulation results below.} We can embed this intuition within the local mis-specification framework as follows
   \begin{equation}
      E \left[\begin{array}{c} \mathbf{z}_{ni} \epsilon_{ni} \\ x_{ni} \epsilon_{ni} \end{array}\right] = \left[\begin{array}{c} \mathbf{0} \\ \tau/\sqrt{n} \end{array}\right].
   \end{equation}
@@ -214,14 +214,12 @@ where $\mathbf{0}$ is a vector of zeros, and $\tau$ is an unknown constant that 
 		\item $E[\mathbf{z}_{ni} \epsilon_{ni}]=\mathbf{0}$, $E[\mathbf{z}_{ni} v_{ni}]=\mathbf{0}$, and $E[\epsilon_{ni}v_{ni}] = \tau/\sqrt{n}$ for all $n$
 		\item $E[\left|\mathbf{z}_{ni}\right|^{4+\eta}] <C$, $E[\left|\epsilon_{ni}\right|^{4+\eta}] <C$, and $E[\left|v_{ni}\right|^{4+\eta}] <C$ for some $\eta >0$, $C <\infty$
 		\item $E[\mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow Q>0$, $E[v_{ni}^2]\rightarrow \sigma_v^2 >0$, and $E[\epsilon_{ni}^2] \rightarrow \sigma_\epsilon^2 >0$ as $n\rightarrow \infty$
-		\item $\left(E[v_{ni}\epsilon_{ni}^2] - E[v_{ni}]E[\epsilon_{ni}^2]\right) \rightarrow 0$ and $\left(E[v_{ni}^2 \epsilon_{ni}^2] - E[v_{ni}^2]E[\epsilon_{ni}^2]\right)\rightarrow 0$ as $n\rightarrow \infty$
+		\item As $n\rightarrow \infty$, $E[\epsilon_{ni}^2 \mathbf{z}_{ni} \mathbf{z}_{ni}']- E[\epsilon_{ni}^2]E[ \mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow 0$, $E[\epsilon_i^2 v_{ni} \mathbf{z}_{ni}'] - E[\epsilon_{ni}^2]E[v_{ni} \mathbf{z}_{ni}'] \rightarrow 0$, and $E[\epsilon_{ni}^2 v_{ni}^2] - E[\epsilon_{ni}^2]E[v_{ni}^2] \rightarrow 0$
 		\item $x_{ni} = \mathbf{z}_{ni}'\boldsymbol{\pi} + v_i$ where $\boldsymbol{\pi} \neq \mathbf{0}$, and $y_{ni} = \beta x_{ni} + \epsilon_{ni}$
 	\end{enumerate}
 \end{assump}
 
-Parts (a), (b) and (d) correspond to the local mis-specification assumption, part (c) is a set of moment restrictions, and (f) is simply the DGP.  Part (e) is the homoskedasticity assumption: an \emph{asymptotic} restriction on the joint distribution of the errors $v_{ni}$ and $\epsilon_{ni}$.   
-
- \todo[inline]{Comment on the assumptions. Basically standard. Which ones are for the CLT? Assumption (e) is the homoskedasticity assumption: it only places an asymptotic restriction. Note that when the errors are normally distributed, this follows immediately from Isserli's Theorem. See Wiki. Proof of following Theorem is standard and hence omitted. Just substitute DGP, use Lindeberg-Feller, and $L_2$ WLLN. Only step worth commenting on is checking the Lindeberg condition.}
+Parts (a), (b) and (d) correspond to the local mis-specification assumption, part (c) is a set of moment restrictions, and (f) is simply the DGP.  Part (e) is the homoskedasticity assumption: an \emph{asymptotic} restriction on the joint distribution of $v_{ni}$, $\epsilon_{ni}$, and $\mathbf{z}_{ni}$. This condition holds automatically, given the other asssumptions, if $(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})$ are jointly normal, as in our simulation experiment described below. 
 
 \begin{thm}[OLS and 2SLS Limit Distributions]
 	\label{thm:OLSvsIV} Under Assumption \ref{assump:OLSvsIV},
@@ -247,27 +245,25 @@ N\left(
 $$
 where $\sigma_x^2 = \gamma^2 + \sigma_v^2$, $\gamma^2 = \boldsymbol{\pi}'Q \boldsymbol{\pi}$, and $Q$, $ \sigma_\epsilon^2$, and $\sigma_v^2$ are defined in Assumption \ref{assump:OLSvsIV}.
 \end{thm}
-\todo[inline]{Add a proof sketch to the appendix.}
-We see from the preceding result that the variance of the OLS estimator is always strictly lower than that of the 2SLS estimator since $\sigma^2_\epsilon/\sigma_x^2 = \sigma^2_\epsilon/(\gamma^2 + \sigma_v^2)$. Unless $\tau = 0$, however, OLS shows an asymptotic bias. In contrast, the 2SLS estimator is asymptotically unbiased regardless of the value of $\tau$. 
+
+We see from the preceding result that the variance of the OLS estimator is always strictly lower than that of the 2SLS estimator since $\sigma^2_\epsilon/\sigma_x^2 = \sigma^2_\epsilon/(\gamma^2 + \sigma_v^2)$. Unless $\tau = 0$, however, OLS shows an asymptotic bias. In contrast, the 2SLS estimator is asymptotically unbiased regardless of the value of $\tau$.  
 
 
 
 \subsection{Example: Choosing Instrumental Variables}
 \label{sec:chooseIVlowlevel}
-\todo[inline]{OLS versus 2SLS example could be thought of as particular instance of the more general problem of instrument selection: if exogenous, $x$ is clearly its own ``best instrument.'' Now state the instrument selection problem in greater generality.}
-
-Consider a linear instrumental variables (IV) model in a simple iid setting, namely
+The preceding example was quite specific, but it a sense it amounted to a problem of instrument selection: if $x$ is exogenous, it is clearly its ``own best instrument.'' Viewed from this perspective, the FMSC amounted to trading off endogeneity against instrument strength. We now consider instrument selection \emph{in general} for linear GMM estimators in an iid setting. Consider the following model:
 \begin{eqnarray}
     y_i &=& \mathbf{x}_i' \beta +  \epsilon_i\\
     \mathbf{x}_i &=&  \Pi_1' \mathbf{z}_{i}^{(1)} + \Pi_2'\mathbf{z}_{i}^{(2)} + \mathbf{v}_i
 \end{eqnarray}
-where $y$ is an outcome of interest, $\mathbf{x}$ is a $p$-vector of regressors, some of which are endogenous, $\mathbf{z}^{(1)}$ is a $q_1$-vector of instruments known to be exogenous, and $\mathbf{z}^{(2)}$ is a $q_2$-vector  of \emph{potentially endogenous} instruments. The $p$-vector $\beta$, $q_1\times p$ matrix $\Pi_1$, and $q_2\times p$ matrix $\Pi_2$ contain unknown constants. Stacking observations in the usual way, let $\mathbf{y}' = (y_1, \hdots, y_n)$, $X' = (\mathbf{x}_1, \hdots, \mathbf{x}_n)$, $\boldsymbol{\epsilon} = (\epsilon_1, \hdots, \epsilon_n)$, 
+where $y$ is an outcome of interest, $\mathbf{x}$ is an $r$-vector of regressors, some of which are endogenous, $\mathbf{z}^{(1)}$ is a $p$-vector of instruments known to be exogenous, and $\mathbf{z}^{(2)}$ is a $q$-vector  of \emph{potentially endogenous} instruments. The $r$-vector $\beta$, $p\times r$ matrix $\Pi_1$, and $q\times r$ matrix $\Pi_2$ contain unknown constants. Stacking observations in the usual way, let $\mathbf{y}' = (y_1, \hdots, y_n)$, $X' = (\mathbf{x}_1, \hdots, \mathbf{x}_n)$, $\boldsymbol{\epsilon} = (\epsilon_1, \hdots, \epsilon_n)$, 
 $Z_1' = (\mathbf{z}_{1}^{(1)}, \hdots, \mathbf{z}_{n}^{(1)})$, $Z_2' = (\mathbf{z}_{1}^{(2)}, \hdots, \mathbf{z}_{n}^{(2)})$, and $V' = (\mathbf{v}_1, \hdots, \mathbf{v}_n)$ where $n$ is the sample size. Using this notation, $\mathbf{y} = X\beta +\boldsymbol{\epsilon}$ and $X =  Z \Pi + V$, where $Z = (Z_1, Z_2)$ and $\Pi = (\Pi_1', \Pi_2')'$. 
 
-\todo[inline]{Need to give the dimension of $\mathbf{x}$ so I can state the identification condition in this example.}
-
-The idea behind this setup is that the instruments contained in $Z_2$ are expected to be strong. If we were confident that they were exogenous, we would certainly use them in estimation. Yet the very fact that we expect them to be strongly correlated with $\mathbf{x}$ gives us reason to fear that the instruments contained in $Z_2$ may be endogenous. The exact opposite is true of $Z_1$. These are the instruments that we are prepared to assume are exogenous. But when is such an assumption plausible? Precisely when the instruments contained in $Z_1$ are \emph{not especially strong}. In this setting, the FMSC attempts to trade off a small increase in bias from using a \emph{slightly} endogenous instrument against a larger decrease in variance from increasing the overall strength of the instruments used in estimation.
+The idea behind this setup is that the instruments contained in $Z_2$ are expected to be strong. If we were confident that they were exogenous, we would certainly use them in estimation. Yet the very fact that we expect them to be strongly correlated with $\mathbf{x}$ gives us reason to fear that the instruments contained in $Z_2$ may be endogenous. The exact opposite is true of $Z_1$. These are the instruments that we are prepared to assume are exogenous. But when is such an assumption plausible? Precisely when the instruments contained in $Z_1$ are \emph{not especially strong}. 
 \todo[inline]{Should briefly mention some situations in which this setup arises. Panel data, etc. Also refer to my empirical example.}
+In this setting, the FMSC attempts to trade off a small increase in bias from using a \emph{slightly} endogenous instrument against a larger decrease in variance from increasing the overall strength of the instruments used in estimation.
+
 
 
 To this end, consider a general linear GMM estimator of the form
@@ -285,8 +281,7 @@ where $S$ indexes the instruments used in estimation, $Z_S'  = \Xi_S Z'$ is the 
   \end{array}
 \right]
 \end{equation}
-where $\mathbf{0}$ is a $q_1$-vector of zeros, and $\boldsymbol{\tau}$ is a $q_2$-vector of unknown constants. The following low-level conditions are sufficient for the asymptotic normality of $\widehat{\beta}_S$.
-
+where $\mathbf{0}$ is a $p$-vector of zeros, and $\boldsymbol{\tau}$ is a $q$-vector of unknown constants. The following low-level conditions are sufficient for the asymptotic normality of $\widehat{\beta}_S$.
 
 \begin{assump}[Choosing IVs]
 \label{assump:chooseIV} 
@@ -300,13 +295,16 @@ where $\mathbf{0}$ is a $q_1$-vector of zeros, and $\boldsymbol{\tau}$ is a $q_2
 	\end{enumerate}
 \end{assump}
 
-\begin{thm}[Choosing IVs Limit Distribution] Suppose that $\widetilde{W}_S \rightarrow_p W_S >0$. Then, under Assumption \ref{assump:chooseIV}
+The preceding conditions are similar to although more general than those contained in Assumption \ref{assump:OLSvsIV}. While we no longer assume homoskedasticity, for simplicity we retain the assumption that the triangular array is iid in each row. 
+
+\begin{thm}[Choosing IVs Limit Distribution]
+\label{thm:chooseIV} Suppose that $\widetilde{W}_S \rightarrow_p W_S >0$. Then, under Assumption \ref{assump:chooseIV}
 $$\sqrt{n}\left(\widehat{\beta}_S - \beta \right) \overset{d}{\rightarrow} -K_S \Xi_S \left(\left[\begin{array}
            {c} \mathbf{0} \\ \boldsymbol{\tau}
          \end{array}\right] + M \right)$$
 where
          $$-K_S = \left(\Pi' Q_S W_S Q_S'\Pi\right)^{-1} \Pi'Q_SW_S$$
-  with $Q_S = Q_Z \Xi_S'$ and the matrices $Q$ and $\Omega$ are defined in Assumption \ref{assump:chooseIV}.
+$M \sim N(\mathbf{0}, \Omega)$, $Q_S = Q_Z \Xi_S'$, and $Q$ and $\Omega$ are defined in Assumption \ref{assump:chooseIV}.
 \end{thm}
 
 
@@ -327,7 +325,7 @@ where $M_S = \Xi_S M$, $\tau_S = \Xi_S (0', \tau')'$ and $M$ is defined in Theor
 
 For the valid estimator $\widehat{\theta}_v$ we have $K_v = \left[G'W_{v}G\right]^{-1}G' W_{v}$ and $\Xi_v =\left[\begin{array}{cc} \mathbf{I}_p& \mathbf{0}_{p\times q} \end{array} \right]$. Thus, the valid estimator $\widehat{\mu}_v$ of $\mu$ has zero asymptotic bias. In contrast, any candidate estimator $\widehat{\mu}_S$ that includes moment conditions from $h$ inherits an asymptotic bias from the corresponding elements of $\tau$. We see that the extent and direction of this bias depends both on $K_S$ and $\nabla_\theta\mu(\theta_0)$. Adding moment conditions from $h$, however, generally decreases asymptotic variance. In particular, the usual proof that adding moment conditions cannot increase asymptotic variance under efficient GMM \citep[see for example][ch.\ 6]{Hallbook} continues to hold under local mis-specification, because all moment conditions are correctly specified in the limit. Thus, we see that local mis-specification gives an asymptotic analogue of the bias-variance tradeoff that we encounter in finite samples.\footnote{The general result for adding moment conditions in GMM is only relevant in situations where the valid moment set is strictly nested inside of all other candidate moment sets. When this does not hold, such as in the OLS verus IV example, we establish an analogous ordering of asymptotic variances by direct calculation.} 
 
-To use this framework for moment selection, we need to construct estimators of the unknown quantities: $\theta_0$, $K_S$, $\Omega$, and $\tau$. Under local mis-specification, the estimator of $\theta$ under \emph{any} moment set is consistent. A natural estimator is $\widehat{\theta}_v$, although there are other possibilities. Recall that $K_S = [F_S'W_SF_S]^{-1} F_S'W_S \Xi_S$. Now, $\Xi_S$ is known because it is simply the selection matrix defining moment set $S$. The remaining quantities $F_S$ and $W_S$ that make up $K_S$ are consistently estimated by their sample analogues under Assumption \ref{assump:highlevel}. Similarly, consistent estimators of $\Omega$ are readily available under local mis-specification, although the precise form depends on the situation. We consider this point as it relates to our two running examples in Sections ??? and ???.\todo{Where?}
+To use this framework for moment selection, we need to construct estimators of the unknown quantities: $\theta_0$, $K_S$, $\Omega$, and $\tau$. Under local mis-specification, the estimator of $\theta$ under \emph{any} moment set is consistent. A natural estimator is $\widehat{\theta}_v$, although there are other possibilities. Recall that $K_S = [F_S'W_SF_S]^{-1} F_S'W_S \Xi_S$. Now, $\Xi_S$ is known because it is simply the selection matrix defining moment set $S$. The remaining quantities $F_S$ and $W_S$ that make up $K_S$ are consistently estimated by their sample analogues under Assumption \ref{assump:highlevel}. Similarly, consistent estimators of $\Omega$ are readily available under local mis-specification, although the precise form depends on the situation. We consider this point further below as it relates to our two running examples.
 
 The only remaining unknown is $\tau$. Local mis-specification is essential for making meaningful comparisons of AMSE because it prevents the bias term from dominating the comparison. Unfortunately, it also prevents us from consistently estimating this asymptotic bias parameter. Under Assumption \ref{assump:Identification}, however, we can construct an \emph{asymptotically unbiased} estimator $\widehat{\tau}$ of $\tau$ by substituting $\widehat{\theta}_v$, the estimator of $\theta_0$ that uses only correctly specified moment conditions, into $h_n$, the sample analogue of the (potentially) mis-specified moment conditions. In other words,  $\widehat{\tau} = \sqrt{n} h_n(\widehat{\theta}_v)$. 
 
@@ -369,7 +367,7 @@ $$\mbox{AMSE(OLS)} = \frac{\tau^2}{\sigma_x^4} + \frac{\sigma_\epsilon^2}{\sigma
   \mbox{AMSE(2SLS)} = \frac{\sigma_\epsilon^2}{\gamma^2}$$
  Rearranging, we see that the AMSE of the OLS estimator is strictly less than that of the 2SLS estimator whenever $\tau^2  < \sigma_x^2 \sigma_\epsilon^2\sigma_v^2/\gamma^2$. To use this expression for moment selection we need to estimate the unknown parameters. Fortunately, the familiar estimators of $\sigma_x^2, \gamma^2$, and $\sigma_v^2$ remain consistent under Assumption \ref{assump:OLSvsIV} so we set
  $$\widehat{\sigma}_x^2 = n^{-1}\mathbf{x}'\mathbf{x}, \quad \widehat{\gamma}^2 = n^{-1}\mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x}, \quad \widehat{\sigma}_v^2 =  \widehat{\sigma}_x^2 - \widehat{\gamma}^2.$$
-To estimate $\sigma_\epsilon^2$ we have two choices: we can either use the residuals from the OLS estimator or those from the 2SLS estimator. Under local mis-specification, both provide a consistent estimator of $\sigma_\epsilon^2$. We would expect the estimator based on the 2SLS residuals to be more robust, however, unless the instruments are quite weak. This is because the exogeneity of $x$, even though it disappears in the limit under our asymptotics, is non-zero in finite samples. Thus, we use 
+To estimate $\sigma_\epsilon^2$ we have two choices: we can either use the residuals from the OLS estimator or those from the 2SLS estimator. Under local mis-specification, both provide consistent estimators of $\sigma_\epsilon^2$. We would expect the estimator based on the 2SLS residuals to be more robust, however, unless the instruments are quite weak. This is because the exogeneity of $x$, even though it disappears in the limit under our asymptotics, is non-zero in finite samples. Thus, we use 
 	$$\widehat{\sigma}_\epsilon^2 = n^{-1}\left(\textbf{y} - \textbf{x}\widetilde{\beta}_{2SLS} \right)'\left(\textbf{y} - \textbf{x}\widetilde{\beta}_{2SLS} \right)$$
 to estimate $\sigma_\epsilon^2$ below. All that remains is to estimate $\tau^2$. Specializing Theorem \ref{thm:tau} and Corollary \ref{cor:tautau} to the present example gives the following result.
 \begin{thm}
@@ -400,8 +398,10 @@ The equivalence between FMSC selection and a DHW test in the OLS versus 2SLS exa
 
 
 \subsection{FMSC for Instrument Selection Example}
-\todo[inline]{In this example we're choosing overidentifying restrictions} Here the target parameter is allowed to be any function of $\beta$. Example introduced in Section \ref{sec:chooseIVlowlevel}. Expressions aren't as readily interpretable as in the OLS versus IV example but they are still fairly simple.
+Here the target parameter is allowed to be any function of $\beta$. Example introduced in Section \ref{sec:chooseIVlowlevel}. Expressions aren't as readily interpretable as in the OLS versus IV example but they are still fairly simple.
 
+
+\todo[inline]{First give the general result for the limit distribution of $\widehat{\tau}$, etc. Then specialize to the case of 2SLS, which we use in the empirical example and simulation study, and talk about particular estimators for $\Omega$, etc. along with centering and allowing for heteroskedasticity.}
 
 \subsection{OLD VERSION: FMSC for 2SLS Instrument Selection}\label{sec:2sls}
 \todo[inline]{This section will eventually be replaced by the example I'll merge in from \texttt{metrica\_revisions.tex}.}
@@ -1232,7 +1232,9 @@ This paper has introduced the FMSC, a proposal to choose moment conditions using
 Essentially identical to the proofs of \cite{NeweyMcFadden1994} Theorems 2.6 and 3.1.
 \end{proof}
 
-
+\begin{proof}[Proof of Theorems \ref{thm:OLSvsIV}, \ref{thm:chooseIV}]
+\todo[inline]{Standard, so just give a sketch: Lindeberg Feller and $L_2$ argument for WLLN.}
+\end{proof}
 
 \begin{proof}[Proof of Theorem \ref{thm:tau}]
 By a mean-value expansion:
@@ -1243,7 +1245,6 @@ By a mean-value expansion:
 \end{eqnarray*}
 The result follows since $\sqrt{n}f_n(\theta_0) \rightarrow_d M + (0', \tau')'$ under Assumption \ref{assump:highlevel} (h).
 \end{proof}
-
 
 
 
