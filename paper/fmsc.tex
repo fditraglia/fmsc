@@ -12,7 +12,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{todonotes}
-\usepackage[margin=1.25in]{geometry}
+\usepackage[margin=1.2in]{geometry}
 	
 \usepackage{setspace}
 % \singlespacing
@@ -853,10 +853,75 @@ Table \ref{tab:summary} compares average and worst-case RMSE over the parameter 
 
 
 
-\section{Moment Average Estimators}
+\section{Moment Averaging \& Post-Selection Estimators}
 \label{sec:avg}
+In the preceding section we derived the FMSC as an asymptotically unbiased estimator of the AMSE of a candidate estimator.
+Besides presenting simulation results, however, we have thus far said nothing about the sampling properties of the FMSC selection procedure \emph{itself}.
+Because it is constructed from $\widehat{\tau}$, the FMSC is a random variable, even in the limit. 
+As such, the FMSC-selected estimator is also random, even as the sample size goes to infinity.
+In other words, the FMSC is \emph{not} a consistent selection criterion.
+At first blush this sounds like a serious defect, but it is in fact a blessing in disguise.
+The goal of the FMSC is \emph{not} to consistently select the correct moment conditions: it is to choose an estimator with a low finite-sample MSE.
+Because this quantity cannot typically be estimated directly, we use local mis-specification to create an asymptotic framework that mimics the finite-sample intuition that a consistent selection procedure would ignore.
+In the same way,
+
+ 
+
+Thus far we have considered the FMSC as a moment selection tool only. 
+Using the local mis-specification framework we derived an asymptotically unbiased estimator of AMSE and proposed choosing the candidate estimator that minimized this quantity.
+It turns out, however, that we can do much more with local mis-specification than simply choose moment conditions: the FMSC framework allows us to \emph{average} estimators based on different sets of moment conditions and carry out valid inference for such ``moment average'' estimators.
+Distinction between estimating the AMSE and considering the 
+As a side-effect, we obtain a procedure for valid post-selection inference for estimators selected using the FMSC and number of related moment selection criteria including the familiar J-test.
+
+
+
+\subsection{Moment Average Estimators}
+\todo[inline]{Merge in from other document.}
 
 \todo[inline]{Start by mentioning that we'll eventually use this for post selection inference. Then state the general case. Then give some actual moment averaging examples, including the OLS vs.\ IV example. Then talk about post-selection and give the simulation for the IV example since it's relevant to the empirical example. Possibly skip inference for the averaging estimator OLS versus IV.}
+
+Moment selection is a crude procedure: it gives full weight to the estimator that minimizes the moment selection criterion no matter how close its nearest competitor lies. Accordingly, when competing moment sets have similar criterion values in the population, sampling variation will be \emph{magnified} in the selected estimator. Thus, it may be possible to achieve better performance by using smooth weights rather than discrete selection. %In this section, I briefly examine a proposal based on exponential weighting.
+
+In the context of maximum likelihood estimation, \cite{Burnhametal} suggest averaging the estimators resulting from a number of competing models using exponential weights of the form $w_k = \exp(-I_k/2)/\sum_{i=1}^K \exp(-I_i/2)$ where $I_k$ is an information criterion evaluated for model $k$, and $i$ indexes the set of $K$ candidate models. This expression, constructed by an analogy with Bayesian model averaging, gives more weight to models with lower values of the information criterion but non-zero weight to all models. Applying this idea to the moment selection criteria given above, consider
+	\begin{equation}	
+		\widehat{\omega}_S = \left.\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S)\right\}\right/\sum_{S' \in \mathcal{A}}\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S')\right\}
+		\label{eq:expweight}
+\end{equation}
+where MSC$(\cdot)$ is a moment selection criterion and the parameter $\kappa$ varies the uniformity of the weighting. As $\kappa \rightarrow 0$ the weights become more uniform; as $\kappa \rightarrow \infty$ they approach the moment selection procedure given by minimizing the corresponding criterion. Table \ref{tab:avg} compares moment averaging against moment selection by substituting FMSC, GMM-AIC, BIC and HQ into Equation \ref{eq:expweight} using the simulation experiment described in Section \ref{sec:fmscsim}. Calculations are based on 10,000 replications, each with a sample size of 500. For FMSC averaging $\kappa = 1/100$ to account for the fact that the FMSC is generally more variable than criteria based on the $J$-test. Weights for GMM-BIC, HQ, and AIC averaging set $\kappa = 1$. Both in terms of average and worst-case RMSE, moment selection is inferior to moment averaging. The only exception is worst-case RMSE for the FMSC. (Pointwise comparisons are available upon request.) If our goal is estimators with low RMSE, moment averaging may be preferable to moment selection. 
+
+
+% latex.default(RMSE.average.vs.select, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      append = TRUE) 
+%
+\begin{table}[!tbp]
+ \begin{center}
+\caption{Average and worst-case RMSE of moment averaging versus selection.}
+\label{tab:avg}
+\small
+ \begin{tabular}{lrr}\hline\hline
+\multicolumn{1}{l}{Average RMSE}&\multicolumn{1}{c}{Averaging}&\multicolumn{1}{c}{Selection}\tabularnewline
+\hline
+FMSC&0.24&0.26\tabularnewline
+GMM-BIC&0.26&0.29\tabularnewline
+GMM-HQ&0.26&0.29\tabularnewline
+GMM-AIC&0.26&0.28\tabularnewline
+\hline
+\multicolumn{1}{l}{Worst-Case RMSE}&\multicolumn{1}{c}{Averaging}&\multicolumn{1}{c}{Selection}\tabularnewline
+\hline
+FMSC&0.36&0.33\tabularnewline
+GMM-BIC&0.41&0.47\tabularnewline
+GMM-HQ&0.36&0.39\tabularnewline
+GMM-AIC&0.33&0.35\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+\footnotesize
+\begin{tablenotes}
+	\item  Averaging is based on $\kappa = 1/100$ for FMSC weights and $\kappa = 1$ for all other weights. Values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications at each combination of parameter values from Table \ref{tab:trueRMSE} and a sample size of $500$.
+\end{tablenotes}
+\end{table}
+
+
+
 
 \subsection{The Effects of Moment Selection on Inference}
 The usual approach to inference post-selection is to state conditions under which traditional distribution theory continues to hold, typically involving an appeal to Lemma 1.1 of \citet[p.\ 168]{Poetscher1991}, which states that the limit distributions of an estimator pre- and post-consistent selection are identical. \citet[pp.\ 179--180]{Poetscher1991}, however, also states that this result does not hold uniformly over the parameter space. 
@@ -957,8 +1022,6 @@ Consider a moment selection criterion of the form $MSC(S) = J_n(S) - h(|S|)\kapp
 \end{thm}
 
 
-\subsection{AMSE Optimal Estimator for OLS vs IV Example}
-\todo[inline]{Merge in from other document.}
 
 
 \subsection{Valid Confidence Intervals}
@@ -1112,49 +1175,6 @@ To evaluate the performance of the procedure given in Algorithm \ref{alg:conf}, 
 	\begin{tablenotes}
 		\item Intervals are calculated by simulation with $B=1000$ using $\widehat{\tau}$ rather than constructing a confidence interval for $\tau$ (c.f.\ Algorithm \ref{alg:conf}). Simulations are generated from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
 	\end{tablenotes}
-\end{table}
-
-
-\subsection{Moment Averaging}
-%The moment average estimators of the previous section were derived primarily to provide valid confidence intervals post-moment selection, but in fact allow us to carry out inference for a wider class of estimators. 
-Viewed as a special case of Equation \ref{eq:avg}, moment selection is in fact a fairly crude procedure, giving full weight to the minimizer of the criterion no matter how close its nearest competitor lies. Under moment selection, when competing moment sets have similar criterion values in the population, random variation in the sample will be magnified in the selected estimator. Thus, it may be possible to achieve better performance by using smooth weights rather than discrete selection. %In this section, I briefly examine a proposal based on exponential weighting.
-
-In the context of maximum likelihood estimation, \cite{Burnhametal} suggest averaging the estimators resulting from a number of competing models using exponential weights of the form $w_k = \exp(-I_k/2)/\sum_{i=1}^K \exp(-I_i/2)$ where $I_k$ is an information criterion evaluated for model $k$, and $i$ indexes the set of $K$ candidate models. This expression, constructed by an analogy with Bayesian model averaging, gives more weight to models with lower values of the information criterion but non-zero weight to all models. Applying this idea to the moment selection criteria given above, consider
-	\begin{equation}	
-		\widehat{\omega}_S = \left.\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S)\right\}\right/\sum_{S' \in \mathcal{A}}\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S')\right\}
-		\label{eq:expweight}
-\end{equation}
-where MSC$(\cdot)$ is a moment selection criterion and the parameter $\kappa$ varies the uniformity of the weighting. As $\kappa \rightarrow 0$ the weights become more uniform; as $\kappa \rightarrow \infty$ they approach the moment selection procedure given by minimizing the corresponding criterion. Table \ref{tab:avg} compares moment averaging against moment selection by substituting FMSC, GMM-AIC, BIC and HQ into Equation \ref{eq:expweight} using the simulation experiment described in Section \ref{sec:fmscsim}. Calculations are based on 10,000 replications, each with a sample size of 500. For FMSC averaging $\kappa = 1/100$ to account for the fact that the FMSC is generally more variable than criteria based on the $J$-test. Weights for GMM-BIC, HQ, and AIC averaging set $\kappa = 1$. Both in terms of average and worst-case RMSE, moment selection is inferior to moment averaging. The only exception is worst-case RMSE for the FMSC. (Pointwise comparisons are available upon request.) If our goal is estimators with low RMSE, moment averaging may be preferable to moment selection. 
-
-
-% latex.default(RMSE.average.vs.select, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      append = TRUE) 
-%
-\begin{table}[!tbp]
- \begin{center}
-\caption{Average and worst-case RMSE of moment averaging versus selection.}
-\label{tab:avg}
-\small
- \begin{tabular}{lrr}\hline\hline
-\multicolumn{1}{l}{Average RMSE}&\multicolumn{1}{c}{Averaging}&\multicolumn{1}{c}{Selection}\tabularnewline
-\hline
-FMSC&0.24&0.26\tabularnewline
-GMM-BIC&0.26&0.29\tabularnewline
-GMM-HQ&0.26&0.29\tabularnewline
-GMM-AIC&0.26&0.28\tabularnewline
-\hline
-\multicolumn{1}{l}{Worst-Case RMSE}&\multicolumn{1}{c}{Averaging}&\multicolumn{1}{c}{Selection}\tabularnewline
-\hline
-FMSC&0.36&0.33\tabularnewline
-GMM-BIC&0.41&0.47\tabularnewline
-GMM-HQ&0.36&0.39\tabularnewline
-GMM-AIC&0.33&0.35\tabularnewline
-\hline
-\end{tabular}
-\end{center}
-\footnotesize
-\begin{tablenotes}
-	\item  Averaging is based on $\kappa = 1/100$ for FMSC weights and $\kappa = 1$ for all other weights. Values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications at each combination of parameter values from Table \ref{tab:trueRMSE} and a sample size of $500$.
-\end{tablenotes}
 \end{table}
 
 
