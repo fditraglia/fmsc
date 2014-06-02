@@ -986,44 +986,51 @@ Because FMSC, GMM-AIC and selection based on a downward $J$-test at a fixed sign
 
 
 \subsection{Moment Average Estimators}
-\todo[inline]{Need to correct notation from here down. Also correct the notation in the associated proofs.}
 To account for the effects of moment selection on inference, I extend a framework developed by \cite{HjortClaeskens} for frequentist model averaging. I treat post-selection estimators as a special case of moment-averaging: combining estimators based on different moment sets using data-dependent weights. Consider an estimator of the form,
 \begin{equation}
 	\label{eq:avg}
 	\widehat{\mu}=\sum_{S \in \mathscr{S}} \widehat{\omega}_S\widehat{\mu}_S
 \end{equation}
-where $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ is an estimator of the target parameter $\mu$ under moment set $S$, $\mathscr{S}$ is the collection of all moment sets under consideration, and $\widehat{\omega}_S$ is shorthand for the value of a data-dependent weight function  $\widehat{\omega}_S=\omega(\cdot| \cdot)$ evaluated at moment set $S$ and the sample observations $Z_{n1}, \hdots, Z_{nn}$.  As above $\mu(\cdot)$ is a $\mathbb{R}$-valued, $Z$-almost surely continuous function of $\theta$ that is differentiable in an open neighborhood of $\theta_0$. When $\widehat{\omega}_S$ is an indicator, taking on the value one at the moment set moment set that minimizes some moment selection criterion, $\widehat{\mu}$ is a post-moment selection estimator. More generally, $\widehat{\mu}$ is a moment average estimator.
+where $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ is an estimator of the target parameter $\mu$ under moment set $S$, $\mathscr{S}$ is the collection of all moment sets under consideration, and $\widehat{\omega}_S$ is shorthand for the value of a data-dependent weight function  $\widehat{\omega}_S=\omega(\cdot, \cdot)$ evaluated at moment set $S$ and the sample observations $Z_{n1}, \hdots, Z_{nn}$.  As above $\mu(\cdot)$ is a $\mathbb{R}$-valued, $Z$-almost surely continuous function of $\theta$ that is differentiable in an open neighborhood of $\theta_0$. When $\widehat{\omega}_S$ is an indicator, taking on the value one at the moment set moment set that minimizes some moment selection criterion, $\widehat{\mu}$ is a post-moment selection estimator. More generally, $\widehat{\mu}$ is a moment average estimator.
 
 The limiting behavior of $\widehat{\mu}$ follows almost immediately from Theorem \ref{thm:normality}, which states that asymptotic distribution of $\widehat{\theta}_S$ depends only on $K_S$ and $M$. Because $K_S$ is a matrix of constants, the random variable $M$ governs the joint limiting behavior of $\widehat{\theta}_S$, $S\in \mathscr{S}$. Under certain conditions on the $\widehat{\omega}_S$, we can fully characterize the limit distribution of $\widehat{\mu}$.
 \begin{assump}[Conditions on the Weights]\mbox{}
 \label{assump:weights}
 \begin{enumerate}[(a)]
 	\item $\sum_{S \in \mathscr{S}} \widehat{\omega}_S = 1$ 
-	\item For each $S\in \mathscr{S}$, $\widehat{\omega}_S \rightarrow_d\varphi(M|S)$, a function of $M$ (the normal random vector defined in Theorem \ref{thm:normality}) and constants only.
+	\item For each $S\in \mathscr{S}$, $\widehat{\omega}_S \rightarrow_d\varphi_S(\tau, M)$, a function of $\tau$, $M$ (the normal random vector defined in Theorem \ref{thm:normality}) and consistently estimable constants only.
 \end{enumerate}
 \end{assump}
 
 \begin{cor}[Asymptotic Distribution of Moment-Average Estimators]
 \label{cor:momentavg}
 Under Assumption \ref{assump:weights} and the conditions of Theorem \ref{thm:normality},
-	$$\sqrt{n}\left(\widehat{\mu} -  \mu_0\right) \rightarrow_{d}\Lambda(\tau) =  -\nabla_\theta\mu(\theta_0)'\left[\sum_{S \in \mathscr{S}} \varphi(M|S) K_S\Xi_S\right] M.$$
+	$$\sqrt{n}\left(\widehat{\mu} -  \mu_0\right) \rightarrow_{d}\Lambda(\tau) =  -\nabla_\theta\mu(\theta_0)'\left[\sum_{S \in \mathscr{S}} \varphi_S(\tau,M) K_S\Xi_S\right] (M + \tau).$$
 \end{cor}
 Notice that the limit random variable, denoted $\Lambda(\tau)$, is a randomly weighted average of the multivariate normal vector $M$. Hence, $\Lambda(\tau)$ is non-normal. 
 
-Although it restricts the convergence of the weight functions, Assumption \ref{assump:weights} is satisfied by weighting schemes based on a number of familiar moment selection criteria. Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} shows that the FMSC converges in distribution to a function of $M$ and constants only. In particular, we have $FMSC_n(S) \rightarrow_dFMSC(M|S)$ where
+Although it restricts the convergence of the weight functions, Assumption \ref{assump:weights} is satisfied by weighting schemes based on a number of familiar moment selection criteria. Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} shows that the FMSC converges in distribution to a function of $\tau$, $M$ and consistently estimable constants only. In particular, we see that $FMSC_n(S)$ converges in distribution to 
 \begin{equation}
 \label{eq:FMSClimit}
-	\mbox{FMSC}(M|S) = \nabla_\theta\mu(\theta_0)'K_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\Psi \left(MM' - \Omega\right)\Psi' \end{array}\right] + \Omega\right\}\Xi_S'K_S'\nabla_\theta\mu(\theta_0)
+	\mbox{FMSC}_S(\tau,M) = \nabla_\theta\mu(\theta_0)'K_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0& B(\tau,M) \end{array}\right] + \Omega\right\}\Xi_S'K_S'\nabla_\theta\mu(\theta_0)
 \end{equation}
-Under local mis-specification, the $J$-test statistic converges to a non-central $\chi^2$ distribution. This limit distribution, too, can be expressed in terms of $M$ and constants only, as the following result shows.
+where $B(\tau,M)$ is given by
+\begin{equation}
+	\label{eq:Bdef}
+	B(\tau,M) = (\Psi M + \tau)(\Psi M + \tau)' - \Psi \Omega \Psi
+\end{equation}
+and $\Psi$ is defined in Theorem \ref{thm:tau}.
+\todo[inline]{Should put this into a corollary or something.}
+
+Under local mis-specification, the $J$-test statistic converges to a non-central $\chi^2$ distribution. This limit distribution, too, can be expressed in terms of $\tau$, $M$ and consistently estimable constants only, as the following result shows.
 \begin{thm}[Distribution of $J$-Statistic under Local Mis-Specification] 
 \label{pro:jstat}
-	Let $J_n(S)  = n \left[\Xi_S f_n(\widehat{\theta}_S)\right]' \widehat{\Omega}^{-1}\left[\Xi_S f_n(\widehat{\theta}_S)\right]$ where $\widehat{\Omega}^{-1}_S$ is a consistent estimator of $\Omega_S^{-1}$. Then, under the conditions of Theorem \ref{thm:normality}, $J_n(S) \rightarrow_dJ(M|S)$, where
-		$$J(M|S)=(\Omega_S^{-1/2}M_S)' (I - P_S)(\Omega_S^{-1/2}M_S),$$
-$P_S$ is the projection matrix formed from the GMM the identifying restrictions $\Omega^{-1/2}_S F_S$, and $M_S = \Xi_S M$.
+	Define the J-test statistic as per usual by $J_n(S)  = n \left[\Xi_S f_n(\widehat{\theta}_S)\right]' \widehat{\Omega}^{-1}\left[\Xi_S f_n(\widehat{\theta}_S)\right]$ where $\widehat{\Omega}^{-1}_S$ is a consistent estimator of $\Omega_S^{-1}$. Then, under the conditions of Theorem \ref{thm:normality}, we have $J_n(S) \rightarrow_dJ_S(\tau, M)$ where
+		$$J_S(\tau, M)=[\Omega_S^{-1/2}\Xi_S(M + \tau)]' (I - P_S)[\Omega_S^{-1/2}\Xi_S(M + \tau)],$$
+and $P_S$ is the projection matrix formed from the GMM identifying restrictions $\Omega^{-1/2}_S F_S$.
 \end{thm}
-To connect these results to estimators post-selection, consider the weight function $\widehat{\omega}_S^{MSC} = \mathbf{1}\left\{\mbox{MSC}_n(S) = \min_{S'\in \mathscr{S}} \mbox{MSC}_n(S')\right\}$ where $\mbox{MSC}_n(S)$ is the value of some moment selection criterion evaluated at the sample observations $Z_{n1}\hdots, Z_{nn}$. Now suppose $\mbox{MSC}_n(S) \rightarrow_d\mbox{MSC}(M|S)$, a function of $M$ and constants only. Then, so long as the probability of ties, $\p\left\{\mbox{MSC}(M|S) = \mbox{MSC}(M|S') \right\}$, is zero for all $S\neq S'$, the continuous mapping theorem gives 
-	$$\widehat{\omega}_S^{MSC} \rightarrow_d \mathbf{1}\left\{\mbox{MSC}(M|S) = \min_{S'\in \mathscr{S}} \mbox{MSC}(M|S')\right\}$$ 
+To connect these results to estimators post-selection, consider the weight function $\widehat{\omega}_S^{MSC} = \mathbf{1}\left\{\mbox{MSC}_n(S) = \min_{S'\in \mathscr{S}} \mbox{MSC}_n(S')\right\}$ where $\mbox{MSC}_n(S)$ is the value of some moment selection criterion evaluated at the sample observations $Z_{n1}\hdots, Z_{nn}$. Now suppose $\mbox{MSC}_n(S) \rightarrow_d\mbox{MSC}_S(\tau,M)$, a function of $\tau$, $M$ and consistently estimable constants only. Then, so long as the probability of ties, $\p\left\{\mbox{MSC}_S(\tau,M) = \mbox{MSC}_{S'}(\tau,M) \right\}$, is zero for all $S\neq S'$, the continuous mapping theorem gives 
+	$$\widehat{\omega}_S^{MSC} \rightarrow_d \mathbf{1}\left\{\mbox{MSC}_S(\tau,M) = \min_{S'\in \mathscr{S}} \mbox{MSC}_{S'}(\tau,M)\right\}$$ 
 satisfying Assumption \ref{assump:weights} (b). Thus, post-selection estimators based on the FMSC, the downward $J$-test procedure, GMM-BIC, GMM-HQ, and GMM-AIC all fall within the ambit of \ref{cor:momentavg}. GMM-BIC and GMM-HQ, however, are not particularly interesting under local mis-specification. Intuitively, because they aim to select all valid moment conditions w.p.a.1, we would expect that under Assumption \ref{assump:drift} they simply choose the full moment set in the limit. The following result states that this intuition is correct. Because moment selection using the GMM-BIC or HQ leads to weights with a degenerate asymptotic distribution, these  are not considered further below. 
 \begin{thm}[Consistent Criteria under Local Mis-Specification]
 \label{pro:andrews}
@@ -1036,36 +1043,40 @@ Consider a moment selection criterion of the form $MSC(S) = J_n(S) - h(|S|)\kapp
 \subsection{Valid Confidence Intervals}
 While Corollary \ref{cor:momentavg} characterizes the limiting behavior of moment-average, and hence post-selection estimators, the limiting random variable $\Lambda(\tau)$ is a complicated function of the normal random vector $M$. Because this distribution is analytically intractable, I adapt a suggestion from \cite{ClaeskensHjortbook} and approximate it by simulation. The result is a conservative procedure that provides asymptotically valid confidence intervals.\footnote{Although I originally developed this procedure by analogy to \cite{ClaeskensHjortbook}, \cite{Leeb} kindly pointed out that constructions of the kind given here have appeared elsewhere in the statistics literature, notably in \cite{Loh1985}, \cite{Berger1994}, and \cite{Silvapulle1996}. More recently, \cite{McCloskey} uses a similar approach to study non-standard testing problems.}
  
-First, suppose that $K_S$, $\varphi(\cdot|S)$, $\theta_0$, $\Omega$ and $\tau$ were known. Then, by simulating from $M$, as defined in Theorem \ref{thm:normality}, the distribution of $\Lambda(\tau)$, defined in Corollary \ref{cor:momentavg}, could be approximated to arbitrary precision. To operationalize this procedure, substitute consistent estimators of $K_S$, $\theta_0$, and $\Omega$, e.g.\ those used to calculate FMSC. To estimate $\varphi(\cdot|S)$, we first need to derive the limit distribution of $\widehat{\omega}_S$, the data-based weights specified by the user. As an example, consider the case of moment selection based on the FMSC. Here $\widehat{\omega}_S$ is simply the indicator function
+First, suppose that $K_S$, $\varphi_S(\cdot,\cdot)$, $\theta_0$, $\Omega$ and $\tau$ were known. Then, by simulating from $M$, as defined in Theorem \ref{thm:normality}, the distribution of $\Lambda(\tau)$, defined in Corollary \ref{cor:momentavg}, could be approximated to arbitrary precision. To operationalize this procedure, substitute consistent estimators of $K_S$, $\theta_0$, and $\Omega$, e.g.\ those used to calculate FMSC. To estimate $\varphi(\cdot|S)$, we first need to derive the limit distribution of $\widehat{\omega}_S$, the data-based weights specified by the user. As an example, consider the case of moment selection based on the FMSC. Here $\widehat{\omega}_S$ is simply the indicator function
 \begin{equation}
 	\label{eq:FMSCindicate}
 	\widehat{\omega}_S = \mathbf{1}\left\{\mbox{FMSC}_n(S) = \min_{S'\in \mathscr{S}} \mbox{FMSC}_n(S')\right\}
 \end{equation}
-To estimate $\varphi(\cdot|S)$, we first substitute consistent estimators of $\Omega$, $K_S$ and $\theta_0$ into $\mbox{FMSC}(M|S)$, defined in Equation \ref{eq:FMSClimit}, yielding,
+To estimate $\varphi_S(\cdot,\cdot)$, we first substitute consistent estimators of $\Omega$, $K_S$ and $\theta_0$ into $\mbox{FMSC}_S(\tau,M)$, defined in Equation \ref{eq:FMSClimit}, yielding,
 \begin{equation}
-	\widehat{\mbox{FMSC}}(M|S) = \nabla_\theta\mu(\widehat{\theta})'\widehat{K}_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\widehat{\Psi} \left(MM' - \widehat{\Omega}\right)\widehat{\Psi}' \end{array}\right] + \widehat{\Omega}\right\}\Xi_S'\widehat{K}_S'\nabla_\theta\mu(\widehat{\theta}).
+	\widehat{\mbox{FMSC}}_S(\tau,M) = \nabla_\theta\mu(\widehat{\theta})'\widehat{K}_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\widehat{\mathcal{B}}(\tau,M) \end{array}\right] + \widehat{\Omega}\right\}\Xi_S'\widehat{K}_S'\nabla_\theta\mu(\widehat{\theta}).
+\end{equation}
+where
+\begin{equation}
+	\widehat{\mathcal{B}}(\tau,M) = (\widehat{\Psi} M + \tau)(\widehat{\Psi} M + \tau)' - \widehat{\Psi} \widehat{\Omega} \widehat{\Psi}
 \end{equation}
 Combining this with Equation \ref{eq:FMSCindicate},
 \begin{equation}
 \label{eq:omegahat}
-	\widehat{\varphi}(\cdot|S) = \mathbf{1}\left\{\widehat{\mbox{FMSC}}(\cdot|S) = \min_{S'\in \mathscr{S}} \widehat{\mbox{FMSC}}(\cdot|S')\right\}
+	\widehat{\varphi}_S(\tau,M) = \mathbf{1}\left\{\widehat{\mbox{FMSC}}_S(\tau,M) = \min_{S'\in \mathscr{S}} \widehat{\mbox{FMSC}}_{S'}(\tau,M)\right\}
 \end{equation}
-For GMM-AIC moment selection or selection based on a downward $J$-test, $\varphi(\cdot|S)$ may be estimated analogously, following  Theorem \ref{pro:jstat}. 
+For GMM-AIC moment selection or selection based on a downward $J$-test, $\varphi_S(\cdot,\cdot)$ may be estimated analogously, following  Theorem \ref{pro:jstat}. 
 
-Simulating from $M$, defined in Theorem \ref{thm:normality}, requires estimates of $\Omega$ and $\tau$. Recall that no consistent estimator of $\tau$ is available under local mis-specification; the estimator $\widehat{\tau}$ has a non-degenerate limit distribution (see Theorem \ref{cor:tautau}). Thus, simulation from a $\mathcal{N}_{p+q}((0', \widehat{\tau}')',\widehat{\Omega} )$ distribution may lead to erroneous results by failing to account for the uncertainty that enters through $\widehat{\tau}$. The solution is to use a two-stage procedure. First construct a  $100(1-\delta)\%$ confidence region $T(\widehat{\tau})$ for $\tau$ using Theorem \ref{cor:tautau}. Then simulate from the distribution of $\Lambda(\tau)$, defined in Corollary \ref{cor:momentavg}, for each $\tau \in T(\widehat{\tau})$. Taking the lower and upper bounds of the resulting intervals, centering and rescaling yields a conservative interval for $\widehat{\mu}$, as defined in defined in Equation \ref{eq:avg}. The precise algorithm is as follows.
+Although simulating draws from $M$, defined in Theorem \ref{thm:normality}, requires only an estimate of $\Omega$, the limit $\varphi_S$ of the weight function also depends on $\tau$. As discussed above, no consistent estimator of $\tau$ is available under local mis-specification: the estimator $\widehat{\tau}$ has a non-degenerate limit distribution (see Theorem \ref{thm:tau}). Thus, substituting $\widehat{\tau}$ for $\tau$ will give erroneous results by failing to account for the uncertainty that enters through $\widehat{\tau}$. The solution is to use a two-stage procedure. First construct a  $100(1-\delta)\%$ confidence region $\mathcal{R}(\widehat{\tau})$ for $\tau$ using Theorem \ref{cor:tautau}. Then simulate from the distribution of $\Lambda(\tau)$, defined in Corollary \ref{cor:momentavg}, for each $\tau \in \mathcal{R}(\widehat{\tau})$. Taking the lower and upper bounds of the resulting intervals, centering and rescaling yields a conservative interval for $\widehat{\mu}$, as defined in defined in Equation \ref{eq:avg}. The precise algorithm is as follows.
 
 \begin{alg}[Simulation-based Confidence Interval for $\widehat{\mu}$]
 \label{alg:conf}
 \mbox{}
 \begin{enumerate}
-	\item For each $\tau \in T(\widehat{\tau})$ 
+	\item For each $\tau \in \mathcal{R}(\widehat{\tau})$ 
 		\begin{enumerate}[(i)]
-			\item Generate $M_j(\tau) \sim \mathcal{N}_{p+q}\left( (0', \tau')', \widehat{\Omega}  \right)$, $j = 1, 2, \hdots, B$ 
-			\item Set $\Lambda_j(\tau) = -\nabla_\theta\mu(\widehat{\theta})'\left[\sum_{S \in \mathscr{S}} \widehat{\varphi}(M_j(\tau)|S) \widehat{K}_S\Xi_S\right] M_j(\tau)$
-			\item Using $\{\Lambda_j(\tau)\}_{j=1}^B$, calculate $\widehat{a}(\tau)$, $\widehat{b}(\tau)$ such that
+			\item Generate $J$ independent draws $M_j \sim N_{p+q}( 0, \widehat{\Omega} )$
+			\item Set $\Lambda_j(\tau) = -\nabla_\theta\mu(\widehat{\theta})'\left[\sum_{S \in \mathscr{S}} \widehat{\varphi}_S(\tau,M_j) \widehat{K}_S\Xi_S\right] (M_j + \tau)$
+			\item Using $\{\Lambda_j(\tau)\}_{j=1}^J$, calculate $\widehat{a}(\tau)$, $\widehat{b}(\tau)$ such that
 		$$\p\left\{ \widehat{a}(\tau) \leq\Lambda(\tau)\leq \widehat{b}(\tau) \right\} = 1 - \alpha$$
 		\end{enumerate}
-	\item Set $\displaystyle \widehat{a}_{min}(\widehat{\tau})=\min_{\tau \in T(\widehat{\tau})} \widehat{a}(\tau)$ and $\displaystyle \widehat{b}_{max}(\widehat{\tau})= \max_{\tau \in T(\widehat{\tau})} \widehat{b}(\tau)$ \vspace{0.5em}
+	\item Set $\displaystyle \widehat{a}_{min}(\widehat{\tau})=\min_{\tau \in \mathcal{R}(\widehat{\tau})} \widehat{a}(\tau)$ and $\displaystyle \widehat{b}_{max}(\widehat{\tau})= \max_{\tau \in \mathcal{R}(\widehat{\tau})} \widehat{b}(\tau)$ \vspace{0.5em}
 	\item The confidence interval for $\mu$ is
 				$\displaystyle \mbox{CI}_{sim}=\left[ \widehat{\mu} - \frac{\widehat{b}_{max}(\widehat{\tau})}{\sqrt{n}}, \;\;\; \widehat{\mu} - \frac{\widehat{a}_{min}(\widehat{\tau})}{\sqrt{n}} \right]$
 \end{enumerate}
@@ -1076,11 +1087,11 @@ Simulating from $M$, defined in Theorem \ref{thm:normality}, requires estimates 
 If
 \begin{enumerate}[(a)]
 	\item $\widehat{\Psi}$, $\widehat{\Omega}$, $\widehat{\theta}$ and $\widehat{K}_S$ are consistent estimators of $\Psi$, $\Omega$, $\theta_0$ and $K_S$;
-	\item $\widehat{\varphi}(M|S) = \varphi(M|S)+ o_p(1)$;
+	\item $\widehat{\varphi}_S(\tau,M) = \varphi_S(\tau,M)+ o_p(1)$;
 	\item $\widehat{\Delta}(\widehat{\tau},\tau) = \left(\widehat{\tau} - \tau\right)' \left(\widehat{\Psi}\widehat{\Omega}\widehat{\Psi}'\right)^{-1} \left(\widehat{\tau} - \tau\right)$ and
-	\item $T(\widehat{\tau}) = \left\{\tau \colon  \Delta_n(\widehat{\tau},\tau) \leq \chi^2_q(\delta)\right\}$ where $\chi^2_q(\delta)$ denotes the $1-\delta$ quantile of a $\chi^2$ distribution with $q$ degrees of freedom
+	\item $\mathcal{R}(\widehat{\tau}) = \left\{\tau \colon  \Delta_n(\widehat{\tau},\tau) \leq \chi^2_q(\delta)\right\}$ where $\chi^2_q(\delta)$ denotes the $1-\delta$ quantile of a $\chi^2$ distribution with $q$ degrees of freedom
 \end{enumerate}
-then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asymptotic coverage probability no less than $1-(\alpha + \delta)$ as $B,n\rightarrow \infty$.
+then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asymptotic coverage probability no less than $1-(\alpha + \delta)$ as $J,n\rightarrow \infty$.
 \end{thm}
 
 To evaluate the performance of the procedure given in Algorithm \ref{alg:conf}, we revisit the simulation experiment described in Section \ref{sec:fmscsim}, considering FMSC moment selection. The following results are based on 10,000 replications, each with a sample size of 500. Table \ref{tab:FMSCconf} gives the empirical coverage probabilities of traditional 95\% confidence intervals post-FMSC selection. These are far below the nominal level over the vast majority of the parameter space. Table \ref{tab:FMSCcorrect} presents the empirical coverage of conservative 90\% confidence intervals constructed according to Algorithm \ref{alg:conf}, with $B=1000$.\footnote{Because this simulation is computationally intensive, I use a reduced grid of parameter values.} The two-stage simulation procedure performs remarkably well, achieving a minimum coverage probability of $0.89$ relative to its nominal level of $0.9$. Moreover, a na\"{i}ve one-step procedure that omits the first-stage and simply simulates from $M$ based on $\widehat{\tau}$ performs surprisingly well; see Table \ref{tab:FMSCnaive}. While the empirical coverage probabilities of the one-step procedure are generally lower than the nominal level of $0.95$, they represent a substantial improvement over the traditional intervals given in Table \ref{tab:FMSCconf}, with a worst-case coverage of $0.72$ compared to $0.15$. This suggests that the one-step intervals might be used as a rough but useful approximation to the correct but more computationally intensive intervals constructed according to Algorithm \ref{alg:conf}.
@@ -1445,7 +1456,7 @@ By Theorem \ref{thm:tau} and the Continuous Mapping Theorem, we have $\widehat{\
 \todo[inline]{Need to adjust some notation here for $M$ and $\tau$, etc.}
 Because the weights sum to one
 		$$\sqrt{n}\left(\widehat{\mu} - \mu_0\right) = \sqrt{n} \left[\left(\sum_{S \in \mathscr{S}} \widehat{\omega}_S \widehat{\mu}_S\right) - \mu_0\right]= \sum_{S \in \mathscr{S}}\left[ \widehat{\omega}_S \sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\right].$$
-By Corollary \ref{cor:target}, $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S (M_S + \tau_S)$ and by the assumptions of this Corollary $\widehat{\omega}_S \rightarrow_d\varphi(M|S)$ for each $S\in \mathscr{S}$, where $\varphi(M|S)$ is a function of $M$ and constants only. Hence $\widehat{\omega}_S$ and $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)$ converge jointly in distribution to their respective functions of $M$, for all $S \in \mathscr{S}$. The result follows by application of the Continuous Mapping Theorem.
+By Corollary \ref{cor:target}, $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S (M_S + \tau_S)$ and by the assumptions of this Corollary $\widehat{\omega}_S \rightarrow_d\varphi_S(\tau,M)$ for each $S\in \mathscr{S}$, where $\varphi_S(\tau,M)$ is a function of $M$ and constants only. Hence $\widehat{\omega}_S$ and $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)$ converge jointly in distribution to their respective functions of $M$, for all $S \in \mathscr{S}$. The result follows by application of the Continuous Mapping Theorem.
 \end{proof}
 
 \begin{proof}[Proof of Theorem \ref{pro:jstat}]
