@@ -12,6 +12,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{todonotes}
+\usepackage{mathrsfs}
 \usepackage[margin=1.2in]{geometry}
 	
 \usepackage{setspace}
@@ -892,7 +893,7 @@ Moment selection is a crude procedure: it gives full weight to the estimator tha
 
 In the context of maximum likelihood estimation, \cite{Burnhametal} suggest averaging the estimators resulting from a number of competing models using exponential weights of the form $w_k = \exp(-I_k/2)/\sum_{i=1}^K \exp(-I_i/2)$ where $I_k$ is an information criterion evaluated for model $k$, and $i$ indexes the set of $K$ candidate models. This expression, constructed by an analogy with Bayesian model averaging, gives more weight to models with lower values of the information criterion but non-zero weight to all models. Applying this idea to the moment selection criteria given above, consider
 	\begin{equation}	
-		\widehat{\omega}_S = \left.\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S)\right\}\right/\sum_{S' \in \mathcal{A}}\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S')\right\}
+		\widehat{\omega}_S = \left.\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S)\right\}\right/\sum_{S' \in \mathscr{S}}\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S')\right\}
 		\label{eq:expweight}
 \end{equation}
 where MSC$(\cdot)$ is a moment selection criterion and the parameter $\kappa$ varies the uniformity of the weighting. As $\kappa \rightarrow 0$ the weights become more uniform; as $\kappa \rightarrow \infty$ they approach the moment selection procedure given by minimizing the corresponding criterion. Table \ref{tab:avg} compares moment averaging against moment selection by substituting FMSC, GMM-AIC, BIC and HQ into Equation \ref{eq:expweight} using the simulation experiment described in Section \ref{sec:fmscsim}. Calculations are based on 10,000 replications, each with a sample size of 500. For FMSC averaging $\kappa = 1/100$ to account for the fact that the FMSC is generally more variable than criteria based on the $J$-test. Weights for GMM-BIC, HQ, and AIC averaging set $\kappa = 1$. Both in terms of average and worst-case RMSE, moment selection is inferior to moment averaging. The only exception is worst-case RMSE for the FMSC. (Pointwise comparisons are available upon request.) If our goal is estimators with low RMSE, moment averaging may be preferable to moment selection. 
@@ -989,23 +990,23 @@ Because FMSC, GMM-AIC and selection based on a downward $J$-test at a fixed sign
 To account for the effects of moment selection on inference, I extend a framework developed by \cite{HjortClaeskens} for frequentist model averaging. I treat post-selection estimators as a special case of moment-averaging: combining estimators based on different moment sets using data-dependent weights. Consider an estimator of the form,
 \begin{equation}
 	\label{eq:avg}
-	\widehat{\mu}=\sum_{S \in \mathcal{A}} \widehat{\omega}_S\widehat{\mu}_S
+	\widehat{\mu}=\sum_{S \in \mathscr{S}} \widehat{\omega}_S\widehat{\mu}_S
 \end{equation}
-where $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ is an estimator of the target parameter $\mu$ under moment set $S$, $\mathcal{A}$ is the collection of all moment sets under consideration, and $\widehat{\omega}_S$ is shorthand for the value of a data-dependent weight function  $\widehat{\omega}_S=\omega(\cdot| \cdot)$ evaluated at moment set $S$ and the sample observations $Z_{n1}, \hdots, Z_{nn}$.  As above $\mu(\cdot)$ is a $\mathbb{R}$-valued, $Z$-almost surely continuous function of $\theta$ that is differentiable in an open neighborhood of $\theta_0$. When $\widehat{\omega}_S$ is an indicator, taking on the value one at the moment set moment set that minimizes some moment selection criterion, $\widehat{\mu}$ is a post-moment selection estimator. More generally, $\widehat{\mu}$ is a moment average estimator.
+where $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ is an estimator of the target parameter $\mu$ under moment set $S$, $\mathscr{S}$ is the collection of all moment sets under consideration, and $\widehat{\omega}_S$ is shorthand for the value of a data-dependent weight function  $\widehat{\omega}_S=\omega(\cdot| \cdot)$ evaluated at moment set $S$ and the sample observations $Z_{n1}, \hdots, Z_{nn}$.  As above $\mu(\cdot)$ is a $\mathbb{R}$-valued, $Z$-almost surely continuous function of $\theta$ that is differentiable in an open neighborhood of $\theta_0$. When $\widehat{\omega}_S$ is an indicator, taking on the value one at the moment set moment set that minimizes some moment selection criterion, $\widehat{\mu}$ is a post-moment selection estimator. More generally, $\widehat{\mu}$ is a moment average estimator.
 
-The limiting behavior of $\widehat{\mu}$ follows almost immediately from Theorem \ref{thm:normality}, which states that asymptotic distribution of $\widehat{\theta}_S$ depends only on $K_S$ and $M$. Because $K_S$ is a matrix of constants, the random variable $M$ governs the joint limiting behavior of $\widehat{\theta}_S$, $S\in \mathcal{A}$. Under certain conditions on the $\widehat{\omega}_S$, we can fully characterize the limit distribution of $\widehat{\mu}$.
+The limiting behavior of $\widehat{\mu}$ follows almost immediately from Theorem \ref{thm:normality}, which states that asymptotic distribution of $\widehat{\theta}_S$ depends only on $K_S$ and $M$. Because $K_S$ is a matrix of constants, the random variable $M$ governs the joint limiting behavior of $\widehat{\theta}_S$, $S\in \mathscr{S}$. Under certain conditions on the $\widehat{\omega}_S$, we can fully characterize the limit distribution of $\widehat{\mu}$.
 \begin{assump}[Conditions on the Weights]\mbox{}
 \label{assump:weights}
 \begin{enumerate}[(a)]
-	\item $\sum_{S \in \mathcal{A}} \widehat{\omega}_S = 1$ 
-	\item For each $S\in \mathcal{A}$, $\widehat{\omega}_S \rightarrow_d\varphi(M|S)$, a function of $M$ (the normal random vector defined in Theorem \ref{thm:normality}) and constants only.
+	\item $\sum_{S \in \mathscr{S}} \widehat{\omega}_S = 1$ 
+	\item For each $S\in \mathscr{S}$, $\widehat{\omega}_S \rightarrow_d\varphi(M|S)$, a function of $M$ (the normal random vector defined in Theorem \ref{thm:normality}) and constants only.
 \end{enumerate}
 \end{assump}
 
 \begin{cor}[Asymptotic Distribution of Moment-Average Estimators]
 \label{cor:momentavg}
 Under Assumption \ref{assump:weights} and the conditions of Theorem \ref{thm:normality},
-	$$\sqrt{n}\left(\widehat{\mu} -  \mu_0\right) \rightarrow_{d}\Lambda(\tau) =  -\nabla_\theta\mu(\theta_0)'\left[\sum_{S \in \mathcal{A}} \varphi(M|S) K_S\Xi_S\right] M.$$
+	$$\sqrt{n}\left(\widehat{\mu} -  \mu_0\right) \rightarrow_{d}\Lambda(\tau) =  -\nabla_\theta\mu(\theta_0)'\left[\sum_{S \in \mathscr{S}} \varphi(M|S) K_S\Xi_S\right] M.$$
 \end{cor}
 Notice that the limit random variable, denoted $\Lambda(\tau)$, is a randomly weighted average of the multivariate normal vector $M$. Hence, $\Lambda(\tau)$ is non-normal. 
 
@@ -1021,8 +1022,8 @@ Under local mis-specification, the $J$-test statistic converges to a non-central
 		$$J(M|S)=(\Omega_S^{-1/2}M_S)' (I - P_S)(\Omega_S^{-1/2}M_S),$$
 $P_S$ is the projection matrix formed from the GMM the identifying restrictions $\Omega^{-1/2}_S F_S$, and $M_S = \Xi_S M$.
 \end{thm}
-To connect these results to estimators post-selection, consider the weight function $\widehat{\omega}_S^{MSC} = \mathbf{1}\left\{\mbox{MSC}_n(S) = \min_{S'\in \mathcal{A}} \mbox{MSC}_n(S')\right\}$ where $\mbox{MSC}_n(S)$ is the value of some moment selection criterion evaluated at the sample observations $Z_{n1}\hdots, Z_{nn}$. Now suppose $\mbox{MSC}_n(S) \rightarrow_d\mbox{MSC}(M|S)$, a function of $M$ and constants only. Then, so long as the probability of ties, $\p\left\{\mbox{MSC}(M|S) = \mbox{MSC}(M|S') \right\}$, is zero for all $S\neq S'$, the continuous mapping theorem gives 
-	$$\widehat{\omega}_S^{MSC} \rightarrow_d \mathbf{1}\left\{\mbox{MSC}(M|S) = \min_{S'\in \mathcal{A}} \mbox{MSC}(M|S')\right\}$$ 
+To connect these results to estimators post-selection, consider the weight function $\widehat{\omega}_S^{MSC} = \mathbf{1}\left\{\mbox{MSC}_n(S) = \min_{S'\in \mathscr{S}} \mbox{MSC}_n(S')\right\}$ where $\mbox{MSC}_n(S)$ is the value of some moment selection criterion evaluated at the sample observations $Z_{n1}\hdots, Z_{nn}$. Now suppose $\mbox{MSC}_n(S) \rightarrow_d\mbox{MSC}(M|S)$, a function of $M$ and constants only. Then, so long as the probability of ties, $\p\left\{\mbox{MSC}(M|S) = \mbox{MSC}(M|S') \right\}$, is zero for all $S\neq S'$, the continuous mapping theorem gives 
+	$$\widehat{\omega}_S^{MSC} \rightarrow_d \mathbf{1}\left\{\mbox{MSC}(M|S) = \min_{S'\in \mathscr{S}} \mbox{MSC}(M|S')\right\}$$ 
 satisfying Assumption \ref{assump:weights} (b). Thus, post-selection estimators based on the FMSC, the downward $J$-test procedure, GMM-BIC, GMM-HQ, and GMM-AIC all fall within the ambit of \ref{cor:momentavg}. GMM-BIC and GMM-HQ, however, are not particularly interesting under local mis-specification. Intuitively, because they aim to select all valid moment conditions w.p.a.1, we would expect that under Assumption \ref{assump:drift} they simply choose the full moment set in the limit. The following result states that this intuition is correct. Because moment selection using the GMM-BIC or HQ leads to weights with a degenerate asymptotic distribution, these  are not considered further below. 
 \begin{thm}[Consistent Criteria under Local Mis-Specification]
 \label{pro:andrews}
@@ -1038,7 +1039,7 @@ While Corollary \ref{cor:momentavg} characterizes the limiting behavior of momen
 First, suppose that $K_S$, $\varphi(\cdot|S)$, $\theta_0$, $\Omega$ and $\tau$ were known. Then, by simulating from $M$, as defined in Theorem \ref{thm:normality}, the distribution of $\Lambda(\tau)$, defined in Corollary \ref{cor:momentavg}, could be approximated to arbitrary precision. To operationalize this procedure, substitute consistent estimators of $K_S$, $\theta_0$, and $\Omega$, e.g.\ those used to calculate FMSC. To estimate $\varphi(\cdot|S)$, we first need to derive the limit distribution of $\widehat{\omega}_S$, the data-based weights specified by the user. As an example, consider the case of moment selection based on the FMSC. Here $\widehat{\omega}_S$ is simply the indicator function
 \begin{equation}
 	\label{eq:FMSCindicate}
-	\widehat{\omega}_S = \mathbf{1}\left\{\mbox{FMSC}_n(S) = \min_{S'\in \mathcal{A}} \mbox{FMSC}_n(S')\right\}
+	\widehat{\omega}_S = \mathbf{1}\left\{\mbox{FMSC}_n(S) = \min_{S'\in \mathscr{S}} \mbox{FMSC}_n(S')\right\}
 \end{equation}
 To estimate $\varphi(\cdot|S)$, we first substitute consistent estimators of $\Omega$, $K_S$ and $\theta_0$ into $\mbox{FMSC}(M|S)$, defined in Equation \ref{eq:FMSClimit}, yielding,
 \begin{equation}
@@ -1047,7 +1048,7 @@ To estimate $\varphi(\cdot|S)$, we first substitute consistent estimators of $\O
 Combining this with Equation \ref{eq:FMSCindicate},
 \begin{equation}
 \label{eq:omegahat}
-	\widehat{\varphi}(\cdot|S) = \mathbf{1}\left\{\widehat{\mbox{FMSC}}(\cdot|S) = \min_{S'\in \mathcal{A}} \widehat{\mbox{FMSC}}(\cdot|S')\right\}
+	\widehat{\varphi}(\cdot|S) = \mathbf{1}\left\{\widehat{\mbox{FMSC}}(\cdot|S) = \min_{S'\in \mathscr{S}} \widehat{\mbox{FMSC}}(\cdot|S')\right\}
 \end{equation}
 For GMM-AIC moment selection or selection based on a downward $J$-test, $\varphi(\cdot|S)$ may be estimated analogously, following  Theorem \ref{pro:jstat}. 
 
@@ -1060,7 +1061,7 @@ Simulating from $M$, defined in Theorem \ref{thm:normality}, requires estimates 
 	\item For each $\tau \in T(\widehat{\tau})$ 
 		\begin{enumerate}[(i)]
 			\item Generate $M_j(\tau) \sim \mathcal{N}_{p+q}\left( (0', \tau')', \widehat{\Omega}  \right)$, $j = 1, 2, \hdots, B$ 
-			\item Set $\Lambda_j(\tau) = -\nabla_\theta\mu(\widehat{\theta})'\left[\sum_{S \in \mathcal{A}} \widehat{\varphi}(M_j(\tau)|S) \widehat{K}_S\Xi_S\right] M_j(\tau)$
+			\item Set $\Lambda_j(\tau) = -\nabla_\theta\mu(\widehat{\theta})'\left[\sum_{S \in \mathscr{S}} \widehat{\varphi}(M_j(\tau)|S) \widehat{K}_S\Xi_S\right] M_j(\tau)$
 			\item Using $\{\Lambda_j(\tau)\}_{j=1}^B$, calculate $\widehat{a}(\tau)$, $\widehat{b}(\tau)$ such that
 		$$\p\left\{ \widehat{a}(\tau) \leq\Lambda(\tau)\leq \widehat{b}(\tau) \right\} = 1 - \alpha$$
 		\end{enumerate}
@@ -1443,8 +1444,8 @@ By Theorem \ref{thm:tau} and the Continuous Mapping Theorem, we have $\widehat{\
 \begin{proof}[Proof of Corollary \ref{cor:momentavg}]
 \todo[inline]{Need to adjust some notation here for $M$ and $\tau$, etc.}
 Because the weights sum to one
-		$$\sqrt{n}\left(\widehat{\mu} - \mu_0\right) = \sqrt{n} \left[\left(\sum_{S \in \mathcal{A}} \widehat{\omega}_S \widehat{\mu}_S\right) - \mu_0\right]= \sum_{S \in \mathcal{A}}\left[ \widehat{\omega}_S \sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\right].$$
-By Corollary \ref{cor:target}, $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S (M_S + \tau_S)$ and by the assumptions of this Corollary $\widehat{\omega}_S \rightarrow_d\varphi(M|S)$ for each $S\in \mathcal{A}$, where $\varphi(M|S)$ is a function of $M$ and constants only. Hence $\widehat{\omega}_S$ and $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)$ converge jointly in distribution to their respective functions of $M$, for all $S \in \mathcal{A}$. The result follows by application of the Continuous Mapping Theorem.
+		$$\sqrt{n}\left(\widehat{\mu} - \mu_0\right) = \sqrt{n} \left[\left(\sum_{S \in \mathscr{S}} \widehat{\omega}_S \widehat{\mu}_S\right) - \mu_0\right]= \sum_{S \in \mathscr{S}}\left[ \widehat{\omega}_S \sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\right].$$
+By Corollary \ref{cor:target}, $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S (M_S + \tau_S)$ and by the assumptions of this Corollary $\widehat{\omega}_S \rightarrow_d\varphi(M|S)$ for each $S\in \mathscr{S}$, where $\varphi(M|S)$ is a function of $M$ and constants only. Hence $\widehat{\omega}_S$ and $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)$ converge jointly in distribution to their respective functions of $M$, for all $S \in \mathscr{S}$. The result follows by application of the Continuous Mapping Theorem.
 \end{proof}
 
 \begin{proof}[Proof of Theorem \ref{pro:jstat}]
@@ -1460,7 +1461,7 @@ by Assumption \ref{assump:highlevel} (h), where $\widehat{\Omega}^{-1/2}_S$ is a
 
 
 \begin{proof}[Proof of Theorem \ref{pro:andrews}]
-Let $S_1$ and $S_2$ be arbitrary moment sets in $\mathcal{A}$ and let $|S|$ denote the cardinality of $S$. Further, define $\Delta_n(S_1, S_2) = MSC(S_1) - MSC(S_2)$. By Theorem \ref{pro:jstat}, $J_n(S) = O_p(1)$, $S \in \mathcal{A}$, thus
+Let $S_1$ and $S_2$ be arbitrary moment sets in $\mathscr{S}$ and let $|S|$ denote the cardinality of $S$. Further, define $\Delta_n(S_1, S_2) = MSC(S_1) - MSC(S_2)$. By Theorem \ref{pro:jstat}, $J_n(S) = O_p(1)$, $S \in \mathscr{S}$, thus
 	\begin{eqnarray*}
 			\Delta_n(S_1, S_2)	&=&   \left[J_{n}(S_1) - J_{n}(S_2)\right] - \left[h\left(p+|S_1|\right) - h\left(p+|S_2|\right)\right]\kappa_n\\
 				&=& O_p(1) - C\kappa_n
