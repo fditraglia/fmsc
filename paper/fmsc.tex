@@ -1530,43 +1530,41 @@ Hence:
 The result follows because the full moment set contains more moment conditions than any other moment set $S$.
 \end{proof}
 
-\todo[inline]{The following proof still needs cleanup.}
-
 \begin{proof}[Proof of Theorem \ref{pro:sim}]
-By Theorem \ref{thm:tau} and the Continuous Mapping Theorem we find that $\Delta_n(\widehat{\tau},\tau^*)\rightarrow_d \Delta(\tau,\tau^*)$ where
-$$\Delta(\tau,\tau^*) =  (\Psi M + \tau - \tau^*)' (\Psi\Omega\Psi')^{-1} \left(\Psi M + \tau - \tau^*\right)$$
-follows a \emph{non-central} $\chi^2$ distribution with $q$ degrees of freedom and non-centrality parameter $\tau - \tau^*$.
-
-
-$\widehat{a}_{min}(\widehat{\tau})$ to $a_{min}(\Psi M + \tau)$ 
-
-$\widehat{b}_{max}(\widehat{\tau})$ to $b_{max}(\Psi M + \tau)$ 
-
-$a_{min}(\Psi M + \tau)=\min \left\{a(\tau)\colon \tau \in T(\delta)\right\}$
-
-$b_{max}(\Psi M + \tau)=\max \left\{b(\tau)\colon \tau \in T(\delta)\right\}$
-
-$\mathscr{T}(\Psi M + \tau,\delta) = \left\{\tau^* \colon  \Delta(\Psi M +\tau, \tau^*) \leq \chi^2_q(\delta) \right\}$ 
-
-Corollary \ref{cor:momentavg}, $\sqrt{n}(\widehat{\mu} - \mu_0) \rightarrow_d\Lambda(\tau)$ \emph{jointly} with the above.
-
-Now, rearranging,
-	$$P\left\{\mu_0 \in \mbox{CI}_{sim} \right\} = P\left\{\widehat{a}_{min}(\widehat{\tau}) \leq  \sqrt{n}\left(\widehat{\mu} - \mu_0\right) \leq \widehat{b}_{max}(\widehat{\tau}) \right\}$$
-
-By the Continuous Mapping Theorem,
-	$$P\left[  \widehat{a}_{min}(\widehat{\tau}) \leq \sqrt{n}\left( \widehat{\mu}-\mu_0\right)\leq  \widehat{b}_{max}(\widehat{\tau}) \right] \rightarrow P \left[ a_{min}(\Psi M) \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right]$$
-so it suffices to show that $P \left[ a_{min}(\Psi M) \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right]\geq 1 - (\alpha + \delta).$
-Define the event $A = \left\{ \Delta(\Psi M, \tau) \leq \chi^2_q(\delta) \right\}$, so that $P(A) = 1-\delta$. Then,
-	\begin{eqnarray*}
-		1-\alpha %&=& \p\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\\
-			&=& P\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \right] + P\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A^c \right] 
-\end{eqnarray*}
-Now, $\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A$ is a subset of $\left\{a_0(\Psi M)  \leq \Lambda(\tau) \leq b_0(\Psi M)\right\}$ and  $\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A^c$ is a subset of $A^c$. Thus, 
+By Theorem \ref{thm:tau} and Corollary \ref{cor:momentavg},
 \begin{eqnarray*}
-P\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \right]  &\leq& P \left\{a_{min}(\Psi M)  \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right\}\\
-P\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A^c \right]  &\leq& P(A^c) = \delta.
+	P\left\{\mu_0 \in \mbox{CI}_{sim} \right\} %&=& P\left\{\widehat{a}_{min}(\widehat{\tau}) \leq  \sqrt{n}\left(\widehat{\mu} - \mu_0\right) \leq \widehat{b}_{max}(\widehat{\tau}) \right\}\\
+	&\rightarrow& P \left\{ a_{min} \leq \Lambda(\tau) \leq b_{max}\right\}
 \end{eqnarray*}
-Combining these, the result follows.
+where $a(\tau^*), b(\tau^*)$ define a collection of $(1-\alpha)\times 100\%$ intervals indexed by $\tau^*$, each of which is constructed under the assumption that $\tau = \tau^*$
+$$P\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*) \right\} = 1-\alpha $$
+and we define the shorthand $a_{min}, b_{max}$ as follows
+	\begin{eqnarray*}
+	a_{min}(\Psi M + \tau)&=&\min \left\{a(\tau^*)\colon \tau^* \in \mathscr{T}(\Psi M + \tau,\delta) \right\}\\
+	b_{max}(\Psi M + \tau)&=&\max \left\{b(\tau^*)\colon \tau^* \in \mathscr{T}(\Psi M + \tau,\delta) \right\}\\
+	\mathscr{T}(\Psi M + \tau,\delta) &=& \left\{\tau^* \colon  \Delta(\tau, \tau^*) \leq \chi^2_q(\delta) \right\}\\
+	\Delta(\tau,\tau^*) &=&  (\Psi M + \tau - \tau^*)' (\Psi\Omega\Psi')^{-1} \left(\Psi M + \tau - \tau^*\right)
+	\end{eqnarray*}
+Now, let $A = \left\{ \Delta(\tau, \tau) \leq \chi^2_q(\delta) \right\}$ where $\chi^2_q(\delta)$ is the $1- \delta$ quantile of a $\chi^2_q$ random variable. 
+This is the event that the \emph{limiting version} of the confidence region for $\tau$ contains the true bias parameter. 
+Since $\Delta(\tau, \tau)\sim\chi^2_q$, $P(A) = 1 - \delta$. For every $\tau^*\in \mathscr{T}(\Psi M + \tau,\delta)$ we have
+$$P\left[\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*)  \right\}\cap A \right] + P\left[\left\{a(\tau^*) \leq \Lambda(\tau) \leq b(\tau^*)  \right\}\cap A^c \right] = 1-\alpha$$
+by decomposing $P\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*) \right\} $ into the sum of mutually exclusive events. 
+But since
+$$P\left[\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*)  \right\}\cap A^c \right] \leq P(A^c) = \delta$$
+we see that
+$$P\left[\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*)  \right\}\cap A \right]  
+\geq 1-\alpha-\delta$$
+for every $\tau^* \in \mathscr{T}(\Psi M + \tau,\delta)$. 
+Now, by definition, if $A$ occurs then the true bias parameter $\tau$ is contained in $\mathscr{T}(\Psi M + \tau,\delta)$ and hence 
+$$P\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \right]  
+\geq 1-\alpha-\delta.$$
+But when $\tau \in \mathscr{T}(\Psi M + \tau,\delta)$, $a_{min} \leq a(\tau)$ and $b(\tau) \leq b_{max}$. 
+It follows that
+	$$\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \subseteq \{a_{min} \leq \Lambda(\tau) \leq b_{max}\}$$
+and therefore
+	$$1 -\alpha - \delta \leq P\left\[\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*)  \right\}\cap A \right \leq P\left[ \{a_{min} \leq \Lambda(\tau) \leq b_{max}\}\right]$$
+as asserted.
 \end{proof}
 
 
