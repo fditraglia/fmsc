@@ -1466,7 +1466,9 @@ Essentially identical to the proofs of \cite{NeweyMcFadden1994} Theorems 2.6 and
 \end{proof}
 
 \begin{proof}[Proof of Theorems \ref{thm:OLSvsIV}, \ref{thm:chooseIV}]
-\todo[inline]{Standard, so just give a sketch: Lindeberg Feller and $L_2$ argument for WLLN.}
+The proofs of both results are similar and standard, so we provide only a sketch of the argument for Theorem \ref{thm:chooseIV}. 
+First substitute the DGP into the expression for $\widehat{\beta}_S$ and rearrange so that the left-hand side becomes $\sqrt{n}(\beta_S - \beta)$. 
+The right-hand side has two factors: the first converges in probability to $-K_S$ by an $L_2$ argument and the second converges in distribution to $M + (0', \tau')'$ by the Lindeberg-Feller Central Limit Theorem. 
 \end{proof}
 
 \begin{proof}[Proof of Theorem \ref{thm:tau}]
@@ -1563,7 +1565,7 @@ But when $\tau \in \mathscr{T}(\Psi M + \tau,\delta)$, $a_{min} \leq a(\tau)$ an
 It follows that
 	$$\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \subseteq \{a_{min} \leq \Lambda(\tau) \leq b_{max}\}$$
 and therefore
-	$$1 -\alpha - \delta \leq P\left\[\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*)  \right\}\cap A \right \leq P\left[ \{a_{min} \leq \Lambda(\tau) \leq b_{max}\}\right]$$
+	$$1 -\alpha - \delta \leq P\left[\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*)  \right\}\cap A \right] \leq P\left[ \{a_{min} \leq \Lambda(\tau) \leq b_{max}\}\right]$$
 as asserted.
 \end{proof}
 
