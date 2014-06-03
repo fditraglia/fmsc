@@ -421,8 +421,10 @@ Applying the Delta Method to Theorem \ref{thm:normality} gives the AMSE of $\wid
 \begin{cor}[AMSE of Target Parameter]
 \label{cor:target}
 Under the hypotheses of Theorem \ref{thm:normality}, 
-$$\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S (M_S+\tau_S)$$ 
-where $M_S = \Xi_S M$, $\tau_S = \Xi_S (0', \tau')'$ and $M$ is defined in Theorem \ref{thm:normality}.
+$$\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S \Xi_S \left(M +  \left[\begin{array}
+	{c} 0 \\ \tau
+\end{array} \right]\right)$$ 
+where $M$ is defined in Theorem \ref{thm:normality}.
 Hence,
 	$$\mbox{AMSE}\left(\widehat{\mu}_S\right) = \nabla_\theta\mu(\theta_0)'K_S \Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\tau\tau'\end{array}\right] + \Omega\right\}\Xi_S'K_S'\nabla_\theta\mu(\theta_0).$$
 \end{cor}
@@ -1011,7 +1013,9 @@ Under certain conditions on the $\widehat{\omega}_S$, we can fully characterize 
 \begin{cor}[Asymptotic Distribution of Moment-Average Estimators]
 \label{cor:momentavg}
 Under Assumption \ref{assump:weights} and the conditions of Theorem \ref{thm:normality},
-	$$\sqrt{n}\left(\widehat{\mu} -  \mu_0\right) \rightarrow_{d}\Lambda(\tau) =  -\nabla_\theta\mu(\theta_0)'\left[\sum_{S \in \mathscr{S}} \varphi_S(\tau,M) K_S\Xi_S\right] (M + \tau).$$
+	$$\sqrt{n}\left(\widehat{\mu} -  \mu_0\right) \rightarrow_{d}\Lambda(\tau) =  -\nabla_\theta\mu(\theta_0)'\left[\sum_{S \in \mathscr{S}} \varphi_S(\tau,M) K_S\Xi_S\right] \left(M + \left[\begin{array}
+	{c} 0 \\ \tau
+\end{array} \right]\right).$$
 \end{cor}
 Notice that the limit random variable, denoted $\Lambda(\tau)$, is a randomly weighted average of the multivariate normal vector $M$. 
 Hence, $\Lambda(\tau)$ is non-normal. 
@@ -1036,8 +1040,8 @@ This limit distribution, too, can be expressed in terms of $\tau$, $M$ and consi
 \begin{thm}[Distribution of $J$-Statistic under Local Mis-Specification] 
 \label{pro:jstat}
 	Define the J-test statistic as per usual by $J_n(S)  = n \left[\Xi_S f_n(\widehat{\theta}_S)\right]' \widehat{\Omega}^{-1}\left[\Xi_S f_n(\widehat{\theta}_S)\right]$ where $\widehat{\Omega}^{-1}_S$ is a consistent estimator of $\Omega_S^{-1}$. Then, under the conditions of Theorem \ref{thm:normality}, we have $J_n(S) \rightarrow_dJ_S(\tau, M)$ where
-		$$J_S(\tau, M)=[\Omega_S^{-1/2}\Xi_S(M + \tau)]' (I - P_S)[\Omega_S^{-1/2}\Xi_S(M + \tau)],$$
-and $P_S$ is the projection matrix formed from the GMM identifying restrictions $\Omega^{-1/2}_S F_S$.
+		$$J_S(\tau, M)=[\Omega_S^{-1/2}(M_S + \tau_S)]' (I - P_S)[\Omega_S^{-1/2}\Xi_S(M_S + \tau_S)],$$
+$M_S = \Xi_S M$, $\tau_S' = (0', \tau')\Xi_S'$, and $P_S$ is the projection matrix formed from the GMM identifying restrictions $\Omega^{-1/2}_S F_S$.
 \end{thm}
 To connect these results to estimators post-selection, consider the weight function $\widehat{\omega}_S^{MSC} = \mathbf{1}\left\{\mbox{MSC}_n(S) = \min_{S'\in \mathscr{S}} \mbox{MSC}_n(S')\right\}$ where $\mbox{MSC}_n(S)$ is the value of some moment selection criterion evaluated at the sample observations $Z_{n1}\hdots, Z_{nn}$. 
 Now suppose $\mbox{MSC}_n(S) \rightarrow_d\mbox{MSC}_S(\tau,M)$, a function of $\tau$, $M$ and consistently estimable constants only. 
@@ -1050,7 +1054,7 @@ The following result states that this intuition is correct.
 Because moment selection using the GMM-BIC or HQ leads to weights with a degenerate asymptotic distribution, these  are not considered further below. 
 \begin{thm}[Consistent Criteria under Local Mis-Specification]
 \label{pro:andrews}
-Consider a moment selection criterion of the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $h$ is strictly increasing,  $\lim_{n\rightarrow \infty}\kappa_n = \infty$, and $\kappa_n = o(n)$. Under the conditions of Theorem \ref{thm:normality}, $MSC(S)$ selects the full moment set w.p.a.1.
+Consider a moment selection criterion of the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $h$ is strictly increasing,  $\lim_{n\rightarrow \infty}\kappa_n = \infty$, and $\kappa_n = o(n)$. Under the conditions of Theorem \ref{thm:normality}, $MSC(S)$ selects the full moment set with probability approaching one.
 \end{thm}
 
 
@@ -1104,7 +1108,7 @@ The precise algorithm is as follows.
 			\item Generate $J$ independent draws $M_j \sim N_{p+q}( 0, \widehat{\Omega} )$
 			\item Set $\Lambda_j(\tau^*) = -\nabla_\theta\mu(\widehat{\theta})'\left[\sum_{S \in \mathscr{S}} \widehat{\varphi}_S(\tau^*,M_j) \widehat{K}_S\Xi_S\right] (M_j + \tau^*)$
 			\item Using the draws $\{\Lambda_j(\tau^*)\}_{j=1}^J$, calculate $\widehat{a}(\tau^*)$, $\widehat{b}(\tau^*)$ such that
-		$$\p\left\{ \widehat{a}(\tau^*) \leq\Lambda(\tau^*)\leq \widehat{b}(\tau^*) \right\} = 1 - \alpha$$
+		$$P\left\{ \widehat{a}(\tau^*) \leq\Lambda(\tau^*)\leq \widehat{b}(\tau^*) \right\} = 1 - \alpha$$
 		\end{enumerate}
 	\item Set $\displaystyle \widehat{a}_{min}(\widehat{\tau})=\min_{\tau^* \in \mathscr{T}(\widehat{\tau},\delta)} \widehat{a}(\tau^*)$ and $\displaystyle \widehat{b}_{max}(\widehat{\tau})= \max_{\tau^* \in \mathscr{T}(\widehat{\tau},\delta)} \widehat{b}(\tau^*)$ \vspace{0.5em}
 	\item The confidence interval for $\mu$ is
@@ -1484,10 +1488,15 @@ By Theorem \ref{thm:tau} and the Continuous Mapping Theorem, we have $\widehat{\
 
 
 \begin{proof}[Proof of Corollary \ref{cor:momentavg}]
-\todo[inline]{Need to adjust some notation here for $M$ and $\tau$, etc.}
 Because the weights sum to one
 		$$\sqrt{n}\left(\widehat{\mu} - \mu_0\right) = \sqrt{n} \left[\left(\sum_{S \in \mathscr{S}} \widehat{\omega}_S \widehat{\mu}_S\right) - \mu_0\right]= \sum_{S \in \mathscr{S}}\left[ \widehat{\omega}_S \sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\right].$$
-By Corollary \ref{cor:target}, $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S (M_S + \tau_S)$ and by the assumptions of this Corollary $\widehat{\omega}_S \rightarrow_d\varphi_S(\tau,M)$ for each $S\in \mathscr{S}$, where $\varphi_S(\tau,M)$ is a function of $M$ and constants only. Hence $\widehat{\omega}_S$ and $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)$ converge jointly in distribution to their respective functions of $M$, for all $S \in \mathscr{S}$. The result follows by application of the Continuous Mapping Theorem.
+By Corollary \ref{cor:target}, we have
+$$\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S \Xi_S \left(M +  \left[\begin{array}
+	{c} 0 \\ \tau
+\end{array} \right]\right)$$
+and by the assumptions of this Corollary we find that $\widehat{\omega}_S \rightarrow_d\varphi_S(\tau,M)$ for each $S\in \mathscr{S}$, where $\varphi_S(\tau,M)$ is a function of $M$ and constants only. 
+Hence $\widehat{\omega}_S$ and $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)$ converge jointly in distribution to their respective functions of $M$, for all $S \in \mathscr{S}$. 
+The result follows by application of the Continuous Mapping Theorem.
 \end{proof}
 
 \begin{proof}[Proof of Theorem \ref{pro:jstat}]
@@ -1503,42 +1512,59 @@ by Assumption \ref{assump:highlevel} (h), where $\widehat{\Omega}^{-1/2}_S$ is a
 
 
 \begin{proof}[Proof of Theorem \ref{pro:andrews}]
-Let $S_1$ and $S_2$ be arbitrary moment sets in $\mathscr{S}$ and let $|S|$ denote the cardinality of $S$. Further, define $\Delta_n(S_1, S_2) = MSC(S_1) - MSC(S_2)$. By Theorem \ref{pro:jstat}, $J_n(S) = O_p(1)$, $S \in \mathscr{S}$, thus
+Let $S_1$ and $S_2$ be arbitrary moment sets in $\mathscr{S}$ and let $|S|$ denote the cardinality of $S$. 
+Further, define $\Delta_n(S_1, S_2) = MSC(S_1) - MSC(S_2)$
+By Theorem \ref{pro:jstat}, $J_n(S) = O_p(1)$, $S \in \mathscr{S}$, thus
 	\begin{eqnarray*}
 			\Delta_n(S_1, S_2)	&=&   \left[J_{n}(S_1) - J_{n}(S_2)\right] - \left[h\left(p+|S_1|\right) - h\left(p+|S_2|\right)\right]\kappa_n\\
 				&=& O_p(1) - C\kappa_n
 	\end{eqnarray*}
-where $C = \left[h\left(p+|S_1|\right) - h\left(p+|S_2|\right)\right]$. Since $h$ is strictly increasing, $C$ is positive for $|S_1|>|S_2|$, negative for $|S_1|<|S_2|$, and zero for $|S_1|=|S_2|$. Hence:
+where $C = \left[h\left(p+|S_1|\right) - h\left(p+|S_2|\right)\right]$. 
+Since $h$ is strictly increasing, $C$ is positive for $|S_1|>|S_2|$, negative for $|S_1|<|S_2|$, and zero for $|S_1|=|S_2|$. 
+Hence:
 	\begin{eqnarray*}
 		|S_1|>|S_2|&\implies& \Delta_n(S_1, S_2)  \rightarrow -\infty\\
 		|S_1|=|S_2|&\implies&\Delta_n(S_1, S_2)  = O_p(1)\\
 		|S_1|<|S_2|&\implies& \Delta_n(S_1, S_2)  \rightarrow \infty
 \end{eqnarray*}
-The result follows because $|S_{full}|>|S|$ for any $S \neq S_{full}$.
+The result follows because the full moment set contains more moment conditions than any other moment set $S$.
 \end{proof}
 
+\todo[inline]{The following proof still needs cleanup.}
 
 \begin{proof}[Proof of Theorem \ref{pro:sim}]
-\todo[inline]{Need to adjust some notation here for $M$ and $\tau$, etc.}
-Rearranging,
-	\begin{eqnarray*}	
-		\p\left\{\mu_{true} \in \mbox{CI}_{sim} \right\} %&=& \p\left\{ \widehat{\mu} - \widehat{b}_0(\widehat{\tau})/\sqrt{n}\leq \mu_{true}\leq \widehat{\mu} - \widehat{a}_0(\widehat{\tau})/\sqrt{n} \right\}\\
-		&=& \p\left\{\widehat{a}_0(\widehat{\tau}) \leq  \sqrt{n}\left(\widehat{\mu} - \mu_{true}\right) \leq \widehat{b}_0(\widehat{\tau}) \right\}
-\end{eqnarray*}
-By Theorem \ref{thm:tau} and Corollary \ref{cor:momentavg}, we have \emph{joint} convergence in distribution of $\sqrt{n}(\hat{\mu} - \mu_{true})$ to $\Lambda(\tau)$, $\widehat{\Delta}(\widehat{\tau},\tau)$ to $\Delta(\Psi M,\tau)$, $\widehat{a}_{min}(\widehat{\tau})$ to $a_{min}(\Psi M)$ and $\widehat{b}_{max}(\widehat{\tau})$ to $b_{max}(\Psi M)$ where
-$a_{min}(\Psi M)=\min \left\{a(\tau)\colon \tau \in T(\delta)\right\}$, $b_{max}(\Psi M)=\max \left\{b(\tau)\colon \tau \in T(\delta)\right\}$, $T(\delta) = \left\{\tau \colon  \Delta(\Psi M, \tau) \leq \chi^2_q(\delta) \right\}$ and $\Delta(\Psi M, \tau)=\left(\Psi M - \tau \right)'\left(\Psi \Omega \Psi'\right)^{-1}\left(\Psi M - \tau \right)$.
+By Theorem \ref{thm:tau} and the Continuous Mapping Theorem we find that $\Delta_n(\widehat{\tau},\tau^*)\rightarrow_d \Delta(\tau,\tau^*)$ where
+$$\Delta(\tau,\tau^*) =  (\Psi M + \tau - \tau^*)' (\Psi\Omega\Psi')^{-1} \left(\Psi M + \tau - \tau^*\right)$$
+follows a \emph{non-central} $\chi^2$ distribution with $q$ degrees of freedom and non-centrality parameter $\tau - \tau^*$.
+
+
+$\widehat{a}_{min}(\widehat{\tau})$ to $a_{min}(\Psi M + \tau)$ 
+
+$\widehat{b}_{max}(\widehat{\tau})$ to $b_{max}(\Psi M + \tau)$ 
+
+$a_{min}(\Psi M + \tau)=\min \left\{a(\tau)\colon \tau \in T(\delta)\right\}$
+
+$b_{max}(\Psi M + \tau)=\max \left\{b(\tau)\colon \tau \in T(\delta)\right\}$
+
+$\mathscr{T}(\Psi M + \tau,\delta) = \left\{\tau^* \colon  \Delta(\Psi M +\tau, \tau^*) \leq \chi^2_q(\delta) \right\}$ 
+
+Corollary \ref{cor:momentavg}, $\sqrt{n}(\widehat{\mu} - \mu_0) \rightarrow_d\Lambda(\tau)$ \emph{jointly} with the above.
+
+Now, rearranging,
+	$$P\left\{\mu_0 \in \mbox{CI}_{sim} \right\} = P\left\{\widehat{a}_{min}(\widehat{\tau}) \leq  \sqrt{n}\left(\widehat{\mu} - \mu_0\right) \leq \widehat{b}_{max}(\widehat{\tau}) \right\}$$
+
 By the Continuous Mapping Theorem,
-	$$\p\left[  \widehat{a}_{min}(\widehat{\tau}) \leq \sqrt{n}\left( \widehat{\mu}-\mu_{true}\right)\leq  \widehat{b}_{max}(\widehat{\tau}) \right] \rightarrow\p \left[ a_{min}(\Psi M) \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right]$$
-so it suffices to show that $\p \left[ a_{min}(\Psi M) \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right]\geq 1 - (\alpha + \delta).$
-Define the event $A = \left\{ \Delta(\Psi M, \tau) \leq \chi^2_q(\delta) \right\}$, so that $\p(A) = 1-\delta$. Then,
+	$$P\left[  \widehat{a}_{min}(\widehat{\tau}) \leq \sqrt{n}\left( \widehat{\mu}-\mu_0\right)\leq  \widehat{b}_{max}(\widehat{\tau}) \right] \rightarrow P \left[ a_{min}(\Psi M) \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right]$$
+so it suffices to show that $P \left[ a_{min}(\Psi M) \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right]\geq 1 - (\alpha + \delta).$
+Define the event $A = \left\{ \Delta(\Psi M, \tau) \leq \chi^2_q(\delta) \right\}$, so that $P(A) = 1-\delta$. Then,
 	\begin{eqnarray*}
 		1-\alpha %&=& \p\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\\
-			&=& \p\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \right] + \p\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A^c \right] 
+			&=& P\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \right] + P\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A^c \right] 
 \end{eqnarray*}
 Now, $\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A$ is a subset of $\left\{a_0(\Psi M)  \leq \Lambda(\tau) \leq b_0(\Psi M)\right\}$ and  $\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A^c$ is a subset of $A^c$. Thus, 
 \begin{eqnarray*}
-\p\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \right]  &\leq& \p \left\{a_{min}(\Psi M)  \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right\}\\
-\p\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A^c \right]  &\leq& \p(A^c) = \delta.
+P\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \right]  &\leq& P \left\{a_{min}(\Psi M)  \leq \Lambda(\tau) \leq b_{max}(\Psi M)\right\}\\
+P\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A^c \right]  &\leq& P(A^c) = \delta.
 \end{eqnarray*}
 Combining these, the result follows.
 \end{proof}
