@@ -860,6 +860,7 @@ Table \ref{tab:summary} compares average and worst-case RMSE over the parameter 
 \label{sec:avg}
 In the preceding section we derived the FMSC as an asymptotically unbiased estimator of the AMSE of a candidate estimator.
 Besides presenting simulation results, however, we have thus far said nothing about the sampling properties of the FMSC selection procedure itself.
+Because it is constructed from $\widehat{\tau}$, the FMSC is a random variable, even in the limit.
 Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} gives the following.
 \begin{cor}[Limit Distribution of FMSC]
 \label{cor:FMSClimit}
@@ -871,11 +872,20 @@ Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} gives the follo
 \end{cor}
 
 
+Because the FMSC is itself random, so is the FMSC-selected estimator.
+This means that the FMSC is a ``conservative'' rather than ``consistent'' selection procedure.
+While this lack of consistency may sound like a ``bug'' it is in fact a desirable feature of the FMSC for two reasons.
+First, as discussed above, the goal of the FMSC is not to consistently select the correct moment conditions: it is to choose an estimator with a low finite-sample MSE as approximated by AMSE.
+In fact, the goal of consistent selection is very much at odds with that of controlling estimator risk.
+As explained by \cite{Yang2005} and \cite{LeebPoetscher2008}, the worst-case risk of a consistent selection procedure \emph{diverges} with sample size. 
+Second, we know both from simulation studies \citep{Demetrescu} and analytical calculations \citep{LeebPoetscher2005} that selection dramatically changes the sampling distribution of our estimators.
+The asymptotics of consistent selection, however, give the misleading impression that this effect can be ignored.
+In constrast, the asymptotics of conservative selection procedures under local mis-specification provide a far more accurate picture, and can be exploited to construct valid confidence intervals post-selection.
 
-Distinction between estimating the AMSE and considering the 
-As a side-effect, we obtain a procedure for valid post-selection inference for estimators selected using the FMSC and number of related moment selection criteria including the familiar J-test.
-
-
+In this section, we derive the asymptotic distribution of generic ``moment average'' estimators by extending the idea behind the frequentist model average estimators of \cite{HjortClaeskens}. 
+Such estimators are interesting in their own right and include, as a special case, a variety of post-conservative moment selection estimators including the FMSC.
+Although their limit distributions are complicated, it remains possible to construct asymptotically valid confidence intervals for moment average estimators using a two-step, simulation-based procedure.
+We being by defining moment average estimators in general and considering some examples.
 
 \subsection{Moment Average Estimators}
 \todo[inline]{Merge in from other document.}
