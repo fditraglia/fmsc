@@ -858,13 +858,8 @@ Table \ref{tab:summary} compares average and worst-case RMSE over the parameter 
 
 \section{Moment Averaging \& Post-Selection Estimators}
 \label{sec:avg}
-\todo[inline]{The material in this section needs to be rearranged.}
 In the preceding section we derived the FMSC as an asymptotically unbiased estimator of the AMSE of a candidate estimator.
 Besides presenting simulation results, however, we have thus far said nothing about the sampling properties of the FMSC selection procedure itself.
-Because it is constructed from $\widehat{\tau}$, the FMSC is a random variable, even in the limit. 
-As such, the FMSC-selected estimator is also random, even as the sample size goes to infinity.
-In other words, the FMSC is \emph{not} a consistent selection criterion.
-Although it may seem strange at first, this is a ``feature'' not a ``bug.'' 
 Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} gives the following.
 \begin{cor}[Limit Distribution of FMSC]
 \label{cor:FMSClimit}
@@ -875,22 +870,8 @@ Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} gives the follo
 	\end{eqnarray*}
 \end{cor}
 
-The goal of the FMSC is \emph{not} to consistently select the correct moment conditions: it is to choose an estimator with a low finite-sample MSE.
-because we typically cannot estimate this quantity directly, we use local mis-specification to create an asymptotic framework that mimics the finite-sample bias-variance tradeoff.
-Without local asymptotics, this tradeof tradeoff becomes degenerate: the bias component diverges while the variance stabilizes.
-\todo[inline]{Should probably give the limit distribution of the FMSC here along with the related results for the J-test statistic. Also talk about how consistent selection with J-test gives a degenerate limit dist and how this relates to the Leeb \& P\"{o}tscher stuff.}
 
 
-Clearly, consistent selection is the wrong tool for the job.
-Similarly, if our goal is to characterize the distribution post-selection, consistent selection gives a misleading portrait, while local mis-specification correctly captures the finite-sample behavior.
-\footnote{See \cite{LeebPoetscher2005} for a simple example involving model selection in a linear regression model.}
-\todo[inline]{In the same way, consistent selection does not give us a language with which to express post-selection distribution, etc. cite Leeb etc.}
-
- 
-
-Thus far we have considered the FMSC as a moment selection tool only. 
-Using the local mis-specification framework we derived an asymptotically unbiased estimator of AMSE and proposed choosing the candidate estimator that minimized this quantity.
-It turns out, however, that we can do much more with local mis-specification than simply choose moment conditions: the FMSC framework allows us to \emph{average} estimators based on different sets of moment conditions and carry out valid inference for such ``moment average'' estimators.
 Distinction between estimating the AMSE and considering the 
 As a side-effect, we obtain a procedure for valid post-selection inference for estimators selected using the FMSC and number of related moment selection criteria including the familiar J-test.
 
