@@ -865,6 +865,15 @@ Because it is constructed from $\widehat{\tau}$, the FMSC is a random variable, 
 As such, the FMSC-selected estimator is also random, even as the sample size goes to infinity.
 In other words, the FMSC is \emph{not} a consistent selection criterion.
 Although it may seem strange at first, this is a ``feature'' not a ``bug.'' 
+Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} gives the following.
+\begin{cor}[Limit Distribution of FMSC]
+\label{cor:FMSClimit}
+	Under Assumptions \ref{assump:drift}, \ref{assump:highlevel} and \ref{assump:Identification}, $FMSC_n(S) \rightarrow_d FMSC_S(\tau, M)$, where
+	\begin{eqnarray*}
+		\mbox{FMSC}_S(\tau,M) &=& \nabla_\theta\mu(\theta_0)'K_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0& B(\tau,M) \end{array}\right] + \Omega\right\}\Xi_S'K_S'\nabla_\theta\mu(\theta_0)\\
+		B(\tau,M) &=& (\Psi M + \tau)(\Psi M + \tau)' - \Psi \Omega \Psi.
+	\end{eqnarray*}
+\end{cor}
 
 The goal of the FMSC is \emph{not} to consistently select the correct moment conditions: it is to choose an estimator with a low finite-sample MSE.
 because we typically cannot estimate this quantity directly, we use local mis-specification to create an asymptotic framework that mimics the finite-sample bias-variance tradeoff.
@@ -1022,15 +1031,8 @@ Notice that the limit random variable, denoted $\Lambda(\tau)$, is a randomly we
 Hence, $\Lambda(\tau)$ is non-normal. 
 
 Although it restricts the convergence of the weight functions, Assumption \ref{assump:weights} is satisfied by weighting schemes based on a number of familiar moment selection criteria. 
-Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} shows that the FMSC converges in distribution to a function of $\tau$, $M$ and consistently estimable constants only. 
-\begin{cor}[Limit Distribution of FMSC]
-\label{cor:FMSClimit}
-	Under Assumptions \ref{assump:drift}, \ref{assump:highlevel} and \ref{assump:Identification}, $FMSC_n(S) \rightarrow_d FMSC_S(\tau, M)$, where
-	\begin{eqnarray*}
-		\mbox{FMSC}_S(\tau,M) &=& \nabla_\theta\mu(\theta_0)'K_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0& B(\tau,M) \end{array}\right] + \Omega\right\}\Xi_S'K_S'\nabla_\theta\mu(\theta_0)\\
-		B(\tau,M) &=& (\Psi M + \tau)(\Psi M + \tau)' - \Psi \Omega \Psi.
-	\end{eqnarray*}
-\end{cor}
+
+\todo[inline]{As we saw above in Corollary ???, for example the FMSC converges in distribution to a function of $\tau$, $M$ and consistently estimable constants only. }
 
 Under local mis-specification, the $J$-test statistic converges to a non-central $\chi^2$ distribution.
 This limit distribution, too, can be expressed in terms of $\tau$, $M$ and consistently estimable constants only, as the following result shows.
