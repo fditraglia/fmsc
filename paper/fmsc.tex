@@ -860,7 +860,7 @@ Table \ref{tab:summary} compares average and worst-case RMSE over the parameter 
 \label{sec:avg}
 In the preceding section we derived the FMSC as an asymptotically unbiased estimator of the AMSE of a candidate estimator.
 Besides presenting simulation results, however, we have thus far said nothing about the sampling properties of the FMSC selection procedure itself.
-Because it is constructed from $\widehat{\tau}$, the FMSC is a random variable, even in the limit.
+Because it is constructed from $\widehat{\tau}$ the FMSC is a random variable, even in the limit.
 Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} gives the following.
 \begin{cor}[Limit Distribution of FMSC]
 \label{cor:FMSClimit}
@@ -878,9 +878,68 @@ While this lack of consistency may sound like a ``bug'' it is in fact a desirabl
 First, as discussed above, the goal of the FMSC is not to consistently select the correct moment conditions: it is to choose an estimator with a low finite-sample MSE as approximated by AMSE.
 In fact, the goal of consistent selection is very much at odds with that of controlling estimator risk.
 As explained by \cite{Yang2005} and \cite{LeebPoetscher2008}, the worst-case risk of a consistent selection procedure \emph{diverges} with sample size. 
+
 Second, we know both from simulation studies \citep{Demetrescu} and analytical calculations \citep{LeebPoetscher2005} that selection dramatically changes the sampling distribution of our estimators.
-The asymptotics of consistent selection, however, give the misleading impression that this effect can be ignored.
-\todo[inline]{Merge material from the section ``Effects of Moment Selection on Inference'' here.}
+Taken at face value, however, the asymptotics of consistent selection give the misleading impression that this effect can be ignored.
+Lemma 1.1 of \citet[p.\ 168]{Poetscher1991}, for example, has been interpreted by some as evidence that traditional distribution theory continues to hold so long as we restrict ourselves to consistent selection criteria.
+While his lemma does establish that the limit distributions of an estimator pre- and post-consistent selection are identical, \citet[pp.\ 179--180]{Poetscher1991} also makes it very clear that this result does not hold uniformly in the parameter space.
+As such, a reliance on the lemma  ``only creates an illusion of conducting valid inference'' \citep[p.\ 22]{LeebPoetscher2005}.
+Figure \ref{fig:consist} illustrates this problem via the simulation experiment from Section \ref{sec:fmscsim} by depicting the distributions of the valid and full estimators alongside those post-GMM-BIC and HQ.\footnote{These distributions are computed by kernel density estimation based on $10,000$ replications of the simulation described in Equations \ref{eq:secondstage} and \ref{eq:firststage}, each with a sample size of $500$ and $\gamma = 0.4$, $\rho= 0.2$.}
+Because they are consistent criteria, and hence will exclude any invalid instruments in the limit, a na\"{i}ve reading of P\"{o}tscher's Lemma 1.1 would suggest that the post-selection distributions of GMM-BIC and HQ should be close to that of the valid estimator. 
+This is emphatically not the case: the post-selection distributions are highly non-normal mixtures of the distributions of the valid and full estimators. 
+\begin{figure}[htbp]
+\begin{center}
+	\includegraphics[scale = 0.48]{GMM_BIC}
+	\includegraphics[scale = 0.48]{GMM_HQ}
+\caption{ \small Post-selection distributions for the estimated effect of $x$ on $y$ in Equation \ref{eq:secondstage} with $\gamma = 0.4$, $\rho = 0.2$, $N=500$. The distribution post-GMM-BIC selection appears in the top panel, while the distribution post-GMM-HQ selection appears in the bottom panel. The distribution of the full estimator is given in dotted lines while that of the valid estimator is given in dashed lines in each panel. All distributions are calculated by kernel density estimation based on 10,000 simulation replications generated from Equations \ref{eq:secondstage}--\ref{eq:varmatrix}.}
+\label{fig:consist}
+\end{center}
+\end{figure}
+While Figure \ref{fig:consist} pertains to only one point in the parameter space, the problem is more general. As shown by Table \ref{tab:BICcov}, the empirical coverage probabilities of traditional $95\%$ confidence intervals are far lower than their nominal level over the vast majority of the parameter space.
+The lack of uniformity is particularly striking: relatively small changes in the model parameters lead to a large deterioration in coverage.\footnote{Coverage probabilities for the GMM-HQ (available upon request) are similar.}
+
+% latex.default(cover.BIC, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
+%
+\begin{table}[!tbp]
+\caption{Coverage post-GMM-BIC moment selection (nominal 95\%).}
+\label{tab:BICcov}
+\small
+ \begin{center}
+ \begin{tabular}{r|rrrrrrrrr}\hline\hline
+&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
+\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
+\hline
+0.0&0.92&0.92&0.92&0.93&0.92&0.92&0.92&0.92&0.93\tabularnewline
+0.1&0.92&0.83&0.77&0.83&0.90&0.92&0.93&0.92&0.92\tabularnewline
+0.2&0.93&0.76&0.55&0.57&0.74&0.86&0.89&0.90&0.91\tabularnewline
+0.3&0.93&0.75&0.45&0.35&0.50&0.69&0.80&0.85&0.88\tabularnewline
+0.4&0.93&0.75&0.40&0.22&0.31&0.48&0.63&0.74&0.80\tabularnewline
+0.5&0.93&0.75&0.38&0.18&0.20&0.32&0.46&0.59&0.68\tabularnewline
+0.6&0.94&0.76&0.38&0.14&0.14&0.23&0.32&0.43&0.53\tabularnewline
+\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
+0.7&0.94&0.76&0.37&0.12&0.11&0.16&0.24&0.32&0.42\tabularnewline
+0.8&0.93&0.76&0.37&0.11&0.08&0.12&0.18&0.25&0.33\tabularnewline
+0.9&0.94&0.75&0.37&0.11&0.07&0.10&0.14&0.19&0.25\tabularnewline
+1.0&0.93&0.76&0.37&0.10&0.06&0.08&0.11&0.16&0.20\tabularnewline
+1.1&0.93&0.77&0.37&0.10&0.06&0.07&0.10&0.13&0.16\tabularnewline
+1.2&0.94&0.77&0.38&0.10&0.05&0.06&0.08&0.11&0.14\tabularnewline
+1.3&0.94&0.77&0.38&0.10&0.04&0.05&0.07&0.09&0.12\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+\footnotesize
+\begin{tablenotes}
+\item Values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
+\end{tablenotes}
+\end{table}
+
+The point is not that these criteria fail to suffer from the non-uniformity problem. 
+Indeed, simulation results for these are similar to GMM-BIC.
+Instead it is that an asymptotic framework based on conservative selection and local asymptotics allows us to \emph{capture} this behavior when we derive limit distributions. 
+Because FMSC, GMM-AIC and selection based on a downward $J$-test at a fixed significance level are conservative rather than consistent procedures, Lemma 1.1 of \citet{Poetscher1991} is inapplicable. 
+Their behavior, however, is similar to that of the GMM-BIC.\footnote{Coverage probabilities for the FMSC appear below in Table \ref{tab:FMSCconf}.} 
+
+
 In constrast, the asymptotics of conservative selection procedures under local mis-specification provide a far more accurate picture, and can be exploited to carry out valid inference post-selection.
 
 In this section, we derive the asymptotic distribution of generic ``moment average'' estimators by extending the idea behind the frequentist model average estimators of \cite{HjortClaeskens}. 
@@ -989,60 +1048,6 @@ GMM-AIC&0.33&0.35\tabularnewline
 \end{tablenotes}
 \end{table}
 
-
-
-
-\subsection{The Effects of Moment Selection on Inference}
-The usual approach to inference post-selection is to state conditions under which traditional distribution theory continues to hold, typically involving an appeal to Lemma 1.1 of \citet[p.\ 168]{Poetscher1991}, which states that the limit distributions of an estimator pre- and post-consistent selection are identical. \citet[pp.\ 179--180]{Poetscher1991}, however, also states that this result does not hold uniformly over the parameter space. 
-Accordingly, \citet[p.\ 22]{LeebPoetscher2005} emphasize that a reliance on the lemma ``only creates an illusion of conducting valid inference.'' In this section I briefly illustrate the problem using the simulation experiment from Section \ref{sec:fmscsim}.
-
-Figure \ref{fig:consist} gives the distributions of the valid and full estimators alongside the post-selection distributions of estimators chosen by the GMM-BIC and HQ criteria. The distributions are computed by kernel density estimation using $10,000$ replications of the simulation described in Equations \ref{eq:secondstage} and \ref{eq:firststage}, each with a sample size of $500$ and $\gamma = 0.4$, $\rho= 0.2$. For these parameter values the instrument $w$ is relevant but sufficiently invalid that, based on the results of Table \ref{tab:trueRMSE}, we should exclude it. Because GMM-BIC and HQ are consistent procedures, they will exclude any invalid instruments w.p.a.1. A na\"{i}ve reading of P\"{o}tscher's Lemma 1.1 suggests that consistent instrument selection is innocuous, and thus that the post-selection distributions of GMM-BIC and HQ should be close to that of the valid estimator, indicated by dashed lines. This is emphatically not the case: the post-selection distributions are highly non-normal mixtures of the distributions of the valid and full estimators. 
-\begin{figure}[htbp]
-\begin{center}
-	\includegraphics[scale = 0.48]{GMM_BIC}
-	\includegraphics[scale = 0.48]{GMM_HQ}
-\caption{ \small Post-selection distributions for the estimated effect of $x$ on $y$ in Equation \ref{eq:secondstage} with $\gamma = 0.4$, $\rho = 0.2$, $N=500$. The distribution post-GMM-BIC selection appears in the top panel, while the distribution post-GMM-HQ selection appears in the bottom panel. The distribution of the full estimator is given in dotted lines while that of the valid estimator is given in dashed lines in each panel. All distributions are calculated by kernel density estimation based on 10,000 simulation replications generated from Equations \ref{eq:secondstage}--\ref{eq:varmatrix}.}
-\label{fig:consist}
-\end{center}
-\end{figure}
-While Figure \ref{fig:consist} pertains to only one point in the parameter space, the problem is more general. Table \ref{tab:BICcov} gives the empirical coverage probabilities of traditional $95\%$ confidence intervals over the full simulation grid for the GMM-BIC. Over the vast majority of the parameter space, empirical coverage probabilities are far lower than the nominal level 0.95. The lack of uniformity is particularly striking. When $w$ is irrelevant, $\gamma = 0$, or valid $\rho = 0$, empirical coverage probabilities are only slightly below 0.95. Relatively small changes in either $\rho$ or $\gamma$, however, lead to a large deterioration in coverage. Results for the GMM-HQ (available upon request) are similar.
-
-
-Because FMSC, GMM-AIC and selection based on a downward $J$-test at a fixed significance level are not consistent procedures, Lemma 1.1 of \citet{Poetscher1991} is inapplicable. Their behavior, however, is similar to that of the GMM-BIC. Results for FMSC appear in Table \ref{tab:FMSCconf}. (Details for the other procedures are available upon request.) As this example illustrates, ignoring the effects of moment selection can lead to highly misleading inferences.
-% latex.default(cover.BIC, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
-%
-\begin{table}[!tbp]
-\caption{Coverage post-GMM-BIC moment selection (nominal 95\%).}
-\label{tab:BICcov}
-\small
- \begin{center}
- \begin{tabular}{r|rrrrrrrrr}\hline\hline
-&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
-\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
-\hline
-0.0&0.92&0.92&0.92&0.93&0.92&0.92&0.92&0.92&0.93\tabularnewline
-0.1&0.92&0.83&0.77&0.83&0.90&0.92&0.93&0.92&0.92\tabularnewline
-0.2&0.93&0.76&0.55&0.57&0.74&0.86&0.89&0.90&0.91\tabularnewline
-0.3&0.93&0.75&0.45&0.35&0.50&0.69&0.80&0.85&0.88\tabularnewline
-0.4&0.93&0.75&0.40&0.22&0.31&0.48&0.63&0.74&0.80\tabularnewline
-0.5&0.93&0.75&0.38&0.18&0.20&0.32&0.46&0.59&0.68\tabularnewline
-0.6&0.94&0.76&0.38&0.14&0.14&0.23&0.32&0.43&0.53\tabularnewline
-\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
-0.7&0.94&0.76&0.37&0.12&0.11&0.16&0.24&0.32&0.42\tabularnewline
-0.8&0.93&0.76&0.37&0.11&0.08&0.12&0.18&0.25&0.33\tabularnewline
-0.9&0.94&0.75&0.37&0.11&0.07&0.10&0.14&0.19&0.25\tabularnewline
-1.0&0.93&0.76&0.37&0.10&0.06&0.08&0.11&0.16&0.20\tabularnewline
-1.1&0.93&0.77&0.37&0.10&0.06&0.07&0.10&0.13&0.16\tabularnewline
-1.2&0.94&0.77&0.38&0.10&0.05&0.06&0.08&0.11&0.14\tabularnewline
-1.3&0.94&0.77&0.38&0.10&0.04&0.05&0.07&0.09&0.12\tabularnewline
-\hline
-\end{tabular}
-\end{center}
-\footnotesize
-\begin{tablenotes}
-\item Values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
-\end{tablenotes}
-\end{table}
 
 
 
