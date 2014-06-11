@@ -613,7 +613,7 @@ But selection is a blunt instrument. A better idea is to \emph{combine} the OLS 
   $$\omega^* = \underset{\omega \in [0,1]}{\mbox{argmin }} \mbox{AMSE}\left(\omega \widehat{\beta} + (1-\omega)\widetilde{\beta}\right)  $$
   Let $\widehat{\beta}(\omega) = \omega \widehat{\beta} + (1-\omega) \widetilde{\beta}$. Then,
     \begin{eqnarray*}
-      \mbox{Bias}\left(\widehat{\beta}(\omega)\right) &=& \mbox{Bias}(\widehat{\beta}) + \mbox{Bias}(\widetilde{\beta})=\omega\left( \frac{\tau}{\sigma_x^2}\right)
+      \mbox{Bias}\left(\widehat{\beta}(\omega)\right) &=& \omega\mbox{Bias}(\widehat{\beta}) + (1-\omega)\mbox{Bias}(\widetilde{\beta})=\omega\left( \frac{\tau}{\sigma_x^2}\right)
     \end{eqnarray*}
   and
   \begin{eqnarray*}
