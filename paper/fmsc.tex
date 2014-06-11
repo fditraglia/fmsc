@@ -879,14 +879,13 @@ First, as discussed above, the goal of the FMSC is not to consistently select th
 In fact, the goal of consistent selection is very much at odds with that of controlling estimator risk.
 As explained by \cite{Yang2005} and \cite{LeebPoetscher2008}, the worst-case risk of a consistent selection procedure \emph{diverges} with sample size. 
 
-Second, we know both from simulation studies \citep{Demetrescu} and analytical calculations \citep{LeebPoetscher2005} that selection dramatically changes the sampling distribution of our estimators.
-Taken at face value, however, the asymptotics of consistent selection give the misleading impression that this effect can be ignored.
-Lemma 1.1 of \citet[p.\ 168]{Poetscher1991}, for example, has been interpreted by some as evidence that traditional distribution theory continues to hold so long as we restrict ourselves to consistent selection criteria.
-While his lemma does establish that the limit distributions of an estimator pre- and post-consistent selection are identical, \citet[pp.\ 179--180]{Poetscher1991} also makes it very clear that this result does not hold uniformly in the parameter space.
-As such, a reliance on the lemma  ``only creates an illusion of conducting valid inference'' \citep[p.\ 22]{LeebPoetscher2005}.
-Figure \ref{fig:consist} illustrates this problem via the simulation experiment from Section \ref{sec:fmscsim} by depicting the distributions of the valid and full estimators alongside those post-GMM-BIC and HQ.\footnote{These distributions are computed by kernel density estimation based on $10,000$ replications of the simulation described in Equations \ref{eq:secondstage} and \ref{eq:firststage}, each with a sample size of $500$ and $\gamma = 0.4$, $\rho= 0.2$.}
-Because they are consistent criteria, and hence will exclude any invalid instruments in the limit, a na\"{i}ve reading of P\"{o}tscher's Lemma 1.1 would suggest that the post-selection distributions of GMM-BIC and HQ should be close to that of the valid estimator. 
-This is emphatically not the case: the post-selection distributions are highly non-normal mixtures of the distributions of the valid and full estimators. 
+Second, while we know from simulation studies that selection can dramatically change the sampling distribution of our estimators, the asymptotics of consistent selection give the misleading impression that this effect can be ignored.
+For example Lemma 1.1 of \citet[p.\ 168]{Poetscher1991}, which states that the limit distributions of an estimator pre- and post-consistent selection are identical, has been interpreted by some as evidence that consistent selection is innocuous. 
+\citet[pp.\ 179--180]{Poetscher1991} makes it very clear, however, this result does not hold uniformly in the parameter space and hence ``only creates an illusion of conducting valid inference'' \citep[p.\ 22]{LeebPoetscher2005}.
+Figure \ref{fig:consist} illustrates this problem using the simulation experiment from Section \ref{sec:fmscsim} with a sample size of $500$ and $\gamma = 0.4$, $\rho= 0.2$.
+At these parameter values, $w$ is an invalid instrument.
+Because they are consistent criteria, and hence will exclude any invalid instruments in the limit, a na\"{i}ve reading of P\"{o}tscher's Lemma 1.1 would suggest that the post-selection distributions of GMM-BIC and HQ should be close to that of the valid estimator, given in dashed lines.
+This is emphatically not the case: both post-selection distributions are highly non-normal mixtures. 
 \begin{figure}[htbp]
 \begin{center}
 	\includegraphics[scale = 0.48]{GMM_BIC}
@@ -895,8 +894,7 @@ This is emphatically not the case: the post-selection distributions are highly n
 \label{fig:consist}
 \end{center}
 \end{figure}
-While Figure \ref{fig:consist} pertains to only one point in the parameter space, the problem is more general. As shown by Table \ref{tab:BICcov}, the empirical coverage probabilities of traditional $95\%$ confidence intervals are far lower than their nominal level over the vast majority of the parameter space.
-The lack of uniformity is particularly striking: relatively small changes in the model parameters lead to a large deterioration in coverage.\footnote{Coverage probabilities for the GMM-HQ (available upon request) are similar.}
+While Figure \ref{fig:consist} examines only one point in the parameter space, the problem is more general, as shown by Table \ref{tab:BICcov}. The empirical coverage probabilities of traditional $95\%$ confidence intervals are far lower than their nominal level over the majority of the parameter space and the lack of uniformity is striking: small changes in parameters lead to large changes in coverage.\footnote{Coverage probabilities for the GMM-HQ (available upon request) are similar.}
 
 % latex.default(cover.BIC, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
 %
@@ -933,16 +931,11 @@ The lack of uniformity is particularly striking: relatively small changes in the
 \end{tablenotes}
 \end{table}
 
-The point is not that these criteria fail to suffer from the non-uniformity problem. 
-Indeed, simulation results for these are similar to GMM-BIC.
-Instead it is that an asymptotic framework based on conservative selection and local asymptotics allows us to \emph{capture} this behavior when we derive limit distributions. 
-Because FMSC, GMM-AIC and selection based on a downward $J$-test at a fixed significance level are conservative rather than consistent procedures, Lemma 1.1 of \citet{Poetscher1991} is inapplicable. 
-Their behavior, however, is similar to that of the GMM-BIC.\footnote{Coverage probabilities for the FMSC appear below in Table \ref{tab:FMSCconf}.} 
-
-
-In constrast, the asymptotics of conservative selection procedures under local mis-specification provide a far more accurate picture, and can be exploited to carry out valid inference post-selection.
-
-In this section, we derive the asymptotic distribution of generic ``moment average'' estimators by extending the idea behind the frequentist model average estimators of \cite{HjortClaeskens}. 
+In constrast to those of consistent selection, the asymptotics of \emph{conservative} selection  under local mis-specification provide a far more accurate picture of the distribution of post-selection estimators.
+The point is \emph{not} that conservative criteria -- such as the FMSC, GMM-AIC and $J$-test at a fixed significance level -- are immune to the effects of selection on inference.
+%The coverage probabilities for post-FMSC estimators given in Table \ref{tab:FMSCconf}, for example, show that this is not the case.
+Rather, it is that conservative criteria can be studied in a framework that allows us to capture the non-normality that is so apparent from Figure \ref{fig:consist} in our limit theory.  
+To this end, the present section derives the asymptotic distribution of generic ``moment average'' estimators by extending the idea behind the frequentist model average estimators of \cite{HjortClaeskens}. 
 Such estimators are interesting in their own right and include, as a special case, a variety of post-conservative moment selection estimators including the FMSC.
 Although their limit distributions are complicated, it remains possible to construct asymptotically valid confidence intervals for moment average estimators using a two-step, simulation-based procedure.
 We being by defining moment average estimators in general and considering some examples.
