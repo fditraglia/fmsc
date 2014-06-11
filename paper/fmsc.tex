@@ -894,7 +894,8 @@ This is emphatically not the case: both post-selection distributions are highly 
 \label{fig:consist}
 \end{center}
 \end{figure}
-While Figure \ref{fig:consist} examines only one point in the parameter space, the problem is more general, as shown by Table \ref{tab:BICcov}. The empirical coverage probabilities of traditional $95\%$ confidence intervals are far lower than their nominal level over the majority of the parameter space and the lack of uniformity is striking: small changes in parameters lead to large changes in coverage.\footnote{Coverage probabilities for the GMM-HQ (available upon request) are similar.}
+While Figure \ref{fig:consist} examines only one point in the parameter space the problem is more general, as shown by Table \ref{tab:BICcov}. 
+The empirical coverage probabilities of traditional $95\%$ confidence intervals are far lower than their nominal level over the majority of the parameter space and the lack of uniformity is striking: small changes in parameters lead to large changes in coverage.
 
 % latex.default(cover.BIC, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
 %
@@ -938,7 +939,7 @@ Rather, it is that conservative criteria can be studied in a framework that allo
 To this end, the present section derives the asymptotic distribution of generic ``moment average'' estimators by extending the idea behind the frequentist model average estimators of \cite{HjortClaeskens}. 
 Such estimators are interesting in their own right and include, as a special case, a variety of post-conservative moment selection estimators including the FMSC.
 Although their limit distributions are complicated, it remains possible to construct asymptotically valid confidence intervals for moment average estimators using a two-step, simulation-based procedure.
-We being by defining moment average estimators in general and considering some examples.
+We begin by defining moment average estimators in general and considering some examples.
 
 \subsection{Moment Average Estimators}
 A generic moment average estimator takes the form
@@ -964,7 +965,13 @@ Under Assumption \ref{assump:weights} and the conditions of Theorem \ref{thm:nor
 \end{array} \right]\right).$$
 \end{cor}
 Notice that the limit random variable from Corollary \ref{cor:momentavg}, denoted $\Lambda(\tau)$, is a \emph{randomly weighted average} of the multivariate normal vector $M$. 
-Hence, $\Lambda(\tau)$ is non-normal. The conditions of Assumption \ref{assump:weights} are fairly mild. Requiring that the weights sum to one ensures that $\widehat{\mu}$ is a consistent estimator of $\mu_0$ and leads to a simpler expression for the limit distribution. While somewhat less transparent, the second condition is satisfied by weighting schemes based on a number of familiar moment selection criteria. We see immediately from Corollary \ref{cor:FMSClimit}, for example, that the FMSC converges in distribution to a function of $\tau$, $M$ and consistently estimable constants only. The same as true for the $J$-test statistic, as we see from the following result. 
+Hence, $\Lambda(\tau)$ is non-normal. 
+This is precisely the behavior that Figure \ref{fig:consist} suggests our limit theory should capture.
+The conditions of Assumption \ref{assump:weights} are fairly mild. 
+Requiring that the weights sum to one ensures that $\widehat{\mu}$ is a consistent estimator of $\mu_0$ and leads to a simpler expression for the limit distribution. 
+While somewhat less transparent, the second condition is satisfied by weighting schemes based on a number of familiar moment selection criteria.
+We see immediately from Corollary \ref{cor:FMSClimit}, for example, that the FMSC converges in distribution to a function of $\tau$, $M$ and consistently estimable constants only. 
+The same as true for the $J$-test statistic, as we see from the following result. 
 \begin{thm}[Distribution of $J$-Statistic under Local Mis-Specification] 
 \label{pro:jstat}
 	Define the J-test statistic as per usual by $J_n(S)  = n \left[\Xi_S f_n(\widehat{\theta}_S)\right]' \widehat{\Omega}^{-1}\left[\Xi_S f_n(\widehat{\theta}_S)\right]$ where $\widehat{\Omega}^{-1}_S$ is a consistent estimator of $\Omega_S^{-1}$. Then, under the conditions of Theorem \ref{thm:normality}, we have $J_n(S) \rightarrow_dJ_S(\tau, M)$ where
