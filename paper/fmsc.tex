@@ -562,17 +562,22 @@ To apply the FMSC to this problem, we simply need to specialize Equation \label{
 To begin, recall that $Z_1$ is a matrix containing $p$ valid instruments and $Z_2$ is a matrix containing $q$ potentially endogenous instruments. 
 Thus the valid estimator, defined in Assumption \ref{assump:Identification}, is simply
 $$\widehat{\beta}_v = \left(X'Z_1 \widetilde{W}_v Z_1'X\right)^{-1}X'Z_1 \widetilde{W}_v Z_1'\mathbf{y}$$
-in this example. Thus, we specialize Theorem \ref{thm:tau} as follows.
+in this example and we estimate $\nabla_\beta \mu(\beta)$ with $\nabla_\beta \mu(\widehat{\beta}_v)$.  
+Similarly, 
+$$-\widehat{K}_S = n(X'Z \Xi_S' \widetilde{W}^S \Xi_S Z X)^{-1}X' Z \Xi_S' \widetilde{W}_S$$
+is the natural consistent estimator of $-K_S$ in this setting.\footnote{The negative sign is squared in the FMSC expression and hence disappears. We write it here only to be consistent with the notation of Theorem \ref{thm:normality}.}
+Since $\Xi_S$ chosen by the researcher, the only remaining quantities from Equation \label{eq:fmsc} are $\widehat{\boldsymbol{\tau}}$, $\widehat{\Psi}$ and $\widehat{\Omega}$. 
+For the first two of these, we specialize Theorem \ref{thm:tau} as follows.
 \begin{thm}
 Let $\widehat{\boldsymbol{\tau}} = n^{-1/2} Z_2' \left( \mathbf{y} - X\widehat{\beta}_v\right)$. Then, under Assumption \ref{assump:chooseIV}, we have $\widehat{\boldsymbol{\tau}} \rightarrow_d \boldsymbol{\tau} + \Psi M$ where
 	$$\Psi =\left[ \begin{array}{cc}
-              -\Xi_2Q_Z \Pi K_1  & I_{q}
+              -\Xi_2Q_Z \Pi K_v  & I_{q}
             \end{array}\right],$$
 $M \sim N(0,\Omega)$ and $I_q$ is the $q\times q$ identity matrix.
 \end{thm}
 
 
-\todo[inline]{First give the general result for the limit distribution of $\widehat{\tau}$, etc. Then specialize to the case of 2SLS, which we use in the empirical example and simulation study, and talk about particular estimators for $\Omega$, etc. along with centering and allowing for heteroskedasticity.}
+\todo[inline]{Explain the estimator of $\Psi$ and the asymptotically unbiased estimator of $\tau\tau'$. Then talk about $\Omega$ and specialize everything to the case of 2SLS, which we use in the empirical example and simulation study. Talk about centering / heteroskedasticity.}
 
 \subsection{OLD VERSION: FMSC for 2SLS Instrument Selection}\label{sec:2sls}
 \todo[inline]{This section will eventually be replaced by the example I'll merge in from \texttt{metrica\_revisions.tex}.}
