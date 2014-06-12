@@ -286,8 +286,7 @@ $\mathbf{z}' = (z_{1}, \hdots, z_{n})$, $Z' = (\mathbf{z}_{1}, \hdots, \mathbf{z
 where $P_Z = Z(Z'Z)^{-1}Z'$. 
 But why should we even \emph{consider} using OLS if $x$ is endogenous and we have valid instruments at our disposal? 
 The answer is simple: 2SLS is a high variance estimator. 
-Depending on the degree of endogeneity present in $x$ and the strength of the instruments, $\widehat{\beta}_{OLS}$ could easily have the lower mean-squared error of the two estimators.
-\footnote{Because the moments of the 2SLS estimator only exist up to the order of overidentificiation \citep{Phillips1980} this statement should be understood to refer to ``trimmed'' mean-squared error when the number of instruments is two or fewer. For more discussion of this point, see the simulation results below.} 
+Depending on the degree of endogeneity present in $x$ and the strength of the instruments, $\widehat{\beta}_{OLS}$ could easily have the lower mean-squared error of the two estimators.\footnote{Because the moments of the 2SLS estimator only exist up to the order of overidentificiation \citep{Phillips1980} this statement should be understood to refer to ``trimmed'' mean-squared error when the number of instruments is two or fewer. For more discussion of this point, see the simulation results below.} 
 We can embed this intuition within the local mis-specification framework as follows
   \begin{equation}
      E \left[\begin{array}{c} \mathbf{z}_{ni} \epsilon_{ni} \\ x_{ni} \epsilon_{ni} \end{array}\right] = \left[\begin{array}{c} \mathbf{0} \\ \tau/\sqrt{n} \end{array}\right].
@@ -406,7 +405,7 @@ $$\sqrt{n}\left(\widehat{\beta}_S - \beta \right) \overset{d}{\rightarrow} -K_S 
          \end{array}\right] + M \right)$$
 where
          $$-K_S = \left(\Pi' Q_S W_S Q_S'\Pi\right)^{-1} \Pi'Q_SW_S$$
-$M \sim N(\mathbf{0}, \Omega)$, $Q_S = Q_Z \Xi_S'$, and $Q$ and $\Omega$ are defined in Assumption \ref{assump:chooseIV}.
+$M \sim N(\mathbf{0}, \Omega)$, $Q_S = Q \Xi_S'$, and $Q$ and $\Omega$ are defined in Assumption \ref{assump:chooseIV}.
 \end{thm}
 
 
@@ -508,7 +507,7 @@ $$\mbox{AMSE(OLS)} = \frac{\tau^2}{\sigma_x^4} + \frac{\sigma_\epsilon^2}{\sigma
  To use this expression for moment selection we need to estimate the unknown parameters.
  Fortunately, the familiar estimators of $\sigma_x^2, \gamma^2$, and $\sigma_v^2$ remain consistent under Assumption \ref{assump:OLSvsIV} so we set
  $$\widehat{\sigma}_x^2 = n^{-1}\mathbf{x}'\mathbf{x}, \quad \widehat{\gamma}^2 = n^{-1}\mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x}, \quad \widehat{\sigma}_v^2 =  \widehat{\sigma}_x^2 - \widehat{\gamma}^2.$$
-To estimate $\sigma_\epsilon^2$ we have two choices: we can either use the residuals from the OLS estimator or those from the 2SLS estimator.
+To estimate $\sigma_\epsilon^2$ we have two choices: we can use either use the residuals from the OLS estimator or those from the 2SLS estimator.
 Under local mis-specification, both provide consistent estimators of $\sigma_\epsilon^2$. 
 We would expect the estimator based on the 2SLS residuals to be more robust, however, unless the instruments are quite weak. 
 This is because the exogeneity of $x$, even though it disappears in the limit under our asymptotics, is non-zero in finite samples. 
@@ -549,35 +548,45 @@ using the fact that $\widehat{\sigma}_v = \widehat{\sigma}_x^2 - \widehat{\gamma
 Thus, to show that $\widehat{T}_{FMSC} = \widehat{T}_{DHW}$, all that remains is to establish that $\widehat{\tau}^2 = n\widehat{\sigma}_x^4 (\widehat{\beta}_{OLS} - \widetilde{\beta}_{2SLS})^2$, which we obtain as follows:
     $$\widehat{\tau}^2  =  \left[n^{-1/2} \textbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})\right]^2 = n^{-1}\left[\mathbf{x}'\mathbf{x} \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2 = n^{-1}\left[n \widehat{\sigma}_x^2 \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2.$$
 
-The equivalence between FMSC selection and a DHW test in the OLS versus 2SLS example has two useful implications. 
+The equivalence between FMSC selection and a DHW test in this example is helpful for two reasons. 
 First, it provides a novel justification for the use of the DHW test to select between OLS and 2SLS. So long as it is carried out with $\alpha \approx 16\%$, the DHW test is equivalent to selecting the estimator that minimizes an asymptotically unbiased estimator of AMSE. 
-Note that this significance level differs from the more usual values of 5 or 10\% in that it leads us to select 2SLS \emph{more often}: OLS should indeed be given the benefit of the doubt, but not by so wide a margin as tradition suggests. 
+Note that this significance level differs from the more usual values of 5 or 10\% in that it leads us to select 2SLS \emph{more often}: OLS should indeed be given the benefit of the doubt, but not by so wide a margin as traditional practice suggests. 
 Second, this equivalence shows that the FMSC can be viewed as an \emph{extension} of the machinery behind the familiar DHW test to more general GMM environments. 
 Naturally each application of the FMSC should be evaluated on its own merits, but it is reassuring that the local mis-specification framework leads to a reasonable procedure in a simple setting where we can compare it to more familiar techniques.
 
 
 \subsection{FMSC for Instrument Selection Example}
 As explained above, the OLS versus 2SLS example can be viewed as a special case of the more general instrument selection problem from Section \ref{sec:chooseIVlowlevel}.
-To apply the FMSC to this problem, we simply need to specialize Equation \label{eq:fmsc} to this example. 
-To begin, recall that $Z_1$ is a matrix containing $p$ valid instruments and $Z_2$ is a matrix containing $q$ potentially endogenous instruments. 
-Thus the valid estimator, defined in Assumption \ref{assump:Identification}, is simply
-$$\widehat{\beta}_v = \left(X'Z_1 \widetilde{W}_v Z_1'X\right)^{-1}X'Z_1 \widetilde{W}_v Z_1'\mathbf{y}$$
-in this example and we estimate $\nabla_\beta \mu(\beta)$ with $\nabla_\beta \mu(\widehat{\beta}_v)$.  
+To apply the FMSC to this problem, we simply need to specialize Equation \ref{eq:fmsc}.
+Recall that $Z_1$ is the matrix containing the $p$ instruments known to be exogenous, $Z_2$ is the matrix containing the $q$ potentially endogenous instruments and $Z = (Z_1, Z_2)$.
+To simplify the notation in this section, let
+$$\Xi_1 = \left[\begin{array}{cc} I_{p} & 0_{p \times q}  \end{array}\right], \quad
+    \Xi_2 = \left[ \begin{array}{cc}
+              0_{q \times p}& I_{q}
+            \end{array}\right]$$
+so that $Z_1 = Z \Xi_1'$ and $Z_2 = Z \Xi_2'$.
+In this example the valid estimator, defined in Assumption \ref{assump:Identification}, is given by
+$$\widehat{\beta}_v = \left(X'Z_1 \widetilde{W}_v Z_1' X\right)^{-1}X'Z_1 \widetilde{W}_v Z_1' \mathbf{y}$$
+and we estimate $\nabla_\beta \mu(\beta)$ with $\nabla_\beta \mu(\widehat{\beta}_v)$.  
 Similarly, 
-$$-\widehat{K}_S = n(X'Z \Xi_S' \widetilde{W}^S \Xi_S Z X)^{-1}X' Z \Xi_S' \widetilde{W}_S$$
+$$-\widehat{K}_S = n\left(X'Z \Xi_S' \widetilde{W}_S \Xi_S Z' X\right)^{-1}X' Z \Xi_S' \widetilde{W}_S$$
 is the natural consistent estimator of $-K_S$ in this setting.\footnote{The negative sign is squared in the FMSC expression and hence disappears. We write it here only to be consistent with the notation of Theorem \ref{thm:normality}.}
-Since $\Xi_S$ chosen by the researcher, the only remaining quantities from Equation \label{eq:fmsc} are $\widehat{\boldsymbol{\tau}}$, $\widehat{\Psi}$ and $\widehat{\Omega}$. 
-For the first two of these, we specialize Theorem \ref{thm:tau} as follows.
+Since $\Xi_S$ merely encodes a set of candidate moment conditions proposed by the researcher, the only remaining quantities from Equation \ref{eq:fmsc} are $\widehat{\boldsymbol{\tau}}$, $\widehat{\Psi}$ and $\widehat{\Omega}$. 
+To proceed further, we first specialize Theorem \ref{thm:tau} as follows.
 \begin{thm}
-Let $\widehat{\boldsymbol{\tau}} = n^{-1/2} Z_2' \left( \mathbf{y} - X\widehat{\beta}_v\right)$. Then, under Assumption \ref{assump:chooseIV}, we have $\widehat{\boldsymbol{\tau}} \rightarrow_d \boldsymbol{\tau} + \Psi M$ where
-	$$\Psi =\left[ \begin{array}{cc}
-              -\Xi_2Q_Z \Pi K_v  & I_{q}
-            \end{array}\right],$$
-$M \sim N(0,\Omega)$ and $I_q$ is the $q\times q$ identity matrix.
+Let $\widehat{\boldsymbol{\tau}} = n^{-1/2} Z_2' \left( \mathbf{y} - X\widehat{\beta}_v\right)$. Under Assumption \ref{assump:chooseIV},
+$\widehat{\boldsymbol{\tau}} \rightarrow_d \boldsymbol{\tau} + \Psi M$
+where
+\begin{eqnarray*}
+	\Psi &=&\left[ \begin{array}{cc}-\Xi_2Q \Pi K_v  & I_{q} \end{array}\right] \\
+	-K_v &=& \left(\Pi' Q \Xi'_1 W_v \Xi_1 Q'\Pi\right)^{-1} \Pi'Q \Xi_1' W_v
+\end{eqnarray*}
+where $M \sim N(0,\Omega)$, $\Xi_2$ is the moment selection matrix that corresponds to using only the instruments in $Z_2$, $Q$ is defined in $I_q$ is the $q\times q$ identity matrix.
 \end{thm}
+Using the preceding result, we construct the asymptotically unbiased estimator $\widehat{\tau}\widehat{\tau} - \widehat{\Psi}\widehat{\Omega} \widehat{\Psi}'$ of $\tau\tau$ from
+	$$\widehat{\Psi} = \left[ \right]$$
 
-
-\todo[inline]{Explain the estimator of $\Psi$ and the asymptotically unbiased estimator of $\tau\tau'$. Then talk about $\Omega$ and specialize everything to the case of 2SLS, which we use in the empirical example and simulation study. Talk about centering / heteroskedasticity.}
+\todo[inline]{Now just talk about $\Omega$ and specialize everything to the case of 2SLS, which we use in the empirical example and simulation study. Talk about centering / heteroskedasticity.}
 
 \subsection{OLD VERSION: FMSC for 2SLS Instrument Selection}\label{sec:2sls}
 \todo[inline]{This section will eventually be replaced by the example I'll merge in from \texttt{metrica\_revisions.tex}.}
