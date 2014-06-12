@@ -557,8 +557,19 @@ Naturally each application of the FMSC should be evaluated on its own merits, bu
 
 
 \subsection{FMSC for Instrument Selection Example}
-Here the target parameter is allowed to be any function of $\beta$. Example introduced in Section \ref{sec:chooseIVlowlevel}. 
-Expressions aren't as readily interpretable as in the OLS versus IV example but they are still fairly simple.
+As explained above, the OLS versus 2SLS example can be viewed as a special case of the more general instrument selection problem from Section \ref{sec:chooseIVlowlevel}.
+To apply the FMSC to this problem, we simply need to specialize Equation \label{eq:fmsc} to this example. 
+To begin, recall that $Z_1$ is a matrix containing $p$ valid instruments and $Z_2$ is a matrix containing $q$ potentially endogenous instruments. 
+Thus the valid estimator, defined in Assumption \ref{assump:Identification}, is simply
+$$\widehat{\beta}_v = \left(X'Z_1 \widetilde{W}_v Z_1'X\right)^{-1}X'Z_1 \widetilde{W}_v Z_1'\mathbf{y}$$
+in this example. Thus, we specialize Theorem \ref{thm:tau} as follows.
+\begin{thm}
+Let $\widehat{\boldsymbol{\tau}} = n^{-1/2} Z_2' \left( \mathbf{y} - X\widehat{\beta}_v\right)$. Then, under Assumption \ref{assump:chooseIV}, we have $\widehat{\boldsymbol{\tau}} \rightarrow_d \boldsymbol{\tau} + \Psi M$ where
+	$$\Psi =\left[ \begin{array}{cc}
+              -\Xi_2Q_Z \Pi K_1  & I_{q}
+            \end{array}\right],$$
+$M \sim N(0,\Omega)$ and $I_q$ is the $q\times q$ identity matrix.
+\end{thm}
 
 
 \todo[inline]{First give the general result for the limit distribution of $\widehat{\tau}$, etc. Then specialize to the case of 2SLS, which we use in the empirical example and simulation study, and talk about particular estimators for $\Omega$, etc. along with centering and allowing for heteroskedasticity.}
