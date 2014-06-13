@@ -611,29 +611,6 @@ Accordingly, we use
 rather than the $(p\times p)$ upper left sub-matrix of $\widehat{\Omega}$ to estimate this quantity. 
 This imposes the assumption that all instruments in $Z_1$ are valid so that no centering is needed, providing greater precision.
 
-\subsection{OLD VERSION: FMSC for 2SLS Instrument Selection}\label{sec:2sls}
-\todo[inline]{This section will eventually be replaced by the example I'll merge in from \texttt{metrica\_revisions.tex}.}
-This section specializes FMSC to a case of particular applied interest: instrument selection for 2SLS in a micro-data setting. The expressions given here are used in the simulation studies and empirical example that appear later in the paper. Consider a linear IV regression model with response variable $y_{ni}$, regressors $\mathbf{x}_{ni}$, valid instruments $\mathbf{z}^{(1)}_{ni}$ and potentially invalid instruments $\mathbf{z}^{(2)}_{ni}$. Define $\mathbf{z}_{ni} = (\mathbf{z}^{(1)}_{ni},\mathbf{z}^{(2)}_{ni})'$. We assume that $\{(y_{ni}, \mathbf{x}_{ni}',\mathbf{z}_{ni}')'\}_{i=1}^n$ is iid across $i$ for fixed sample size $n$, but allow the distribution to change with $n$.
-In this case Assumption \ref{assump:drift} becomes
-\begin{equation}
-\label{eq:linear}
-	E\left[\begin{array}{c} \mathbf{z}^{(1)}_{ni} \left(y_{ni} - \mathbf{x}_{ni}' \theta_0  \right)  \\ \mathbf{z}^{(2)}_{ni} \left(y_{ni} - \mathbf{x}_{ni}' \theta_0  \right) \end{array}  \right] = \left[\begin{array}{c} \mathbf{0}\\ \tau/\sqrt{n}  \end{array}\right]
-\end{equation}
-where $(y_{ni},\mathbf{x}_{ni}',\mathbf{z}_{ni}')\rightarrow_d(y_i,\mathbf{x}_{i}',\mathbf{z}_{i}')$ for each $i$, and the $(y_i,\mathbf{x}_{i}',\mathbf{z}_{i}')$ are iid. Stacking observations, let $X = \left(\mathbf{x}_{n1}, \hdots, \mathbf{x}_{nn} \right)'$, $y = \left( y_{n1}, \hdots, y_{nn}\right)'$, $Z_1 = (\mathbf{z}^{(1)}_{n1}, \hdots, \mathbf{z}^{(1)}_{nn} )'$, $Z_2 = (\mathbf{z}^{(2)}_{n1}, \hdots, \mathbf{z}^{(2)}_{nn})'$, and $Z = (Z_1, Z_2)$. Further define $u_{ni}(\theta) = y_{ni} - \mathbf{x}_{ni}'\theta$ and $u(\theta) = y - X\theta$. The 2SLS estimator of $\theta_0$ under instrument set $S$ is given by $\widehat{\theta}_{S} = \left[X'P_SX\right]^{-1} X'P_S y$ where $Z_S = Z\Xi_S'$ and $P_S = Z_S(Z_S'Z_S)^{-1}Z_S'$. Similarly, the full estimator is $\widehat{\theta}_{f} = \left[X' P_Z X\right]^{-1} X' P_Z y$ while the valid estimator is $\widehat{\theta}_{v} = \left[X' P_{Z_1} X\right]^{-1} X' P_{Z_1}y$. Let $\mathbf{z}_S = \Xi_S \mathbf{z}$. Then, the matrix $K_S$ becomes
-\begin{equation}
-	K_S = - \left( E\left[\mathbf{x}\mathbf{z}'_S\right]\left(E[\mathbf{z}_S\mathbf{z}'_S] \right)^{-1} E\left[\mathbf{z}'_S \mathbf{x}\right]\right)^{-1} E\left[\mathbf{x}\mathbf{z}'_S\right]\left(E[\mathbf{z}_S\mathbf{z}'_S]\right)^{-1}. 
-\end{equation}
-where $\left(\mathbf{x}', \mathbf{z}'\right)$ is shorthand for $\left(\mathbf{x}_i', \mathbf{z}_i'\right)$, the limiting law of  $\left(\mathbf{x}_{ni}', \mathbf{z}_{ni}'\right)$. Because the observations are iid for fixed $n$, $\Omega = \lim_{n\rightarrow \infty} Var\left[\mathbf{z}_{ni}u_{ni}(\theta_0)  \right]$. This allows for conditional but not unconditional heteroscedasticity.
-
-To use the FMSC for instrument selection, we first need an estimator of $K_S$ for each moment set under consideration, e.g.\
-\begin{equation}
-	\widehat{K}_S = n \left[X' Z_S\left(Z_S'Z_S\right)^{-1}Z_S' X\right]^{-1} X' Z_S\left(Z_S'Z_S\right)^{-1} 
-\end{equation}
-which is consistent for $K_S$ under Assumption \ref{assump:highlevel}. To estimate $\Omega$ for all but the valid instrument set, I employ the centered, heteroscedasticity-consistent estimator
-	$$\widehat{\Omega}= \frac{1}{n}\sum_{i=1}^n \mathbf{z}_i \mathbf{z}_i' u_i(\widehat{\theta}_f)^2 - \left(\frac{1}{n}\sum_{i=1}^n \mathbf{z}_i u_i(\widehat{\theta}_f)  \right)\left(\frac{1}{n}\sum_{i=1}^n  u_i(\widehat{\theta}_f)\mathbf{z}_i'  \right).$$
-Centering allows moment functions to have non-zero means. While the local mis-specification framework implies that these means tend to zero in the limit, they are non-zero for any fixed sample size. Centering accounts for this fact, and thus provides added robustness. Since the valid estimator $\widehat{\theta}_v$ has no asymptotic bias, the AMSE of any target parameter based on this estimator equals its asymptotic variance. I use $\widetilde{\Omega}_{11}= n^{-1}\sum_{i=1}^n \mathbf{z}_{1i}\mathbf{z}_{1i}'u_i(\widehat{\theta}_v)^2$ rather than the $(p\times p)$ upper left sub-matrix of $\widehat{\Omega}$ to estimate this quantity. This imposes the assumption that all instruments in $Z_1$ are valid so that no centering is needed, providing greater precision. A robust estimator of $\nabla_{\theta}\mu(\theta_0)$ is provided by $\nabla_{\theta}\mu(\widehat{\theta}_{Valid})$. For 2SLS the asymptotically unbiased estimator $\widehat{\tau}\widehat{\tau} - \widehat{\Psi}\widehat{\Omega}\widehat{\Psi}$ of $\tau\tau'$ described in Corollary \ref{cor:tautau} is constructed from $\widehat{\tau} = n^{-1/2} \; Z_2' \; u(\hat{\theta}_{v})$ and $\widehat{\Psi} =  \left[ \begin{array}{cc} -n^{-1}Z_2'X \widehat{K}_{v} & \mathbf{I}\end{array}\right].$
-
-
 \subsection{Simulation Study: Choosing Instruments Example}\label{sec:fmscsim}
 \todo[inline]{Probably need a whole section for this, since we'll present results for two examples. Also think about giving a simulation that shows the limit theory is working, i.e.\ a simulation with no estimation: simply plugging in the true values. Be sure to show that even when we use trimmed AMSE or median absolute deviation we're getting what we want. Emphasize how large the gains are.}
 This section evaluates the performance of FMSC in a simple 2SLS instrument selection problem. The simulation setup is as follows:
