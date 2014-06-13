@@ -21,4 +21,6 @@ library(sem) #contains tsls routine
 
 source("load_and_clean_data.R")
 
+source("calculate_2SLS_results.R")
+
 source("table_2SLS_results.R")
