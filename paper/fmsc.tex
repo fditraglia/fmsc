@@ -26,9 +26,6 @@
 \RequirePackage{hypernat}
 
 
-\newcommand{\p}{\mathbb{P}}
-\DeclareMathOperator*{\argmin}{arg\,min}
-
 \newtheorem{assump}{Assumption}[section]
 \newtheorem{pro}{Proposition}[section]
 \newtheorem{lem}{Lemma}[section]
@@ -133,7 +130,7 @@ The moment condition associated with $g(\cdot,\cdot)$ is assumed to be correct w
 More precisely, 
 \begin{assump}[Local Mis-Specification]
 \label{assump:drift}
-Let $\{Z_{ni}\colon 1\leq i \leq n, n =1, 2, \hdots\}$ be a triangular array of random vectors defined on a probability space $(\Upsilon, \mathcal{F}, \p)$ satisfying
+Let $\{Z_{ni}\colon 1\leq i \leq n, n =1, 2, \hdots\}$ be a triangular array of random vectors defined on a probability space $(\Upsilon, \mathcal{F}, \mathbb{P})$ satisfying
 	\begin{enumerate}[(a)]
 		\item $E[g(Z_{ni},\theta_0)] = 0$,
 		\item $E[h(Z_{ni},\theta_0)] = n^{-1/2}\tau$, where $\tau$ is an unknown constant vector, 
@@ -154,7 +151,7 @@ A candidate GMM estimator $\widehat{\theta}_S$ uses some subset $S$ of the momen
 Let $|S|$ denote the number of moment conditions used. For $\widehat{\theta}_S$ to be identified, we require that $|S|>r$. 
 Let $\Xi_S$ be the $|S| \times(p +q)$ \emph{moment selection matrix} corresponding to $S$. That is, $\Xi_S$ is a matrix of ones and zeros arranged such that $\Xi_S f_n(\theta)$ contains only the sample moment conditions used to estimate $\widehat{\theta}_S$. 
 Thus, the GMM estimator of $\theta$ based on moment set $S$ is given by 
-$$\widehat{\theta}_S = \argmin_{\theta \in \Theta}\; \left[\Xi_S f_n(\theta)\right]' \widetilde{W}_S \; \left[ \Xi_S f_n(\theta)\right].$$
+$$\widehat{\theta}_S = \underset{\theta \in \Theta}{\mbox{arg min}}\; \left[\Xi_S f_n(\theta)\right]' \widetilde{W}_S \; \left[ \Xi_S f_n(\theta)\right].$$
 where $\widetilde{W}_S$ is an $|S|\times |S|$, positive semi-definite weight matrix. Note that we place no restrictions on $S$ other than $|S| >r$ so that the estimator exists. 
 In particular, $S$ may \emph{exclude} some or all of the valid moment conditions contained in $g$.
 While this may seem strange, it allows us to accomodate a wider range of examples, including choosing between least squares and instrumental variables estimators.
@@ -235,7 +232,7 @@ With the exception of Section \ref{subsec:digress}, we maintain the following as
 \begin{assump}[FMSC Identification Condition] 
 \label{assump:Identification}
 Let $\widehat{\theta}_v$ denote the GMM estimator based solely on the moment conditions contained in the $g$--block
-$$\widehat{\theta}_v = \argmin_{\theta \in \Theta}\; g_n(\theta)' \widetilde{W}_{v} \; g_n(\theta)$$
+$$\widehat{\theta}_v = \underset{\theta \in \Theta}{\mbox{arg min}}\; g_n(\theta)' \widetilde{W}_{v} \; g_n(\theta)$$
 We call this the ``valid estimator'' and assume that it is identified, i.e.\ that $p\geq r$.
 \end{assump}
 
@@ -1107,7 +1104,7 @@ The preceding is a globally convex function of $\omega$.
 Taking the first order condition and rearranging, we find that the unique global minimizer is
 \begin{equation}
 \label{eq:AMSEoptimal}
-	\omega^* = \underset{\omega \in [0,1]}{\mbox{argmin}}\; \mbox{AMSE}\left[\widehat{\beta}(\omega) \right] 
+	\omega^* = \underset{\omega \in [0,1]}{\mbox{arg min}}\; \mbox{AMSE}\left[\widehat{\beta}(\omega) \right] 
 	=\left[1 + \frac{\tau^2/\sigma_x^4}{\sigma_\epsilon^2(1/\gamma^2 - 1/\sigma_x^2)}\right]^{-1}
 \end{equation}
 In other words,
