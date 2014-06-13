@@ -484,7 +484,7 @@ provides an asymptotically unbiased estimator of AMSE.
 When $r > p$, Assumption \ref{assump:Identification} fails: $\theta_0$ is not estimable by $\widehat{\theta}_v$ so $\widehat{\tau}$ is an infeasible estimator of $\tau$. 
 A na\"{i}ve approach to this problem would be to substitute another consistent estimator of $\theta_0$ and proceed analogously. 
 Unfortunately, this approach fails. To understand why, consider the case in which all moment conditions are potentially invalid so that the $g$--block is empty. 
-Letting $\widehat{\theta}_f$ denote the estimator based on the full set of moment conditions in $h$, we have $\sqrt{n}h_n(\widehat{\theta}_f) \rightarrow_d\Gamma  \mathcal{N}_q(\tau, \Omega)$ where $\Gamma = \mathbf{I}_q - H \left(H'WH\right)^{-1}H'W$, using an argument similar to that in the proof of Theorem \ref{thm:tau}. 
+Letting $\widehat{\theta}_f$ denote the estimator based on the full set of moment conditions in $h$,  $\sqrt{n}h_n(\widehat{\theta}_f) \rightarrow_d\Gamma  \mathcal{N}_q(\tau, \Omega)$ where $\Gamma = \mathbf{I}_q - H \left(H'WH\right)^{-1}H'W$, using an argument similar to that in the proof of Theorem \ref{thm:tau}. 
 The mean, $\Gamma \tau$, of the resulting limit distribution does not equal $\tau$, and because $\Gamma$ has rank $q-r$ we cannot pre-multiply by its inverse to extract an estimate of $\tau$.
 Intuitively, $q-r$ over-identifying restrictions are insufficient to estimate a $q$-vector: $\tau$ is not identified unless we have a minimum of $r$ valid moment conditions. 
 However, the limiting distribution of $\sqrt{n}h_n(\widehat{\theta}_f)$ partially identifies $\tau$ even when we have no valid moment conditions at our disposal. 
