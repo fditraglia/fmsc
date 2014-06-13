@@ -592,11 +592,24 @@ Using the preceding result, we construct the asymptotically unbiased estimator $
 		-n^{-1}Z_2'X \widehat{K}_v & I_q
 	\end{array}\right], \quad -\widehat{K}_v = n\left(X'Z_1 \widetilde{W}_v Z_1' X\right)^{-1}X'Z_1 \widetilde{W}_v$$
 
-All that remains before we can simply substitute into Equation \ref{eq:fmsc} is to estimate $\Omega$. 
+All that remains before we can substitute into Equation \ref{eq:fmsc} is to estimate $\Omega$. 
 There are many possible ways to proceed, depending on the problem at hand and the assumptions one is willing to make. 
-In the simulation and empirical examples discussed below we examine the 2SLS estimator, that is $\widetilde{W}_S = (\Xi_S Z'Z\Xi_S)^{-1}$. 
-
-\todo[inline]{Now just talk about $\Omega$ and specialize everything to the case of 2SLS, which we use in the empirical example and simulation study. Talk about centering / heteroskedasticity.}
+In the simulation and empirical examples discussed below we examine the 2SLS estimator, that is $\widetilde{W}_S = (\Xi_S Z'Z\Xi_S)^{-1}$, and estimate $\Omega$ as follows. 
+For all specifications \emph{except} the valid estimator $\widehat{\beta}_v$, we employ the centered, heteroscedasticity-consistent estimator
+\begin{equation}
+	\widehat{\Omega}= \frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_{full})^2\mathbf{z}_i \mathbf{z}_i'  - \left(\frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_{full})\mathbf{z}_i   \right)\left(\frac{1}{n}\sum_{i=1}^n  u_i(\widehat{\beta}_{full})\mathbf{z}_i'  \right)
+\end{equation}
+where $u_i(\beta) = y_i - \mathbf{x}_i'\beta$ and $\widehat{\beta}_{full} = (X'Z(Z'Z)^{-1}Z'X)^{-1}X'Z(Z'Z)^{-1}Z'\mathbf{y}$.
+Centering allows moment functions to have non-zero means. 
+While the local mis-specification framework implies that these means tend to zero in the limit, they are non-zero for any fixed sample size. 
+Centering accounts for this fact, and thus provides added robustness. 
+Since the valid estimator $\widehat{\beta}_v$ has no asymptotic bias, the AMSE of any target parameter based on this estimator equals its asymptotic variance. 
+Accordingly, we use 
+\begin{equation}
+	\widetilde{\Omega}_{11}= n^{-1}\sum_{i=1}^n u_i(\widehat{\beta}_{full})^2\mathbf{z}_{1i}\mathbf{z}_{1i}'
+\end{equation}
+rather than the $(p\times p)$ upper left sub-matrix of $\widehat{\Omega}$ to estimate this quantity. 
+This imposes the assumption that all instruments in $Z_1$ are valid so that no centering is needed, providing greater precision.
 
 \subsection{OLD VERSION: FMSC for 2SLS Instrument Selection}\label{sec:2sls}
 \todo[inline]{This section will eventually be replaced by the example I'll merge in from \texttt{metrica\_revisions.tex}.}
