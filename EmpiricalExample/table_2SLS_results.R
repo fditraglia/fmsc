@@ -8,7 +8,7 @@ foo.raw <- do.call("cbind", tsls.summaries[range])
 foo <- foo.raw
 rNames <- rownames(foo)
 nCols <- ncol(foo)
-foo <- apply(foo, c(1,2), as.character)
+foo <- apply(foo, c(1,2), format, nsmall = 2) #format works like as.character but with more precise formatting commands. We need it here to keep the trailing zeros from being deleted
 foo <- apply(foo, c(1,2), function(x) paste0('$', x, '$'))
 foo <- cbind(rNames, foo)
 foo <- apply(foo, 1, function(x) paste(x, collapse = ' & '))
