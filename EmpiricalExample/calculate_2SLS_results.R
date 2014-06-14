@@ -70,6 +70,7 @@ reg.table <- function(tsls.object){
   lower <- coef - z * SE
   upper <- coef + z * SE
   results <- round(rbind(coef, SE, lower, upper), 2) 
+  rownames(results)[1] <- "coeff."
   return(results[,-1]) #Don't report intercept
 }
 
