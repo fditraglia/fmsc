@@ -54,5 +54,5 @@ full.table <- paste(panel1, '\n \\vspace{2em}', panel2)
 #gsub("MalfalSq", full.table, "\\emph{malfal}$^2$")
 #gsub("RuleSq", full.table, "\\emph{rule}$^2$")
 
-cat(full.table, file = "table_2sls_results.tex")
+cat(full.table, file = "table_2SLS_results.tex")
 rm(full.table, panel1, panel2, make.table)
