@@ -4,7 +4,7 @@
 #This script constructs a table of 2SLS Results for all instrument sets considered in my empirical example. It should not be run on its own: it is called by run_empirical_example.R
 
 #Since I need to do this twice (two panels of results so it fits on one page), I've wrapped everything into a function. 
-make.table <- function(range){
+make.table <- function(range, from.last = FALSE){
 
   #2SLS Results Panel
   results.raw <- do.call("cbind", tsls.summaries[range])
@@ -20,7 +20,7 @@ make.table <- function(range){
   
   #Instrument Blocks Panel
   blocks.raw <- instrument.blocks[range]
-  full <- unique(unlist(blocks.raw))
+  full <- unique(unlist(blocks.raw), fromLast = from.last)
   blocks <- lapply(blocks.raw, function(x) replace(rep(NA, length(full)), match(x, full), x))
   blocks <- t(do.call("rbind", blocks))
   blocks[is.na(blocks)] <- ""
@@ -47,7 +47,7 @@ make.table <- function(range){
 
 #Assemble full table from two separate panels
 panel1 <- make.table(1:6)
-panel2 <- make.table(7:12)
+panel2 <- make.table(7:12, from.last = TRUE)
 full.table <- paste(panel1, '\n \n \\vspace{2em} \n \n', panel2)
 
 #Make "MalfalSq" and "RuleSq" look prettier
