@@ -70,67 +70,6 @@
 
 \input{OLSvsIV_simulation_study.tex}
 
-\subsection{FMSC for Instrument Selection Example}
-\label{sec:chooseIVFMSC}
-As explained above, the OLS versus 2SLS example can be viewed as a special case of the more general instrument selection problem from Section \ref{sec:chooseIVlowlevel}.
-To apply the FMSC to this problem, we simply need to specialize Equation \ref{eq:fmsc}.
-Recall that $Z_1$ is the matrix containing the $p$ instruments known to be exogenous, $Z_2$ is the matrix containing the $q$ potentially endogenous instruments and $Z = (Z_1, Z_2)$.
-To simplify the notation in this section, let
-\begin{equation}
-\label{eq:xi12}
-\Xi_1 = \left[\begin{array}{cc} I_{p} & 0_{p \times q}  \end{array}\right], \quad
-    \Xi_2 = \left[ \begin{array}{cc}
-              0_{q \times p}& I_{q}
-            \end{array}\right]	
-\end{equation}
-where $0_{m\times n}$ denotes an $n\times m$ matrix of zeros and $I_m$ denotes the $m\times m$ identity matrix.
-Using this convention, $Z_1 = Z \Xi_1'$ and $Z_2 = Z \Xi_2'$.
-In this example the valid estimator, defined in Assumption \ref{assump:Identification}, is given by
-\begin{equation}
-\label{eq:betav}
-\widehat{\beta}_v = \left(X'Z_1 \widetilde{W}_v Z_1' X\right)^{-1}X'Z_1 \widetilde{W}_v Z_1' \mathbf{y}	
-\end{equation}
-and we estimate $\nabla_\beta \mu(\beta)$ with $\nabla_\beta \mu(\widehat{\beta}_v)$.  
-Similarly, 
-$$-\widehat{K}_S = n\left(X'Z \Xi_S' \widetilde{W}_S \Xi_S Z' X\right)^{-1}X' Z \Xi_S' \widetilde{W}_S$$
-is the natural consistent estimator of $-K_S$ in this setting.\footnote{The negative sign is squared in the FMSC expression and hence disappears. We write it here only to be consistent with the notation of Theorem \ref{thm:normality}.}
-Since $\Xi_S$ is known, the only remaining quantities from Equation \ref{eq:fmsc} are $\widehat{\boldsymbol{\tau}}$, $\widehat{\Psi}$ and $\widehat{\Omega}$. 
-To proceed further, we first specialize Theorem \ref{thm:tau} as follows.
-\begin{thm}
-Let $\widehat{\boldsymbol{\tau}} = n^{-1/2} Z_2' ( \mathbf{y} - X\widehat{\beta}_v)$ where $\widehat{\beta}_v$ is as defined in Equation \ref{eq:betav}. Under Assumption \ref{assump:chooseIV} we have
-$\widehat{\boldsymbol{\tau}} \rightarrow_d \boldsymbol{\tau} + \Psi M$
-where $M$ is defined in Theorem \ref{thm:chooseIV},
-\begin{eqnarray*}
-	\Psi &=&\left[ \begin{array}{cc}-\Xi_2Q \Pi K_v  & I_{q} \end{array}\right] \\
-	-K_v &=& \left(\Pi' Q \Xi'_1 W_v \Xi_1 Q'\Pi\right)^{-1} \Pi'Q \Xi_1' W_v
-\end{eqnarray*}
-$W_v$ is the probability limit of the weighting matrix from Equation \ref{eq:betav}, $I_q$ is the $q\times q$ identity matrix, $\Xi_1$ is defined in Equation \ref{eq:xi12},  and $Q$ is defined in Assumption \ref{assump:chooseIV}.
-\end{thm}
-Using the preceding result, we construct the asymptotically unbiased estimator $\widehat{\tau}\widehat{\tau}' - \widehat{\Psi}\widehat{\Omega} \widehat{\Psi}'$ of $\tau\tau'$ from
-	$$\widehat{\Psi} = \left[ \begin{array}
-		{cc}
-		-n^{-1}Z_2'X \widehat{K}_v & I_q
-	\end{array}\right], \quad -\widehat{K}_v = n\left(X'Z_1 \widetilde{W}_v Z_1' X\right)^{-1}X'Z_1 \widetilde{W}_v$$
-
-All that remains before we can substitute into Equation \ref{eq:fmsc} is to estimate $\Omega$. 
-There are many possible ways to proceed, depending on the problem at hand and the assumptions one is willing to make. 
-In the simulation and empirical examples discussed below we examine the 2SLS estimator, that is $\widetilde{W}_S = (\Xi_S Z'Z\Xi_S)^{-1}$, and estimate $\Omega$ as follows. 
-For all specifications \emph{except} the valid estimator $\widehat{\beta}_v$, we employ the centered, heteroscedasticity-consistent estimator
-\begin{equation}
-	\widehat{\Omega}= \frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_{full})^2\mathbf{z}_i \mathbf{z}_i'  - \left(\frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_{full})\mathbf{z}_i   \right)\left(\frac{1}{n}\sum_{i=1}^n  u_i(\widehat{\beta}_{full})\mathbf{z}_i'  \right)
-\end{equation}
-where $u_i(\beta) = y_i - \mathbf{x}_i'\beta$ and $\widehat{\beta}_{full} = (X'Z(Z'Z)^{-1}Z'X)^{-1}X'Z(Z'Z)^{-1}Z'\mathbf{y}$.
-Centering allows moment functions to have non-zero means. 
-While the local mis-specification framework implies that these means tend to zero in the limit, they are non-zero for any fixed sample size. 
-Centering accounts for this fact, and thus provides added robustness. 
-Since the valid estimator $\widehat{\beta}_v$ has no asymptotic bias, the AMSE of any target parameter based on this estimator equals its asymptotic variance. 
-Accordingly, we use 
-\begin{equation}
-	\widetilde{\Omega}_{11}= n^{-1}\sum_{i=1}^n u_i(\widehat{\beta}_{full})^2\mathbf{z}_{1i}\mathbf{z}_{1i}'
-\end{equation}
-rather than the $(p\times p)$ upper left sub-matrix of $\widehat{\Omega}$ to estimate this quantity. 
-This imposes the assumption that all instruments in $Z_1$ are valid so that no centering is needed, providing greater precision.
-
 \subsection{Simulation Study: Choosing Instruments Example}\label{sec:fmscsim}
 \todo[inline]{Update with revised simulations and shorten. Be sure to show that even when we use trimmed AMSE or median absolute deviation we're getting what we want. Emphasize how large the gains are.}
 This section evaluates the performance of FMSC in a simple 2SLS instrument selection problem. The simulation setup is as follows:
@@ -402,6 +341,7 @@ Table \ref{tab:summary} compares average and worst-case RMSE over the parameter 
 
 
 
+\input{chooseIV_fmsc.tex}
 
 
 \section{Moment Averaging \& Post-Selection Estimators}
