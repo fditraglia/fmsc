@@ -1,0 +1,40 @@
+\ProvidesPackage{frankstyle}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{rotating}
+\usepackage{amssymb, amsmath, amsthm} 
+\usepackage{multirow}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{threeparttable}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{todonotes}
+\usepackage{mathrsfs}
+\usepackage{setspace}
+% \singlespacing
+\onehalfspacing
+% \doublespacing
+% \setstretch{<factor>} % for custom spacing
+
+\RequirePackage{natbib}
+\RequirePackage[colorlinks]{hyperref}
+\RequirePackage{hypernat}
+
+
+\newtheorem{assump}{Assumption}[section]
+\newtheorem{pro}{Proposition}[section]
+\newtheorem{lem}{Lemma}[section]
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}{Corollary}[section]
+\newtheorem{ineq}{Inequality}[section]
+\newtheorem{defn}{Definition}[section]
+\newtheorem{rem}{Remark}[section]
+\newtheorem{ex}{Example}[section]
+\theoremstyle{definition}
+\newtheorem{alg}{Algorithm}[section]
+
+%Bold proof titles
+\makeatletter \renewenvironment{proof}[1][\proofname] {\par\pushQED{\qed}\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\bfseries#1\@addpunct{.}]\ignorespaces}{\popQED\endtrivlist\@endpefalse} \makeatother
