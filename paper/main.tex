@@ -1,0 +1,41 @@
+\documentclass[12pt]{article}
+\usepackage{frankstyle}
+
+\begin{document}
+
+\title{Using Invalid Instruments on Purpose: Focused Moment Selection and Averaging for GMM\footnote{I thank Aislinn Bohren, Gerda Claeskens, Bruce Hansen, Byunghoon Kang, Toru Kitagawa, Hannes Leeb, Serena Ng, Alexei Onatski, Hashem Pesaran, Benedikt P\"{o}tscher, Frank Schorfheide, Neil Shephard,  Richard J.\ Smith, Stephen Thiele, Melvyn Weeks, as well as seminar participants at Cambridge, the University of Vienna, Queen Mary, St Andrews, George Washington, UPenn, Columbia, Oxford, and the 2011 Econometric Society European Meetings for their many helpful comments and suggestions. I thank Kai Carstensen for providing data for my empirical example.}}
+
+\author{Francis J.\ DiTraglia \\ University of Pennsylvania}
+
+\date{\normalsize First Version: November 9, 2011 \\ This Version: \today}
+
+\maketitle 
+\begin{abstract}
+	\input{abstract.tex}
+\end{abstract}
+
+%Body of the paper
+\input{introduction.tex}
+\input{asymptotic_framework.tex}
+\input{OLSvsIVlowlevel.tex}
+\input{chooseIVlowlevel.tex}
+\input{general_fmsc.tex}
+\input{OLSvsIV_fmsc.tex}
+\input{OLSvsIV_simulation_study.tex}
+\input{chooseIV_fmsc.tex}
+\input{chooseIV_simulation_study.tex}
+\input{moment_avg_introduction.tex}
+\input{moment_avg_examples.tex}
+\input{valid_CIs.tex}
+\input{empirical_example.tex}
+\input{conclusion.tex}
+
+%References
+\bibliographystyle{elsarticle-harv}
+\bibliography{fmsc_refs}
+
+%Proofs in the Appendix
+\appendix
+\input{proofs.tex}
+
+\end{document}
