@@ -1,0 +1,110 @@
+%!TEX root = main.tex
+\section{Proofs}
+
+\begin{proof}[Proof of Theorems \ref{thm:consist}, \ref{thm:normality}]
+Essentially identical to the proofs of \cite{NeweyMcFadden1994} Theorems 2.6 and 3.1.
+\end{proof}
+
+\begin{proof}[Proof of Theorems \ref{thm:OLSvsIV}, \ref{thm:chooseIV}]
+The proofs of both results are similar and standard, so we provide only a sketch of the argument for Theorem \ref{thm:chooseIV}. 
+First substitute the DGP into the expression for $\widehat{\beta}_S$ and rearrange so that the left-hand side becomes $\sqrt{n}(\beta_S - \beta)$. 
+The right-hand side has two factors: the first converges in probability to $-K_S$ by an $L_2$ argument and the second converges in distribution to $M + (0', \tau')'$ by the Lindeberg-Feller Central Limit Theorem. 
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{thm:tau}]
+By a mean-value expansion:
+	\begin{eqnarray*}
+	\widehat{\tau} &=& \sqrt{n} h_n\left(\widehat{\theta}_{v}\right) = \sqrt{n}h_n(\theta_0) + H \sqrt{n}\left(\widehat{\theta}_{v} - \theta_0\right) + o_p(1)\\
+		&=&-HK_{v} \sqrt{n}g_n(\theta_0) + \mathbf{I}_q\sqrt{n}h_n(\theta_0) +o_p(1)\\
+		&=& \Psi \sqrt{n}f_n(\theta_0) + o_p(1) 
+\end{eqnarray*}
+The result follows since $\sqrt{n}f_n(\theta_0) \rightarrow_d M + (0', \tau')'$ under Assumption \ref{assump:highlevel} (h).
+\end{proof}
+
+
+
+\begin{proof}[Proof of Corollary \ref{cor:tautau}]
+By Theorem \ref{thm:tau} and the Continuous Mapping Theorem, we have $\widehat{\tau}\widehat{\tau}' \rightarrow_d UU'$  where $U =\Psi M + \tau$. Since $E[M]=0$, $E[UU'] = \Psi \Omega \Psi' + \tau\tau'$. 
+\end{proof}
+
+
+
+\begin{proof}[Proof of Corollary \ref{cor:momentavg}]
+Because the weights sum to one
+		$$\sqrt{n}\left(\widehat{\mu} - \mu_0\right) = \sqrt{n} \left[\left(\sum_{S \in \mathscr{S}} \widehat{\omega}_S \widehat{\mu}_S\right) - \mu_0\right]= \sum_{S \in \mathscr{S}}\left[ \widehat{\omega}_S \sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\right].$$
+By Corollary \ref{cor:target}, we have
+$$\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S \Xi_S \left(M +  \left[\begin{array}
+	{c} 0 \\ \tau
+\end{array} \right]\right)$$
+and by the assumptions of this Corollary we find that $\widehat{\omega}_S \rightarrow_d\varphi_S(\tau,M)$ for each $S\in \mathscr{S}$, where $\varphi_S(\tau,M)$ is a function of $M$ and constants only. 
+Hence $\widehat{\omega}_S$ and $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)$ converge jointly in distribution to their respective functions of $M$, for all $S \in \mathscr{S}$. 
+The result follows by application of the Continuous Mapping Theorem.
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{pro:jstat}]
+By a mean-value expansion,
+	$$\sqrt{n}\left[\Xi_S f_n\left(\widehat{\theta}_S\right)\right]  = \sqrt{n}\left[\Xi_S f_n(\theta_0)\right] + F_S  \sqrt{n}\left(\widehat{\theta}_S - \theta_0\right) + o_p(1).$$
+Since $\sqrt{n}\left(\widehat{\theta}_S - \theta_0\right) \rightarrow_p -\left(F_S' W_S F_S  \right)^{-1}F_S'W_S\sqrt{n}\left[\Xi_S f_n(\theta_0)\right]$, we have
+	$$\sqrt{n}\left[\Xi_S f_n(\widehat{\theta}_S)\right] = \left[I - F_S\left(F_S' W_S F_S  \right)^{-1}F_S'W_S\right] \sqrt{n}\left[\Xi_S f_n(\theta_0)\right] + o_p(1).$$
+Thus, for estimation using the efficient weighting matrix 
+$$\widehat{\Omega}^{-1/2}_S \sqrt{n}\left[\Xi_S f_n\left(\widehat{\theta}_S\right)\right] \rightarrow_d\left[I - P_S\right] \Omega_S^{-1/2}\Xi_S\left(M + \left[\begin{array}{c}0\\ \tau \end{array} \right] \right)$$
+by Assumption \ref{assump:highlevel} (h), where $\widehat{\Omega}^{-1/2}_S$ is a consistent estimator of $\Omega_S^{-1/2}$ and $P_S$ is the projection matrix based on $\Omega^{-1/2}_S F_S$, the identifying restrictions.\footnote{See \cite{Hallbook}, Chapter 3.} The result follows by combining and rearranging these expressions.
+\end{proof}
+
+
+
+\begin{proof}[Proof of Theorem \ref{pro:andrews}]
+Let $S_1$ and $S_2$ be arbitrary moment sets in $\mathscr{S}$ and let $|S|$ denote the cardinality of $S$. 
+Further, define $\Delta_n(S_1, S_2) = MSC(S_1) - MSC(S_2)$
+By Theorem \ref{pro:jstat}, $J_n(S) = O_p(1)$, $S \in \mathscr{S}$, thus
+	\begin{eqnarray*}
+			\Delta_n(S_1, S_2)	&=&   \left[J_{n}(S_1) - J_{n}(S_2)\right] - \left[h\left(p+|S_1|\right) - h\left(p+|S_2|\right)\right]\kappa_n\\
+				&=& O_p(1) - C\kappa_n
+	\end{eqnarray*}
+where $C = \left[h\left(p+|S_1|\right) - h\left(p+|S_2|\right)\right]$. 
+Since $h$ is strictly increasing, $C$ is positive for $|S_1|>|S_2|$, negative for $|S_1|<|S_2|$, and zero for $|S_1|=|S_2|$. 
+Hence:
+	\begin{eqnarray*}
+		|S_1|>|S_2|&\implies& \Delta_n(S_1, S_2)  \rightarrow -\infty\\
+		|S_1|=|S_2|&\implies&\Delta_n(S_1, S_2)  = O_p(1)\\
+		|S_1|<|S_2|&\implies& \Delta_n(S_1, S_2)  \rightarrow \infty
+\end{eqnarray*}
+The result follows because the full moment set contains more moment conditions than any other moment set $S$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{pro:sim}]
+By Theorem \ref{thm:tau} and Corollary \ref{cor:momentavg},
+\begin{eqnarray*}
+	P\left\{\mu_0 \in \mbox{CI}_{sim} \right\} %&=& P\left\{\widehat{a}_{min}(\widehat{\tau}) \leq  \sqrt{n}\left(\widehat{\mu} - \mu_0\right) \leq \widehat{b}_{max}(\widehat{\tau}) \right\}\\
+	&\rightarrow& P \left\{ a_{min} \leq \Lambda(\tau) \leq b_{max}\right\}
+\end{eqnarray*}
+where $a(\tau^*), b(\tau^*)$ define a collection of $(1-\alpha)\times 100\%$ intervals indexed by $\tau^*$, each of which is constructed under the assumption that $\tau = \tau^*$
+$$P\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*) \right\} = 1-\alpha $$
+and we define the shorthand $a_{min}, b_{max}$ as follows
+	\begin{eqnarray*}
+	a_{min}(\Psi M + \tau)&=&\min \left\{a(\tau^*)\colon \tau^* \in \mathscr{T}(\Psi M + \tau,\delta) \right\}\\
+	b_{max}(\Psi M + \tau)&=&\max \left\{b(\tau^*)\colon \tau^* \in \mathscr{T}(\Psi M + \tau,\delta) \right\}\\
+	\mathscr{T}(\Psi M + \tau,\delta) &=& \left\{\tau^* \colon  \Delta(\tau, \tau^*) \leq \chi^2_q(\delta) \right\}\\
+	\Delta(\tau,\tau^*) &=&  (\Psi M + \tau - \tau^*)' (\Psi\Omega\Psi')^{-1} \left(\Psi M + \tau - \tau^*\right)
+	\end{eqnarray*}
+Now, let $A = \left\{ \Delta(\tau, \tau) \leq \chi^2_q(\delta) \right\}$ where $\chi^2_q(\delta)$ is the $1- \delta$ quantile of a $\chi^2_q$ random variable. 
+This is the event that the \emph{limiting version} of the confidence region for $\tau$ contains the true bias parameter. 
+Since $\Delta(\tau, \tau)\sim\chi^2_q$, $P(A) = 1 - \delta$. For every $\tau^*\in \mathscr{T}(\Psi M + \tau,\delta)$ we have
+$$P\left[\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*)  \right\}\cap A \right] + P\left[\left\{a(\tau^*) \leq \Lambda(\tau) \leq b(\tau^*)  \right\}\cap A^c \right] = 1-\alpha$$
+by decomposing $P\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*) \right\} $ into the sum of mutually exclusive events. 
+But since
+$$P\left[\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*)  \right\}\cap A^c \right] \leq P(A^c) = \delta$$
+we see that
+$$P\left[\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*)  \right\}\cap A \right]  
+\geq 1-\alpha-\delta$$
+for every $\tau^* \in \mathscr{T}(\Psi M + \tau,\delta)$. 
+Now, by definition, if $A$ occurs then the true bias parameter $\tau$ is contained in $\mathscr{T}(\Psi M + \tau,\delta)$ and hence 
+$$P\left[\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \right]  
+\geq 1-\alpha-\delta.$$
+But when $\tau \in \mathscr{T}(\Psi M + \tau,\delta)$, $a_{min} \leq a(\tau)$ and $b(\tau) \leq b_{max}$. 
+It follows that
+	$$\left\{a(\tau) \leq \Lambda(\tau) \leq b(\tau)  \right\}\cap A \subseteq \{a_{min} \leq \Lambda(\tau) \leq b_{max}\}$$
+and therefore
+	$$1 -\alpha - \delta \leq P\left[\left\{a(\tau^*) \leq \Lambda(\tau^*) \leq b(\tau^*)  \right\}\cap A \right] \leq P\left[ \{a_{min} \leq \Lambda(\tau) \leq b_{max}\}\right]$$
+as asserted.
+\end{proof}

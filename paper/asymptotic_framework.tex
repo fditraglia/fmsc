@@ -1,0 +1,137 @@
+%!TEX root = main.tex
+\section{Assumptions and Asymptotic Framework}
+\label{sec:asymp}
+
+\subsection{Local Mis-Specification}
+Let $f(\cdot,\cdot)$ be a $(p+q)$-vector of moment functions of a random vector $Z$ and an $r$-dimensional parameter vector $\theta$, partitioned according to $f(\cdot,\cdot) = \left(g(\cdot,\cdot)', h(\cdot,\cdot)'  \right)'$ where $g(\cdot,\cdot)$ and $h(\cdot,\cdot)$ are $p$- and $q$-vectors of moment functions. 
+The moment condition associated with $g(\cdot,\cdot)$ is assumed to be correct whereas that associated with $h(\cdot,\cdot)$ is locally mis-specified.
+More precisely, 
+\begin{assump}[Local Mis-Specification]
+\label{assump:drift}
+Let $\{Z_{ni}\colon 1\leq i \leq n, n =1, 2, \hdots\}$ be a triangular array of random vectors defined on a probability space $(\Upsilon, \mathcal{F}, \mathbb{P})$ satisfying
+	\begin{enumerate}[(a)]
+		\item $E[g(Z_{ni},\theta_0)] = 0$,
+		\item $E[h(Z_{ni},\theta_0)] = n^{-1/2}\tau$, where $\tau$ is an unknown constant vector, 
+		\item $\{f(Z_{ni},\theta_0)\colon 1\leq i \leq n, n = 1, 2, \hdots\}$ is uniformly integrable, and
+		\item $Z_{ni} \rightarrow_dZ_i$, where the $Z_i$ are identically distributed.
+	\end{enumerate}
+\end{assump}
+For any fixed sample size $n$, the expectation of $h$ evaluated at the true parameter value value $\theta_0$ depends on the unknown constant vector $\tau$. 
+Unless all components of $\tau$ are zero, some of the moment conditions contained in $h$ are mis-specified. In the limit however, this mis-specification vanishes, as $\tau/\sqrt{n}$ converges to zero. 
+Uniform integrability combined with weak convergence implies convergence of expectations, so that $E[g(Z_i, \theta_0)]=0$ and $E[h(Z_i, \theta_0)]=0$. Because the limiting random vectors $Z_i$ are identically distributed, we suppress the $i$ subscript and simply write $Z$ to denote their common marginal law, e.g.\ $E[h(Z,\theta_0)]=0$. 
+It is important to note that local mis-specification is \emph{not} intended as a literal description of real-world datasets: it is merely a device that gives asymptotic bias-variance trade-off that mimics the finite-sample intuition. 
+
+\subsection{Candidate GMM Estimators}
+Define the sample analogue of the expectations in Assumption \ref{assump:drift} as follows:
+$$f_n(\theta) = \frac{1}{n}\sum_{i=1}^n f(Z_{ni},\theta) = \left[\begin{array}{c} g_n(\theta)\\ h_n(\theta) \end{array} \right]=\left[\begin{array}{c}n^{-1}\sum_{i=1}^n g(Z_{ni},\theta) \\ n^{-1}\sum_{i=1}^n h(Z_{ni},\theta) \end{array}\right]$$
+where $g_n$ is the sample analogue of the correctly specified moment conditions and $h_n$ is that of the (potentially) mis-specified moment conditions.
+A candidate GMM estimator $\widehat{\theta}_S$ uses some subset $S$ of the moment conditions contained in $f$ in estimation. 
+Let $|S|$ denote the number of moment conditions used. For $\widehat{\theta}_S$ to be identified, we require that $|S|>r$. 
+Let $\Xi_S$ be the $|S| \times(p +q)$ \emph{moment selection matrix} corresponding to $S$. That is, $\Xi_S$ is a matrix of ones and zeros arranged such that $\Xi_S f_n(\theta)$ contains only the sample moment conditions used to estimate $\widehat{\theta}_S$. 
+Thus, the GMM estimator of $\theta$ based on moment set $S$ is given by 
+$$\widehat{\theta}_S = \underset{\theta \in \Theta}{\mbox{arg min}}\; \left[\Xi_S f_n(\theta)\right]' \widetilde{W}_S \; \left[ \Xi_S f_n(\theta)\right].$$
+where $\widetilde{W}_S$ is an $|S|\times |S|$, positive semi-definite weight matrix. Note that we place no restrictions on $S$ other than $|S| >r$ so that the estimator exists. 
+In particular, $S$ may \emph{exclude} some or all of the valid moment conditions contained in $g$.
+While this may seem strange, it allows us to accomodate a wider range of examples, including choosing between least squares and instrumental variables estimators.
+
+To consider the limit distribution of $\widehat{\theta}_S$, we require some further notation. 
+First define the derivative matrices
+	$$G = E\left[\nabla_{\theta} \; g(Z,\theta_0)\right], \quad H = E\left[\nabla_{\theta} \; h(Z,\theta_0)\right], \quad F = (G', H')'$$
+and let $\Omega = Var\left[ f(Z,\theta_0) \right]$ where $\Omega$ is partitioned into blocks $\Omega_{gg}$, $\Omega_{gh}$, $\Omega_{hg}$, and $\Omega_{hh}$ conformably with the partition of $f$ by $g$ and $h$. 
+Notice that each of these expressions involves the \emph{limiting random variable} $Z$ rather than $Z_{ni}$, so that the corresponding expectations are taken with respect to a distribution for which all moment conditions are correctly specified. 
+Finally, to avoid repeatedly writing out pre- and post-multiplication by $\Xi_S$, define $F_S = \Xi_S F$ and $\Omega_S = \Xi_S \Omega\Xi_S'$. 
+The following high level assumptions are sufficient for the consistency and asymptotic normality of the candidate GMM estimator $\widehat{\theta}_S$. 
+\begin{assump}[High Level Sufficient Conditions]
+\label{assump:highlevel} 
+\mbox{}
+	\begin{enumerate}[(a)]
+		\item $\theta_0$ lies in the interior of $\Theta$, a compact set
+		\item $\widetilde{W}_S \rightarrow_{p} W_S$, a positive definite matrix
+		\item $W_S \Xi_S E[f(Z,\theta)]=0$ if and only if $\theta = \theta_0$
+		\item $E[f(Z,\theta)]$ is continuous on $\Theta$
+		\item $\sup_{\theta \in \Theta}\| f_n(\theta)- E[f(Z,\theta)]\|\rightarrow_{p} 0$
+		\item $f$ is Z-almost surely differentiable in an open neighborhood $\mathcal{B}$ of $\theta_0$
+		\item $\sup_{\theta \in \Theta} \|\nabla_{\theta}f_n(\theta) - F(\theta)\|\rightarrow_{p} 0$
+		\item $\sqrt{n}f_n(\theta_0) \rightarrow_d  M + \left[\begin{array}{c}0\\ \tau \end{array} \right]$ where $M \sim N_{p+q}\left(0, \Omega \right)$
+		\item $F_S'W_SF_S$ is invertible
+	\end{enumerate}
+\end{assump}
+
+Although Assumption \ref{assump:highlevel} closely approximates the standard regularity conditions for GMM estimation, establishing primitive conditions for Assumptions \ref{assump:highlevel} (d), (e), (g) and (h) is slightly more involved under local mis-specification. 
+Low-level sufficient conditions for the two running examples considered in this paper appear in Sections \ref{sec:OLSvsIVlowlevel} and  \ref{sec:chooseIVlowlevel} below. 
+For more general results, see \cite{Andrews1988} Theorem 2 and \cite{Andrews1992} Theorem 4.  
+Notice that identification, (c), and continuity, (d), are conditions on the distribution of $Z$, the marginal law to which each $Z_{ni}$ converges. 
+
+\begin{thm}[Consistency]
+\label{thm:consist}
+Under Assumptions \ref{assump:drift} and \ref{assump:highlevel} (a)--(e), $\widehat{\theta}_S \rightarrow_{p} \theta_0$.
+\end{thm}
+
+\begin{thm}[Asymptotic Normality]
+\label{thm:normality}
+Under Assumptions \ref{assump:drift} and \ref{assump:highlevel}
+$$\sqrt{n}(\widehat{\theta}_S - \theta_0 ) \rightarrow_d -K_S \Xi_S  \left(\left[\begin{array}
+	{c} M_g \\ M_h
+\end{array} \right]  + \left[\begin{array}
+	{c} 0 \\ \tau
+\end{array} \right]\right)$$
+where $K_S  = [F_S'W_SF_S]^{-1} F_S'W_S$, $M = (M_g', M_h')'$, and $M \sim N(0,\Omega)$.
+\end{thm}
+
+As we see from Theorems \ref{thm:consist} and \ref{thm:normality}, \emph{any} candidate GMM estimator $\widehat{\theta}_S$ is consistent for $\theta_0$ under local mis-specification. 
+Unless $S$ excludes \emph{all} of the moment conditions contained in $h$, however, $\widehat{\theta}_S$ inherits an asymptotic bias from the mis-specification parameter $\tau$. 
+The local mis-specification framework is useful precisely because it results in a limit distribution for $\widehat{\theta}_S$ with both a bias \emph{and} a variance. 
+This captures in asymptotic form the bias-variance tradeoff that we see in finite sample simulations.
+In constrast, fixed mis-specification results in a degenerate bias-variance tradeoff in the limit: scaling up by $\sqrt{n}$ to yield an asymptotic variance causes the bias component to diverge.
+
+\subsection{Identification}
+Any form of moment selection requires an identifying assumption: we need to make clear which parameter value $\theta_0$ counts as the ``truth.''
+One approach, following \cite{Andrews1999}, is to assume that there exists a unique, maximal set of correctly specified moment conditions that identifies $\theta_0$. 
+In the notation of the present paper\footnote{Although \cite{Andrews1999}, \cite{AndrewsLu}, and \cite{HongPrestonShum} consider \emph{fixed} mis-specification, we can view this as a version of local mis-specification in which $\tau \rightarrow \infty$.} this is equivalent to the following:
+
+\begin{assump}[\cite{Andrews1999} Identification Condition]
+	\label{assump:Andrews}
+There exists a subset $S_{max}$ of at least $r$ moment conditions satisfying:
+	\begin{enumerate}
+	 	\item $\Xi_{S_{max}} E[f(Z_{ni},\theta_0)]= 0$
+	 	\item For any $S' \neq S_{max}$ such that $\Xi_{S'} E[f(Z_{ni},\theta')]= 0$ for some $\theta' \in \Theta$, $|S_{max}| > |S'|$.
+	 \end{enumerate}
+\end{assump}
+
+\cite{AndrewsLu} and \cite{HongPrestonShum} take the same basic approach to identification, with appropriate modifications to allow for simultaneous model and moment selection. 
+An advantage of Assumption \ref{assump:Andrews} is that, under fixed mis-specification, it allows consistent selection of $S_{max}$ without any prior knowledge of \emph{which} moment conditions are correct. 
+In the notation of the present paper this corresponds to having no moment conditions in the $g$ block. As \citet[p.\ 254]{Hallbook} points out, however, the second part of Assumption \ref{assump:Andrews} can fail even in simple settings such as linear instrumental variables estimation. 
+When it does fail, the selected GMM estimator may no longer be consistent for $\theta_0$. 
+
+A different approach to identification is to assume that there is a minimal set of at least $r$ moment conditions \emph{known} to be correctly specified.
+This is the approach we follow here, one shared by \cite{Liao} and \cite{ChengLiao}. 
+With the exception of Section \ref{subsec:digress}, we maintain the following assumption throughout.
+
+\begin{assump}[FMSC Identification Condition] 
+\label{assump:Identification}
+Let $\widehat{\theta}_v$ denote the GMM estimator based solely on the moment conditions contained in the $g$--block
+$$\widehat{\theta}_v = \underset{\theta \in \Theta}{\mbox{arg min}}\; g_n(\theta)' \widetilde{W}_{v} \; g_n(\theta)$$
+We call this the ``valid estimator'' and assume that it is identified, i.e.\ that $p\geq r$.
+\end{assump}
+
+Assumption \ref{assump:Identification} and Theorem \ref{thm:normality} immediately imply that the valid estimator shows no asymptotic bias. 
+For convenience, we state its limit distribution in the following Corollary: 
+\begin{cor}[Limit Distribution of Valid Estimator]
+	\label{cor:valid}
+	Let $S_{v}$ include only the moment conditions contained in $g$. 
+	Then, under Assumption \ref{assump:Identification} we have
+		$$\sqrt{n}\left(\widehat{\theta}_v - \theta_0\right) \rightarrow_d -K_v M_g$$
+	by applying Theorem \ref{thm:normality} to $S_{v}$, where $K_v = [G'W_vG]^{-1}G'W_v$ and $M_g \sim N(0,\Omega_{gg})$. 
+\end{cor}
+
+Both Assumptions \ref{assump:Andrews} and \ref{assump:Identification} are strong, and neither fully nests the other. 
+Which should be preferred is both a matter of taste and of the particular application one has in mind.
+In the context of the present paper, Assumption \ref{assump:Identification} is meant to represent a situation that is common in empirical practice. 
+The $g$--block of moment conditions contains the ``baseline'' assumptions that an empirical researcher would be prepared to defend in a seminar, while the $h$--block represents a set of stronger, more controversial assumptions. 
+In the FMSC framework, moment selection is carried out \emph{conditional} on the baseline assumptions: we use the $g$--block to help us decide whether to include any of the moment conditions contained in the $h$--block. 
+But why would we ever consider using controversial assumptions? 
+FMSC is designed for settings in which the $h$--block is expected to contain a substantial amount of information beyond that already contained in the $g$--block. 
+The idea is that, if we knew the $h$--block was correctly specified, we would expect a large gain in efficiency by including it in estimation. 
+This motivates the idea of trading off the variance reduction from including $h$ against the potential increase in bias. 
+Not all applications have the structure, but many important ones do. 
+We now consider two motivating examples. 

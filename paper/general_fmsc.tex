@@ -1,0 +1,85 @@
+%!TEX root = main.tex
+\section{The Focused Moment Selection Criterion}
+\label{sec:FMSC}
+
+\subsection{The General Case}
+FMSC chooses among the potentially invalid moment conditions contained in $h$ to minimize estimator AMSE for a target parameter. 
+Denote this target parameter by $\mu$, a real-valued, $Z$-almost continuous function of the parameter vector $\theta$ that is differentiable in a neighborhood of $\theta_0$. 
+Further, define the GMM estimator of $\mu$ based on $\widehat{\theta}_S$ by $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ and the true value of $\mu$ by $\mu_0 = \mu(\theta_0)$. 
+Applying the Delta Method to Theorem \ref{thm:normality} gives the AMSE of $\widehat{\mu}_S$.
+
+\begin{cor}[AMSE of Target Parameter]
+\label{cor:target}
+Under the hypotheses of Theorem \ref{thm:normality}, 
+$$\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S \Xi_S \left(M +  \left[\begin{array}
+	{c} 0 \\ \tau
+\end{array} \right]\right)$$ 
+where $M$ is defined in Theorem \ref{thm:normality}.
+Hence,
+	$$\mbox{AMSE}\left(\widehat{\mu}_S\right) = \nabla_\theta\mu(\theta_0)'K_S \Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\tau\tau'\end{array}\right] + \Omega\right\}\Xi_S'K_S'\nabla_\theta\mu(\theta_0).$$
+\end{cor}
+
+For the valid estimator $\widehat{\theta}_v$ we have $K_v = \left[G'W_{v}G\right]^{-1}G' W_{v}$ and $\Xi_v =\left[\begin{array}{cc} \mathbf{I}_p& \mathbf{0}_{p\times q} \end{array} \right]$. 
+Thus, the valid estimator $\widehat{\mu}_v$ of $\mu$ has zero asymptotic bias. 
+In contrast, any candidate estimator $\widehat{\mu}_S$ that includes moment conditions from $h$ inherits an asymptotic bias from the corresponding elements of $\tau$. 
+We see that the extent and direction of this bias depends both on $K_S$ and $\nabla_\theta\mu(\theta_0)$. 
+Adding moment conditions from $h$, however, generally decreases asymptotic variance. 
+In particular, the usual proof that adding moment conditions cannot increase asymptotic variance under efficient GMM \citep[see for example][ch.\ 6]{Hallbook} continues to hold under local mis-specification, because all moment conditions are correctly specified in the limit. 
+Thus, we see that local mis-specification gives an asymptotic analogue of the bias-variance tradeoff that we encounter in finite samples.
+\footnote{The general result for adding moment conditions in GMM is only relevant in situations where the valid moment set is strictly nested inside of all other candidate moment sets. When this does not hold, such as in the OLS verus IV example, we establish an analogous ordering of asymptotic variances by direct calculation.} 
+
+To use this framework for moment selection, we need to construct estimators of the unknown quantities: $\theta_0$, $K_S$, $\Omega$, and $\tau$. 
+Under local mis-specification, the estimator of $\theta$ under \emph{any} moment set is consistent. 
+A natural estimator is $\widehat{\theta}_v$, although there are other possibilities. 
+Recall that $K_S = [F_S'W_SF_S]^{-1} F_S'W_S \Xi_S$.
+Now, $\Xi_S$ is known because it is simply the selection matrix defining moment set $S$. 
+The remaining quantities $F_S$ and $W_S$ that make up $K_S$ are consistently estimated by their sample analogues under Assumption \ref{assump:highlevel}.
+Similarly, consistent estimators of $\Omega$ are readily available under local mis-specification, although the precise form depends on the situation.
+We consider this point further below as it relates to our two running examples.
+
+The only remaining unknown is $\tau$. Local mis-specification is essential for making meaningful comparisons of AMSE because it prevents the bias term from dominating the comparison. U
+nfortunately, it also prevents us from consistently estimating this asymptotic bias parameter. 
+Under Assumption \ref{assump:Identification}, however, we can construct an \emph{asymptotically unbiased} estimator $\widehat{\tau}$ of $\tau$ by substituting $\widehat{\theta}_v$, the estimator of $\theta_0$ that uses only correctly specified moment conditions, into $h_n$, the sample analogue of the (potentially) mis-specified moment conditions. 
+In other words,  $\widehat{\tau} = \sqrt{n} h_n(\widehat{\theta}_v)$. 
+
+\begin{thm}[Asymptotic Distribution of $\widehat{\tau}$] 
+\label{thm:tau}
+Let $\widehat{\tau} = \sqrt{n} h_n(\widehat{\theta}_v)$ where $\widehat{\theta}_v$ is the valid estimator, based only on the moment conditions contained in $g$. 
+Then under Assumptions \ref{assump:drift}, \ref{assump:highlevel} and \ref{assump:Identification}
+$$\widehat{\tau} \rightarrow_d \Psi\left( M + \left[\begin{array}
+	{c} 0 \\ \tau
+\end{array} \right]\right), \quad \Psi = \left[\begin{array}{cc} -HK_v & \mathbf{I}_q \end{array}\right]$$ 
+where $K_v$ is defined in Corollary \ref{cor:valid}.
+Thus, $\widehat{\tau}\rightarrow_d (\Psi M + \tau) \sim N_q(\tau, \Psi \Omega \Psi')$.
+\end{thm}
+
+Returning to Corollary $\ref{cor:target}$, however, we see that it is $\tau \tau'$ rather than $\tau$ that enters the expression for AMSE. 
+Although $\widehat{\tau}$ is an asymptotically unbiased estimator of $\tau$, the limiting expectation of $\widehat{\tau} \widehat{\tau}'$ is not $\tau\tau'$ because $\widehat{\tau}$ has an asymptotic variance.  
+To obtain an asymptotically unbiased estimator of $\tau\tau'$ we proceed as follows, subtracting a consistent estimate of the asymptotic variance.
+
+
+\begin{cor}[Asymptotically Unbiased Estimator of $\tau \tau'$]
+\label{cor:tautau}
+If $\widehat{\Omega}$ and $\widehat{\Psi}$ are consistent for $\Omega$ and $\Psi$, then $ \widehat{\tau}\widehat{\tau}' - \widehat{\Psi}\widehat{\Omega}\widehat{\Psi}$ is an asymptotically unbiased estimator of $\tau\tau'$.
+\end{cor}
+It follows that
+\begin{equation}
+\label{eq:fmsc}
+	\mbox{FMSC}_n(S) = \nabla_\theta\mu(\widehat{\theta})'\widehat{K}_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\widehat{\tau}\widehat{\tau}' - \widehat{\Psi}\widehat{\Omega}\widehat{\Psi}'\end{array}\right] + \widehat{\Omega}\right\}\Xi_S'\widehat{K}_S' \nabla_\theta\mu(\widehat{\theta})
+\end{equation}
+provides an asymptotically unbiased estimator of AMSE.
+\todo[inline]{Comment on how we could look at other risk functions. Talk about why an asymptotically unbiased estimator can make sense. At least try to justify why this is reasonable.}
+
+
+\subsection{Digression: Failure of the Identification Condition}
+\label{subsec:digress}
+When $r > p$, Assumption \ref{assump:Identification} fails: $\theta_0$ is not estimable by $\widehat{\theta}_v$ so $\widehat{\tau}$ is an infeasible estimator of $\tau$. 
+A na\"{i}ve approach to this problem would be to substitute another consistent estimator of $\theta_0$ and proceed analogously. 
+Unfortunately, this approach fails. To understand why, consider the case in which all moment conditions are potentially invalid so that the $g$--block is empty. 
+Letting $\widehat{\theta}_f$ denote the estimator based on the full set of moment conditions in $h$,  $\sqrt{n}h_n(\widehat{\theta}_f) \rightarrow_d\Gamma  \mathcal{N}_q(\tau, \Omega)$ where $\Gamma = \mathbf{I}_q - H \left(H'WH\right)^{-1}H'W$, using an argument similar to that in the proof of Theorem \ref{thm:tau}. 
+The mean, $\Gamma \tau$, of the resulting limit distribution does not equal $\tau$, and because $\Gamma$ has rank $q-r$ we cannot pre-multiply by its inverse to extract an estimate of $\tau$.
+Intuitively, $q-r$ over-identifying restrictions are insufficient to estimate a $q$-vector: $\tau$ is not identified unless we have a minimum of $r$ valid moment conditions. 
+However, the limiting distribution of $\sqrt{n}h_n(\widehat{\theta}_f)$ partially identifies $\tau$ even when we have no valid moment conditions at our disposal. 
+A combination of this information with prior restrictions on the magnitude of the components of $\tau$ allows the use of the FMSC framework to carry out a sensitivity analysis when $r>p$. 
+For example, the worst-case estimate of AMSE over values of $\tau$ in the identified region could still allow certain moment sets to be ruled out.
+This idea shares similarities with \citet{Kraay} and \citet{Conleyetal}, two recent papers that suggest methods for evaluating the robustness of conclusions drawn from IV regressions when the instruments used may be invalid.
