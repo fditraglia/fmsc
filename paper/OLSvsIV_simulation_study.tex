@@ -21,3 +21,6 @@ where $(\epsilon_i, v_i, z_{1i}, z_{2i}, z_{3i}) \sim \mbox{ iid } N(0, \mathcal
 \end{equation}
 where $\pi = Corr(x_i, z_{1i} + z_{2i} + z_{3i})$ and $\rho = Corr(\epsilon_i, v_i)$ since the variance of $x$ is fixed at one.
 This design satisfies the conditions of Assumption \ref{assump:OLSvsIV}.
+Goal is to estimate $\beta$ which in this case equals 0.5.
+Vary $N, \rho$, and $\pi$.
+Following the formulas from Sections \ref{sec:OLSvsIVlowlevel} and \ref{sec:FMSCforOLSvsIV} compare FMSC against OLS, 2SLS, and DHW pre-test estimators at the standard significance levels of 90 and 95\% in terms of estimator RMSE.
