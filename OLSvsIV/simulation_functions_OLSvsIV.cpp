@@ -602,15 +602,22 @@ NumericVector mse_compare_cpp(double b, colvec p, mat Ve,
 NumericVector mse_compare_default_cpp(double p , double r, int n, 
                                         int n_reps){
 //Wrapper for mse_compare_cpp
-//Runs simulation once with default values for "uninteresting" params
+//Runs simulation once with default values for "uninteresting" params.
 
-  double b = 1;
+//In this specification there are three instruments (z1, z2, z3)
+//which ensures that the finite-sample RMSE of the 2SLS estimator exists.
+//Further, the design sets
+//  var(x) = 1
+//  corr(e,v) = r
+//  cor(x, z1 + z2 + z3) = p
+ 
+  double b = 0.5;
   colvec p_vec = p * ones(3);
-  mat Vz = eye(3, 3);
+  mat Vz = eye(3, 3) / 3;
   
   mat Ve;
-  Ve << 1<< r << endr
-     << r << 1 << endr;
+  Ve << 1 << r * sqrt(1 - pow(p,2)) << endr
+     << r * sqrt(1 - pow(p,2)) << 1 - pow(p, 2) << endr;
   
   NumericVector out = mse_compare_cpp(b, p_vec, Ve, Vz, n, n_reps);
   return(out);  
@@ -622,14 +629,22 @@ NumericVector mse_compare_default_cpp(double p , double r, int n,
 // [[Rcpp::export]]
 mat test_CIs_cpp(double p , double r, int n, 
                                         int n_reps){
-//Function to test the confidence interval code
-  double b = 1;
+//Function to test the confidence interval code with the same parameter
+//values as in mse_compare_default_cpp
+//In this specification there are three instruments (z1, z2, z3)
+//which ensures that the finite-sample RMSE of the 2SLS estimator exists.
+//Further, the design sets
+//  var(x) = 1
+//  corr(e,v) = r
+//  cor(x, z1 + z2 + z3) = p
+ 
+  double b = 0.5;
   colvec p_vec = p * ones(3);
-  mat Vz = eye(3, 3);
+  mat Vz = eye(3, 3) / 3;
   
   mat Ve;
-  Ve << 1<< r << endr
-     << r << 1 << endr;
+  Ve << 1 << r * sqrt(1 - pow(p,2)) << endr
+     << r * sqrt(1 - pow(p,2)) << 1 - pow(p, 2) << endr;
 
   mat out(n_reps, 2, fill::zeros);
   
