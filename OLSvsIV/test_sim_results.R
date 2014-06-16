@@ -6,13 +6,27 @@ library(tikzDevice)
 setwd("~/fmsc/OLSvsIV")
 sourceCpp("simulation_functions_OLSvsIV.cpp")
 
-r.seq <- seq(0, 0.6, 0.005)
+set.seed(1928)
+system.time(foo1 <- mse_compare_default_cpp(0.3, 0.2, 250, 10000))
+foo1
+
+Vz <- diag(1/3, 3, 3)
+p <- 0.3
+pvec <- p * c(1, 1, 1)
+r <- 0.2
+Ve <- matrix(c(1, r * sqrt(1 - p^2),
+               r * sqrt(1 - p^2), 1 - p^2), 2, 2) 
+set.seed(1928)
+system.time(foo2 <- mse_compare_cpp(0.5, pvec, Ve, Vz, 250, 10000))
+foo2
+
+all.equal(foo1, foo2)
+
+r.seq <- seq(0, 0.6, 0.01)
 
 set.seed(4938)
 system.time(bar <- do.call(rbind, mclapply(X = r.seq, FUN = function(r){mse_compare_default_cpp(0.3, r, 250, 20000)}, mc.set.seed = FALSE)))
 
-set.seed(4938)
-system.time(foo <- do.call(rbind, lapply(X = r.seq, FUN = function(r){mse_compare_default_cpp(0.3, r, 250, 20000)})))
 
 
 matplot(r.seq, apply(bar, 2, sqrt), xlab = 'Cor(e,v)', ylab = 'RMSE',
