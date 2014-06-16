@@ -11,10 +11,10 @@
 
 #include <RcppArmadillo.h>
 using namespace Rcpp;
+using namespace arma;
 
 
-
-double sample_quantile(arma::colvec x, double p){
+double sample_quantile(colvec x, double p){
 /*-------------------------------------------------------
 # Calculates a sample quantile
 #--------------------------------------------------------
@@ -33,11 +33,11 @@ double sample_quantile(arma::colvec x, double p){
   double m = 1 - p;
   int j = floor(n * p + m);
   double g = n * p + m - j;
-  arma::colvec x_sort = arma::sort(x);
+  colvec x_sort = sort(x);
   return((1 - g) * x_sort(j - 1) + g * x_sort(j));
 }
 
-double MSE_trim(arma::colvec x, double truth, double trim){
+double MSE_trim(colvec x, double truth, double trim){
 /*-------------------------------------------------------
 # Calculates trimmed mean-squared error.
 #--------------------------------------------------------
@@ -49,30 +49,30 @@ double MSE_trim(arma::colvec x, double truth, double trim){
   int k = x.n_elem;
   int tail_drop = ceil(k * trim / 2);
   
-  arma::colvec x_trimmed = arma::sort(x);
-  x_trimmed = x_trimmed(arma::span(tail_drop, k - tail_drop - 1));
+  colvec x_trimmed = sort(x);
+  x_trimmed = x_trimmed(span(tail_drop, k - tail_drop - 1));
   
-  arma::colvec truth_vec = truth * arma::ones(x_trimmed.n_elem);
-  arma::colvec errors = x_trimmed - truth_vec;
-  double MSE = arma::dot(errors, errors) / errors.n_elem;
+  colvec truth_vec = truth * ones(x_trimmed.n_elem);
+  colvec errors = x_trimmed - truth_vec;
+  double MSE = dot(errors, errors) / errors.n_elem;
   
   return(MSE);  
 }
 
-double MAD(arma::colvec x, double truth){
+double MAD(colvec x, double truth){
 /*-------------------------------------------------------
 # Calculates median absolute deviation.
 #--------------------------------------------------------
 #  x        vector of estimates
 #  truth    true value of the parameter
 #-------------------------------------------------------*/
-  arma::colvec truth_vec = truth * arma::ones(x.n_rows);
-  arma::colvec abs_dev = abs(x - truth_vec);
-  return(arma::median(abs_dev)); 
+  colvec truth_vec = truth * ones(x.n_rows);
+  colvec abs_dev = abs(x - truth_vec);
+  return(median(abs_dev)); 
 }
 
 
-double coverage_prob(arma::mat conf_intervals, double truth){
+double coverage_prob(mat conf_intervals, double truth){
 /*-------------------------------------------------------
 # Calculates the coverage probability of a matrix of
 # confidence intervals.
@@ -85,17 +85,17 @@ double coverage_prob(arma::mat conf_intervals, double truth){
 #  truth            true value of the parameter for which
 #                       the CIs were constructed
 #-------------------------------------------------------*/
-  arma::colvec truth_vec = truth * arma::ones(conf_intervals.n_rows);
-  arma::colvec cover_lower = arma::conv_to<arma::colvec>
+  colvec truth_vec = truth * ones(conf_intervals.n_rows);
+  colvec cover_lower = conv_to<colvec>
                     ::from(conf_intervals.col(0) < truth_vec);
-  arma::colvec cover_upper = arma::conv_to<arma::colvec>
+  colvec cover_upper = conv_to<colvec>
                     ::from(conf_intervals.col(1) > truth_vec);
-  arma::colvec cover = cover_lower % cover_upper;
-  return(arma::sum(cover) / cover.n_elem);
+  colvec cover = cover_lower % cover_upper;
+  return(sum(cover) / cover.n_elem);
 }
 
 
-double median_width(arma::mat conf_intervals){
+double median_width(mat conf_intervals){
 /*-------------------------------------------------------
 # Calculates the median width of a matrix of confidence
 # intervals.
@@ -105,8 +105,8 @@ double median_width(arma::mat conf_intervals){
 #                     column is the lower limit, and the
 #                     2nd column is the upper limit 
 #-------------------------------------------------------*/
-  arma::colvec width = conf_intervals.col(1) - conf_intervals.col(0);
-  return(arma::median(width));
+  colvec width = conf_intervals.col(1) - conf_intervals.col(0);
+  return(median(width));
 }
 
 
@@ -117,15 +117,15 @@ class dgp_OLS_IV {
 # Class for simulating from dgp in OLS vs IV example
 #-------------------------------------------------*/
   public:
-    arma::colvec x;  //sims for endogenous regressor
-    arma::colvec y;  //sims for outcome
-    arma::mat z;     //sims for instrumental vars
+    colvec x;  //sims for endogenous regressor
+    colvec y;  //sims for outcome
+    mat z;     //sims for instrumental vars
     //Class constructor
-    dgp_OLS_IV(double, arma::colvec, arma::mat, arma::mat, int);
+    dgp_OLS_IV(double, colvec, mat, mat, int);
 };
 
-dgp_OLS_IV::dgp_OLS_IV(double b, arma::colvec p, arma::mat Ve, 
-              arma::mat Vz, int n){
+dgp_OLS_IV::dgp_OLS_IV(double b, colvec p, mat Ve, 
+              mat Vz, int n){
 /*--------------------------------------------------
 # Constructor: generates simulations from dgp
 #---------------------------------------------------
@@ -142,11 +142,11 @@ dgp_OLS_IV::dgp_OLS_IV(double b, arma::colvec p, arma::mat Ve,
   RNGScope scope;
   int n_z = Vz.n_cols;
   
-  arma::colvec stdnorm_errors = rnorm(n * 2);
-  arma::mat errors = arma::trans(arma::chol(Ve) * reshape(stdnorm_errors, 2, n));
-  arma::colvec stdnorm_z = rnorm(n * n_z);
+  colvec stdnorm_errors = rnorm(n * 2);
+  mat errors = trans(chol(Ve) * reshape(stdnorm_errors, 2, n));
+  colvec stdnorm_z = rnorm(n * n_z);
   
-  z = trans(arma::chol(Vz) * reshape(stdnorm_z, n_z, n));
+  z = trans(chol(Vz) * reshape(stdnorm_z, n_z, n));
   x = z * p + errors.col(1); //Remember: zero indexing!
   y = b * x + errors.col(0);   
 }
@@ -162,8 +162,8 @@ class fmsc_OLS_IV {
 #-------------------------------------------------*/
   public:
     //class constructor
-    fmsc_OLS_IV(const arma::colvec&, const arma::colvec&, 
-          const arma::mat&);
+    fmsc_OLS_IV(const colvec&, const colvec&, 
+          const mat&);
     //member functions
     double Tfmsc();       //return FMSC "test statistic"
     double b_ols();       //return OLS estimate
@@ -171,36 +171,36 @@ class fmsc_OLS_IV {
     double b_fmsc();      //return FMSC-selected estimate
     double b_DHW(double); //return DHW pre-test estimate
     double b_AVG();       //return feasible averaging estimate
-    arma::rowvec CI_ols(double);  //Confidence interval (CI) for ols
-    arma::rowvec CI_tsls(double); //CI for tsls
-    arma::rowvec CI_fmsc_naive(double); //Naive CI post-fmsc
+    rowvec CI_ols(double);  //Confidence interval (CI) for ols
+    rowvec CI_tsls(double); //CI for tsls
+    rowvec CI_fmsc_naive(double); //Naive CI post-fmsc
     void draw_CI_sims(int); //Initialize CI_sims for use by other members
-    arma::rowvec CI_fmsc_1step(double); //Simulation-based CI for 
+    rowvec CI_fmsc_1step(double); //Simulation-based CI for 
                     //b_fmsc that simply plugs in tau-hat
-    arma::rowvec CI_fmsc_correct(double, double, int); //Simulation-based CI for
+    rowvec CI_fmsc_correct(double, double, int); //Simulation-based CI for
                     //b_fmsc based on the two-step procedure using CI for tau
-    arma::rowvec CI_AVG_1step(double); //Simulation-based CI for 
+    rowvec CI_AVG_1step(double); //Simulation-based CI for 
                     //b_AVG that simply plugs in tau-hat 
-    arma::rowvec CI_AVG_correct(double, double, int); //Simulation-based CI for
+    rowvec CI_AVG_correct(double, double, int); //Simulation-based CI for
                    //b_AVG based on the two-step procedure using CI for tau
   private:
     int n_z, n;
     double xx, g_sq, s_e_sq_ols, s_e_sq_tsls, s_x_sq, 
         s_v_sq, tau, tau_var, ols_estimate, tsls_estimate;
-    arma::colvec ols_resid, tsls_resid, first_stage_coefs, zx;
-    arma::mat zz_inv, zz, CI_sims;
+    colvec ols_resid, tsls_resid, first_stage_coefs, zx;
+    mat zz_inv, zz, CI_sims;
     //private member functions
-    arma::rowvec CI_tau(double); //CI for bias parameter tau
-    arma::rowvec CI_Lambda_fmsc(double, double); //Simulation-based CI for
+    rowvec CI_tau(double); //CI for bias parameter tau
+    rowvec CI_Lambda_fmsc(double, double); //Simulation-based CI for
                     //Lambda post-FMSC evaluated at particular value of tau
-    arma::rowvec CI_Lambda_AVG(double, double); //Simulation-based CI for
+    rowvec CI_Lambda_AVG(double, double); //Simulation-based CI for
                       //Lambda based on the averaging estimator evaluated 
                       //at particular value of tau
 };
   
 
-fmsc_OLS_IV::fmsc_OLS_IV(const arma::colvec& x, const arma::colvec& y, 
-                          const arma::mat& z){
+fmsc_OLS_IV::fmsc_OLS_IV(const colvec& x, const colvec& y, 
+                          const mat& z){
 /*--------------------------------------------------
 # Constructor: calculates all "basic quantities"
 #---------------------------------------------------
@@ -218,27 +218,27 @@ fmsc_OLS_IV::fmsc_OLS_IV(const arma::colvec& x, const arma::colvec& y,
   n_z = z.n_cols;
   n = z.n_rows;
 
-  xx = arma::dot(x, x);
-  ols_estimate = arma::dot(x, y) / xx;
+  xx = dot(x, x);
+  ols_estimate = dot(x, y) / xx;
   ols_resid = y - x * ols_estimate;
   
-  first_stage_coefs = arma::solve(z,x);
-  tsls_estimate = arma::as_scalar(arma::solve(z * first_stage_coefs, y)); 
+  first_stage_coefs = solve(z,x);
+  tsls_estimate = as_scalar(solve(z * first_stage_coefs, y)); 
   tsls_resid = y - x * tsls_estimate; 
   
-  arma::mat Qz, Rz, Rzinv;
-  arma::qr_econ(Qz, Rz, z);
-  Rzinv = arma::inv(arma::trimatu(Rz));
-  zz_inv = Rzinv * arma::trans(Rzinv);
+  mat Qz, Rz, Rzinv;
+  qr_econ(Qz, Rz, z);
+  Rzinv = inv(trimatu(Rz));
+  zz_inv = Rzinv * trans(Rzinv);
   zz = trans(trimatu(Rz)) * trimatu(Rz);
-  zx = arma::trans(z) * x;
-  g_sq = arma::as_scalar(arma::trans(zx) * zz_inv * zx) / n;
+  zx = trans(z) * x;
+  g_sq = as_scalar(trans(zx) * zz_inv * zx) / n;
   
-  s_e_sq_ols = arma::dot(ols_resid, ols_resid) / n;
-  s_e_sq_tsls = arma::dot(tsls_resid, tsls_resid) / n;
+  s_e_sq_ols = dot(ols_resid, ols_resid) / n;
+  s_e_sq_tsls = dot(tsls_resid, tsls_resid) / n;
   s_x_sq = xx / n;
   s_v_sq = s_x_sq - g_sq;
-  tau = arma::dot(x, tsls_resid) / sqrt(n);
+  tau = dot(x, tsls_resid) / sqrt(n);
   tau_var = s_e_sq_tsls * s_x_sq * (s_x_sq / g_sq - 1);
 }
 
@@ -308,7 +308,7 @@ double fmsc_OLS_IV::b_AVG(){
   return(out);
 }
 
-arma::rowvec fmsc_OLS_IV::CI_ols(double alpha){
+rowvec fmsc_OLS_IV::CI_ols(double alpha){
 //Member function of class fmsc_OLS_IV
 //Returns confidence interval (lower, upper) for OLS estimator
 //Arguments: alpha = significance level (0.05 = 95% CI)
@@ -317,13 +317,13 @@ arma::rowvec fmsc_OLS_IV::CI_ols(double alpha){
   double lower = ols_estimate - z_quantile * SE_ols;
   double upper = ols_estimate + z_quantile * SE_ols;
   
-  arma::rowvec out(2);
+  rowvec out(2);
   out(0) = lower;
   out(1) = upper;
   return(out);
 }
 
-arma::rowvec fmsc_OLS_IV::CI_tsls(double alpha){
+rowvec fmsc_OLS_IV::CI_tsls(double alpha){
 //Member function of class fmsc_OLS_IV
 //Returns confidence interval (lower, upper) for TSLS estimator
 //Arguments: alpha = significance level (0.05 = 95% CI)
@@ -332,18 +332,18 @@ arma::rowvec fmsc_OLS_IV::CI_tsls(double alpha){
   double lower = tsls_estimate - z_quantile * SE_tsls;
   double upper = tsls_estimate + z_quantile * SE_tsls;
   
-  arma::rowvec out(2);
+  rowvec out(2);
   out(0) = lower;
   out(1) = upper;
   return(out);
 }
 
-arma::rowvec fmsc_OLS_IV::CI_fmsc_naive(double alpha){
+rowvec fmsc_OLS_IV::CI_fmsc_naive(double alpha){
 //Member function of class fmsc_OLS_IV
 //Returns naive confidence interval (lower, upper)
 //for post-FMSC estimator
 //Arguments: alpha = significance level (0.05 = 95% CI)
-    arma::rowvec out(2);
+    rowvec out(2);
     if(Tfmsc() < 2){
       out = CI_ols(alpha);
     } else {
@@ -352,7 +352,7 @@ arma::rowvec fmsc_OLS_IV::CI_fmsc_naive(double alpha){
   return(out);
 }
 
-arma::rowvec fmsc_OLS_IV::CI_tau(double delta){
+rowvec fmsc_OLS_IV::CI_tau(double delta){
 //Member function of class fmsc_OLS_IV
 //Returns CI (lower, upper) for bias parameter tau
 //Arguments: delta = significance level (0.05 = 95% CI)
@@ -361,7 +361,7 @@ arma::rowvec fmsc_OLS_IV::CI_tau(double delta){
   double lower = tau - z_quantile * SE_tau;
   double upper = tau + z_quantile * SE_tau;
   
-  arma::rowvec out(2);
+  rowvec out(2);
   out(0) = lower;
   out(1) = upper;
   return(out);
@@ -374,69 +374,69 @@ void fmsc_OLS_IV::draw_CI_sims(int n_sims){
   RNGScope scope;
   
   //Construct variance matrix of M
-  arma::mat Omega(n_z + 1, n_z + 1);
+  mat Omega(n_z + 1, n_z + 1);
   Omega(0, 0) = s_x_sq;
-  Omega(0, arma::span(1, n_z)) = arma::trans(zx) / n;
-  Omega(arma::span(1, n_z), 0) = zx / n;
-  Omega(arma::span(1, n_z), arma::span(1, n_z)) = zz / n;
+  Omega(0, span(1, n_z)) = trans(zx) / n;
+  Omega(span(1, n_z), 0) = zx / n;
+  Omega(span(1, n_z), span(1, n_z)) = zz / n;
   Omega = s_e_sq_tsls * Omega;
   
   //Construct matrix D that multiplies M
-  arma::mat D(3, n_z + 1);
+  mat D(3, n_z + 1);
   D(0, 0) = 1 / s_x_sq;
-  D(0, arma::span(1, n_z)) = arma::zeros<arma::rowvec>(n_z);
+  D(0, span(1, n_z)) = zeros<rowvec>(n_z);
   D(1, 0) = 0;
-  D(1, arma::span(1, n_z)) = arma::trans(first_stage_coefs) / g_sq;
+  D(1, span(1, n_z)) = trans(first_stage_coefs) / g_sq;
   D(2, 0) = 1;
-  D(2, arma::span(1, n_z)) = -1 * s_x_sq * 
-                      arma::trans(first_stage_coefs) / g_sq;
+  D(2, span(1, n_z)) = -1 * s_x_sq * 
+                      trans(first_stage_coefs) / g_sq;
   
   //Draw simulations
-  arma::colvec stdnorm = rnorm(n_sims * Omega.n_rows);
-  CI_sims = D * arma::chol(Omega) * reshape(stdnorm, Omega.n_rows, n);
+  colvec stdnorm = rnorm(n_sims * Omega.n_rows);
+  CI_sims = D * chol(Omega) * reshape(stdnorm, Omega.n_rows, n);
 }
 
 
-arma::rowvec fmsc_OLS_IV::CI_Lambda_fmsc(double alpha, double tau_star){
+rowvec fmsc_OLS_IV::CI_Lambda_fmsc(double alpha, double tau_star){
 //Member function of class fmsc_OLS_IV
 //Constructs a (1 - alpha) * 100% CI for Lambda at a given value of tau 
 //based on FMSC selection. This function assumes that draw_CI_sims has
 //already been called so that the data member CI_sims is available.
-  arma::rowvec one_vec = arma::ones<arma::rowvec>(CI_sims.n_cols);
-  arma::rowvec A = (tau_star / s_x_sq) * one_vec + CI_sims.row(0);
-  arma::rowvec B = CI_sims.row(1);
-  arma::rowvec C = tau_star * one_vec + CI_sims.row(2);
+  rowvec one_vec = ones<rowvec>(CI_sims.n_cols);
+  rowvec A = (tau_star / s_x_sq) * one_vec + CI_sims.row(0);
+  rowvec B = CI_sims.row(1);
+  rowvec C = tau_star * one_vec + CI_sims.row(2);
   
-  arma::rowvec w = arma::conv_to<arma::rowvec>
+  rowvec w = conv_to<rowvec>
                     ::from(pow(C, 2) < (2 * tau_var * one_vec));
                     
-  arma::colvec Lambda = arma::conv_to<arma::colvec>
+  colvec Lambda = conv_to<colvec>
                           ::from(w % A + (one_vec - w) % B);
   double lower = sample_quantile(Lambda, alpha/2);
   double upper = sample_quantile(Lambda, 1 - alpha/2);
-  arma::rowvec out(2);
+  rowvec out(2);
   out(0) = lower;
   out(1) = upper;
   return(out);
 }
 
 
-arma::rowvec fmsc_OLS_IV::CI_fmsc_1step(double alpha){
+rowvec fmsc_OLS_IV::CI_fmsc_1step(double alpha){
 //Member function of class fmsc_OLS_IV
 //Returns 1-step corrected confidence interval (lower, upper)
 //This function assumes that draw_CI_sims has already been called
-  arma::rowvec Lambda_interval = CI_Lambda_fmsc(alpha, tau);
+  rowvec Lambda_interval = CI_Lambda_fmsc(alpha, tau);
   double Lambda_lower = Lambda_interval(0);
   double Lambda_upper = Lambda_interval(1);
   double lower = b_fmsc() - Lambda_upper / sqrt(n);
   double upper = b_fmsc() - Lambda_lower / sqrt(n);
-  arma::rowvec out(2);
+  rowvec out(2);
   out(0) = lower;
   out(1) = upper;
   return(out);
 }
 
-arma::rowvec fmsc_OLS_IV::CI_fmsc_correct(double alpha, 
+rowvec fmsc_OLS_IV::CI_fmsc_correct(double alpha, 
                                   double delta, int n_grid){
 //Member function of class fmsc_OLS_IV
 //Returns corrected confidence interval (lower, upper)
@@ -446,73 +446,73 @@ arma::rowvec fmsc_OLS_IV::CI_fmsc_correct(double alpha,
 //Arguments: 
 //  alpha       significance level for Lambda CI conditional on tau
 //  delta       significance level for tau confidence interval
-  arma::rowvec tau_interval = CI_tau(delta);
+  rowvec tau_interval = CI_tau(delta);
   double tau_lower = tau_interval(0);
   double tau_upper = tau_interval(1);
-  arma::colvec tau_star = arma::linspace(tau_lower, tau_upper, n_grid);
-  arma::mat Lambda_CIs(n_grid, 2);
+  colvec tau_star = linspace(tau_lower, tau_upper, n_grid);
+  mat Lambda_CIs(n_grid, 2);
   
   for(int i = 0; i < n_grid; i++){
     Lambda_CIs.row(i) = CI_Lambda_fmsc(alpha, tau_star(i));
   }
   
-  double Lambda_lower_min = arma::min(Lambda_CIs.col(0));
-  double Lambda_upper_max = arma::max(Lambda_CIs.col(1));
+  double Lambda_lower_min = min(Lambda_CIs.col(0));
+  double Lambda_upper_max = max(Lambda_CIs.col(1));
   
   double lower = b_fmsc() - Lambda_upper_max / sqrt(n);
   double upper = b_fmsc() - Lambda_lower_min / sqrt(n);
-  arma::rowvec out(2);
+  rowvec out(2);
   out(0) = lower;
   out(1) = upper;
   return(out);
 }
 
 
-arma::rowvec fmsc_OLS_IV::CI_Lambda_AVG(double alpha, double tau_star){
+rowvec fmsc_OLS_IV::CI_Lambda_AVG(double alpha, double tau_star){
 //Member function of class fmsc_OLS_IV
 //Constructs a (1 - alpha) * 100% CI for Lambda at a given value of tau 
 //based on feasible AMSE averaging. This function assumes draw_CI_sims has
 //already been called so that the data member CI_sims is available.
-  arma::rowvec one_vec = arma::ones<arma::rowvec>(CI_sims.n_cols);
-  arma::rowvec A = (tau_star / s_x_sq) * one_vec + CI_sims.row(0);
-  arma::rowvec B = CI_sims.row(1);
-  arma::rowvec C = tau_star * one_vec + CI_sims.row(2);
+  rowvec one_vec = ones<rowvec>(CI_sims.n_cols);
+  rowvec A = (tau_star / s_x_sq) * one_vec + CI_sims.row(0);
+  rowvec B = CI_sims.row(1);
+  rowvec C = tau_star * one_vec + CI_sims.row(2);
   
-  arma::rowvec sq_bias_est = (pow(C, 2)  - tau_var * one_vec) 
+  rowvec sq_bias_est = (pow(C, 2)  - tau_var * one_vec) 
                                 / pow(s_x_sq, 2);
-  arma::rowvec zero_vec = arma::zeros<arma::rowvec>(CI_sims.n_cols);
+  rowvec zero_vec = zeros<rowvec>(CI_sims.n_cols);
   sq_bias_est = max(zero_vec, sq_bias_est);
   
   double var_diff = s_e_sq_tsls * (1 / g_sq - 1 / s_x_sq);
-  arma::rowvec w = one_vec / (one_vec + sq_bias_est / var_diff);
-  arma::colvec Lambda = arma::conv_to<arma::colvec>
+  rowvec w = one_vec / (one_vec + sq_bias_est / var_diff);
+  colvec Lambda = conv_to<colvec>
                           ::from(w % A + (one_vec - w) % B);
                           
   double lower = sample_quantile(Lambda, alpha/2);
   double upper = sample_quantile(Lambda, 1 - alpha/2);
-  arma::rowvec out(2);
+  rowvec out(2);
   out(0) = lower;
   out(1) = upper;
   return(out);
 }
 
-arma::rowvec fmsc_OLS_IV::CI_AVG_1step(double alpha){
+rowvec fmsc_OLS_IV::CI_AVG_1step(double alpha){
 //Member function of class fmsc_OLS_IV
 //Returns 1-step corrected confidence interval (lower, upper)
 //This function assumes that draw_CI_sims has already been called
-  arma::rowvec Lambda_interval = CI_Lambda_AVG(alpha, tau);
+  rowvec Lambda_interval = CI_Lambda_AVG(alpha, tau);
   double Lambda_lower = Lambda_interval(0);
   double Lambda_upper = Lambda_interval(1);
   double lower = b_AVG() - Lambda_upper / sqrt(n);
   double upper = b_AVG() - Lambda_lower / sqrt(n);
-  arma::rowvec out(2);
+  rowvec out(2);
   out(0) = lower;
   out(1) = upper;
   return(out);
 }
 
 
-arma::rowvec fmsc_OLS_IV::CI_AVG_correct(double alpha, 
+rowvec fmsc_OLS_IV::CI_AVG_correct(double alpha, 
                                 double delta, int n_grid){
 //Member function of class fmsc_OLS_IV
 //Returns corrected confidence interval (lower, upper)
@@ -522,22 +522,22 @@ arma::rowvec fmsc_OLS_IV::CI_AVG_correct(double alpha,
 //Arguments: 
 //  alpha       significance level for Lambda CI conditional on tau
 //  delta       significance level for tau confidence interval
-  arma::rowvec tau_interval = CI_tau(delta);
+  rowvec tau_interval = CI_tau(delta);
   double tau_lower = tau_interval(0);
   double tau_upper = tau_interval(1);
-  arma::colvec tau_star = arma::linspace(tau_lower, tau_upper, n_grid);
-  arma::mat Lambda_CIs(n_grid, 2);
+  colvec tau_star = linspace(tau_lower, tau_upper, n_grid);
+  mat Lambda_CIs(n_grid, 2);
   
   for(int i = 0; i < n_grid; i++){
     Lambda_CIs.row(i) = CI_Lambda_AVG(alpha, tau_star(i));
   }
   
-  double Lambda_lower_min = arma::min(Lambda_CIs.col(0));
-  double Lambda_upper_max = arma::max(Lambda_CIs.col(1));
+  double Lambda_lower_min = min(Lambda_CIs.col(0));
+  double Lambda_upper_max = max(Lambda_CIs.col(1));
   
   double lower = b_AVG() - Lambda_upper_max / sqrt(n);
   double upper = b_AVG() - Lambda_lower_min / sqrt(n);
-  arma::rowvec out(2);
+  rowvec out(2);
   out(0) = lower;
   out(1) = upper;
   return(out);
@@ -550,17 +550,17 @@ arma::rowvec fmsc_OLS_IV::CI_AVG_correct(double alpha,
 
 
 // [[Rcpp::export]]
-NumericVector mse_compare_cpp(double b, arma::colvec p, arma::mat Ve, 
-              arma::mat Vz, int n, int n_reps){
+NumericVector mse_compare_cpp(double b, colvec p, mat Ve, 
+              mat Vz, int n, int n_reps){
 //Function to run n_reps of the simulation study and calculate the MSE
 //of various estimators
 
-  arma::colvec ols(n_reps);
-  arma::colvec tsls(n_reps);
-  arma::colvec fmsc(n_reps);
-  arma::colvec DHW90(n_reps);
-  arma::colvec DHW95(n_reps);
-  arma::colvec AVG(n_reps);
+  colvec ols(n_reps);
+  colvec tsls(n_reps);
+  colvec fmsc(n_reps);
+  colvec DHW90(n_reps);
+  colvec DHW95(n_reps);
+  colvec AVG(n_reps);
 
   for(int i = 0; i < n_reps; i++){
     
@@ -605,12 +605,12 @@ NumericVector mse_compare_default_cpp(double p , double r, int n,
 //Runs simulation once with default values for "uninteresting" params
 
   double b = 1;
-  arma::colvec p_vec = p * arma::ones(3);
-  arma::mat Vz = arma::eye(3, 3);
+  colvec p_vec = p * ones(3);
+  mat Vz = eye(3, 3);
   
-  arma::mat Ve;
-  Ve << 1<< r << arma::endr
-     << r << 1 << arma::endr;
+  mat Ve;
+  Ve << 1<< r << endr
+     << r << 1 << endr;
   
   NumericVector out = mse_compare_cpp(b, p_vec, Ve, Vz, n, n_reps);
   return(out);  
@@ -620,18 +620,18 @@ NumericVector mse_compare_default_cpp(double p , double r, int n,
 
 
 // [[Rcpp::export]]
-arma::mat test_CIs_cpp(double p , double r, int n, 
+mat test_CIs_cpp(double p , double r, int n, 
                                         int n_reps){
 //Function to test the confidence interval code
   double b = 1;
-  arma::colvec p_vec = p * arma::ones(3);
-  arma::mat Vz = arma::eye(3, 3);
+  colvec p_vec = p * ones(3);
+  mat Vz = eye(3, 3);
   
-  arma::mat Ve;
-  Ve << 1<< r << arma::endr
-     << r << 1 << arma::endr;
+  mat Ve;
+  Ve << 1<< r << endr
+     << r << 1 << endr;
 
-  arma::mat out(n_reps, 2, arma::fill::zeros);
+  mat out(n_reps, 2, fill::zeros);
   
   for(int i = 0; i < n_reps; i++){
     
