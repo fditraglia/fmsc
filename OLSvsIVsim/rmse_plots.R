@@ -1,5 +1,5 @@
 #Load and unpack rmse results
-load("rmse_results.Rdata")
+load("mse_results.Rdata")
 coarse.pi <- results$coarse.pi
 coarse.rho <- results$coarse.rho
 rm(results)
@@ -21,8 +21,8 @@ rmse.plot <- function(panel, col.list, relative = TRUE){
   panel <- as.data.frame(panel) #allows $ column selection
   y <- panel[,col.list] 
   if(relative){
-    oracle <- pmin(panel$b.ols, panel$b.tsls)
-    y <- y[,!(col.list %in% c("b.ols", "b.tsls")), drop = FALSE]
+    oracle <- pmin(panel$OLS, panel$TSLS)
+    y <- y[,!(col.list %in% c("OLS", "TSLS")), drop = FALSE]
     y <- (y - oracle) / oracle * 100
     y.label <- "RMSE Relative to Oracle (\\%)"
   }else{
@@ -54,8 +54,10 @@ rmse.plot <- function(panel, col.list, relative = TRUE){
 }
 
 test.panel <- coarse.pi[[1]][[1]]
-test.cols <- c("b.ols", "b.tsls", "b.fmsc", 
-               "b.star","b.DHW90", "b.DHW95")
+test.cols <- c("OLS", "TSLS", "FMSC", 
+               "AVG","DHW90", "DHW95")
 
 rmse.plot(test.panel, test.cols)
-rmse.plot(test.panel, c("b.ols", "b.tsls", "b.fmsc"), relative = FALSE)
+rmse.plot(test.panel, c("OLS", "TSLS", "FMSC"), relative = FALSE)
+
+par(op)
