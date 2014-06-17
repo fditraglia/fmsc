@@ -14,7 +14,7 @@ source("mse_calculations.R")
 #Open rmse_results.Rdata
 #plot the results 
 #and export in tikz format
-#source("rmse_plots.R")
+source("rmse_plots.R")
 
 #source("CI_calculations.R")
 

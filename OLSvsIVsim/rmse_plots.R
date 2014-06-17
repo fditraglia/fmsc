@@ -1,21 +1,18 @@
-#Load and unpack rmse results
 load("mse_results.Rdata")
 coarse.pi <- results$coarse.pi
 coarse.rho <- results$coarse.rho
 rm(results)
 
+plot.width <- 5
+plot.height <- 7
+
 line.types <- 1:10
 line.colors <- c("black", "red", "blue", "orange", "green", "cyan")
 line.width <- 2
 
-op <- par()
 par (mar = c(3,3,2,1), mgp = c(2, 0.7, 0), tck = -0.01) 
 
-#Input a panel (matrix)
-#and a list of columns we want to plot
-#Function figures out which parameter (p or r) is constant
-#and draws the plot accordingly
-#Relative RMSE as an option.
+
 rmse.plot <- function(panel, col.list, relative = TRUE){
   panel[,-c(1:3)] <- apply(panel[,-c(1:3)], c(1,2), sqrt)
   panel <- as.data.frame(panel) #allows $ column selection
@@ -42,22 +39,70 @@ rmse.plot <- function(panel, col.list, relative = TRUE){
     fixed.label <- "\\pi"
   }
   n <- unique(panel$n)
-  plot.title <- paste0("$N=", n, ", \\quad ", 
+  plot.title <- paste0("$N=", n, ", \\;", 
                        fixed.label, "=", fixed.value, "$")
   
   matplot(x, y, type = 'l', lty = line.types, 
           col = line.colors, lwd = line.width, 
           xlab = x.label, ylab = y.label, 
           main = plot.title)
-  legend("topright", names(y), lty = line.types, 
+  legend("topright", bty = "n", names(y), lty = line.types, 
          col = line.colors, lwd = line.width)  
 }
 
-test.panel <- coarse.pi[[1]][[1]]
-test.cols <- c("OLS", "TSLS", "FMSC", 
-               "AVG","DHW90", "DHW95")
 
-rmse.plot(test.panel, test.cols)
-rmse.plot(test.panel, c("OLS", "TSLS", "FMSC"), relative = FALSE)
 
-par(op)
+plot.grid <- function(results, ...){
+  nCols <- length(results)
+  nRows <- lapply(results, length)[[1]]
+  par(mfcol = c(nRows, nCols))
+  for(i in 1:nCols){
+    for(j in 1:nRows){
+      rmse.plot(results[[i]][[j]], ...)
+    }
+  }
+  par(mfcol = c(1,1))
+}
+
+baseline <- c("OLS", "TSLS", "FMSC")
+relative.DHW <- c("OLS", "TSLS", "FMSC", "DHW90", "DHW95")
+relative.all <- c("OLS", "TSLS", "FMSC", "AVG","DHW90", "DHW95")
+
+
+tikz('RMSE_coarse_pi_baseline.tex',
+     width = plot.width, height = plot.height)
+  plot.grid(coarse.pi, baseline, relative = FALSE)
+dev.off()
+
+tikz('RMSE_coarse_pi_relative_DHW.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.pi, relative.DHW)
+dev.off()
+
+tikz('RMSE_coarse_pi_relative_all.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.pi, relative.all)
+dev.off()
+
+tikz('RMSE_coarse_rho_baseline.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.rho, baseline, relative = FALSE)
+dev.off()
+
+tikz('RMSE_coarse_rho_relative_DHW.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.rho, relative.DHW)
+dev.off()
+
+tikz('RMSE_coarse_rho_relative_all.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.rho, relative.all)
+dev.off()
+
+
+#Clean up
+rm(coarse.pi, coarse.rho)
+rm(line.colors, line.types, line.width)
+rm(rmse.plot)
+rm(baseline, relative.DHW, relative.all)
+rm(plot.width, plot.height)
