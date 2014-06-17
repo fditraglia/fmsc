@@ -39,3 +39,12 @@ results.coarse.pi <- lapply(sample.size.grid, panels.coarse.pi)
 results <- list(coarse.rho = results.coarse.rho,
                 coarse.pi = results.coarse.pi)
 save(results, file = "rmse_results.Rdata")
+
+#Clean up
+rm(n.reps, sample.size.grid)
+rm(pi.fine, pi.coarse)
+rm(rho.fine, rho.coarse)
+rm(fix.pi, fix.rho)
+rm(panels.coarse.pi, panels.coarse.rho)
+rm(results.coarse.pi, results.coarse.rho)
+rm(results)
