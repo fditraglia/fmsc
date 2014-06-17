@@ -3,8 +3,9 @@ coarse.pi <- results$coarse.pi
 coarse.rho <- results$coarse.rho
 rm(results)
 
-plot.width <- 5
+plot.width <- 6
 plot.height <- 7
+legend.inset <- 0.03
 
 line.types <- 1:10
 line.colors <- c("black", "red", "blue", "orange", "green", "cyan")
@@ -13,7 +14,8 @@ line.width <- 2
 par (mar = c(3,3,2,1), mgp = c(2, 0.7, 0), tck = -0.01) 
 
 
-rmse.plot <- function(panel, col.list, relative = TRUE){
+rmse.plot <- function(panel, col.list, relative = TRUE, 
+                      legend.pos = "topright"){
   panel[,-c(1:3)] <- apply(panel[,-c(1:3)], c(1,2), sqrt)
   panel <- as.data.frame(panel) #allows $ column selection
   y <- panel[,col.list] 
@@ -46,8 +48,9 @@ rmse.plot <- function(panel, col.list, relative = TRUE){
           col = line.colors, lwd = line.width, 
           xlab = x.label, ylab = y.label, 
           main = plot.title)
-  legend("topright", bty = "n", names(y), lty = line.types, 
-         col = line.colors, lwd = line.width)  
+  legend(legend.pos, bty = "n", names(y), lty = line.types, 
+         col = line.colors, lwd = line.width,
+         inset = legend.inset)  
 }
 
 
@@ -71,7 +74,8 @@ relative.all <- c("OLS", "TSLS", "FMSC", "AVG","DHW90", "DHW95")
 
 tikz('RMSE_coarse_pi_baseline.tex',
      width = plot.width, height = plot.height)
-  plot.grid(coarse.pi, baseline, relative = FALSE)
+  plot.grid(coarse.pi, baseline, relative = FALSE,
+            legend.pos = "topleft")
 dev.off()
 
 tikz('RMSE_coarse_pi_relative_DHW.tex',
@@ -91,7 +95,8 @@ dev.off()
 
 tikz('RMSE_coarse_rho_relative_DHW.tex',
      width = plot.width, height = plot.height)
-plot.grid(coarse.rho, relative.DHW)
+plot.grid(coarse.rho, relative.DHW, 
+          legend.pos = "topleft")
 dev.off()
 
 tikz('RMSE_coarse_rho_relative_all.tex',
@@ -103,6 +108,6 @@ dev.off()
 #Clean up
 rm(coarse.pi, coarse.rho)
 rm(line.colors, line.types, line.width)
-rm(rmse.plot)
+rm(rmse.plot, plot.grid)
 rm(baseline, relative.DHW, relative.all)
 rm(plot.width, plot.height)
