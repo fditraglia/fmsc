@@ -42,16 +42,38 @@ sourceCpp("simulation_functions_OLSvsIV.cpp")
 set.seed(2819)
 
 n.reps <- 1000
-rho.seq <- seq(0, 0.6, 0.01)
-pi.seq <- seq(0.1, 0.6, 0.01)
+rho.fine <- seq(0, 0.6, 0.1)
+pi.fine <- seq(0.1, 0.6, 0.1)
+rho.coarse <- seq(0.1, 0.2, 0.1)
+pi.coarse <- seq(0.1, 0.2, 0.1)
 
+sample.size.grid <- c(50, 100, 250)
+
+#Run the simulation over all values in rho.fine for a fixed value of pi and sample size
 fix.pi <- function(pi.value, sample.size){
-  do.call(rbind, lapply(rho.seq, function(r) mse_compare_default_cpp(pi.value, r, sample.size, n.reps)))
+  out <- lapply(rho.fine, function(r) mse_compare_default_cpp(pi.value, r, sample.size, n.reps))
+  out <- do.call(rbind, out) #Convert list to matrix
+  nRows <- length(rho.fine)
+  cbind(n = rep(sample.size, nRows), p = rep(pi.value, nRows), r = rho.fine, out)
 }
 
+#Run the simulation over all values in pi.fine for a fixed value of rho and sample size
 fix.rho <- function(rho.value, sample.size){
-  do.call(rbind, lapply(pi.seq, function(p) mse_compare_default_cpp(p, rho.value, sample.size, n.reps)))
+  out <- lapply(pi.fine, function(p) mse_compare_default_cpp(p, rho.value, sample.size, n.reps))
+  out <- do.call(rbind, out) #Convert list to matrix
+  nRows <- length(pi.fine)
+  cbind(n = rep(sample.size, nRows), p = pi.fine, r = rep(rho.value, nRows), out)
 }
 
-fix.pi.panels <- mclapply(c(0.1, 0.2), function(x) fix.pi(x, 250))
-fix.rho.panels <- mclapply(c(0.1, 0.2), function(x) fix.rho(x, 250))
+#Run fix.pi over all values in pi.coarse for a fixed sample size
+panels.coarse.pi <- function(sample.size){
+  lapply(pi.coarse, function(p) fix.pi(p, sample.size))
+} 
+
+#Run fix.rho over all values in rho.coarse for a fixed sample size
+panels.coarse.rho <- function(sample.size){
+  lapply(rho.coarse, function(r) fix.rho(r, sample.size))
+}
+
+results.coarse.rho <- lapply(sample.size.grid, panels.coarse.rho)
+results.coarse.pi <- lapply(sample.size.grid, panels.coarse.pi)
