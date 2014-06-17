@@ -23,7 +23,8 @@
 *.synctex.gz
 *.fdb_latexmk
 *.Rhistory
-*.Rdata
+workspace*.Rdata
+.Rdata
 *.rdb
 *.rdx
 *.tikz
