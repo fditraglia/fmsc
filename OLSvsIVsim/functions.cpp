@@ -588,8 +588,8 @@ NumericVector mse_compare_cpp(double b, colvec p, mat Ve,
   //Create and return vector of results
   NumericVector out = NumericVector::create(MSE_ols, MSE_tsls, MSE_fmsc, 
                         MSE_star, MSE_DHW90, MSE_DHW95);
-  out.names() = CharacterVector::create("b.ols", "b.tsls", "b.fmsc", 
-                        "b.star", "b.DHW90", "b.DHW95");
+  out.names() = CharacterVector::create("OLS", "TSLS", "FMSC", 
+                        "AVG", "DHW90", "DHW95");
   return(out);  
 
   
