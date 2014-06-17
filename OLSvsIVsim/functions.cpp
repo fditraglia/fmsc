@@ -1,8 +1,8 @@
 /*------------------------------------------------------------
-# Filename:        simulation_functions_OLSvsIV.cpp
+# Filename:        functions.cpp
 # Author:          Frank DiTraglia
 # First Version:   2014-01-22
-# This Version:    2014-02-08
+# Last Updated:    2014-06-17
 #--------------------------------------------------------------
 # C++ code to carry out the OLS vs. IV simulation experiments.
 #------------------------------------------------------------*/
