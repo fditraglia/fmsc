@@ -3,7 +3,6 @@ library(RcppArmadillo)
 library(parallel)
 library(tikzDevice)
 
-setwd("~/fmsc/OLSvsIV")
-sourceCpp("simulation_functions_OLSvsIV.cpp")
+sourceCpp("functions.cpp")
 
 set.seed(1928)
