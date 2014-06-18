@@ -1,6 +1,6 @@
 n.reps <- 20000
-rho.fine <- seq(0, 0.6, 0.1)
-pi.fine <- seq(0.1, 0.6, 0.1)
+rho.fine <- seq(0, 0.6, 0.01)
+pi.fine <- seq(0.1, 0.6, 0.01)
 rho.coarse <- c(0, 0.25, 0.5)
 pi.coarse <- c(0.1, 0.3, 0.5)
 
