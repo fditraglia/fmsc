@@ -706,7 +706,7 @@ List CIs_compare_default_cpp(double p , double r, int n,
                                               coverage_prob(FMSC_correct, b),
                                               coverage_prob(AVG_1step, b),
                                               coverage_prob(AVG_correct, b));
-  names.cover() = col_names;
+  cover.names() = col_names;
   
   NumericVector width = NumericVector::create(median_width(OLS),
                                               median_width(TSLS),
@@ -715,7 +715,7 @@ List CIs_compare_default_cpp(double p , double r, int n,
                                               median_width(FMSC_correct),
                                               median_width(AVG_1step),
                                               median_width(AVG_correct));
-  names.width() = col_names;
+  width.names() = col_names;
   
   return List::create(Named("coverage.prob") = cover,
                       Named("median.width") = width);
