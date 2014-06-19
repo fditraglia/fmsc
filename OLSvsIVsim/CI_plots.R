@@ -5,4 +5,4 @@ sourceCpp("functions.cpp")
 
 
 set.seed(8273)
-testy <- test_CIs_cpp(0.1, 0.1, 250, 2000)
+testy <- CIs_compare_default_cpp(0.2, 0.2, 500, 1000)

@@ -627,7 +627,7 @@ NumericVector mse_compare_default_cpp(double p , double r, int n,
 
 
 // [[Rcpp::export]]
-NumericVector test_CIs_cpp(double p , double r, int n, 
+List CIs_compare_default_cpp(double p , double r, int n, 
                                         int n_reps){
 //Function to test the confidence interval code with the same parameter
 //values as in mse_compare_default_cpp
@@ -690,20 +690,33 @@ NumericVector test_CIs_cpp(double p , double r, int n,
                                                 n_tau_grid);
     
   }
+
+  CharacterVector col_names = CharacterVector::create("OLS",
+                                                      "TSLS",
+                                                      "FMSC_naive",
+                                                      "FMSC_1step",
+                                                      "FMSC_correct", 
+                                                      "AVG_1step",  
+                                                      "AVG_correct"); 
   
-  NumericVector out = NumericVector::create(coverage_prob(OLS, b),
-                                            coverage_prob(TSLS, b),
-                                            coverage_prob(FMSC_naive, b),
-                                            coverage_prob(FMSC_1step, b),
-                                            coverage_prob(FMSC_correct, b),
-                                            coverage_prob(AVG_1step, b),
-                                            coverage_prob(AVG_correct, b));
-  out.names() = CharacterVector::create("OLS",
-                                        "TSLS",
-                                        "FMSC_naive",
-                                        "FMSC_1step",
-                                        "FMSC_correct", 
-                                        "AVG_1step",
-                                        "AVG_correct"); 
-  return(out);  
+  NumericVector cover = NumericVector::create(coverage_prob(OLS, b),
+                                              coverage_prob(TSLS, b),
+                                              coverage_prob(FMSC_naive, b),
+                                              coverage_prob(FMSC_1step, b),
+                                              coverage_prob(FMSC_correct, b),
+                                              coverage_prob(AVG_1step, b),
+                                              coverage_prob(AVG_correct, b));
+  names.cover() = col_names;
+  
+  NumericVector width = NumericVector::create(median_width(OLS),
+                                              median_width(TSLS),
+                                              median_width(FMSC_naive),
+                                              median_width(FMSC_1step),
+                                              median_width(FMSC_correct),
+                                              median_width(AVG_1step),
+                                              median_width(AVG_correct));
+  names.width() = col_names;
+  
+  return List::create(Named("coverage.prob") = cover,
+                      Named("median.width") = width);
 }
