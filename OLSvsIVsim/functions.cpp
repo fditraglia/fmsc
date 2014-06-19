@@ -627,7 +627,7 @@ NumericVector mse_compare_default_cpp(double p , double r, int n,
 
 
 // [[Rcpp::export]]
-mat test_CIs_cpp(double p , double r, int n, 
+NumericVector test_CIs_cpp(double p , double r, int n, 
                                         int n_reps){
 //Function to test the confidence interval code with the same parameter
 //values as in mse_compare_default_cpp
@@ -637,7 +637,6 @@ mat test_CIs_cpp(double p , double r, int n,
 //  var(x) = 1
 //  corr(e,v) = r
 //  cor(x, z1 + z2 + z3) = p
- 
   double b = 0.5;
   colvec p_vec = p * ones(3);
   mat Vz = eye(3, 3) / 3;
@@ -646,17 +645,65 @@ mat test_CIs_cpp(double p , double r, int n,
   Ve << 1 << r * sqrt(1 - pow(p,2)) << endr
      << r * sqrt(1 - pow(p,2)) << 1 - pow(p, 2) << endr;
 
-  mat out(n_reps, 2, fill::zeros);
+//Default to nominal 90% CIs
+  double nominal_coverage = 0.9;
+  double alpha_1step = 1 - nominal_coverage;
+//Same level for each interval in the 2-step procedures
+  double alpha_2step = alpha_1step / 2; 
+//Number of simulations for sim-based CIs
+  int n_CI_sims = 1000;
+//Grid for tau
+  int n_tau_grid = 100;
+
+  mat OLS(n_reps, 2, fill::zeros);
+  mat TSLS(n_reps, 2, fill::zeros);
+  mat FMSC_naive(n_reps, 2, fill::zeros);
+  mat FMSC_1step(n_reps, 2, fill::zeros);
+  mat FMSC_correct(n_reps, 2, fill::zeros);
+  mat AVG_1step(n_reps, 2, fill::zeros);
+  mat AVG_correct(n_reps, 2, fill::zeros);
   
   for(int i = 0; i < n_reps; i++){
     
-    dgp_OLS_IV sim_data(b, p_vec, Ve, Vz, n);
-    fmsc_OLS_IV sim_results(sim_data.x, sim_data.y, sim_data.z);
+    //Simulate data and calculate estimators
+    dgp_OLS_IV data(b, p_vec, Ve, Vz, n);
+    fmsc_OLS_IV results(data.x, data.y, data.z);
     
-    sim_results.draw_CI_sims(1000);
-    out.row(i) = sim_results.CI_AVG_correct(0.02, 0.08, 100);
-    //out.row(i) = sim_results.CI_AVG_1step(0.05);
- 
+    //CIs that do not require draw_CI_sims()
+    OLS.row(i) = results.CI_ols(alpha_1step);
+    TSLS.row(i) = results.CI_tsls(alpha_1step);
+    FMSC_naive.row(i) = results.CI_fmsc_naive(alpha_1step);
+    
+    //Initialization for CIs constructed using simulations
+    results.draw_CI_sims(n_CI_sims);
+    
+    //One-step simulation-based CIs
+    FMSC_1step.row(i) = results.CI_fmsc_1step(alpha_1step);
+    AVG_1step.row(i) = results.CI_AVG_1step(alpha_1step);
+    
+    //Two-step simulation-based CIs
+    FMSC_correct.row(i) = results.CI_fmsc_correct(alpha_2step, 
+                                                  alpha_2step,
+                                                  n_tau_grid);
+    AVG_correct.row(i) = results.CI_AVG_correct(alpha_2step, 
+                                                alpha_2step,
+                                                n_tau_grid);
+    
   }
+  
+  NumericVector out = NumericVector::create(coverage_prob(OLS, b),
+                                            coverage_prob(TSLS, b),
+                                            coverage_prob(FMSC_naive, b),
+                                            coverage_prob(FMSC_1step, b),
+                                            coverage_prob(FMSC_correct, b),
+                                            coverage_prob(AVG_1step, b),
+                                            coverage_prob(AVG_correct, b));
+  out.names() = CharacterVector::create("OLS",
+                                        "TSLS",
+                                        "FMSC_naive",
+                                        "FMSC_1step",
+                                        "FMSC_correct", 
+                                        "AVG_1step",
+                                        "AVG_correct"); 
   return(out);  
 }
