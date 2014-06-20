@@ -28,9 +28,19 @@ wide.p.by.r <- function(long.fix.n){
   return(out)
 } 
 
-foo <- subset(width.rel.tsls, n == 500)[,c("n", "p", "r", "AVG_correct")]
-wide.p.by.r(foo)
 
-data <- coverage.prob[,c("n", "p", "r", "AVG_correct")]
-lapply(unique(data$n), function(x) wide.p.by.r(subset(data, n == x)))
+n.by.p.by.r <- function(dataframe, colName){
+  data <- dataframe[,c("n", "p", "r", colName)]
+  lapply(unique(data$n), function(x) wide.p.by.r(subset(data, n == x)))
+}
+
+cover.list <- lapply(keep.cover, function(colName) n.by.p.by.r(coverage.prob, colName))
+names(cover.list) <- keep.cover
+
+width.list <- lapply(setdiff(keep.width, "TSLS"), function(colName) n.by.p.by.r(width.rel.tsls, colName))
+names(width.list) <- setdiff(keep.width, "TSLS")
+
+rm(width.rel.tsls, keep.cover, keep.width, coverage.prob)
+rm(n.by.p.by.r)
+rm(wide.p.by.r)
 

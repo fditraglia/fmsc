@@ -20,7 +20,13 @@ set.seed(1928)
 #and store them in CI_results.Rdata
 #source("CI_calculations.R")
 
-#Load CI_results.Rdata 
-#plot results and export
-#in tikz format
-source("CI_plots.R")
+#Load CI_results.Rdata and 
+#format into two lists of tables
+#One for coverage probability
+#and another for median CI width relative
+#to TSLS
+source("CI_Rtables.R")
+
+#Convert the lists of CI tables
+#to LaTeX and output
+#source("CI_TeXtables.R")
