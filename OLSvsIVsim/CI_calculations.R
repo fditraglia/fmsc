@@ -16,3 +16,8 @@ median.width <- cbind(params, t(sapply(CI.results, function(x) x$median.width)))
 results <- list(coverage.prob = coverage.prob, median.width = median.width)
 
 save(results, file = "CI_results.Rdata")
+
+#Clean up
+rm(n.reps, rho.grid, pi.grid, sample.size.grid)
+rm(params, CI.results, coverage.prob, median.width)
+rm(results)
