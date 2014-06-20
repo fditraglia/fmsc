@@ -15,4 +15,4 @@ median.width <- cbind(params, t(sapply(CI.results, function(x) x$median.width)))
 
 results <- list(coverage.prob = coverage.prob, median.width = median.width)
 
-write(results, "CI_results.Rdata")
+save(results, file = "CI_results.Rdata")
