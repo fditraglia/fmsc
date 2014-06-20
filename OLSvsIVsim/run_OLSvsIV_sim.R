@@ -18,6 +18,9 @@ set.seed(1928)
 
 #Calculate Confidence Interval results for simulation
 #and store them in CI_results.Rdata
-source("CI_calculations.R")
+#source("CI_calculations.R")
 
-#source("CI_plots.R")
+#Load CI_results.Rdata 
+#plot results and export
+#in tikz format
+source("CI_plots.R")
