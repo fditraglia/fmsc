@@ -29,4 +29,4 @@ source("CI_Rtables.R")
 
 #Convert the lists of CI tables
 #to LaTeX and output
-#source("CI_TeXtables.R")
+source("CI_TeXtables.R")
