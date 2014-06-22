@@ -389,6 +389,7 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     n_params = x.n_cols;
     uvec valid_indicator = zeros<uvec>(n_z2);
     uvec full_indicator = ones<uvec>(n_z2);
+    uvec z1_indicator = ones<uvec>(n_z1); //Always include z1
     
     mat K_valid = n_obs * valid.C;
     mat Omega_valid = valid.Omega_robust(); //no centering needed
@@ -425,7 +426,6 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     cube avar_inner_temp(n_params, n_params, n_add_cand + 2);
     //Matrix to store estimate from each candidate
     mat estimates_temp(n_params, n_add_cand + 2);
-    uvec z1_indicator = ones<uvec>(n_z1); //Always include z1
     //Matrix to store Xi(S) * Bias_mat * Xi(S)'
     //as we loop over candidate moment sets
     mat inner;
