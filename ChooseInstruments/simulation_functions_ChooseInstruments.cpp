@@ -435,21 +435,27 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     K_temp(0) = K_valid;
     Omega_temp(0) = Omega_valid;
     estimates_temp.col(0) = valid.est();
-    candidate = join_cols(z1_indicator, valid_indicator);
+    //Use find to convert vector of 0-1 indicators into
+    //vector of *positions* of the non-zeros
+    candidate = find(join_cols(z1_indicator, valid_indicator));
     inner = Bias_mat.submat(candidate, candidate);
     sqbias_inner_temp.slice(0) = K_valid * inner * K_valid.t();
     avar_inner_temp.slice(0) =  K_valid * Omega_valid * K_valid.t();
     
     //Results for any candidates besides valid and full
     for(int i = 0; i < n_add_cand; i++){
+      //Fit 2SLS for current candidate
       mat z2_candidate = z2.cols(candidates.col(i));
       tsls_fit candidate_fit(x, y, join_rows(z1, z2_candidate));
+      //Extract and store quantities needed for FMSC
       mat K_candidate = n_obs * candidate_fit.C;
       mat Omega_candidate = candidate_fit.Omega_center();
       K_temp(i + 1) = K_candidate;
       Omega_temp(i + 1) = Omega_candidate;
       estimates_temp.col(i + 1) = candidate_fit.est();
-      candidate = join_cols(z1_indicator, candidates.col(i));
+      //Use find to convert vector of 0-1 indicators into
+      //vector of *positions* of the non-zeros
+      candidate = find(join_cols(z1_indicator, candidates.col(i)));
       inner = Bias_mat.submat(candidate, candidate);
       sqbias_inner_temp.slice(i + 1) = K_candidate * inner * 
                                                      K_candidate.t();
@@ -461,7 +467,9 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     K_temp(n_add_cand + 1) = K_full;
     Omega_temp(n_add_cand + 1) = Omega_full;
     estimates_temp.col(n_add_cand + 1) = full.est();
-    candidate = join_cols(z1_indicator, full_indicator);
+    //Use find to convert vector of 0-1 indicators into
+    //vector of *positions* of the non-zeros
+    candidate = find(join_cols(z1_indicator, full_indicator));
     inner = Bias_mat.submat(candidate, candidate);
     sqbias_inner_temp.slice(0) = K_full * inner * K_full.t();
     avar_inner_temp.slice(n_add_cand + 1) = K_full * Omega_full * 
