@@ -67,7 +67,60 @@ where $\chi^2_q(\delta)$ denotes the $1-\delta$ quantile of a $\chi^2$ distribut
 Then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asymptotic coverage probability no less than $1-(\alpha + \delta)$ as $J,n\rightarrow \infty$.
 \end{thm}
 
+\subsection{Simulation Study: Valid Confidence Intervals}
 \todo[inline]{Need to talk about coverage versus width. Explore in the simulations and empirical example. There is a cost to moment selection. But this cost is still present when selection is carried out informally: we're just trying to make it formal here. Also talk about how we could use the same procedure to get an interval for more general moment average estimators.}
+
+\subsubsection{OLS versus IV Example}
+
+\begin{table}[h]
+\footnotesize
+\centering
+	\begin{subtable}{0.48\textwidth}
+		\caption{post-FMSC Estimator}
+		\input{../OLSvsIVsim/coverage_FMSC_correct.tex}
+	\end{subtable}	
+	~
+	\begin{subtable}{0.48\textwidth}
+		\caption{AMSE-Averaging Estimator}
+		\input{../OLSvsIVsim/coverage_AVG_correct.tex}
+	\end{subtable}
+	\caption{Actual coverage probabilities of simulation-based interval (nominal $>90\%$)}
+\end{table}
+
+
+\begin{table}[h]
+\footnotesize
+\centering
+	\begin{subtable}{0.48\textwidth}
+		\caption{Two-Stage Least Squares}
+		\input{../OLSvsIVsim/coverage_TSLS.tex}
+	\end{subtable}	
+	~
+	\begin{subtable}{0.48\textwidth}
+		\caption{Na\"{i}ve post-FMSC}
+		\input{../OLSvsIVsim/coverage_FMSC_naive.tex}
+	\end{subtable}
+	\caption{Actual coverage probabilities nominal 90\% CIs}
+\end{table}
+
+
+\begin{table}[h]
+\footnotesize
+\centering
+	\begin{subtable}{0.48\textwidth}
+		\caption{post-FMSC Estimator}
+		\input{../OLSvsIVsim/width_FMSC_correct.tex}
+	\end{subtable}	
+	~
+	\begin{subtable}{0.48\textwidth}
+		\caption{AMSE-Averaging Estimator}
+		\input{../OLSvsIVsim/width_AVG_correct.tex}
+	\end{subtable}
+	\caption{Median CI width relative to that of 2SLS (\%)}
+\end{table}
+
+
+\subsubsection{Choosing Instrumental Variables Example}
 
 To evaluate the performance of the procedure given in Algorithm \ref{alg:conf}, we revisit the simulation experiment described in Section \ref{sec:fmscsim}, considering FMSC moment selection. The following results are based on 10,000 replications, each with a sample size of 500. Table \ref{tab:FMSCconf} gives the empirical coverage probabilities of traditional 95\% confidence intervals post-FMSC selection. These are far below the nominal level over the vast majority of the parameter space. Table \ref{tab:FMSCcorrect} presents the empirical coverage of conservative 90\% confidence intervals constructed according to Algorithm \ref{alg:conf}, with $B=1000$.\footnote{Because this simulation is computationally intensive, I use a reduced grid of parameter values.} The two-stage simulation procedure performs remarkably well, achieving a minimum coverage probability of $0.89$ relative to its nominal level of $0.9$. Moreover, a na\"{i}ve one-step procedure that omits the first-stage and simply simulates from $M$ based on $\widehat{\tau}$ performs surprisingly well; see Table \ref{tab:FMSCnaive}. While the empirical coverage probabilities of the one-step procedure are generally lower than the nominal level of $0.95$, they represent a substantial improvement over the traditional intervals given in Table \ref{tab:FMSCconf}, with a worst-case coverage of $0.72$ compared to $0.15$. This suggests that the one-step intervals might be used as a rough but useful approximation to the correct but more computationally intensive intervals constructed according to Algorithm \ref{alg:conf}.
 
