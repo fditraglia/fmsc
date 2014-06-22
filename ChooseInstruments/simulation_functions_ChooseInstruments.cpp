@@ -319,19 +319,20 @@ linearGMM_select::linearGMM_select(const mat& X,
 class fmsc_chooseIV {
   public:
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
-    
+    //Target parameter estimators for all candidate specs
     colvec mu_est(colvec weights){return(weights.t() * estimates);}
-    
+    //Valid model estimator of target parameter
     double mu_valid(colvec weights){
       colvec mu = mu_est(weights);
       return(mu(0));
     }
-    
+    //Full model estimator of target parameter
     double mu_full(colvec weights){
       colvec mu = mu_est(weights);
       return(mu(mu.n_elem - 1));
     }
-    
+    //Squared Aasymptotic Bias estimates for target 
+    //parameter under each candidate specification
     colvec abias_sq(colvec weights){
         colvec out(z2_indicators.n_cols);
         for(int i = 0; i < K.n_elem; i++){
@@ -339,7 +340,8 @@ class fmsc_chooseIV {
         }
         return(out);
     }
-    
+    //Asymptotic Variance estimates for target parameter
+    //under each candidate specification
     colvec avar(colvec weights){
       colvec out(z2_indicators.n_cols);
       for(int i = 0; i < K.n_elem; i++){
@@ -347,9 +349,8 @@ class fmsc_chooseIV {
       }
       return(out);
     }
-    
-    colvec fmsc(colvec weights){
     //Calculate fmsc with non-negative squared bias estimator
+    colvec fmsc(colvec weights){
       colvec first_term = abias_sq(weights);
       first_term = max(first_term, zeros<colvec>(first_term.n_elem));
       colvec second_term = avar(weights);
