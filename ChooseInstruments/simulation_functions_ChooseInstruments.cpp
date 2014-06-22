@@ -126,8 +126,8 @@ cancor::cancor(const mat& X, const mat& Y){
 
 //Class for calculating the canonical correlation information criterion (CCIC)
 //of Hall & Peixe (2003). The argument Z_c is the instrument matrix, while 
-//D_resid is a matrix containing the partial derivatives of the GMM residuals
-//with respect to the parameter vector. 
+//D_resid is a matrix containing the partial derivatives of the GMM residual
+//function u(theta) with respect to the parameter vector theta. 
 //For linear GMM, D_resid is the matrix of regressors, X.
 class CCIC {
   public:
@@ -197,7 +197,7 @@ class linearGMM_msc {
     linearGMM_msc(const mat&, const colvec&, const mat&);
     double Jstat(){return(J);}
     double pJtest(){return(R::pchisq(J, n_overid, 1, 0));}
-    //the arguments of R::chisq are (q, df, lower.tail, log.p)
+    //the arguments of R::pchisq are (q, df, lower.tail, log.p)
     double GMM_AIC(){return(J - 2 * n_overid);}
     double GMM_BIC(){return(J - log(n_obs) * n_overid);}
     double GMM_HQ(){return(J - 2.01 * log(log(n_obs)) * n_overid);}
