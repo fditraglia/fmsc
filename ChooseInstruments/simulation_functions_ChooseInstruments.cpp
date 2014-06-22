@@ -411,28 +411,24 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
       z2_indicators = join_rows(valid_indicator, candidates);
       z2_indicators = join_rows(z2_indicators, full_indicator);
     }
-    //Temporary storage for K(S) and Omega(S) 
-    //matrices for each candidate. Since the 
-    //dimensions vary, use a field object.
-    field<mat> K_temp(n_add_cand + 2);
-    field<mat> Omega_temp(n_add_cand + 2);
-    //Temp storage for K(S)Xi(S) * Bias_mat * Xi(S)'K(S)'
-    //for each candidate. Since the result is of the same
-    //dimension for each candidate, store in s cube object
-    cube sqbias_inner_temp(n_params, n_params, n_add_cand + 2);
-    //Temp storage for K(S)Xi(S) * Omega * K(S)'Xi(S)'
-    //for each candidate. Since the result is of the same
-    //dimension for each candidate, store in a cube object.
-    cube avar_inner_temp(n_params, n_params, n_add_cand + 2);
+
+    //Vector to store current candidate specification
+    //Used to subset *full* instrument matrix, *not* z2
+    uvec candidate(n_z);    
     //Matrix to store estimate from each candidate
     mat estimates_temp(n_params, n_add_cand + 2);
+    //Temporary storage for K(S) and Omega(S) 
+    //Dims vary by candidate so store in a field
+    field<mat> K_temp(n_add_cand + 2);
+    field<mat> Omega_temp(n_add_cand + 2);
     //Matrix to store Xi(S) * Bias_mat * Xi(S)'
     //as we loop over candidate moment sets
     mat inner;
-    //Vector to store the current candidate
-    //Used to subset the *full* instrument
-    //matrix z, *not* z2
-    uvec candidate(n_z);
+    //Temp storage for K(S)Xi(S) * Bias_mat * Xi(S)'K(S)'
+    //and K(S)Xi(S) * Omega * K(S)'Xi(S)'. Since dims are
+    //the same for each candidate, store results in a cube
+    cube sqbias_inner_temp(n_params, n_params, n_add_cand + 2);
+    cube avar_inner_temp(n_params, n_params, n_add_cand + 2);
     
     //Results for valid estimator - outside loop since already fitted
     K_temp(0) = K_valid;
