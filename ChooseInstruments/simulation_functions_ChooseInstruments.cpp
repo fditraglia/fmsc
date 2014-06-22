@@ -211,6 +211,8 @@ class linearGMM_msc {
     int n_obs, n_overid;
 };
 //Class constructor
+//Uses a initialization list to run the first-step
+//of the efficient two-step GMM estimation procedure
 linearGMM_msc::linearGMM_msc(const mat& X, const colvec& y,
                              const mat& Z): first_step(X, y, Z){
   n_obs = X.n_rows;
@@ -233,6 +235,9 @@ linearGMM_msc::linearGMM_msc(const mat& X, const colvec& y,
 
 //Class to carry out moment selection for linear GMM models
 //using the Andrews (1999) criteria and CCIC of Hall & Peixe (2003)
+//This class is really just a wrapper to repeatedly use the 
+//linearGMM_msc class to calculate moment selection criteria over a 
+//collection of candidate moment sets.
 class linearGMM_select{
   public:
     linearGMM_select(const mat&, const colvec&, 
