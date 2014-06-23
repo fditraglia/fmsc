@@ -471,7 +471,7 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     //vector of *positions* of the non-zeros
     candidate = find(join_cols(z1_indicator, full_indicator));
     inner = Bias_mat.submat(candidate, candidate);
-    sqbias_inner_temp.slice(0) = K_full * inner * K_full.t();
+    sqbias_inner_temp.slice(n_add_cand + 1) = K_full * inner * K_full.t();
     avar_inner_temp.slice(n_add_cand + 1) = K_full * Omega_full * 
                                                      K_full.t();
     //Store results in private data members                                       
