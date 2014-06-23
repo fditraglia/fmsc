@@ -7,7 +7,7 @@ using namespace arma;
 
 
 
-double sample_quantile(arma::colvec x, double p){
+double sample_quantile(colvec x, double p){
 /*-------------------------------------------------------
 # Calculates a sample quantile
 #--------------------------------------------------------
@@ -26,11 +26,11 @@ double sample_quantile(arma::colvec x, double p){
   double m = 1 - p;
   int j = floor(n * p + m);
   double g = n * p + m - j;
-  arma::colvec x_sort = arma::sort(x);
+  colvec x_sort = sort(x);
   return((1 - g) * x_sort(j - 1) + g * x_sort(j));
 }
 
-double MSE_trim(arma::colvec x, double truth, double trim){
+double MSE_trim(colvec x, double truth, double trim){
 /*-------------------------------------------------------
 # Calculates trimmed mean-squared error.
 #--------------------------------------------------------
@@ -42,30 +42,30 @@ double MSE_trim(arma::colvec x, double truth, double trim){
   int k = x.n_elem;
   int tail_drop = ceil(k * trim / 2);
   
-  arma::colvec x_trimmed = arma::sort(x);
-  x_trimmed = x_trimmed(arma::span(tail_drop, k - tail_drop - 1));
+  colvec x_trimmed = sort(x);
+  x_trimmed = x_trimmed(span(tail_drop, k - tail_drop - 1));
   
-  arma::colvec truth_vec = truth * arma::ones(x_trimmed.n_elem);
-  arma::colvec errors = x_trimmed - truth_vec;
-  double MSE = arma::dot(errors, errors) / errors.n_elem;
+  colvec truth_vec = truth * ones(x_trimmed.n_elem);
+  colvec errors = x_trimmed - truth_vec;
+  double MSE = dot(errors, errors) / errors.n_elem;
   
   return(MSE);  
 }
 
-double MAD(arma::colvec x, double truth){
+double MAD(colvec x, double truth){
 /*-------------------------------------------------------
 # Calculates median absolute deviation.
 #--------------------------------------------------------
 #  x        vector of estimates
 #  truth    true value of the parameter
 #-------------------------------------------------------*/
-  arma::colvec truth_vec = truth * arma::ones(x.n_rows);
-  arma::colvec abs_dev = abs(x - truth_vec);
-  return(arma::median(abs_dev)); 
+  colvec truth_vec = truth * ones(x.n_rows);
+  colvec abs_dev = abs(x - truth_vec);
+  return(median(abs_dev)); 
 }
 
 
-double coverage_prob(arma::mat conf_intervals, double truth){
+double coverage_prob(mat conf_intervals, double truth){
 /*-------------------------------------------------------
 # Calculates the coverage probability of a matrix of
 # confidence intervals.
@@ -78,17 +78,17 @@ double coverage_prob(arma::mat conf_intervals, double truth){
 #  truth            true value of the parameter for which
 #                       the CIs were constructed
 #-------------------------------------------------------*/
-  arma::colvec truth_vec = truth * arma::ones(conf_intervals.n_rows);
-  arma::colvec cover_lower = arma::conv_to<arma::colvec>
+  colvec truth_vec = truth * ones(conf_intervals.n_rows);
+  colvec cover_lower = conv_to<colvec>
                     ::from(conf_intervals.col(0) < truth_vec);
-  arma::colvec cover_upper = arma::conv_to<arma::colvec>
+  colvec cover_upper = conv_to<colvec>
                     ::from(conf_intervals.col(1) > truth_vec);
-  arma::colvec cover = cover_lower % cover_upper;
-  return(arma::sum(cover) / cover.n_elem);
+  colvec cover = cover_lower % cover_upper;
+  return(sum(cover) / cover.n_elem);
 }
 
 
-double median_width(arma::mat conf_intervals){
+double median_width(mat conf_intervals){
 /*-------------------------------------------------------
 # Calculates the median width of a matrix of confidence
 # intervals.
@@ -98,8 +98,8 @@ double median_width(arma::mat conf_intervals){
 #                     column is the lower limit, and the
 #                     2nd column is the upper limit 
 #-------------------------------------------------------*/
-  arma::colvec width = conf_intervals.col(1) - conf_intervals.col(0);
-  return(arma::median(width));
+  colvec width = conf_intervals.col(1) - conf_intervals.col(0);
+  return(median(width));
 }
 
 
