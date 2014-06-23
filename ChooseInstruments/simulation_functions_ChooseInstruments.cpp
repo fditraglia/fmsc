@@ -7,7 +7,7 @@ using namespace arma;
 
 
 
-double sample_quantile(arma::colvec x, double p){
+double sample_quantile(colvec x, double p){
 /*-------------------------------------------------------
 # Calculates a sample quantile
 #--------------------------------------------------------
@@ -26,11 +26,11 @@ double sample_quantile(arma::colvec x, double p){
   double m = 1 - p;
   int j = floor(n * p + m);
   double g = n * p + m - j;
-  arma::colvec x_sort = arma::sort(x);
+  colvec x_sort = sort(x);
   return((1 - g) * x_sort(j - 1) + g * x_sort(j));
 }
 
-double MSE_trim(arma::colvec x, double truth, double trim){
+double MSE_trim(colvec x, double truth, double trim){
 /*-------------------------------------------------------
 # Calculates trimmed mean-squared error.
 #--------------------------------------------------------
@@ -42,30 +42,30 @@ double MSE_trim(arma::colvec x, double truth, double trim){
   int k = x.n_elem;
   int tail_drop = ceil(k * trim / 2);
   
-  arma::colvec x_trimmed = arma::sort(x);
-  x_trimmed = x_trimmed(arma::span(tail_drop, k - tail_drop - 1));
+  colvec x_trimmed = sort(x);
+  x_trimmed = x_trimmed(span(tail_drop, k - tail_drop - 1));
   
-  arma::colvec truth_vec = truth * arma::ones(x_trimmed.n_elem);
-  arma::colvec errors = x_trimmed - truth_vec;
-  double MSE = arma::dot(errors, errors) / errors.n_elem;
+  colvec truth_vec = truth * ones(x_trimmed.n_elem);
+  colvec errors = x_trimmed - truth_vec;
+  double MSE = dot(errors, errors) / errors.n_elem;
   
   return(MSE);  
 }
 
-double MAD(arma::colvec x, double truth){
+double MAD(colvec x, double truth){
 /*-------------------------------------------------------
 # Calculates median absolute deviation.
 #--------------------------------------------------------
 #  x        vector of estimates
 #  truth    true value of the parameter
 #-------------------------------------------------------*/
-  arma::colvec truth_vec = truth * arma::ones(x.n_rows);
-  arma::colvec abs_dev = abs(x - truth_vec);
-  return(arma::median(abs_dev)); 
+  colvec truth_vec = truth * ones(x.n_rows);
+  colvec abs_dev = abs(x - truth_vec);
+  return(median(abs_dev)); 
 }
 
 
-double coverage_prob(arma::mat conf_intervals, double truth){
+double coverage_prob(mat conf_intervals, double truth){
 /*-------------------------------------------------------
 # Calculates the coverage probability of a matrix of
 # confidence intervals.
@@ -78,17 +78,17 @@ double coverage_prob(arma::mat conf_intervals, double truth){
 #  truth            true value of the parameter for which
 #                       the CIs were constructed
 #-------------------------------------------------------*/
-  arma::colvec truth_vec = truth * arma::ones(conf_intervals.n_rows);
-  arma::colvec cover_lower = arma::conv_to<arma::colvec>
+  colvec truth_vec = truth * ones(conf_intervals.n_rows);
+  colvec cover_lower = conv_to<colvec>
                     ::from(conf_intervals.col(0) < truth_vec);
-  arma::colvec cover_upper = arma::conv_to<arma::colvec>
+  colvec cover_upper = conv_to<colvec>
                     ::from(conf_intervals.col(1) > truth_vec);
-  arma::colvec cover = cover_lower % cover_upper;
-  return(arma::sum(cover) / cover.n_elem);
+  colvec cover = cover_lower % cover_upper;
+  return(sum(cover) / cover.n_elem);
 }
 
 
-double median_width(arma::mat conf_intervals){
+double median_width(mat conf_intervals){
 /*-------------------------------------------------------
 # Calculates the median width of a matrix of confidence
 # intervals.
@@ -98,8 +98,8 @@ double median_width(arma::mat conf_intervals){
 #                     column is the lower limit, and the
 #                     2nd column is the upper limit 
 #-------------------------------------------------------*/
-  arma::colvec width = conf_intervals.col(1) - conf_intervals.col(0);
-  return(arma::median(width));
+  colvec width = conf_intervals.col(1) - conf_intervals.col(0);
+  return(median(width));
 }
 
 
@@ -319,19 +319,20 @@ linearGMM_select::linearGMM_select(const mat& X,
 class fmsc_chooseIV {
   public:
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
-    
+    //Target parameter estimators for all candidate specs
     colvec mu_est(colvec weights){return(weights.t() * estimates);}
-    
+    //Valid model estimator of target parameter
     double mu_valid(colvec weights){
       colvec mu = mu_est(weights);
       return(mu(0));
     }
-    
+    //Full model estimator of target parameter
     double mu_full(colvec weights){
       colvec mu = mu_est(weights);
       return(mu(mu.n_elem - 1));
     }
-    
+    //Squared Asymptotic Bias estimates for target 
+    //parameter under each candidate specification
     colvec abias_sq(colvec weights){
         colvec out(z2_indicators.n_cols);
         for(int i = 0; i < K.n_elem; i++){
@@ -339,7 +340,8 @@ class fmsc_chooseIV {
         }
         return(out);
     }
-    
+    //Asymptotic Variance estimates for target parameter
+    //under each candidate specification
     colvec avar(colvec weights){
       colvec out(z2_indicators.n_cols);
       for(int i = 0; i < K.n_elem; i++){
@@ -347,9 +349,8 @@ class fmsc_chooseIV {
       }
       return(out);
     }
-    
-    colvec fmsc(colvec weights){
     //Calculate fmsc with non-negative squared bias estimator
+    colvec fmsc(colvec weights){
       colvec first_term = abias_sq(weights);
       first_term = max(first_term, zeros<colvec>(first_term.n_elem));
       colvec second_term = avar(weights);
@@ -364,7 +365,7 @@ class fmsc_chooseIV {
       return(dot(weights, b_fmsc));
     }    
 
-  private:
+//  private:
     tsls_fit valid, full;
     colvec tau;
     mat Psi, tau_outer_est, Bias_mat, estimates;
@@ -389,12 +390,13 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     n_params = x.n_cols;
     uvec valid_indicator = zeros<uvec>(n_z2);
     uvec full_indicator = ones<uvec>(n_z2);
+    uvec z1_indicator = ones<uvec>(n_z1); //Always include z1
     
     mat K_valid = n_obs * valid.C;
     mat Omega_valid = valid.Omega_robust(); //no centering needed
     mat K_full = n_obs * full.C;
     mat Omega_full = full.Omega_center();
-    Psi =  join_rows(-1 * z2.t() * K_valid / n_obs, eye(n_z2, n_z2));
+    Psi =  join_rows(-1 * z2.t() * x * K_valid / n_obs, eye(n_z2, n_z2));
     tau = z2.t() * valid.resid() / sqrt(n_obs);
     tau_outer_est = tau * tau.t() - Psi * Omega_full * Psi.t();
     Bias_mat = mat(n_z, n_z, fill::zeros);
@@ -410,35 +412,50 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
       z2_indicators = join_rows(valid_indicator, candidates);
       z2_indicators = join_rows(z2_indicators, full_indicator);
     }
-    
+
+    //Vector to store current candidate specification
+    //Used to subset *full* instrument matrix, *not* z2
+    uvec candidate(n_z);    
+    //Matrix to store estimate from each candidate
+    mat estimates_temp(n_params, n_add_cand + 2);
+    //Temporary storage for K(S) and Omega(S) 
+    //Dims vary by candidate so store in a field
     field<mat> K_temp(n_add_cand + 2);
     field<mat> Omega_temp(n_add_cand + 2);
+    //Matrix to store Xi(S) * Bias_mat * Xi(S)'
+    //as we loop over candidate moment sets
+    mat inner;
+    //Temp storage for K(S)Xi(S) * Bias_mat * Xi(S)'K(S)'
+    //and K(S)Xi(S) * Omega * K(S)'Xi(S)'. Since dims are
+    //the same for each candidate, store results in a cube
     cube sqbias_inner_temp(n_params, n_params, n_add_cand + 2);
     cube avar_inner_temp(n_params, n_params, n_add_cand + 2);
-    mat estimates_temp(n_params, n_add_cand + 2);
-    uvec z1_indicator = ones<uvec>(n_z1); //Always include z1
-    mat inner;
-    uvec candidate(n_z);
     
     //Results for valid estimator - outside loop since already fitted
     K_temp(0) = K_valid;
     Omega_temp(0) = Omega_valid;
     estimates_temp.col(0) = valid.est();
-    candidate = join_cols(z1_indicator, valid_indicator);
+    //Use find to convert vector of 0-1 indicators into
+    //vector of *positions* of the non-zeros
+    candidate = find(join_cols(z1_indicator, valid_indicator));
     inner = Bias_mat.submat(candidate, candidate);
     sqbias_inner_temp.slice(0) = K_valid * inner * K_valid.t();
     avar_inner_temp.slice(0) =  K_valid * Omega_valid * K_valid.t();
     
     //Results for any candidates besides valid and full
     for(int i = 0; i < n_add_cand; i++){
-      mat z2_candidate = z2.cols(candidates.col(i));
+      //Fit 2SLS for current candidate
+      mat z2_candidate = z2.cols(find(candidates.col(i)));
       tsls_fit candidate_fit(x, y, join_rows(z1, z2_candidate));
+      //Extract and store quantities needed for FMSC
       mat K_candidate = n_obs * candidate_fit.C;
       mat Omega_candidate = candidate_fit.Omega_center();
       K_temp(i + 1) = K_candidate;
       Omega_temp(i + 1) = Omega_candidate;
       estimates_temp.col(i + 1) = candidate_fit.est();
-      candidate = join_cols(z1_indicator, candidates.col(i));
+      //Use find to convert vector of 0-1 indicators into
+      //vector of *positions* of the non-zeros
+      candidate = find(join_cols(z1_indicator, candidates.col(i)));
       inner = Bias_mat.submat(candidate, candidate);
       sqbias_inner_temp.slice(i + 1) = K_candidate * inner * 
                                                      K_candidate.t();
@@ -450,9 +467,11 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     K_temp(n_add_cand + 1) = K_full;
     Omega_temp(n_add_cand + 1) = Omega_full;
     estimates_temp.col(n_add_cand + 1) = full.est();
-    candidate = join_cols(z1_indicator, full_indicator);
+    //Use find to convert vector of 0-1 indicators into
+    //vector of *positions* of the non-zeros
+    candidate = find(join_cols(z1_indicator, full_indicator));
     inner = Bias_mat.submat(candidate, candidate);
-    sqbias_inner_temp.slice(0) = K_full * inner * K_full.t();
+    sqbias_inner_temp.slice(n_add_cand + 1) = K_full * inner * K_full.t();
     avar_inner_temp.slice(n_add_cand + 1) = K_full * Omega_full * 
                                                      K_full.t();
     //Store results in private data members                                       
@@ -673,4 +692,21 @@ List GMMselect_test(double g, double r, int n = 500){
 //                      Named("momentsCCIC_AIC") = results.moments_CCIC_AIC(),
 //                      Named("momentsCCIC_BIC") = results.moments_CCIC_BIC(),
 //                      Named("momentsCCIC_HQ") = results.moments_CCIC_HQ());                       
+}
+
+// [[Rcpp::export]]
+List fmsc_test(mat x, colvec y, mat z1, mat z2, 
+                      umat candidates){
+  
+  fmsc_chooseIV test(x, y, z1, z2, candidates);
+  
+  return List::create(Named("tau") = test.tau,
+                      Named("Psi") = test.Psi,
+                      Named("tau.outer") = test.tau_outer_est,
+                      Named("Bias.mat") = test.Bias_mat,
+                      Named("Estimates") = test.estimates,
+                      Named("K") = test.K,
+                      Named("Omega") = test.Omega,
+                      Named("sq.bias.inner") = test.sqbias_inner,
+                      Named("avar.inner") = test.avar_inner);
 }
