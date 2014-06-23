@@ -445,7 +445,7 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     //Results for any candidates besides valid and full
     for(int i = 0; i < n_add_cand; i++){
       //Fit 2SLS for current candidate
-      mat z2_candidate = z2.cols(candidates.col(i));
+      mat z2_candidate = z2.cols(find(candidates.col(i)));
       tsls_fit candidate_fit(x, y, join_rows(z1, z2_candidate));
       //Extract and store quantities needed for FMSC
       mat K_candidate = n_obs * candidate_fit.C;
