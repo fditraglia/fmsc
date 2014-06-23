@@ -125,3 +125,34 @@ all.equal(Omega.full, bar$Omega[[4]], check.attributes = FALSE)
 #Check tau.outer
 tau.outer <- tau %*% t(tau) - Psi %*% Omega.full %*% t(Psi)
 all.equal(tau.outer, bar$tau.outer, check.attributes = FALSE)
+
+#Check Bias.mat
+Bias.mat <- matrix(0, 4, 4)
+Bias.mat[3:4, 3:4] <- tau.outer
+all.equal(Bias.mat, bar$Bias.mat)
+
+#Check sq.bias.inner
+sq.bias.valid <- K.valid %*% Bias.mat[1:2, 1:2] %*% t(K.valid)
+all.equal(sq.bias.valid, bar$sq.bias.inner[,,1])
+
+sq.bias1 <- K.1 %*% Bias.mat[1:3, 1:3] %*% t(K.1)
+all.equal(sq.bias1, bar$sq.bias.inner[,,2])
+
+sq.bias2 <- K.2 %*% Bias.mat[c(1,2,4), c(1,2,4)] %*% t(K.2)
+all.equal(sq.bias2, bar$sq.bias.inner[,,3])
+
+sq.bias.full <- K.full %*% Bias.mat %*% t(K.full)
+all.equal(sq.bias.full, bar$sq.bias.inner[,,4])
+
+#Check avar.inner
+avar.valid <- K.valid %*% Omega.valid %*% t(K.valid)
+all.equal(avar.valid, bar$avar.inner[,,1])
+
+avar1 <- K.1 %*% Omega1 %*% t(K.1)
+all.equal(avar1, bar$avar.inner[,,2])
+
+avar2 <- K.2 %*% Omega2 %*% t(K.2)
+all.equal(avar2, bar$avar.inner[,,3])
+
+avar.full <- K.full %*% Omega.full %*% t(K.full)
+all.equal(avar.full, bar$avar.inner[,,4])
