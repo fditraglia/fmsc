@@ -1101,13 +1101,13 @@ Consider a target parameter $\mu$ where $\mu = \mu(\beta)$ denotes $\mu$ evaluat
          \end{array}\right] + M \right)$$
 It follows immediately that 
   \begin{eqnarray*}
-    \mbox{ABIAS}^2(\widehat{\mu}_S) &=&  \nabla_\beta (\beta)' K_S \Xi_S  \left[\begin{array}
+    \mbox{ABIAS}^2(\widehat{\mu}_S) &=&  \nabla \mu_\beta (\beta)' K_S \Xi_S  \left[\begin{array}
       {cc}
       0 & 0 \\ 0 & \tau \tau'
-    \end{array} \right]  \Xi_S' K_S' \nabla_\beta (\beta)  \\
-    \mbox{AVAR}(\widehat{\mu}_S) &=& \nabla_\beta (\beta)' K_S \Xi_S  \Omega  \Xi_S' K_S' \nabla_\beta (\beta)
+    \end{array} \right]  \Xi_S' K_S' \nabla \mu_\beta (\beta)  \\
+    \mbox{AVAR}(\widehat{\mu}_S) &=& \nabla \mu_\beta (\beta)' K_S \Xi_S  \Omega  \Xi_S' K_S' \nabla \mu_\beta (\beta)
   \end{eqnarray*}
-We estimate $\nabla\mu_\beta(\beta)$ by $\nabla_\beta\mu(\widehat{\beta}_1)$ when necessary (sometimes the derivatives don't depend on $\beta$), and $K_S$ by $\widehat{K}_S$. Both of these will be consistent. Various estimators of $\Omega$ are possible, but the point is that we can easily get a consistent estimator under these asymptotics. The only problem is $\tau \tau'$. We can construct an asymptotically unbiased estimator by using the fact that $\widehat{\tau} \overset{d}{\rightarrow} \Psi M$. It follows that $\widehat{\tau}\widehat{\tau}' - \widehat{\Psi} \widehat{\Omega} \widehat{\Psi}$ is an asymptotically unbiased estimator of $\tau\tau'$ In particular, our estimators are:
+We estimate $\nabla\mu_\beta(\beta)$ by $\nabla \mu_\beta(\widehat{\beta}_1)$ when necessary (sometimes the derivatives don't depend on $\beta$), and $K_S$ by $\widehat{K}_S$. Both of these will be consistent. Various estimators of $\Omega$ are possible, but the point is that we can easily get a consistent estimator under these asymptotics. The only problem is $\tau \tau'$. We can construct an asymptotically unbiased estimator by using the fact that $\widehat{\tau} \overset{d}{\rightarrow} \Psi M$. It follows that $\widehat{\tau}\widehat{\tau}' - \widehat{\Psi} \widehat{\Omega} \widehat{\Psi}'$ is an asymptotically unbiased estimator of $\tau\tau'$ In particular, our estimators are:
 \begin{eqnarray*}
   \widehat{\tau} \widehat{\tau}' &=& \left[n^{-1/2} Z_2'\left(\textbf{y} - X\widehat{\beta}_1\right)\right] \left[n^{-1/2} Z_2'\left(\textbf{y} - X\widehat{\beta}_1\right) \right]'\\
     &=&n^{-1} Z_2' \hat{\epsilon}_1 \hat{\epsilon}_1' Z_2 
@@ -1267,7 +1267,7 @@ If $W_n$ converges in probability to the efficient weighting matrix, namely $\Om
       &=& \left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1}
   \end{eqnarray*}
 
-Now, the question is how to estimate $C\Omega C'$ in general.To begin, suppose we have a consistent estimator of $\Omega$, namely $\widehat{\Omega}$. Then, since $n\, \widehat{C} \overset{p}{\rightarrow} C$, it follows that $n^2 \widehat{C} \widehat{\Omega} \widehat{C}\overset{p}{\rightarrow}C\Omega C'$. This gives us an estimate of the asymptotic variance of $\sqrt{n}(\widehat{\beta} - \beta)$. To convert this to an estimate of the asymptotic variance of $\widehat{\beta}$, we need to divide through by $n$, since variance is a quadratic operator. We have
+Now, the question is how to estimate $C\Omega C'$ in general.To begin, suppose we have a consistent estimator of $\Omega$, namely $\widehat{\Omega}$. Then, since $n\, \widehat{C} \overset{p}{\rightarrow} C$, it follows that $n^2 \widehat{C} \widehat{\Omega} \widehat{C}'\overset{p}{\rightarrow}C\Omega C'$. This gives us an estimate of the asymptotic variance of $\sqrt{n}(\widehat{\beta} - \beta)$. To convert this to an estimate of the asymptotic variance of $\widehat{\beta}$, we need to divide through by $n$, since variance is a quadratic operator. We have
   $$\widehat{\mbox{AVAR}}(\widehat{\beta}) = n\widehat{C} \widehat{\Omega} \widehat{C}$$
 In the case of the efficient GMM estimator, the problem simplifies considerably since we only need to estimate $ \left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1}$ rather than the more general form of $C\Omega C'$. Again, suppose for the moment that we have a consistent estimator $\widehat{\Omega}$ of $\Omega$. Since $X'Z/n \overset{p}{\rightarrow}E[\mathbf{x}\mathbf{z}']$, it follows that
   $$\left(X'Z/n  \,\widehat{\Omega}^{-1} Z'X/n\right)^{-1} = n^2 (X'Z \widehat{\Omega}^{-1} Z'X)^{-1} \overset{p}{\rightarrow}\left( E[\mathbf{x}\mathbf{z}']\, \Omega^{-1} \,E[\mathbf{z}\mathbf{x}'] \right)^{-1}$$
@@ -1291,7 +1291,7 @@ which implies that 2SLS is the efficient linear GMM estimator. If we are not pre
   $$\widehat{\Omega} = \frac{1}{n} \sum_{i=1}^n \widehat{\epsilon}_i^{\, 2} \textbf{z}_i \textbf{z}_i' = Z'DZ/n$$
 Where $D = diag\{\widehat{\epsilon}_i^{\, 2}\}$. (For unbiased estimation, we could divide by $n-k$ rather than $n$ but this usually doesn't make much difference in practice.) One last refinement we can consider is a \emph{centered} variance matrix estimator. While instrumental variables estimation relies on the assumption that $E[\epsilon_i \mathbf{z}_i'] = 0$, there are settings in which we would like a variance matrix estimator that is robust to violations of this assumption. If we do not assume $E[\epsilon_i \mathbf{z}_i'] = 0$, 
   $$Var(\epsilon_i \textbf{z}_i') = E[\epsilon_i^2 \textbf{z}_i \textbf{z}_i'] - E[\epsilon_i \textbf{z}_i]E[\epsilon_i \textbf{z}_i']$$
-by the shortcut formula. We can continue to estimate $E[\epsilon_i^2 \textbf{z}_i \textbf{z}_i']$ by $Z'DZ/n$, or in the case of homoscedasticity by $\widehat{\sigma}_\epsilon^2 Z'Z/n$, so the question is how to estimate the second term. In the presence of over-identifying restrictions, the moment conditions used to estimate the model will not hold exactly in-sample. This is the principle behind the $J$-test. We can use the same idea here to estimate $E[\epsilon_i \textbf{z}_i]$ by the sample analogue $n^{-1} \sum_{i=1}^n \widehat{\epsilon}_i \textbf{z}_i$. This idea leades to the heteroskedasticity-consistent centered variance matrix estimator:
+by the shortcut formula. We can continue to estimate $E[\epsilon_i^2 \textbf{z}_i \textbf{z}_i']$ by $Z'DZ/n$, or in the case of homoscedasticity by $\widehat{\sigma}_\epsilon^2 Z'Z/n$, so the question is how to estimate the second term. In the presence of over-identifying restrictions, the moment conditions used to estimate the model will not hold exactly in-sample. This is the principle behind the $J$-test. We can use the same idea here to estimate $E[\epsilon_i \textbf{z}_i]$ by the sample analogue $n^{-1} \sum_{i=1}^n \widehat{\epsilon}_i \textbf{z}_i$. This idea leads to the heteroskedasticity-consistent centered variance matrix estimator:
   $$\widehat{\Omega} = \frac{1}{n} \sum_{i=1}^n \widehat{\epsilon}_i^{\, 2} \textbf{z}_i \textbf{z}_i' - \left( \frac{1}{n} \sum_{i=1}^n \widehat{\epsilon}_i \textbf{z}_i\right) \left(  \frac{1}{n} \sum_{i=1}^n \widehat{\epsilon}_i \textbf{z}_i'\right) = Z'\left[ \frac{D}{n} - \frac{\widehat{\epsilon}' \widehat{\epsilon}}{n^2} \right] Z$$
 
 \paragraph{Two-step Efficient GMM via Cholesky and QR}
