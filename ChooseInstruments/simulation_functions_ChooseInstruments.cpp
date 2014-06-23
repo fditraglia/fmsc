@@ -331,7 +331,7 @@ class fmsc_chooseIV {
       colvec mu = mu_est(weights);
       return(mu(mu.n_elem - 1));
     }
-    //Squared Aasymptotic Bias estimates for target 
+    //Squared Asymptotic Bias estimates for target 
     //parameter under each candidate specification
     colvec abias_sq(colvec weights){
         colvec out(z2_indicators.n_cols);
