@@ -705,6 +705,8 @@ List fmsc_test(mat x, colvec y, mat z1, mat z2,
                       Named("tau.outer") = test.tau_outer_est,
                       Named("Bias.mat") = test.Bias_mat,
                       Named("Estimates") = test.estimates,
+                      Named("K") = test.K,
+                      Named("Omega") = test.Omega,
                       Named("sq.bias.inner") = test.sqbias_inner,
                       Named("avar.inner") = test.avar_inner);
 }

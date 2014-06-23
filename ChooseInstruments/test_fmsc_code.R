@@ -39,11 +39,11 @@ bar <- fmsc_test(X, y, Z1, Z2, add.cand)
 #stored in the correct order
 all.equal(foo$Estimates, bar$Estimates[,c(1,4)])
 
-est1 <- tsls_est_cpp(X, y, Z1) #Valid model estimates
-est2 <- tsls_est_cpp(X, y, cbind(Z1, test.data$z2)) #Add. candidate #1
-est3 <- tsls_est_cpp(X, y, cbind(Z1, test.data$z3)) #Add. candidate #2
-est4 <- tsls_est_cpp(X, y, cbind(Z1, Z2)) #Full model estimates
-est <- cbind(est1, est2, est3, est4)
+est.valid <- tsls_est_cpp(X, y, Z1) #Valid model estimates
+est1 <- tsls_est_cpp(X, y, cbind(Z1, test.data$z2)) #Add. candidate #1
+est2 <- tsls_est_cpp(X, y, cbind(Z1, test.data$z3)) #Add. candidate #2
+est.full <- tsls_est_cpp(X, y, cbind(Z1, Z2)) #Full model estimates
+est <- cbind(est.valid, est1, est2, est.full)
 
 all.equal(est, bar$Estimates)
 
@@ -58,9 +58,38 @@ all.equal(foo$Bias.mat, bar$Bias.mat)
 #Valid and Full model avar.inner
 #and sq.bias.inner should be the same
 #regardless of whether we include
-#add.cand
+#add.cand as should K and Omega
 all.equal(foo$avar.inner, bar$avar.inner[,,c(1,4)])
 all.equal(foo$sq.bias.inner, bar$sq.bias.inner[,,c(1,4)])
+all.equal(foo$K[[1]], bar$K[[1]])
+all.equal(foo$K[[2]], bar$K[[4]])
+
 
 #Now that I knows the results are consistent between foo and bar, I need to check that the calculations are in fact correct. I'll do this by directly implementing the FMSC calculations inline
+
+#Calculation of tau
+n <- length(y)
+tau <- t(Z2) %*% (y - X %*% est.valid) / sqrt(n)
+all.equal(tau, bar$tau, check.attributes = FALSE)
+
+#Function to calculate K - Neither efficient nor particularly stable but fine for testing this simple example and identical to the formula from the paper
+K.calc <- function(Z){
+  ZZ.inv <- solve(t(Z) %*% Z)
+  P.Z <- Z %*% ZZ.inv %*% t(Z)
+  out <- n * solve(t(X) %*% P.Z %*% X) %*% t(X) %*% Z %*% ZZ.inv
+  colnames(out) <- NULL
+  rownames(out) <- NULL
+  return(out)
+}
+
+#Test K matrices
+K.valid <- K.calc(Z1)
+K.1 <- K.calc(cbind(Z1, test.data$z2))
+K.2 <- K.calc(cbind(Z1, test.data$z3))
+K.full <- K.calc(cbind(Z1, Z2))
+
+all.equal(K.valid, bar)
+
+#Calculation of Psi
+Psi <- cbind(-1 * t(Z2) %*% BLAH , diag(1, ncol(Z2)))
 
