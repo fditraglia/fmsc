@@ -396,7 +396,7 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     mat Omega_valid = valid.Omega_robust(); //no centering needed
     mat K_full = n_obs * full.C;
     mat Omega_full = full.Omega_center();
-    Psi =  join_rows(-1 * z2.t() * K_valid / n_obs, eye(n_z2, n_z2));
+    Psi =  join_rows(-1 * z2.t() * x * K_valid / n_obs, eye(n_z2, n_z2));
     tau = z2.t() * valid.resid() / sqrt(n_obs);
     tau_outer_est = tau * tau.t() - Psi * Omega_full * Psi.t();
     Bias_mat = mat(n_z, n_z, fill::zeros);
