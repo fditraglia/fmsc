@@ -63,11 +63,12 @@ all.equal(foo$avar.inner, bar$avar.inner[,,c(1,4)])
 all.equal(foo$sq.bias.inner, bar$sq.bias.inner[,,c(1,4)])
 all.equal(foo$K[[1]], bar$K[[1]])
 all.equal(foo$K[[2]], bar$K[[4]])
-
+all.equal(foo$Omega[[1]], bar$Omega[[1]])
+all.equal(foo$Omega[[2]], bar$Omega[[4]])
 
 #Now that I knows the results are consistent between foo and bar, I need to check that the calculations are in fact correct. I'll do this by directly implementing the FMSC calculations inline
 
-#Calculation of tau
+#Check tau
 n <- length(y)
 tau <- t(Z2) %*% (y - X %*% est.valid) / sqrt(n)
 all.equal(tau, bar$tau, check.attributes = FALSE)
@@ -88,8 +89,39 @@ K.1 <- K.calc(cbind(Z1, test.data$z2))
 K.2 <- K.calc(cbind(Z1, test.data$z3))
 K.full <- K.calc(cbind(Z1, Z2))
 
-all.equal(K.valid, bar)
+all.equal(K.valid, bar$K[[1]], check.attributes = FALSE)
+all.equal(K.1, bar$K[[2]], check.attributes = FALSE)
+all.equal(K.2, bar$K[[3]], check.attributes = FALSE)
+all.equal(K.full, bar$K[[4]], check.attributes = FALSE)
 
 #Calculation of Psi
-Psi <- cbind(-1 * t(Z2) %*% BLAH , diag(1, ncol(Z2)))
+Psi <- cbind(-1/n * t(Z2) %*% X %*% K.valid, diag(1, ncol(Z2)))
+all.equal(Psi, bar$Psi, check.attributes = FALSE)
 
+#Check Variance Matrix Calculations
+#No centering for valid model
+u.valid <- as.vector(y - X %*% est.valid)
+Omega.valid <- t(Z1) %*% diag(u.valid^2, nrow(Z1)) %*% Z1 / n
+all.equal(Omega.valid, bar$Omega[[1]], check.attributes = FALSE)
+
+#Centering for all others
+var.calc <- function(Z, u){
+  D <- diag(u^2, nrow(Z))
+  u.outer <- u %*% t(u)
+  out <- t(Z) %*% (D/n - u.outer / n^2) %*% Z
+  rownames(out) <- colnames(out) <- NULL
+  return(out)
+}
+
+Omega1 <- var.calc(cbind(Z1, test.data$z2), as.vector(y - X %*% est1))
+all.equal(Omega1, bar$Omega[[2]], check.attributes = FALSE)
+
+Omega2 <- var.calc(cbind(Z1, test.data$z3), as.vector(y - X %*% est2))
+all.equal(Omega2, bar$Omega[[3]], check.attributes = FALSE)
+
+Omega.full <- var.calc(cbind(Z1, Z2), as.vector(y - X %*% est.full))
+all.equal(Omega.full, bar$Omega[[4]], check.attributes = FALSE)
+
+#Check tau.outer
+tau.outer <- tau %*% t(tau) - Psi %*% Omega.full %*% t(Psi)
+all.equal(tau.outer, bar$tau.outer, check.attributes = FALSE)
