@@ -365,7 +365,7 @@ class fmsc_chooseIV {
       return(dot(weights, b_fmsc));
     }    
 
-  private:
+//  private:
     tsls_fit valid, full;
     colvec tau;
     mat Psi, tau_outer_est, Bias_mat, estimates;
@@ -692,4 +692,19 @@ List GMMselect_test(double g, double r, int n = 500){
 //                      Named("momentsCCIC_AIC") = results.moments_CCIC_AIC(),
 //                      Named("momentsCCIC_BIC") = results.moments_CCIC_BIC(),
 //                      Named("momentsCCIC_HQ") = results.moments_CCIC_HQ());                       
+}
+
+// [[Rcpp::export]]
+List fmsc_test(mat x, colvec y, mat z1, mat z2, 
+                      umat candidates){
+  
+  fmsc_chooseIV test(x, y, z1, z2, candidates);
+  
+  return List::create(Named("tau") = test.tau,
+                      Named("Psi") = test.Psi,
+                      Named("tau.outer") = test.tau_outer_est,
+                      Named("Bias.mat") = test.Bias_mat,
+                      Named("Estimates") = test.estimates,
+                      Named("sq.bias.inner") = test.sqbias_inner,
+                      Named("avar.inner") = test.avar_inner);
 }
