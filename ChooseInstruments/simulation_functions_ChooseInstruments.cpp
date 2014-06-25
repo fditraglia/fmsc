@@ -312,36 +312,36 @@ linearGMM_select::linearGMM_select(const mat& X,
 }
 
 
-//The member functions as given here only allow for target parameters
-//that are a linear function of beta. I've created a branch of this
-//project with more general code using function pointers, but it's 
-//a little unwieldy for simple examples.
+//This class only allows target parameters that are weighted averages
+//of the elements of beta. A more general solution would be to pass
+//a function pointer instead of a vector of weights.
 class fmsc_chooseIV {
   public:
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
-    //Target parameter estimators for all candidate specs
+    //Extract Target parameter estimators 
+    //  All candidate specifications:
     colvec mu(colvec weights){return(weights.t() * estimates);}
-    //Valid model estimator of target parameter
+    //  Valid model only:
     double mu_valid(colvec weights){
       colvec mu = mu_est(weights);
       return(mu(0));
     }
-    //Full model estimator of target parameter
+    //  Full model only
     double mu_full(colvec weights){
       colvec mu = mu_est(weights);
       return(mu(mu.n_elem - 1));
     }
-    //Squared Asymptotic Bias estimates for target 
-    //parameter under each candidate specification
+    //Squared Asymptotic Bias of mu estimators 
+    //  (all candidate specifications)
     colvec abias_sq(colvec weights){
-        colvec out(z2_indicators.n_cols);
-        for(int i = 0; i < K.n_elem; i++){
-          out(i) = as_scalar(weights.t() * sqbias_inner(i) * weights);
-        }
-        return(out);
+      colvec out(z2_indicators.n_cols);
+      for(int i = 0; i < K.n_elem; i++){
+        out(i) = as_scalar(weights.t() * sqbias_inner(i) * weights);
+      }
+      return(out);
     }
-    //Asymptotic Variance estimates for target parameter
-    //under each candidate specification
+    //Asymptotic Variance of mu estimators
+    //  (all candidate specifications)
     colvec avar(colvec weights){
       colvec out(z2_indicators.n_cols);
       for(int i = 0; i < K.n_elem; i++){
@@ -349,12 +349,13 @@ class fmsc_chooseIV {
       }
       return(out);
     }
-    //Calculate fmsc allowing negative squared bias estimate
+    //Plain vanilla FMSC
+    //  (allows negative squared bias estimate)
     colvec fmsc(colvec weights){
       return(abias_sq(weights) + avar(weights));
     }
-    //Calculate fmsc setting negative squared bias to zero
-    //This is the "positive-part" FMSC
+    //Positive-Part FMSC
+    //  (set negative squared bias estimates to zero)
     colvec fmsc_pos(colvec weights){
       colvec first_term = abias_sq(weights);
       first_term = max(first_term, zeros<colvec>(first_term.n_elem));
