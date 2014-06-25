@@ -326,6 +326,11 @@ class fmsc_chooseIV {
       colvec mu = mu_est(weights);
       return(mu(0));
     }
+    //Full model estimator of target parameter
+    double mu_full(colvec weights){
+      colvec mu = mu_est(weights);
+      return(mu(mu.n_elem - 1));
+    }
     //Squared Asymptotic Bias estimates for target 
     //parameter under each candidate specification
     colvec abias_sq(colvec weights){
