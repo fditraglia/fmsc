@@ -320,7 +320,7 @@ class fmsc_chooseIV {
   public:
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
     //Target parameter estimators for all candidate specs
-    colvec mu_est(colvec weights){return(weights.t() * estimates);}
+    colvec mu(colvec weights){return(weights.t() * estimates);}
     //Valid model estimator of target parameter
     double mu_valid(colvec weights){
       colvec mu = mu_est(weights);
