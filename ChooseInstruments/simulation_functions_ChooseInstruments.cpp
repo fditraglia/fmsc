@@ -323,12 +323,12 @@ class fmsc_chooseIV {
     colvec mu(colvec weights){return(weights.t() * estimates);}
     //  Valid model only:
     double mu_valid(colvec weights){
-      colvec mu = mu_est(weights);
+      colvec mu = mu(weights);
       return(mu(0));
     }
     //  Full model only
     double mu_full(colvec weights){
-      colvec mu = mu_est(weights);
+      colvec mu = mu(weights);
       return(mu(mu.n_elem - 1));
     }
     //Squared Asymptotic Bias of mu estimators 
