@@ -364,7 +364,14 @@ class fmsc_chooseIV {
       colvec b_fmsc = estimates.col(which_min);
       return(dot(weights, b_fmsc));
     }    
-
+    //positive-part FMSC-selected estimator of mu
+    double mu_fmsc_pos(colvec weights){
+      colvec criterion_values = fmsc_pos(weights);
+      uword which_min;
+      criterion_values.min(which_min);
+      colvec b_fmsc = estimates.col(which_min);
+      return(dot(weights, b_fmsc));
+    }   
 //  private:
     tsls_fit valid, full;
     colvec tau;
