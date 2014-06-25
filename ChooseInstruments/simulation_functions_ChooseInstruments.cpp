@@ -344,11 +344,13 @@ class fmsc_chooseIV {
       }
       return(out);
     }
-    //Calculate fmsc with non-negative squared bias estimator
     //Calculate fmsc allowing negative squared bias estimate
     colvec fmsc(colvec weights){
       return(abias_sq(weights) + avar(weights));
     }
+    //Calculate fmsc setting negative squared bias to zero
+    //This is the "positive-part" FMSC
+    colvec fmsc_pos(colvec weights){
       colvec first_term = abias_sq(weights);
       first_term = max(first_term, zeros<colvec>(first_term.n_elem));
       colvec second_term = avar(weights);
