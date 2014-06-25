@@ -356,7 +356,7 @@ class fmsc_chooseIV {
       colvec second_term = avar(weights);
       return(first_term + second_term);
     }
-    
+    //FMSC-selected estimator of mu
     double mu_fmsc(colvec weights){
       colvec criterion_values = fmsc(weights);
       uword which_min;
