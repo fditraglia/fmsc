@@ -312,51 +312,57 @@ linearGMM_select::linearGMM_select(const mat& X,
 }
 
 
-//The member functions as given here only allow for target parameters
-//that are a linear function of beta. I've created a branch of this
-//project with more general code using function pointers, but it's 
-//a little unwieldy for simple examples.
+//This class only allows target parameters that are weighted averages
+//of the elements of beta. A more general solution would be to pass
+//a function pointer instead of a vector of weights.
 class fmsc_chooseIV {
   public:
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
-    //Target parameter estimators for all candidate specs
-    colvec mu_est(colvec weights){return(weights.t() * estimates);}
-    //Valid model estimator of target parameter
+    //Extract Target parameter estimators 
+    //  All candidate specifications:
+    colvec mu(colvec weights){return(estimates.t() * weights);}
+    //  Valid model only:
     double mu_valid(colvec weights){
-      colvec mu = mu_est(weights);
-      return(mu(0));
+      colvec mu_estimates = mu(weights);
+      return(mu_estimates(0));
     }
-    //Full model estimator of target parameter
+    //  Full model only
     double mu_full(colvec weights){
-      colvec mu = mu_est(weights);
-      return(mu(mu.n_elem - 1));
+      colvec mu_estimates = mu(weights);
+      return(mu_estimates(mu_estimates.n_elem - 1));
     }
-    //Squared Asymptotic Bias estimates for target 
-    //parameter under each candidate specification
+    //Squared Asymptotic Bias of mu estimators 
+    //  (all candidate specifications)
     colvec abias_sq(colvec weights){
-        colvec out(z2_indicators.n_cols);
-        for(int i = 0; i < K.n_elem; i++){
-          out(i) = as_scalar(weights.t() * sqbias_inner(i) * weights);
-        }
-        return(out);
-    }
-    //Asymptotic Variance estimates for target parameter
-    //under each candidate specification
-    colvec avar(colvec weights){
       colvec out(z2_indicators.n_cols);
       for(int i = 0; i < K.n_elem; i++){
-        out(i) = as_scalar(weights.t() * avar_inner(i) * weights);
+        out(i) = as_scalar(weights.t() * sqbias_inner.slice(i) * weights);
       }
       return(out);
     }
-    //Calculate fmsc with non-negative squared bias estimator
+    //Asymptotic Variance of mu estimators
+    //  (all candidate specifications)
+    colvec avar(colvec weights){
+      colvec out(z2_indicators.n_cols);
+      for(int i = 0; i < K.n_elem; i++){
+        out(i) = as_scalar(weights.t() * avar_inner.slice(i) * weights);
+      }
+      return(out);
+    }
+    //Plain vanilla FMSC
+    //  (allows negative squared bias estimate)
     colvec fmsc(colvec weights){
+      return(abias_sq(weights) + avar(weights));
+    }
+    //Positive-Part FMSC
+    //  (set negative squared bias estimates to zero)
+    colvec fmsc_pos(colvec weights){
       colvec first_term = abias_sq(weights);
       first_term = max(first_term, zeros<colvec>(first_term.n_elem));
       colvec second_term = avar(weights);
       return(first_term + second_term);
     }
-    
+    //FMSC-selected estimator of mu
     double mu_fmsc(colvec weights){
       colvec criterion_values = fmsc(weights);
       uword which_min;
@@ -364,7 +370,14 @@ class fmsc_chooseIV {
       colvec b_fmsc = estimates.col(which_min);
       return(dot(weights, b_fmsc));
     }    
-
+    //positive-part FMSC-selected estimator of mu
+    double mu_fmsc_pos(colvec weights){
+      colvec criterion_values = fmsc_pos(weights);
+      uword which_min;
+      criterion_values.min(which_min);
+      colvec b_fmsc = estimates.col(which_min);
+      return(dot(weights, b_fmsc));
+    }   
 //  private:
     tsls_fit valid, full;
     colvec tau;
@@ -700,6 +713,11 @@ List fmsc_test(mat x, colvec y, mat z1, mat z2,
   
   fmsc_chooseIV test(x, y, z1, z2, candidates);
   
+  //The target parameter is the OLS slope coefficient
+  colvec w(2);
+  w << 0 << endr
+    << 1 << endr;
+  
   return List::create(Named("tau") = test.tau,
                       Named("Psi") = test.Psi,
                       Named("tau.outer") = test.tau_outer_est,
@@ -708,5 +726,14 @@ List fmsc_test(mat x, colvec y, mat z1, mat z2,
                       Named("K") = test.K,
                       Named("Omega") = test.Omega,
                       Named("sq.bias.inner") = test.sqbias_inner,
-                      Named("avar.inner") = test.avar_inner);
+                      Named("avar.inner") = test.avar_inner,
+                      Named("mu") = test.mu(w),
+                      Named("mu.valid") = test.mu_valid(w),
+                      Named("mu.full") = test.mu_full(w),
+                      Named("abias.sq") = test.abias_sq(w),
+                      Named("avar") = test.avar(w),
+                      Named("fmsc") = test.fmsc(w),
+                      Named("fmsc.pos") = test.fmsc_pos(w),
+                      Named("mu.fmsc") = test.mu_fmsc(w),
+                      Named("mu.fmsc.pos") = test.mu_fmsc_pos(w));
 }

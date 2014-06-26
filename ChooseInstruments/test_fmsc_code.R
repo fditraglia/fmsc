@@ -156,3 +156,47 @@ all.equal(avar2, bar$avar.inner[,,3])
 
 avar.full <- K.full %*% Omega.full %*% t(K.full)
 all.equal(avar.full, bar$avar.inner[,,4])
+
+#The target parameter is the OLS slope
+w <- as.matrix(c(0,1))
+
+#Check mu
+all.equal(foo$mu, bar$mu[c(1,4),,drop = FALSE])
+all.equal(t(cbind(est.valid, est1, est2, est.full)) %*% w, bar$mu)
+
+#Check mu.valid and mu.full
+foo$mu.valid == bar$mu.valid
+foo$mu.full == bar$mu.full
+all.equal(drop(t(est.valid) %*% w), foo$mu.valid)
+all.equal(drop(t(est.full) %*% w), foo$mu.full)
+all.equal(drop(t(est.valid) %*% w), bar$mu.valid)
+all.equal(drop(t(est.full) %*% w), bar$mu.full)
+
+#Check avar
+all.equal(bar$avar[c(1,4),,drop = FALSE], foo$avar)
+avar <- rbind(t(w) %*% avar.valid %*% w, t(w) %*% avar1 %*% w, t(w) %*% avar2 %*% w, t(w) %*% avar.full %*% w)
+all.equal(avar, bar$avar)
+
+#Check abias.sq
+all.equal(bar$abias.sq[c(1,4),,drop = FALSE], foo$abias.sq)
+abias.sq <- rbind(t(w) %*% sq.bias.valid %*% w, t(w) %*% sq.bias1 %*% w, t(w) %*% sq.bias2 %*% w, t(w) %*% sq.bias.full %*% w)
+all.equal(abias.sq, bar$abias.sq)
+
+#Check plain-vanilla FMSC
+fmsc <- abias.sq + avar
+all.equal(bar$fmsc[c(1,4),,drop = FALSE], foo$fmsc)
+all.equal(fmsc, bar$fmsc)
+
+#Check positive-part FMSC
+fmsc.pos <- pmax(abias.sq, 0) + avar
+all.equal(bar$fmsc.pos[c(1,4),,drop = FALSE], foo$fmsc.pos)
+all.equal(bar$fmsc.pos, fmsc.pos)
+
+#Test mu.fmsc
+mu <- as.vector(t(est) %*% w)
+mu.fmsc <- mu[which.min(as.vector(fmsc))]
+all.equal(mu.fmsc, bar$mu.fmsc)
+
+#Test mu.fmsc.pos
+mu.fmsc.pos <- mu[which.min(as.vector(fmsc.pos))]
+all.equal(mu.fmsc.pos, bar$mu.fmsc.pos)
