@@ -713,6 +713,11 @@ List fmsc_test(mat x, colvec y, mat z1, mat z2,
   
   fmsc_chooseIV test(x, y, z1, z2, candidates);
   
+  //The target parameter is the OLS slope coefficient
+  colvec w(2);
+  w << 0 << endr
+    << 1 << endr;
+  
   return List::create(Named("tau") = test.tau,
                       Named("Psi") = test.Psi,
                       Named("tau.outer") = test.tau_outer_est,
@@ -721,5 +726,14 @@ List fmsc_test(mat x, colvec y, mat z1, mat z2,
                       Named("K") = test.K,
                       Named("Omega") = test.Omega,
                       Named("sq.bias.inner") = test.sqbias_inner,
-                      Named("avar.inner") = test.avar_inner);
+                      Named("avar.inner") = test.avar_inner,
+                      Named("mu") = test.mu(w),
+                      Named("mu.valid") = test.mu_valid(w),
+                      Named("mu.full") = test.mu_full(w),
+                      Named("abias.sq") = test.abias_sq(w),
+                      Named("avar") = test.avar(w));//,
+                      //Named("fmsc") = test.fmsc(w),
+                      //Named("fmsc.pos") = test.fmsc_pos(w),
+                      //Named("mu.fmsc") = test.mu_fmsc(w),
+                      //Named("mu.fmsc.pos") = test.mu_fmsc_pos(w));
 }
