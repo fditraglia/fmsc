@@ -158,7 +158,7 @@ avar.full <- K.full %*% Omega.full %*% t(K.full)
 all.equal(avar.full, bar$avar.inner[,,4])
 
 #The target parameter is the OLS slope
-w <- c(0,1)
+w <- as.matrix(c(0,1))
 
 #Check mu
 all.equal(foo$mu, bar$mu[c(1,4),,drop = FALSE])
@@ -173,6 +173,9 @@ all.equal(drop(t(est.valid) %*% w), bar$mu.valid)
 all.equal(drop(t(est.full) %*% w), bar$mu.full)
 
 #Check avar
-
+all.equal(bar$avar[c(1,4),,drop = FALSE], foo$avar)
+all.equal(rbind(t(w) %*% avar.valid %*% w, t(w) %*% avar1 %*% w, t(w) %*% avar2 %*% w, t(w) %*% avar.full %*% w), bar$avar)
 
 #Check abias.sq
+all.equal(bar$abias.sq[c(1,4),,drop = FALSE], foo$abias.sq)
+all.equal(rbind(t(w) %*% sq.bias.valid %*% w, t(w) %*% sq.bias1 %*% w, t(w) %*% sq.bias2 %*% w, t(w) %*% sq.bias.full %*% w), bar$abias.sq)
