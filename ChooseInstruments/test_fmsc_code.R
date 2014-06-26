@@ -156,3 +156,23 @@ all.equal(avar2, bar$avar.inner[,,3])
 
 avar.full <- K.full %*% Omega.full %*% t(K.full)
 all.equal(avar.full, bar$avar.inner[,,4])
+
+#The target parameter is the OLS slope
+w <- c(0,1)
+
+#Check mu
+all.equal(foo$mu, bar$mu[c(1,4),,drop = FALSE])
+all.equal(t(cbind(est.valid, est1, est2, est.full)) %*% w, bar$mu)
+
+#Check mu.valid and mu.full
+foo$mu.valid == bar$mu.valid
+foo$mu.full == bar$mu.full
+all.equal(drop(t(est.valid) %*% w), foo$mu.valid)
+all.equal(drop(t(est.full) %*% w), foo$mu.full)
+all.equal(drop(t(est.valid) %*% w), bar$mu.valid)
+all.equal(drop(t(est.full) %*% w), bar$mu.full)
+
+#Check avar
+
+
+#Check abias.sq

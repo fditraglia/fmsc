@@ -320,7 +320,7 @@ class fmsc_chooseIV {
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
     //Extract Target parameter estimators 
     //  All candidate specifications:
-    colvec mu(colvec weights){return(weights.t() * estimates);}
+    colvec mu(colvec weights){return(estimates.t() * weights);}
     //  Valid model only:
     double mu_valid(colvec weights){
       colvec mu_estimates = mu(weights);
