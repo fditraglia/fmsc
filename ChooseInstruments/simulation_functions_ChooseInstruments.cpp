@@ -336,7 +336,7 @@ class fmsc_chooseIV {
     colvec abias_sq(colvec weights){
       colvec out(z2_indicators.n_cols);
       for(int i = 0; i < K.n_elem; i++){
-        out(i) = as_scalar(weights.t() * sqbias_inner(i) * weights);
+        out(i) = as_scalar(weights.t() * sqbias_inner.slice(i) * weights);
       }
       return(out);
     }
@@ -345,7 +345,7 @@ class fmsc_chooseIV {
     colvec avar(colvec weights){
       colvec out(z2_indicators.n_cols);
       for(int i = 0; i < K.n_elem; i++){
-        out(i) = as_scalar(weights.t() * avar_inner(i) * weights);
+        out(i) = as_scalar(weights.t() * avar_inner.slice(i) * weights);
       }
       return(out);
     }
