@@ -731,9 +731,9 @@ List fmsc_test(mat x, colvec y, mat z1, mat z2,
                       Named("mu.valid") = test.mu_valid(w),
                       Named("mu.full") = test.mu_full(w),
                       Named("abias.sq") = test.abias_sq(w),
-                      Named("avar") = test.avar(w));//,
-                      //Named("fmsc") = test.fmsc(w),
-                      //Named("fmsc.pos") = test.fmsc_pos(w),
-                      //Named("mu.fmsc") = test.mu_fmsc(w),
-                      //Named("mu.fmsc.pos") = test.mu_fmsc_pos(w));
+                      Named("avar") = test.avar(w),
+                      Named("fmsc") = test.fmsc(w),
+                      Named("fmsc.pos") = test.fmsc_pos(w),
+                      Named("mu.fmsc") = test.mu_fmsc(w),
+                      Named("mu.fmsc.pos") = test.mu_fmsc_pos(w));
 }
