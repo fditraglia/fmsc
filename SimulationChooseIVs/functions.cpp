@@ -533,22 +533,70 @@ dgp::dgp(double b, vec p, double g, mat V, mat Q, int n){
   y = b * x + u_e_z2.col(0);
 }
 
+
+
 // [[Rcpp::export]]
-List dgp_cpp(double g, double r, int n = 500){
-  //This is the simulation setup from the original 
-  //version of the paper (Section 3.4)
-  double b = 1;
-  colvec p = 0.1 * ones(3);
-  mat Q = eye(3, 3);
-  mat V(3,3); 
-  V << 1 << 0.5 - g * r << r << endr
-    << 0.5  - g * r << 1 << 0 << endr
-    << r << 0 << 1 << endr;
+NumericVector mse_compare_cpp(double b, double g, vec p, mat V, mat Q,
+              int n, int n_reps){
+//Function to run n_reps of the simulation study and calculate the MSE
+//of various estimators
   
-    dgp sims(b, p, g, V, Q, n);
+//  colvec ols(n_reps);
+//  colvec tsls(n_reps);
+//  colvec fmsc(n_reps);
+//  colvec DHW90(n_reps);
+//  colvec DHW95(n_reps);
+//  colvec AVG(n_reps);
+
+  for(int i = 0; i < n_reps; i++){
+    
+    dgp sim_data(b, p, g, V, Q, n);
+//    fmsc_OLS_IV sim_results(sim_data.x, sim_data.y, sim_data.z);
+//
+//    ols(i) = sim_results.b_ols();
+//    tsls(i) = sim_results.b_tsls();
+//    fmsc(i) = sim_results.b_fmsc();
+//    DHW90(i) = sim_results.b_DHW(0.1);
+//    DHW95(i) = sim_results.b_DHW(0.05);
+//    AVG(i) = sim_results.b_AVG();
+    
+  }
   
-  return List::create(Named("x") = sims.x,
-                      Named("y") = sims.y,
-                      Named("z1") = sims.z1, 
-                      Named("z2") = sims.z2);
+//  double const trim_frac = 0; //Change this if you want trimmed MSE
+//  
+//  double MSE_ols = MSE_trim(ols, b, trim_frac);
+//  double MSE_tsls = MSE_trim(tsls, b, trim_frac);
+//  double MSE_fmsc = MSE_trim(fmsc, b, trim_frac);
+//  double MSE_DHW90 = MSE_trim(DHW90, b, trim_frac);
+//  double MSE_DHW95 = MSE_trim(DHW95, b, trim_frac);
+//  double MSE_star = MSE_trim(AVG, b, trim_frac);
+//  
+//  //Create and return vector of results
+//  NumericVector out = NumericVector::create(MSE_ols, MSE_tsls, MSE_fmsc, 
+//                        MSE_star, MSE_DHW90, MSE_DHW95);
+//  out.names() = CharacterVector::create("OLS", "TSLS", "FMSC", 
+//                        "AVG", "DHW90", "DHW95");
+  return(out);  
+
+  
 }
+
+//// [[Rcpp::export]]
+//List dgp_cpp(double g, double r, int n = 500){
+//  //This is the simulation setup from the original 
+//  //version of the paper (Section 3.4)
+//  double b = 1;
+//  colvec p = 0.1 * ones(3);
+//  mat Q = eye(3, 3);
+//  mat V(3,3); 
+//  V << 1 << 0.5 - g * r << r << endr
+//    << 0.5  - g * r << 1 << 0 << endr
+//    << r << 0 << 1 << endr;
+//  
+//    dgp sims(b, p, g, V, Q, n);
+//  
+//  return List::create(Named("x") = sims.x,
+//                      Named("y") = sims.y,
+//                      Named("z1") = sims.z1, 
+//                      Named("z2") = sims.z2);
+//}
