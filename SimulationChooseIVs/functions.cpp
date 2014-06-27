@@ -536,50 +536,92 @@ dgp::dgp(double b, vec p, double g, mat V, mat Q, int n){
 
 
 // [[Rcpp::export]]
-NumericVector mse_compare_cpp(double b, double g, vec p, mat V, mat Q,
-              int n, int n_reps){
+NumericVector mse_compare_cpp(int n_reps){
+  int n = 500;
+  double g = 0.5;
+  double r = 0.1;
+  double b = 0.5;
+  colvec p = 0.1 * ones(3);
+  mat Q = eye(3, 3);
+  mat V(3,3); 
+  V << 1 << 0.5 - g * r << r << endr
+    << 0.5  - g * r << 1 << 0 << endr
+    << r << 0 << 1 << endr;
+
+//NumericVector mse_compare_cpp(double b, double g, vec p, mat V, mat Q,
+//              int n, int n_reps){
 //Function to run n_reps of the simulation study and calculate the MSE
 //of various estimators
   
-//  colvec ols(n_reps);
-//  colvec tsls(n_reps);
-//  colvec fmsc(n_reps);
-//  colvec DHW90(n_reps);
-//  colvec DHW95(n_reps);
-//  colvec AVG(n_reps);
+  colvec valid(n_reps);
+  colvec full(n_reps);
+  colvec fmsc(n_reps);
+  colvec fmsc_pos(n_reps);
+//  colvec j90(n_reps);
+//  colvec j95(n_reps);
+  colvec aic(n_reps);
+  colvec bic(n_reps);
+  colvec hq(n_reps);
+//  colvec aic_combine(n_reps);
+//  colvec bic_combine(n_reps);
+//  colvec hq_combine(n_reps);
+  
+  //Candidate moment sets to pass to linear_GMM_select
+  //   (not needed for fmsc_chooseIV since this defaults
+  //    to valid and full models only)
+  umat valid_full(Q.n_rows + 1, 2, fill::ones);
+  valid_full(Q.n_rows, 0) = 0;
+  
+  //Weights for FMSC
+  //  (Coef. on single endog. regressor is the target param.)
+  colvec w(1, 1, fill::ones);
 
   for(int i = 0; i < n_reps; i++){
     
-    dgp sim_data(b, p, g, V, Q, n);
-//    fmsc_OLS_IV sim_results(sim_data.x, sim_data.y, sim_data.z);
-//
-//    ols(i) = sim_results.b_ols();
-//    tsls(i) = sim_results.b_tsls();
-//    fmsc(i) = sim_results.b_fmsc();
-//    DHW90(i) = sim_results.b_DHW(0.1);
-//    DHW95(i) = sim_results.b_DHW(0.05);
-//    AVG(i) = sim_results.b_AVG();
+    dgp sim(b, p, g, V, Q, n);
+    fmsc_chooseIV fmsc_results(sim.x, sim.y, sim.z1, sim.z2);
+    linearGMM_select gmm_msc_results(sim.x, sim.y, 
+                          join_rows(sim.z1, sim.z2), valid_full);
+    
+    valid(i) = fmsc_results.mu_valid(w);
+    full(i) = fmsc_results.mu_full(w);
+    fmsc(i) = fmsc_results.mu_fmsc(w);
+    fmsc_pos(i) = fmsc_results.mu_fmsc_pos(w);
+    aic(i) = as_scalar(gmm_msc_results.est_AIC());
+    bic(i) = as_scalar(gmm_msc_results.est_BIC());
+    hq(i) = as_scalar(gmm_msc_results.est_HQ());
     
   }
   
-//  double const trim_frac = 0; //Change this if you want trimmed MSE
-//  
-//  double MSE_ols = MSE_trim(ols, b, trim_frac);
-//  double MSE_tsls = MSE_trim(tsls, b, trim_frac);
-//  double MSE_fmsc = MSE_trim(fmsc, b, trim_frac);
-//  double MSE_DHW90 = MSE_trim(DHW90, b, trim_frac);
-//  double MSE_DHW95 = MSE_trim(DHW95, b, trim_frac);
-//  double MSE_star = MSE_trim(AVG, b, trim_frac);
-//  
-//  //Create and return vector of results
-//  NumericVector out = NumericVector::create(MSE_ols, MSE_tsls, MSE_fmsc, 
-//                        MSE_star, MSE_DHW90, MSE_DHW95);
-//  out.names() = CharacterVector::create("OLS", "TSLS", "FMSC", 
-//                        "AVG", "DHW90", "DHW95");
-  return(out);  
+    double const trim_frac = 0; //Change this if you want trimmed MSE
+    
+    double MSE_valid = MSE_trim(valid, b, trim_frac);
+    double MSE_full = MSE_trim(full, b, trim_frac);
+    double MSE_fmsc = MSE_trim(fmsc, b, trim_frac);
+    double MSE_fmsc_pos = MSE_trim(fmsc_pos, b, trim_frac);
+    double MSE_aic = MSE_trim(aic, b, trim_frac);
+    double MSE_bic = MSE_trim(bic, b, trim_frac);
+    double MSE_hq = MSE_trim(hq, b, trim_frac);
+        
+  //Create and return vector of results
+    NumericVector out = NumericVector::create(MSE_valid, 
+                                              MSE_full,
+                                              MSE_fmsc,
+                                              MSE_fmsc_pos,
+                                              MSE_aic,
+                                              MSE_bic, 
+                                              MSE_hq);
+    out.names() = CharacterVector::create("Valid", 
+                                          "Full",
+                                          "FMSC",
+                                          "posFMSC",
+                                          "AIC",
+                                          "BIC", 
+                                          "HQ");
+  return(out);
 
-  
 }
+
 
 //// [[Rcpp::export]]
 //List dgp_cpp(double g, double r, int n = 500){
