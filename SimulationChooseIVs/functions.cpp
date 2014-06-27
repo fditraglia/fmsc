@@ -536,20 +536,8 @@ dgp::dgp(double b, vec p, double g, mat V, mat Q, int n){
 
 
 // [[Rcpp::export]]
-NumericVector mse_compare_cpp(int n_reps){
-  int n = 500;
-  double g = 0.5;
-  double r = 0.1;
-  double b = 0.5;
-  colvec p = 0.1 * ones(3);
-  mat Q = eye(3, 3);
-  mat V(3,3); 
-  V << 1 << 0.5 - g * r << r << endr
-    << 0.5  - g * r << 1 << 0 << endr
-    << r << 0 << 1 << endr;
-
-//NumericVector mse_compare_cpp(double b, double g, vec p, mat V, mat Q,
-//              int n, int n_reps){
+NumericVector mse_compare_cpp(double b, double g, vec p, mat V, mat Q,
+                              int n, int n_reps){
 //Function to run n_reps of the simulation study and calculate the MSE
 //of various estimators
   
@@ -680,23 +668,21 @@ NumericVector mse_compare_cpp(int n_reps){
   return(out);
 }
 
-
-//// [[Rcpp::export]]
-//List dgp_cpp(double g, double r, int n = 500){
-//  //This is the simulation setup from the original 
-//  //version of the paper (Section 3.4)
-//  double b = 1;
-//  colvec p = 0.1 * ones(3);
-//  mat Q = eye(3, 3);
-//  mat V(3,3); 
-//  V << 1 << 0.5 - g * r << r << endr
-//    << 0.5  - g * r << 1 << 0 << endr
-//    << r << 0 << 1 << endr;
-//  
-//    dgp sims(b, p, g, V, Q, n);
-//  
-//  return List::create(Named("x") = sims.x,
-//                      Named("y") = sims.y,
-//                      Named("z1") = sims.z1, 
-//                      Named("z2") = sims.z2);
-//}
+// [[Rcpp::export]]
+NumericVector mse_compare_default_cpp(double g, double r, int n,
+                                      int n_reps){
+//This is simply a wrapper to mse_compare_cpp that runs the simulation
+//with default values for the "uninteresting parameters."
+//The setup is described in Section 3.4 of the
+//original version of the paper.
+  double b = 0.5;
+  colvec p = 0.1 * ones(3);
+  mat Q = eye(3, 3);
+  mat V(3,3); 
+  V << 1 << 0.5 - g * r << r << endr
+    << 0.5  - g * r << 1 << 0 << endr
+    << r << 0 << 1 << endr;
+    
+  NumericVector out = mse_compare_cpp(b, g, p, V, Q, n, n_reps);
+  return(out);  
+}
