@@ -399,7 +399,7 @@ class fmsc_chooseIV {
 //Class constructor - initialization list ensures tsls_fit constructor 
 //is called before entering body of the present constuctor 
 fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1, 
-           const mat& z2, umat candidates = zeros(1,1)): 
+           const mat& z2, umat candidates = zeros<umat>(1,1)): 
                 valid(x, y, z1), full(x, y, join_rows(z1, z2)){
     //If specified, each column of candidates is an indicator vector 
     //that corresponds to the columns of z2 used in estimation for that 
