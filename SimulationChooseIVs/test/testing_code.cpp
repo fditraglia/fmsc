@@ -1,6 +1,56 @@
 //To use this code, you need to paste it at the bottom of the C++
 //file contained in the parent directory.
 
+//Testing code - Make some of the member functions available to R
+// [[Rcpp::export]]
+colvec tsls_est_cpp(mat X, colvec y, mat Z) {
+   tsls_fit results(X, y, Z);
+   return(results.est());
+}
+
+// [[Rcpp::export]]
+colvec tsls_SE_textbook_cpp(mat X, colvec y, mat Z) {
+   tsls_fit results(X, y, Z);
+   return(results.SE_textbook());
+}
+
+
+// [[Rcpp::export]]
+colvec tsls_SE_robust_cpp(mat X, colvec y, mat Z) {
+   tsls_fit results(X, y, Z);
+   return(results.SE_robust());
+}
+
+// [[Rcpp::export]]
+colvec tsls_SE_center_cpp(mat X, colvec y, mat Z) {
+   tsls_fit results(X, y, Z);
+   return(results.SE_center());
+}
+
+
+// [[Rcpp::export]]
+colvec test_dgp(double g, double r, int n){
+  colvec p = ones(3) / 10;
+  double b = 1;
+  mat Q = eye(3, 3);
+  mat V(3,3); 
+  V << 1 << 0.5 - g * r << r << endr
+    << 0.5  - g * r << 1 << 0 << endr
+    << r << 0 << 1 << endr;
+  dgp sims(b, p, g, V, Q, n);
+  tsls_fit valid(sims.x, sims.y, sims.z1);
+  return(valid.est());
+}
+
+
+// [[Rcpp::export]]
+List cancor_cpp(mat X, mat Y){
+  cancor results(X, Y);
+  return List::create(Named("cor") = results.cor,
+                      Named("xcoef") = results.xcoef,
+                      Named("ycoef") = results.ycoef);
+}
+
 // [[Rcpp::export]]
 colvec CCIC_test(double g, double r, int n = 500){
   
