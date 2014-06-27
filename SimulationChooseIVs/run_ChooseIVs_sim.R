@@ -9,7 +9,7 @@ set.seed(1928)
 
 #Calculate RMSE results for the simulation
 #and store them in rmse_results.Rdata
-#source("mse_calculations.R")
+source("mse_calculations.R")
 
 #Open rmse_results.Rdata
 #plot the results 
