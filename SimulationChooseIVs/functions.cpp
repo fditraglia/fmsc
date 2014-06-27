@@ -557,8 +557,8 @@ NumericVector mse_compare_cpp(int n_reps){
   colvec full(n_reps);
   colvec fmsc(n_reps);
   colvec fmsc_pos(n_reps);
-//  colvec j90(n_reps);
-//  colvec j95(n_reps);
+  colvec j90(n_reps);
+  colvec j95(n_reps);
   colvec aic(n_reps);
   colvec bic(n_reps);
   colvec hq(n_reps);
@@ -591,6 +591,21 @@ NumericVector mse_compare_cpp(int n_reps){
     bic(i) = as_scalar(gmm_msc_results.est_BIC());
     hq(i) = as_scalar(gmm_msc_results.est_HQ());
     
+    //Downward J-test Estimators
+    //  95%
+    if(gmm_msc_results.pJtest(1) < 0.05){
+      j95(i) = valid(i);
+    }else{
+      j95(i) = full(i);
+    }
+    //  90%
+    if(gmm_msc_results.pJtest(1) < 0.1){
+      j90(i) = valid(i);
+    }else{
+      j90(i) = full(i);
+    }
+    
+    
   }
   
     double const trim_frac = 0; //Change this if you want trimmed MSE
@@ -599,6 +614,8 @@ NumericVector mse_compare_cpp(int n_reps){
     double MSE_full = MSE_trim(full, b, trim_frac);
     double MSE_fmsc = MSE_trim(fmsc, b, trim_frac);
     double MSE_fmsc_pos = MSE_trim(fmsc_pos, b, trim_frac);
+    double MSE_j90 = MSE_trim(j90, b, trim_frac);
+    double MSE_j95 = MSE_trim(j95, b, trim_frac);
     double MSE_aic = MSE_trim(aic, b, trim_frac);
     double MSE_bic = MSE_trim(bic, b, trim_frac);
     double MSE_hq = MSE_trim(hq, b, trim_frac);
@@ -608,6 +625,8 @@ NumericVector mse_compare_cpp(int n_reps){
                                               MSE_full,
                                               MSE_fmsc,
                                               MSE_fmsc_pos,
+                                              MSE_j90,
+                                              MSE_j95,
                                               MSE_aic,
                                               MSE_bic, 
                                               MSE_hq);
@@ -615,6 +634,8 @@ NumericVector mse_compare_cpp(int n_reps){
                                           "Full",
                                           "FMSC",
                                           "posFMSC",
+                                          "J90",
+                                          "J95",
                                           "AIC",
                                           "BIC", 
                                           "HQ");
