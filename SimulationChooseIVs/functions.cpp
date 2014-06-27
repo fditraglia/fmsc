@@ -562,9 +562,15 @@ NumericVector mse_compare_cpp(int n_reps){
   colvec aic(n_reps);
   colvec bic(n_reps);
   colvec hq(n_reps);
-//  colvec aic_combine(n_reps);
-//  colvec bic_combine(n_reps);
-//  colvec hq_combine(n_reps);
+  colvec aic_combine(n_reps);
+  colvec bic_combine(n_reps);
+  colvec hq_combine(n_reps);
+  
+  //Don't bother storing CCIC for each replication
+  //  (Only need temporary storage to calculate combined estimators)
+  double ccic_aic;
+  double ccic_bic;
+  double ccic_hq;
   
   //Candidate moment sets to pass to linear_GMM_select
   //   (not needed for fmsc_chooseIV since this defaults
@@ -605,6 +611,29 @@ NumericVector mse_compare_cpp(int n_reps){
       j90(i) = full(i);
     }
     
+    //Combination CCIC and GMM-MSC Estimators
+    //  (Select valid unless *both* GMM-MSC and CCIC choose full)
+    ccic_aic = as_scalar(gmm_msc_results.est_CCIC_AIC());
+    ccic_bic = as_scalar(gmm_msc_results.est_CCIC_BIC());
+    ccic_hq = as_scalar(gmm_msc_results.est_CCIC_HQ());
+    //  CCIC-GMM-MSC-AIC
+    if(ccic_aic == aic(i) == full(i)){
+      aic_combine(i) = full(i);
+    }else{
+      aic_combine(i) = valid(i);
+    }
+    //  CCIC-GMM-MSC-BIC
+    if(ccic_bic == bic(i) == full(i)){
+      bic_combine(i) = full(i);
+    }else{
+      bic_combine(i) = valid(i);
+    }
+    //  CCIC-GMM-MSC-HQ
+    if(ccic_hq == hq(i) == full(i)){
+      hq_combine(i) = full(i);
+    }else{
+      hq_combine(i) = valid(i);
+    }  
     
   }
   
@@ -619,6 +648,9 @@ NumericVector mse_compare_cpp(int n_reps){
     double MSE_aic = MSE_trim(aic, b, trim_frac);
     double MSE_bic = MSE_trim(bic, b, trim_frac);
     double MSE_hq = MSE_trim(hq, b, trim_frac);
+    double MSE_aic_combine = MSE_trim(aic_combine, b, trim_frac);
+    double MSE_bic_combine = MSE_trim(bic_combine, b, trim_frac);
+    double MSE_hq_combine = MSE_trim(hq_combine, b, trim_frac);
         
   //Create and return vector of results
     NumericVector out = NumericVector::create(MSE_valid, 
@@ -629,7 +661,10 @@ NumericVector mse_compare_cpp(int n_reps){
                                               MSE_j95,
                                               MSE_aic,
                                               MSE_bic, 
-                                              MSE_hq);
+                                              MSE_hq,
+                                              MSE_aic_combine,
+                                              MSE_bic_combine,
+                                              MSE_hq_combine);
     out.names() = CharacterVector::create("Valid", 
                                           "Full",
                                           "FMSC",
@@ -638,9 +673,11 @@ NumericVector mse_compare_cpp(int n_reps){
                                           "J95",
                                           "AIC",
                                           "BIC", 
-                                          "HQ");
+                                          "HQ",
+                                          "combAIC",
+                                          "combBIC",
+                                          "combHQ");
   return(out);
-
 }
 
 
