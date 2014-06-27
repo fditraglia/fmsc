@@ -521,7 +521,7 @@ dgp::dgp(double b, vec p, double g, mat V, mat Q, int n){
 //b = scalar coef for single endog regressor
 //p = vector of first-stage coeffs for exog instruments
 //g = scalar first-stage coeff for potentially endog instrument w
-//V = variance matrix for (u, epsilon, w)'
+//V = variance matrix (3x3) for (u, epsilon, w)'
 //Q = variance matrix for exog instruments
 //n = sample size
   RNGScope scope;
