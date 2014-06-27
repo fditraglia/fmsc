@@ -1,3 +1,12 @@
+/*-------------------------------------------------------
+# Filename:        functions.cpp
+# Author:          Frank DiTraglia
+# First Version:   2014-02-12
+# Last Updated:    2014-06-27
+#--------------------------------------------------------
+# C++ functions for choosing IVs simulation experiment.
+#-------------------------------------------------------*/
+
 // [[Rcpp::depends(RcppArmadillo)]]
 
 #include <RcppArmadillo.h>
