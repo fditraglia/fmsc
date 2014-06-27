@@ -1,3 +1,12 @@
+/*-------------------------------------------------------
+# Filename:        functions.cpp
+# Author:          Frank DiTraglia
+# First Version:   2014-02-12
+# Last Updated:    2014-06-27
+#--------------------------------------------------------
+# C++ functions for choosing IVs simulation experiment.
+#-------------------------------------------------------*/
+
 // [[Rcpp::depends(RcppArmadillo)]]
 
 #include <RcppArmadillo.h>
@@ -390,7 +399,7 @@ class fmsc_chooseIV {
 //Class constructor - initialization list ensures tsls_fit constructor 
 //is called before entering body of the present constuctor 
 fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1, 
-           const mat& z2, umat candidates = zeros(1,1)): 
+           const mat& z2, umat candidates = zeros<umat>(1,1)): 
                 valid(x, y, z1), full(x, y, join_rows(z1, z2)){
     //If specified, each column of candidates is an indicator vector 
     //that corresponds to the columns of z2 used in estimation for that 
@@ -512,7 +521,7 @@ dgp::dgp(double b, vec p, double g, mat V, mat Q, int n){
 //b = scalar coef for single endog regressor
 //p = vector of first-stage coeffs for exog instruments
 //g = scalar first-stage coeff for potentially endog instrument w
-//V = variance matrix for (u, epsilon, w)'
+//V = variance matrix (3x3) for (u, epsilon, w)'
 //Q = variance matrix for exog instruments
 //n = sample size
   RNGScope scope;
@@ -526,214 +535,154 @@ dgp::dgp(double b, vec p, double g, mat V, mat Q, int n){
 
 
 
-
-//Testing code - Make some of the member functions available to R
 // [[Rcpp::export]]
-colvec tsls_est_cpp(mat X, colvec y, mat Z) {
-   tsls_fit results(X, y, Z);
-   return(results.est());
-}
-
-// [[Rcpp::export]]
-colvec tsls_SE_textbook_cpp(mat X, colvec y, mat Z) {
-   tsls_fit results(X, y, Z);
-   return(results.SE_textbook());
-}
-
-
-// [[Rcpp::export]]
-colvec tsls_SE_robust_cpp(mat X, colvec y, mat Z) {
-   tsls_fit results(X, y, Z);
-   return(results.SE_robust());
-}
-
-// [[Rcpp::export]]
-colvec tsls_SE_center_cpp(mat X, colvec y, mat Z) {
-   tsls_fit results(X, y, Z);
-   return(results.SE_center());
-}
-
-
-// [[Rcpp::export]]
-colvec test_dgp(double g, double r, int n){
-  colvec p = ones(3) / 10;
-  double b = 1;
-  mat Q = eye(3, 3);
-  mat V(3,3); 
-  V << 1 << 0.5 - g * r << r << endr
-    << 0.5  - g * r << 1 << 0 << endr
-    << r << 0 << 1 << endr;
-  dgp sims(b, p, g, V, Q, n);
-  tsls_fit valid(sims.x, sims.y, sims.z1);
-  return(valid.est());
-}
-
-
-// [[Rcpp::export]]
-List cancor_cpp(mat X, mat Y){
-  cancor results(X, Y);
-  return List::create(Named("cor") = results.cor,
-                      Named("xcoef") = results.xcoef,
-                      Named("ycoef") = results.ycoef);
-}
-
-
-
-// [[Rcpp::export]]
-List dgp_cpp(double g, double r, int n = 500){
-  //This is the simulation setup from the original 
-  //version of the paper (Section 3.4)
-  double b = 1;
-  colvec p = 0.1 * ones(3);
-  mat Q = eye(3, 3);
-  mat V(3,3); 
-  V << 1 << 0.5 - g * r << r << endr
-    << 0.5  - g * r << 1 << 0 << endr
-    << r << 0 << 1 << endr;
+NumericVector mse_compare_cpp(double b, double g, vec p, mat V, mat Q,
+                              int n, int n_reps){
+//Function to run n_reps of the simulation study and calculate the MSE
+//of various estimators
   
-    dgp sims(b, p, g, V, Q, n);
+  colvec valid(n_reps);
+  colvec full(n_reps);
+  colvec fmsc(n_reps);
+  colvec fmsc_pos(n_reps);
+  colvec j90(n_reps);
+  colvec j95(n_reps);
+  colvec aic(n_reps);
+  colvec bic(n_reps);
+  colvec hq(n_reps);
+  colvec aic_combine(n_reps);
+  colvec bic_combine(n_reps);
+  colvec hq_combine(n_reps);
   
-  return List::create(Named("x") = sims.x,
-                      Named("y") = sims.y,
-                      Named("z1") = sims.z1, 
-                      Named("z2") = sims.z2);
-}
+  //Don't bother storing CCIC for each replication
+  //  (Only need temporary storage to calculate combined estimators)
+  double ccic_aic;
+  double ccic_bic;
+  double ccic_hq;
+  
+  //Candidate moment sets to pass to linear_GMM_select
+  //   (not needed for fmsc_chooseIV since this defaults
+  //    to valid and full models only)
+  umat valid_full(Q.n_rows + 1, 2, fill::ones);
+  valid_full(Q.n_rows, 0) = 0;
+  
+  //Weights for FMSC
+  //  (Coef. on single endog. regressor is the target param.)
+  colvec w(1, 1, fill::ones);
 
-
-// [[Rcpp::export]]
-colvec CCIC_test(double g, double r, int n = 500){
+  for(int i = 0; i < n_reps; i++){
+    
+    dgp sim(b, p, g, V, Q, n);
+    fmsc_chooseIV fmsc_results(sim.x, sim.y, sim.z1, sim.z2);
+    linearGMM_select gmm_msc_results(sim.x, sim.y, 
+                          join_rows(sim.z1, sim.z2), valid_full);
+    
+    valid(i) = fmsc_results.mu_valid(w);
+    full(i) = fmsc_results.mu_full(w);
+    fmsc(i) = fmsc_results.mu_fmsc(w);
+    fmsc_pos(i) = fmsc_results.mu_fmsc_pos(w);
+    aic(i) = as_scalar(gmm_msc_results.est_AIC());
+    bic(i) = as_scalar(gmm_msc_results.est_BIC());
+    hq(i) = as_scalar(gmm_msc_results.est_HQ());
+    
+    //Downward J-test Estimators
+    //  95%
+    if(gmm_msc_results.pJtest(1) < 0.05){
+      j95(i) = valid(i);
+    }else{
+      j95(i) = full(i);
+    }
+    //  90%
+    if(gmm_msc_results.pJtest(1) < 0.1){
+      j90(i) = valid(i);
+    }else{
+      j90(i) = full(i);
+    }
+    
+    //Combination CCIC and GMM-MSC Estimators
+    //  (Select valid unless *both* GMM-MSC and CCIC choose full)
+    ccic_aic = as_scalar(gmm_msc_results.est_CCIC_AIC());
+    ccic_bic = as_scalar(gmm_msc_results.est_CCIC_BIC());
+    ccic_hq = as_scalar(gmm_msc_results.est_CCIC_HQ());
+    //  CCIC-GMM-MSC-AIC
+    if(ccic_aic == aic(i) == full(i)){
+      aic_combine(i) = full(i);
+    }else{
+      aic_combine(i) = valid(i);
+    }
+    //  CCIC-GMM-MSC-BIC
+    if(ccic_bic == bic(i) == full(i)){
+      bic_combine(i) = full(i);
+    }else{
+      bic_combine(i) = valid(i);
+    }
+    //  CCIC-GMM-MSC-HQ
+    if(ccic_hq == hq(i) == full(i)){
+      hq_combine(i) = full(i);
+    }else{
+      hq_combine(i) = valid(i);
+    }  
+    
+  }
   
-  //This is the simulation setup from the original 
-  //version of the paper (Section 3.4)
-  double b = 1;
-  colvec p = 0.1 * ones(3);
-  mat Q = eye(3, 3);
-  mat V(3,3); 
-  V << 1 << 0.5 - g * r << r << endr
-    << 0.5  - g * r << 1 << 0 << endr
-    << r << 0 << 1 << endr;
-  
-  dgp sims(b, p, g, V, Q, n);
-  
-  CCIC HallPeixe(sims.x, join_rows(sims.z1, sims.z2));
-  colvec out(3);
-  out(0) = HallPeixe.BIC();
-  out(1) = HallPeixe.AIC();
-  out(2) = HallPeixe.HQ();
+    double const trim_frac = 0; //Change this if you want trimmed MSE
+    
+    double MSE_valid = MSE_trim(valid, b, trim_frac);
+    double MSE_full = MSE_trim(full, b, trim_frac);
+    double MSE_fmsc = MSE_trim(fmsc, b, trim_frac);
+    double MSE_fmsc_pos = MSE_trim(fmsc_pos, b, trim_frac);
+    double MSE_j90 = MSE_trim(j90, b, trim_frac);
+    double MSE_j95 = MSE_trim(j95, b, trim_frac);
+    double MSE_aic = MSE_trim(aic, b, trim_frac);
+    double MSE_bic = MSE_trim(bic, b, trim_frac);
+    double MSE_hq = MSE_trim(hq, b, trim_frac);
+    double MSE_aic_combine = MSE_trim(aic_combine, b, trim_frac);
+    double MSE_bic_combine = MSE_trim(bic_combine, b, trim_frac);
+    double MSE_hq_combine = MSE_trim(hq_combine, b, trim_frac);
+        
+  //Create and return vector of results
+    NumericVector out = NumericVector::create(MSE_valid, 
+                                              MSE_full,
+                                              MSE_fmsc,
+                                              MSE_fmsc_pos,
+                                              MSE_j90,
+                                              MSE_j95,
+                                              MSE_aic,
+                                              MSE_bic, 
+                                              MSE_hq,
+                                              MSE_aic_combine,
+                                              MSE_bic_combine,
+                                              MSE_hq_combine);
+    out.names() = CharacterVector::create("Valid", 
+                                          "Full",
+                                          "FMSC",
+                                          "posFMSC",
+                                          "J90",
+                                          "J95",
+                                          "AIC",
+                                          "BIC", 
+                                          "HQ",
+                                          "combAIC",
+                                          "combBIC",
+                                          "combHQ");
   return(out);
 }
 
 // [[Rcpp::export]]
-colvec Andrews_test(double g, double r, int n = 500){
-  
-  //This is the simulation setup from the original 
-  //version of the paper (Section 3.4)
-  double b = 1;
+NumericVector mse_compare_default_cpp(double g, double r, int n,
+                                      int n_reps){
+//This is simply a wrapper to mse_compare_cpp that runs the simulation
+//with default values for the "uninteresting parameters."
+//The setup is described in Section 3.4 of the
+//original version of the paper.
+  double b = 0.5;
   colvec p = 0.1 * ones(3);
   mat Q = eye(3, 3);
   mat V(3,3); 
   V << 1 << 0.5 - g * r << r << endr
     << 0.5  - g * r << 1 << 0 << endr
     << r << 0 << 1 << endr;
-  
-  dgp sims(b, p, g, V, Q, n);
-  
-  linearGMM_msc Andrews(sims.x, sims.y,
-                        join_rows(sims.z1, sims.z2));
-  colvec out(7);
-  out(0) = as_scalar(Andrews.est_1step());
-  out(1) = as_scalar(Andrews.est_2step());
-  out(2) = Andrews.Jstat();
-  out(3) = Andrews.pJtest();
-  out(4) = Andrews.GMM_AIC();
-  out(5) = Andrews.GMM_BIC();
-  out(6) = Andrews.GMM_HQ();
-  return(out);
-}
-
-
-// [[Rcpp::export]]
-List GMMselect_test(double g, double r, int n = 500){
-  
-  //This is the simulation setup from the original 
-  //version of the paper (Section 3.4)
-  double b = 1;
-  colvec p = 0.1 * ones(3);
-  mat Q = eye(3, 3);
-  mat V(3,3); 
-  V << 1 << 0.5 - g * r << r << endr
-    << 0.5  - g * r << 1 << 0 << endr
-    << r << 0 << 1 << endr;
-  
-  //Only two candidate specifications
-  umat valid_full(4,2);
-  valid_full << 1 << 1 << endr
-             << 1 << 1 << endr
-             << 1 << 1 << endr
-             << 0 << 1 << endr;
-  
-  dgp sims(b, p, g, V, Q, n);
-  
-  linearGMM_select results(sims.x, sims.y,
-                           join_rows(sims.z1, sims.z2),
-                           valid_full);
-//  colvec testy = conv_to<colvec>::from(results.moments_BIC());          
-  return List::create(
-//                      Named("x") = sims.x,
-//                      Named("y") = sims.y,
-//                      Named("z1") = sims.z1,
-//                      Named("z2") = sims.z2,
-                      Named("J") = results.J,
-                      Named("pJtest") = results.pJtest,
-                      Named("AIC") = results.AIC,
-                      Named("BIC") = results.BIC,
-                      Named("HQ") = results.HQ,
-//                      Named("AIC_CCIC") = results.AIC_CCIC,
-//                      Named("BIC_CCIC") = results.BIC_CCIC,
-//                      Named("HQ_CCIC") = results.HQ_CCIC,
-                      Named("onestep") = results.estimates_1step,
-//                      Named("twostep") = results.estimates_2step,
-                      Named("estAIC") = results.est_AIC(),
-                      Named("estBIC") = results.est_BIC(), 
-                      Named("estHQ") = results.est_HQ(),
-//                      Named("estCCIC_AIC") = results.est_CCIC_AIC(),
-//                      Named("estCCIC_HQ") = results.est_CCIC_HQ(),
-//                      Named("estCCIC_BIC") = results.est_CCIC_BIC(),
-                      Named("momentsAIC") = results.moments_AIC(),
-                      Named("momentsBIC") = results.moments_BIC(),
-                      Named("momentsHQ") = results.moments_HQ());
-//                      Named("momentsCCIC_AIC") = results.moments_CCIC_AIC(),
-//                      Named("momentsCCIC_BIC") = results.moments_CCIC_BIC(),
-//                      Named("momentsCCIC_HQ") = results.moments_CCIC_HQ());                       
-}
-
-// [[Rcpp::export]]
-List fmsc_test(mat x, colvec y, mat z1, mat z2, 
-                      umat candidates){
-  
-  fmsc_chooseIV test(x, y, z1, z2, candidates);
-  
-  //The target parameter is the OLS slope coefficient
-  colvec w(2);
-  w << 0 << endr
-    << 1 << endr;
-  
-  return List::create(Named("tau") = test.tau,
-                      Named("Psi") = test.Psi,
-                      Named("tau.outer") = test.tau_outer_est,
-                      Named("Bias.mat") = test.Bias_mat,
-                      Named("Estimates") = test.estimates,
-                      Named("K") = test.K,
-                      Named("Omega") = test.Omega,
-                      Named("sq.bias.inner") = test.sqbias_inner,
-                      Named("avar.inner") = test.avar_inner,
-                      Named("mu") = test.mu(w),
-                      Named("mu.valid") = test.mu_valid(w),
-                      Named("mu.full") = test.mu_full(w),
-                      Named("abias.sq") = test.abias_sq(w),
-                      Named("avar") = test.avar(w),
-                      Named("fmsc") = test.fmsc(w),
-                      Named("fmsc.pos") = test.fmsc_pos(w),
-                      Named("mu.fmsc") = test.mu_fmsc(w),
-                      Named("mu.fmsc.pos") = test.mu_fmsc_pos(w));
+    
+  NumericVector out = mse_compare_cpp(b, g, p, V, Q, n, n_reps);
+  return(out);  
 }
