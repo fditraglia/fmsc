@@ -29,6 +29,27 @@ colvec tsls_SE_center_cpp(mat X, colvec y, mat Z) {
 
 
 // [[Rcpp::export]]
+List dgp_cpp(double g, double r, int n = 500){
+  //This is the simulation setup from the original 
+  //version of the paper (Section 3.4)
+  double b = 1;
+  colvec p = 0.1 * ones(3);
+  mat Q = eye(3, 3);
+  mat V(3,3); 
+  V << 1 << 0.5 - g * r << r << endr
+    << 0.5  - g * r << 1 << 0 << endr
+    << r << 0 << 1 << endr;
+  
+    dgp sims(b, p, g, V, Q, n);
+  
+  return List::create(Named("x") = sims.x,
+                      Named("y") = sims.y,
+                      Named("z1") = sims.z1, 
+                      Named("z2") = sims.z2);
+}
+
+
+// [[Rcpp::export]]
 colvec test_dgp(double g, double r, int n){
   colvec p = ones(3) / 10;
   double b = 1;
