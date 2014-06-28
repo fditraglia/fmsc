@@ -715,3 +715,22 @@ NumericVector mse_compare_default_cpp(double g, double r, int n,
   NumericVector out = mse_compare_cpp(b, g, p, V, Q, n, n_reps);
   return(out);  
 }
+
+// [[Rcpp::export]]
+List dgp_test(double g, double r, int n){
+  double b = 0.5;
+  colvec p = 0.1 * ones(3);
+  mat Q = eye(3, 3);
+  mat V(3,3); 
+  V << 1 << 0.5 - g * r << r << endr
+    << 0.5  - g * r << 1 << 0 << endr
+    << r << 0 << 1 << endr;
+  
+  dgp sim(b, p, g, V, Q, n);
+  colvec e = sim.e_v_w.col(0);
+  colvec v = sim.e_v_w.col(1);
+  List out = List::create(sim.x, sim.y, sim.z, sim.w, e, v, V, Q, p);
+  out.names() = CharacterVector::create("x", "y", "z", "w", "e", "v", "V", "Q", "p");
+  return(out);
+  
+}
