@@ -539,27 +539,27 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
 class dgp {
   public:
     dgp(double, vec, double, mat, mat, int);
-    colvec x, y, z2;
-    mat z1;
-  private: 
-    int n_z1;
-    mat u_e_z2;
+    colvec x, y, w;
+    mat z;
+  //private: 
+    int n_z;
+    mat e_v_w;
 };
 //Class constructor
 dgp::dgp(double b, vec p, double g, mat V, mat Q, int n){
 //b = scalar coef for single endog regressor
 //p = vector of first-stage coeffs for exog instruments
 //g = scalar first-stage coeff for potentially endog instrument w
-//V = variance matrix (3x3) for (u, epsilon, w)'
+//V = variance matrix (3x3) for (epsilon, v, w)'
 //Q = variance matrix for exog instruments
 //n = sample size
   RNGScope scope;
-  n_z1 = Q.n_cols;
-  z1 = trans(chol(Q) * reshape(colvec(rnorm(n * n_z1)), n_z1, n));
-  u_e_z2 = trans(chol(V) * reshape(colvec(rnorm(3 * n)), 3, n));
-  z2 = u_e_z2.col(2);
-  x = z1 * p + g * z2 + u_e_z2.col(1);
-  y = b * x + u_e_z2.col(0);
+  n_z = Q.n_cols;
+  z = mvrnorm(n, zeros(Q.n_cols), Q);
+  e_v_w = mvrnorm(n, zeros(3), V);
+  w = e_v_w.col(2);
+  x = z * p + g * w + e_v_w.col(1);
+  y = b * x + e_v_w.col(0);
 }
 
 
@@ -602,9 +602,9 @@ NumericVector mse_compare_cpp(double b, double g, vec p, mat V, mat Q,
   for(int i = 0; i < n_reps; i++){
     
     dgp sim(b, p, g, V, Q, n);
-    fmsc_chooseIV fmsc_results(sim.x, sim.y, sim.z1, sim.z2);
+    fmsc_chooseIV fmsc_results(sim.x, sim.y, sim.z, sim.w);
     linearGMM_select gmm_msc_results(sim.x, sim.y, 
-                          join_rows(sim.z1, sim.z2), valid_full);
+                          join_rows(sim.z, sim.w), valid_full);
     
     valid(i) = fmsc_results.mu_valid(w);
     full(i) = fmsc_results.mu_full(w);
