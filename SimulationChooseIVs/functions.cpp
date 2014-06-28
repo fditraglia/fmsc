@@ -13,8 +13,37 @@
 using namespace Rcpp;
 using namespace arma;
 
-
-
+mat mvrnorm(int n, vec mu, mat Sigma){
+/*-------------------------------------------------------
+# Generate draws from a multivariate normal distribution
+#--------------------------------------------------------
+#  n        number of samples
+#  mu       mean vector
+#  Sigma    covariance matrix
+#--------------------------------------------------------
+# Details:
+#           This is essentially a stripped-down version
+#           of the mvrnorm function from the MASS library
+#           in R. Through the magic of Rcpp we're 
+#           transforming the *same* standard normal draws
+#           as the R version. However, since Armadillo
+#           follows a different convention from R in its
+#           definition of the eign-decomposition, the 
+#           output of this function will *not* be the
+#           same as that of its R counterpart. Since we
+#           access R's function for generating normal
+#           draws, we can set the seed from R.
+#-------------------------------------------------------*/
+  RNGScope scope;
+  int p = Sigma.n_cols;
+  mat X = reshape(vec(rnorm(p * n)), p, n);
+  vec eigval;
+  mat eigvec;
+  eig_sym(eigval, eigvec, Sigma);
+  X = eigvec * diagmat(sqrt(eigval)) * X;
+  X.each_col() += mu;
+  return(X.t());
+}
 
 double sample_quantile(colvec x, double p){
 /*-------------------------------------------------------
@@ -510,27 +539,27 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
 class dgp {
   public:
     dgp(double, vec, double, mat, mat, int);
-    colvec x, y, z2;
-    mat z1;
-  private: 
-    int n_z1;
-    mat u_e_z2;
+    colvec x, y, w;
+    mat z;
+  //private: 
+    int n_z;
+    mat e_v_w;
 };
 //Class constructor
 dgp::dgp(double b, vec p, double g, mat V, mat Q, int n){
 //b = scalar coef for single endog regressor
 //p = vector of first-stage coeffs for exog instruments
 //g = scalar first-stage coeff for potentially endog instrument w
-//V = variance matrix (3x3) for (u, epsilon, w)'
+//V = variance matrix (3x3) for (epsilon, v, w)'
 //Q = variance matrix for exog instruments
 //n = sample size
   RNGScope scope;
-  n_z1 = Q.n_cols;
-  z1 = trans(chol(Q) * reshape(colvec(rnorm(n * n_z1)), n_z1, n));
-  u_e_z2 = trans(chol(V) * reshape(colvec(rnorm(3 * n)), 3, n));
-  z2 = u_e_z2.col(2);
-  x = z1 * p + g * z2 + u_e_z2.col(1);
-  y = b * x + u_e_z2.col(0);
+  n_z = Q.n_cols;
+  z = mvrnorm(n, zeros(Q.n_cols), Q);
+  e_v_w = mvrnorm(n, zeros(3), V);
+  w = e_v_w.col(2);
+  x = z * p + g * w + e_v_w.col(1);
+  y = b * x + e_v_w.col(0);
 }
 
 
@@ -568,19 +597,19 @@ NumericVector mse_compare_cpp(double b, double g, vec p, mat V, mat Q,
   
   //Weights for FMSC
   //  (Coef. on single endog. regressor is the target param.)
-  colvec w(1, 1, fill::ones);
+  colvec w_one(1, 1, fill::ones);
 
   for(int i = 0; i < n_reps; i++){
     
     dgp sim(b, p, g, V, Q, n);
-    fmsc_chooseIV fmsc_results(sim.x, sim.y, sim.z1, sim.z2);
+    fmsc_chooseIV fmsc_results(sim.x, sim.y, sim.z, sim.w);
     linearGMM_select gmm_msc_results(sim.x, sim.y, 
-                          join_rows(sim.z1, sim.z2), valid_full);
+                          join_rows(sim.z, sim.w), valid_full);
     
-    valid(i) = fmsc_results.mu_valid(w);
-    full(i) = fmsc_results.mu_full(w);
-    fmsc(i) = fmsc_results.mu_fmsc(w);
-    fmsc_pos(i) = fmsc_results.mu_fmsc_pos(w);
+    valid(i) = fmsc_results.mu_valid(w_one);
+    full(i) = fmsc_results.mu_full(w_one);
+    fmsc(i) = fmsc_results.mu_fmsc(w_one);
+    fmsc_pos(i) = fmsc_results.mu_fmsc_pos(w_one);
     aic(i) = as_scalar(gmm_msc_results.est_AIC());
     bic(i) = as_scalar(gmm_msc_results.est_BIC());
     hq(i) = as_scalar(gmm_msc_results.est_HQ());
