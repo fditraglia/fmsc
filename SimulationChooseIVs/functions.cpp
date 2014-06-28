@@ -597,7 +597,7 @@ NumericVector mse_compare_cpp(double b, double g, vec p, mat V, mat Q,
   
   //Weights for FMSC
   //  (Coef. on single endog. regressor is the target param.)
-  colvec w(1, 1, fill::ones);
+  colvec w_one(1, 1, fill::ones);
 
   for(int i = 0; i < n_reps; i++){
     
@@ -606,10 +606,10 @@ NumericVector mse_compare_cpp(double b, double g, vec p, mat V, mat Q,
     linearGMM_select gmm_msc_results(sim.x, sim.y, 
                           join_rows(sim.z, sim.w), valid_full);
     
-    valid(i) = fmsc_results.mu_valid(w);
-    full(i) = fmsc_results.mu_full(w);
-    fmsc(i) = fmsc_results.mu_fmsc(w);
-    fmsc_pos(i) = fmsc_results.mu_fmsc_pos(w);
+    valid(i) = fmsc_results.mu_valid(w_one);
+    full(i) = fmsc_results.mu_full(w_one);
+    fmsc(i) = fmsc_results.mu_fmsc(w_one);
+    fmsc_pos(i) = fmsc_results.mu_fmsc_pos(w_one);
     aic(i) = as_scalar(gmm_msc_results.est_AIC());
     bic(i) = as_scalar(gmm_msc_results.est_BIC());
     hq(i) = as_scalar(gmm_msc_results.est_HQ());
