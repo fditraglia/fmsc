@@ -1,10 +1,10 @@
-n.reps <- 5000
-
+#Define simulation parameters
+n.reps <- 100
 rho.grid <- seq(from = 0, to = 0.5, by = 0.1)
 pi.grid <- seq(from = 0.1, to = 0.6, by = 0.1)
-sample.size.grid <- c(250, 500, 1000)
+n.grid <- c(250, 500, 1000)
 
-params <- expand.grid(n = sample.size.grid, p = pi.grid, r = rho.grid)
+params <- expand.grid(n = n.grid, p = pi.grid, r = rho.grid)
 
 CI.results <- mapply(CIs_compare_default_cpp, 
                      p = params$p, r = params$r, n = params$n, 
@@ -18,6 +18,6 @@ results <- list(coverage.prob = coverage.prob, median.width = median.width)
 save(results, file = "./Results/CI_results.Rdata")
 
 #Clean up
-rm(n.reps, rho.grid, pi.grid, sample.size.grid)
+rm(n.reps, rho.grid, pi.grid, n.grid)
 rm(params, CI.results, coverage.prob, median.width)
 rm(results)
