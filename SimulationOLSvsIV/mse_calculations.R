@@ -1,50 +1,39 @@
-n.reps <- 20000
-rho.fine <- seq(0, 0.6, 0.01)
-pi.fine <- seq(0.1, 0.6, 0.01)
+n.reps <- 100
+rho.fine <- seq(0, 0.6, 0.1)
+pi.fine <- seq(0.1, 0.6, 0.1)
 rho.coarse <- c(0, 0.25, 0.5)
 pi.coarse <- c(0.1, 0.3, 0.5)
+n.grid<- c(50, 100, 250)
 
-sample.size.grid <- c(50, 100, 250)
+params.pi.coarse <- expand.grid(n.grid, pi.coarse, rho.fine)
+params.rho.coarse <- expand.grid(n.grid, pi.fine, rho.coarse)
+names(params.rho.coarse) <- names(params.pi.coarse) <- c("n", "p", "r")
 
-#Run the simulation over all values in rho.fine for a fixed value of pi and sample size
-fix.pi <- function(pi.value, sample.size){
-  out <- lapply(rho.fine, function(r) mse_compare_default_cpp(pi.value, r, sample.size, n.reps))
-  out <- do.call(rbind, out) #Convert list to matrix
-  nRows <- length(rho.fine)
-  cbind(n = rep(sample.size, nRows), p = rep(pi.value, nRows), r = rho.fine, out)
-}
+results.rho.coarse <- mapply(mse_compare_default_cpp, 
+                                p = params.rho.coarse$p,
+                                r = params.rho.coarse$r,
+                                n = params.rho.coarse$n,
+                                n_reps = n.reps)
+results.rho.coarse <- cbind(params.rho.coarse, 
+                            t(results.rho.coarse))
 
-#Run the simulation over all values in pi.fine for a fixed value of rho and sample size
-fix.rho <- function(rho.value, sample.size){
-  out <- lapply(pi.fine, function(p) mse_compare_default_cpp(p, rho.value, sample.size, n.reps))
-  out <- do.call(rbind, out) #Convert list to matrix
-  nRows <- length(pi.fine)
-  cbind(n = rep(sample.size, nRows), p = pi.fine, r = rep(rho.value, nRows), out)
-}
-
-#Run fix.pi over all values in pi.coarse for a fixed sample size
-panels.coarse.pi <- function(sample.size){
-  lapply(pi.coarse, function(p) fix.pi(p, sample.size))
-} 
-
-#Run fix.rho over all values in rho.coarse for a fixed sample size
-panels.coarse.rho <- function(sample.size){
-  lapply(rho.coarse, function(r) fix.rho(r, sample.size))
-}
-
-results.coarse.rho <- lapply(sample.size.grid, panels.coarse.rho)
-results.coarse.pi <- lapply(sample.size.grid, panels.coarse.pi)
+results.pi.coarse <- mapply(mse_compare_default_cpp, 
+                               p = params.pi.coarse$p,
+                               r = params.pi.coarse$r,
+                               n = params.pi.coarse$n,
+                               n_reps = n.reps)
+results.pi.coarse <- cbind(params.pi.coarse, 
+                           t(results.pi.coarse))
 
 #Output results as R object
-results <- list(coarse.rho = results.coarse.rho,
-                coarse.pi = results.coarse.pi)
-save(results, file = "./mse_results.Rdata")
+results <- list(coarse.rho = results.rho.coarse,
+                coarse.pi = results.pi.coarse)
+save(results, file = "./Results/mse_results.Rdata")
 
 #Clean up
-rm(n.reps, sample.size.grid)
+rm(n.reps, n.grid)
 rm(pi.fine, pi.coarse)
 rm(rho.fine, rho.coarse)
-rm(fix.pi, fix.rho)
-rm(panels.coarse.pi, panels.coarse.rho)
-rm(results.coarse.pi, results.coarse.rho)
+rm(params.pi.coarse, params.rho.coarse)
+rm(results.rho.coarse, results.pi.coarse)
 rm(results)
