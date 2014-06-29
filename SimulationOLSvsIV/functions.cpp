@@ -2,7 +2,7 @@
 # Filename:        functions.cpp
 # Author:          Frank DiTraglia
 # First Version:   2014-01-22
-# Last Updated:    2014-06-17
+# Last Updated:    2014-06-29
 #--------------------------------------------------------
 # C++ functions for OLS vs. IV simulation experiment.
 #-------------------------------------------------------*/
@@ -13,6 +13,38 @@
 using namespace Rcpp;
 using namespace arma;
 
+
+mat mvrnorm(int n, vec mu, mat Sigma){
+/*-------------------------------------------------------
+# Generate draws from a multivariate normal distribution
+#--------------------------------------------------------
+#  n        number of samples
+#  mu       mean vector
+#  Sigma    covariance matrix
+#--------------------------------------------------------
+# Details:
+#           This is essentially a stripped-down version
+#           of the mvrnorm function from the MASS library
+#           in R. Through the magic of Rcpp we're 
+#           transforming the *same* standard normal draws
+#           as the R version. However, since Armadillo
+#           follows a different convention from R in its
+#           definition of the eign-decomposition, the 
+#           output of this function will *not* be the
+#           same as that of its R counterpart. Since we
+#           access R's function for generating normal
+#           draws, we can set the seed from R.
+#-------------------------------------------------------*/
+  RNGScope scope;
+  int p = Sigma.n_cols;
+  mat X = reshape(vec(rnorm(p * n)), p, n);
+  vec eigval;
+  mat eigvec;
+  eig_sym(eigval, eigvec, Sigma);
+  X = eigvec * diagmat(sqrt(eigval)) * X;
+  X.each_col() += mu;
+  return(X.t());
+}
 
 double sample_quantile(colvec x, double p){
 /*-------------------------------------------------------
