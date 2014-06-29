@@ -6,9 +6,10 @@ n.grid <- c(250, 500, 1000)
 
 params <- expand.grid(n = n.grid, p = pi.grid, r = rho.grid)
 
-CI.results <- mapply(CIs_compare_default_cpp, 
+CI.results <- mcmapply(CIs_compare_default_cpp, 
                      p = params$p, r = params$r, n = params$n, 
-                     n_reps = n.reps, SIMPLIFY = FALSE)
+                     n_reps = n.reps, SIMPLIFY = FALSE,
+                     mc.cores = nCores)
 
 coverage.prob <- cbind(params, t(sapply(CI.results, function(x) x$coverage.prob)))
 median.width <- cbind(params, t(sapply(CI.results, function(x) x$median.width)))

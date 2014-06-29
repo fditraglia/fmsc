@@ -5,23 +5,28 @@ rho.coarse <- c(0, 0.25, 0.5)
 pi.coarse <- c(0.1, 0.3, 0.5)
 n.grid<- c(50, 100, 250)
 
-params.pi.coarse <- expand.grid(n.grid, pi.coarse, rho.fine)
-params.rho.coarse <- expand.grid(n.grid, pi.fine, rho.coarse)
-names(params.rho.coarse) <- names(params.pi.coarse) <- c("n", "p", "r")
+params.pi.coarse <- expand.grid(n = n.grid,
+                                p = pi.coarse, 
+                                r = rho.fine)
+params.rho.coarse <- expand.grid(n = n.grid, 
+                                 p = pi.fine, 
+                                 r = rho.coarse)
 
-results.rho.coarse <- mapply(mse_compare_default_cpp, 
+results.rho.coarse <- mcmapply(mse_compare_default_cpp, 
                                 p = params.rho.coarse$p,
                                 r = params.rho.coarse$r,
                                 n = params.rho.coarse$n,
-                                n_reps = n.reps)
+                                n_reps = n.reps,
+                                mc.cores = nCores)
 results.rho.coarse <- cbind(params.rho.coarse, 
                             t(results.rho.coarse))
 
-results.pi.coarse <- mapply(mse_compare_default_cpp, 
+results.pi.coarse <- mcmapply(mse_compare_default_cpp, 
                                p = params.pi.coarse$p,
                                r = params.pi.coarse$r,
                                n = params.pi.coarse$n,
-                               n_reps = n.reps)
+                               n_reps = n.reps,
+                               mc.cores = nCores)
 results.pi.coarse <- cbind(params.pi.coarse, 
                            t(results.pi.coarse))
 
