@@ -24,7 +24,7 @@ names(cover.tables) <- names(cover.list)
 cover.panels <- lapply(names(cover.tables), function(x) paste(cover.tables[[x]], collapse = '\n \n \\vspace{2em} \n \n'))
 names(cover.panels) <- names(cover.tables)
 
-lapply(names(cover.panels), function(x) cat(cover.panels[[x]], file = paste0("coverage_", x, ".tex")))
+lapply(names(cover.panels), function(x) cat(cover.panels[[x]], file = paste0("./Results/coverage_", x, ".tex")))
 
 
 width.tables <- lapply(names(width.list), function(x) unlist(lapply(width.list[[x]], TeXtable)))
@@ -33,7 +33,7 @@ names(width.tables) <- names(width.list)
 width.panels <- lapply(names(width.tables), function(x) paste(width.tables[[x]], collapse = '\n \n \\vspace{2em} \n \n'))
 names(width.panels) <- names(width.tables)
 
-lapply(names(width.panels), function(x) cat(width.panels[[x]], file = paste0("width_", x, ".tex")))
+lapply(names(width.panels), function(x) cat(width.panels[[x]], file = paste0("./Results/width_", x, ".tex")))
 
 
 #Clean up

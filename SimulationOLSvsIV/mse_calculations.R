@@ -38,7 +38,7 @@ results.coarse.pi <- lapply(sample.size.grid, panels.coarse.pi)
 #Output results as R object
 results <- list(coarse.rho = results.coarse.rho,
                 coarse.pi = results.coarse.pi)
-save(results, file = "mse_results.Rdata")
+save(results, file = "./mse_results.Rdata")
 
 #Clean up
 rm(n.reps, sample.size.grid)

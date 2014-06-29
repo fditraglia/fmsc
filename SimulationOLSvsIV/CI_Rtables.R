@@ -1,5 +1,5 @@
 #Load and unpack results
-load("CI_results.Rdata")
+load("./Results/CI_results.Rdata")
 coverage.prob <- results$coverage.prob
 median.width <- results$median.width
 rm(results)

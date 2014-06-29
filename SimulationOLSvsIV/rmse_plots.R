@@ -1,4 +1,4 @@
-load("mse_results.Rdata")
+load("./Results/mse_results.Rdata")
 coarse.pi <- results$coarse.pi
 coarse.rho <- results$coarse.rho
 rm(results)
@@ -72,34 +72,34 @@ relative.DHW <- c("OLS", "TSLS", "FMSC", "DHW90", "DHW95")
 relative.all <- c("OLS", "TSLS", "FMSC", "AVG","DHW90", "DHW95")
 
 
-tikz('RMSE_coarse_pi_baseline.tex',
+tikz('./Results/RMSE_coarse_pi_baseline.tex',
      width = plot.width, height = plot.height)
   plot.grid(coarse.pi, baseline, relative = FALSE,
             legend.pos = "topleft")
 dev.off()
 
-tikz('RMSE_coarse_pi_relative_DHW.tex',
+tikz('./Results/RMSE_coarse_pi_relative_DHW.tex',
      width = plot.width, height = plot.height)
 plot.grid(coarse.pi, relative.DHW)
 dev.off()
 
-tikz('RMSE_coarse_pi_relative_all.tex',
+tikz('./Results/RMSE_coarse_pi_relative_all.tex',
      width = plot.width, height = plot.height)
 plot.grid(coarse.pi, relative.all)
 dev.off()
 
-tikz('RMSE_coarse_rho_baseline.tex',
+tikz('./Results/RMSE_coarse_rho_baseline.tex',
      width = plot.width, height = plot.height)
 plot.grid(coarse.rho, baseline, relative = FALSE)
 dev.off()
 
-tikz('RMSE_coarse_rho_relative_DHW.tex',
+tikz('./Results/RMSE_coarse_rho_relative_DHW.tex',
      width = plot.width, height = plot.height)
 plot.grid(coarse.rho, relative.DHW, 
           legend.pos = "topleft")
 dev.off()
 
-tikz('RMSE_coarse_rho_relative_all.tex',
+tikz('./Results/RMSE_coarse_rho_relative_all.tex',
      width = plot.width, height = plot.height)
 plot.grid(coarse.rho, relative.all)
 dev.off()
@@ -110,4 +110,4 @@ rm(coarse.pi, coarse.rho)
 rm(line.colors, line.types, line.width)
 rm(rmse.plot, plot.grid)
 rm(baseline, relative.DHW, relative.all)
-rm(plot.width, plot.height)
+rm(plot.width, plot.height, legend.inset)
