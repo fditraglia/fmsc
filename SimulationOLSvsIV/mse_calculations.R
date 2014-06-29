@@ -1,9 +1,9 @@
-n.reps <- 100
-rho.fine <- seq(0, 0.6, 0.1)
-pi.fine <- seq(0.1, 0.6, 0.1)
+n.reps <- 10000
+rho.fine <- seq(0, 0.6, 0.01)
+pi.fine <- seq(0.1, 0.6, 0.01)
 rho.coarse <- c(0, 0.25, 0.5)
 pi.coarse <- c(0.1, 0.3, 0.5)
-n.grid<- c(50, 100, 250)
+n.grid<- c(250, 500, 1000)
 
 params.pi.coarse <- expand.grid(n = n.grid,
                                 p = pi.coarse, 
