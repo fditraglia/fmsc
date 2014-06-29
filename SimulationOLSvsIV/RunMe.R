@@ -11,9 +11,9 @@ set.seed(1928)
 #and store them in ./Results/rmse_results.Rdata
 source("mse_calculations.R")
 
-#Open rmse_results.Rdata
+#Open ./Results/rmse_results.Rdata
 #plot the results 
-#and export in tikz format
+#and export in tikz format to ./Results/
 source("rmse_plots.R")
 
 #Calculate Confidence Interval results for simulation
@@ -28,5 +28,5 @@ source("CI_calculations.R")
 source("CI_Rtables.R")
 
 #Convert the lists of CI tables
-#to LaTeX and output
+#to LaTeX and output to ./Results/
 source("CI_TeXtables.R")
