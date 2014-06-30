@@ -24,7 +24,7 @@ source("mse_calculations.R")
 #Open ./Results/rmse_results.Rdata
 #plot the results 
 #and export in tikz format to ./Results/
-source("rmse_plots.R")
+#source("rmse_plots.R")
 
 #Calculate Confidence Interval results for simulation
 #and store them in ./Results/CI_results.Rdata
