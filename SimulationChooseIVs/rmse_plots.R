@@ -98,43 +98,43 @@ plot.grid <- function(results, nRows, nCols, ...){
 
 
 #Columns to include in the different plots
-baseline <- c("Valid", "Full", "FMSC")
-relative.DHW <- c("Valid", "Full", "FMSC", "DHW90", "DHW95")
-relative.all <- c("Valid", "Full", "FMSC", "AVG","DHW90", "DHW95")
+# baseline <- c("Valid", "Full", "FMSC")
+# relative.DHW <- c("Valid", "Full", "FMSC", "DHW90", "DHW95")
+# relative.all <- c("Valid", "Full", "FMSC", "AVG","DHW90", "DHW95")
 
 
-#Create plots and export as tikz files
-tikz('./Results/RMSE_coarse_pi_baseline.tex',
-     width = plot.width, height = plot.height)
-  plot.grid(coarse.pi, nRows, nCols, baseline, relative = FALSE,
-            legend.pos = "topleft")
-dev.off()
-
-tikz('./Results/RMSE_coarse_pi_relative_DHW.tex',
-     width = plot.width, height = plot.height)
-plot.grid(coarse.pi, nRows, nCols, relative.DHW)
-dev.off()
-
-tikz('./Results/RMSE_coarse_pi_relative_all.tex',
-     width = plot.width, height = plot.height)
-plot.grid(coarse.pi, nRows, nCols, relative.all)
-dev.off()
-
-tikz('./Results/RMSE_coarse_rho_baseline.tex',
-     width = plot.width, height = plot.height)
-plot.grid(coarse.rho, nRows, nCols, baseline, relative = FALSE)
-dev.off()
-
-tikz('./Results/RMSE_coarse_rho_relative_DHW.tex',
-     width = plot.width, height = plot.height)
-plot.grid(coarse.rho, nRows, nCols, relative.DHW, 
-          legend.pos = "topleft")
-dev.off()
-
-tikz('./Results/RMSE_coarse_rho_relative_all.tex',
-     width = plot.width, height = plot.height)
-plot.grid(coarse.rho, nRows, nCols, relative.all)
-dev.off()
+# #Create plots and export as tikz files
+# tikz('./Results/RMSE_coarse_pi_baseline.tex',
+#      width = plot.width, height = plot.height)
+#   plot.grid(coarse.pi, nRows, nCols, baseline, relative = FALSE,
+#             legend.pos = "topleft")
+# dev.off()
+# 
+# tikz('./Results/RMSE_coarse_pi_relative_DHW.tex',
+#      width = plot.width, height = plot.height)
+# plot.grid(coarse.pi, nRows, nCols, relative.DHW)
+# dev.off()
+# 
+# tikz('./Results/RMSE_coarse_pi_relative_all.tex',
+#      width = plot.width, height = plot.height)
+# plot.grid(coarse.pi, nRows, nCols, relative.all)
+# dev.off()
+# 
+# tikz('./Results/RMSE_coarse_rho_baseline.tex',
+#      width = plot.width, height = plot.height)
+# plot.grid(coarse.rho, nRows, nCols, baseline, relative = FALSE)
+# dev.off()
+# 
+# tikz('./Results/RMSE_coarse_rho_relative_DHW.tex',
+#      width = plot.width, height = plot.height)
+# plot.grid(coarse.rho, nRows, nCols, relative.DHW, 
+#           legend.pos = "topleft")
+# dev.off()
+# 
+# tikz('./Results/RMSE_coarse_rho_relative_all.tex',
+#      width = plot.width, height = plot.height)
+# plot.grid(coarse.rho, nRows, nCols, relative.all)
+# dev.off()
 
 
 #Clean up
