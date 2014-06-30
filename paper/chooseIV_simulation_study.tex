@@ -1,27 +1,42 @@
 %!TEX root = main.tex
 \subsection{Simulation Study: Choosing Instruments Example}\label{sec:fmscsim}
-\todo[inline]{Update with revised simulations and shorten. Be sure to show that even when we use trimmed AMSE or median absolute deviation we're getting what we want. Emphasize how large the gains are.}
-This section evaluates the performance of FMSC in a simple 2SLS instrument selection problem. The simulation setup is as follows:
+This section evaluates the performance of FMSC in the Instrument Selection Example described in Section \ref{sec:chooseIVFMSC} using the following simulation design:
 \begin{eqnarray}
 		\label{eq:secondstage}
-		y_i &=& 0.5 x_i + u_i\\ 
-		x_i &=& 0.1 (z_{1i} + z_{2i} + z_{3i}) + \gamma w_i + \epsilon_i 
+		y_i &=& 0.5 x_i + \epsilon_i\\ 
+		x_i &=& (z_{1i} + z_{2i} + z_{3i}) /3 + \gamma w_i + v_i 
 		\label{eq:firststage}
 	\end{eqnarray}
-for $i=1, 2, \hdots, n$ where $(u_i, \epsilon_i, w_i)' \sim \mbox{ iid  } \mathcal{N}(0,\mathcal{V})$ with	
+for $i=1, 2, \hdots, N$ where $(\epsilon_i, v_i, w_i, z_{i1}, z_{2i}, z_{3i})' \sim \mbox{ iid  } N(0,\mathcal{V})$ with	
 \begin{equation}
 			\label{eq:varmatrix}
 			\mathcal{V} = \left[  
-				\begin{array}{cccc}
-					1 & 0.5 - \gamma\rho & \rho\\
-					0.5 - \gamma \rho & 1 & 0\\
-					\rho & 0 & 1 \\
+				\begin{array}{cccccc}
+				1 & (0.5 - \gamma \rho) & \rho & 0 & 0 & 0\\
+				(0.5 - \gamma \rho) & (8/9 - \gamma^2) & 0 & 0 & 0 & 0 \\
+				\rho & 0 & 1 & 0 & 0 & 0\\
+				0 & 0 & 0 & 1/3 & 0 & 0\\
+				0 & 0 & 0 & 0 & 1/3 & 0\\
+				0 & 0 & 0 & 0 & 0 & 1/3\\
 				\end{array}
 		\right]
-\end{equation}	
-independently of $(z_{1i}, z_{2i}, z_{3i})\sim \mathcal{N}(0, \mathbf{I})$. This design keeps the endogeneity of $x$ fixed, $Cov(x,u) = 0.5$, while allowing the validity and relevance of $w$ to vary according to $Cov(w,u) =\rho$, $Cov(w,x) = \gamma$. The instruments $z_1, z_2, z_3$ are valid and relevant: they have first-stage coefficients of $0.1$ and are uncorrelated with the second stage error $u$. 
+\end{equation}
+This setup keeps the variance of $x$ fixed at one and the endogeneity of $x$, $Cor(x, \epsilon)$, fixed at $0.5$ while allowing us to vary the relevance, $\gamma = Cor(x,w)$, and endogeneity, $\rho = Cor(w, \epsilon)$, of the instrument $w$.
+The instruments $z_1, z_2, z_3$ are valid and exogenous: they have first-stage coefficients of $1/3$ and are uncorrelated with the second stage error $\epsilon$.
+The ``additional'' instrument $w$ is only relevant if $\gamma \neq 0$ and is only exogenous if $\rho = 0$.
+Since $x$ has unit variance, the first-stage R-squared for this simulation design is simply $1 - \sigma_v^2 = 1/9 + \gamma^2$.
+Hence, when  $\gamma = 0$, so that $w$ is irrelevant, the first-stage R-squared is just over 0.11.
+Increasing $\gamma$ increases the R-squared of the first-stage.
+When $\gamma = 0$, this simulation design is a special case of the DGP used in the Section \ref{sec:OLSvsIVsim}, namely $(\pi=1/3, \rho = 0.5)$.
 
-Our goal is to estimate the effect of $x$ on $y$ with minimum MSE by choosing between two estimators: the valid estimator that uses only $z_1, z_2,$ and $z_3$ as instruments, and the full estimator that uses $z_1, z_2, z_3,$ and $w$. The inclusion of $z_1, z_2$ and $z_3$ in both moment sets means that the order of over-identification is two for the valid estimator and three for the full estimator. Because the moments of the 2SLS estimator only exist up to the order of over-identification \citep{Phillips1980}, this ensures that the small-sample MSE is well-defined. All simulations are carried out over a grid of values for $(\gamma, \rho)$ with $10,000$ replications at each point. Estimation is by 2SLS without a constant term, using the expressions from Section \ref{sec:chooseIVFMSC}.
+As in Section \ref{sec:OLSvsIVsim}, the goal of moment selection in this exercise is to estimate the effect of $x$ on $y$ with minimum MSE.
+In this case, however, we choose between \emph{two} 2SLS estimators rather than choosing between OLS and 2SLS.
+The \emph{valid} estimator the valid estimator that uses only $z_1, z_2,$ and $z_3$ as instruments, while the \emph{full} estimator that uses $z_1, z_2, z_3,$ and $w$. 
+The inclusion of $z_1, z_2$ and $z_3$ in both moment sets means that the order of over-identification is two for the valid estimator and three for the full estimator. 
+Because the moments of the 2SLS estimator only exist up to the order of over-identification \citep{Phillips1980}, this ensures that the small-sample MSE is well-defined.\footnote{Alternatively, one could use fewer instruments for the valid estimator and compare the results using \emph{trimmed} MSE: dropping the lowest and highest $k\%$ of the simulation draws.}
+All estimators in this section are calculated via 2SLS without a constant term using the expressions from Section \ref{sec:chooseIVFMSC}.
+
+\todo[inline]{Update from here onwards with revised simulation results and shorten.}
 
 Table \ref{tab:trueRMSE} gives the difference in small-sample root mean squared error (RMSE) between the full and valid estimators for a sample size of 500. Negative values indicate parameter values at which the full instrument set has a lower RMSE. We see that even if $Cov(w,u)\neq 0$, so that $w$ is invalid, including it in the instrument set can dramatically lower RMSE provided that $Cov(w,x)$ is high. In other words, using an invalid but sufficiently relevant instrument can improve our estimates. Because a sample size of 500 effectively divides the parameter space into two halves, one where the full estimator has the advantage and one where the valid estimator does, I concentrate on this case. Summary results for smaller sample sizes appear in Table \ref{tab:summary}. (Details for sample sizes of 50 and 100 are available upon request.)
 \begin{table}[!tbp]
