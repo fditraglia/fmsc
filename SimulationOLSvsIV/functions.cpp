@@ -2,7 +2,7 @@
 # Filename:        functions.cpp
 # Author:          Frank DiTraglia
 # First Version:   2014-01-22
-# Last Updated:    2014-06-17
+# Last Updated:    2014-06-29
 #--------------------------------------------------------
 # C++ functions for OLS vs. IV simulation experiment.
 #-------------------------------------------------------*/
@@ -13,6 +13,38 @@
 using namespace Rcpp;
 using namespace arma;
 
+
+mat mvrnorm(int n, vec mu, mat Sigma){
+/*-------------------------------------------------------
+# Generate draws from a multivariate normal distribution
+#--------------------------------------------------------
+#  n        number of samples
+#  mu       mean vector
+#  Sigma    covariance matrix
+#--------------------------------------------------------
+# Details:
+#           This is essentially a stripped-down version
+#           of the mvrnorm function from the MASS library
+#           in R. Through the magic of Rcpp we're 
+#           transforming the *same* standard normal draws
+#           as the R version. However, since Armadillo
+#           follows a different convention from R in its
+#           definition of the eign-decomposition, the 
+#           output of this function will *not* be the
+#           same as that of its R counterpart. Since we
+#           access R's function for generating normal
+#           draws, we can set the seed from R.
+#-------------------------------------------------------*/
+  RNGScope scope;
+  int p = Sigma.n_cols;
+  mat X = reshape(vec(rnorm(p * n)), p, n);
+  vec eigval;
+  mat eigvec;
+  eig_sym(eigval, eigvec, Sigma);
+  X = eigvec * diagmat(sqrt(eigval)) * X;
+  X.each_col() += mu;
+  return(X.t());
+}
 
 double sample_quantile(colvec x, double p){
 /*-------------------------------------------------------
@@ -139,16 +171,10 @@ dgp_OLS_IV::dgp_OLS_IV(double b, colvec p, mat Ve,
 # Initializes:
 #     x, y, z
 #-------------------------------------------------*/
-  RNGScope scope;
-  int n_z = Vz.n_cols;
-  
-  colvec stdnorm_errors = rnorm(n * 2);
-  mat errors = trans(chol(Ve) * reshape(stdnorm_errors, 2, n));
-  colvec stdnorm_z = rnorm(n * n_z);
-  
-  z = trans(chol(Vz) * reshape(stdnorm_z, n_z, n));
-  x = z * p + errors.col(1); //Remember: zero indexing!
-  y = b * x + errors.col(0);   
+  mat e_v = mvrnorm(n, zeros(Ve.n_cols), Ve);
+  z = mvrnorm(n, zeros(Vz.n_cols), Vz);
+  x = z * p + e_v.col(1); //Remember: zero indexing!
+  y = b * x + e_v.col(0);   
 }
 
 
@@ -392,8 +418,8 @@ void fmsc_OLS_IV::draw_CI_sims(int n_sims){
                       trans(first_stage_coefs) / g_sq;
   
   //Draw simulations
-  colvec stdnorm = rnorm(n_sims * Omega.n_rows);
-  CI_sims = D * chol(Omega) * reshape(stdnorm, Omega.n_rows, n);
+  mat M_sims = mvrnorm(n_sims, zeros(Omega.n_cols), Omega);
+  CI_sims = D * M_sims.t();
 }
 
 
