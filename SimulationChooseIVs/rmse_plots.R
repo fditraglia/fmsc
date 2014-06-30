@@ -30,8 +30,8 @@ rmse.plot <- function(panel, col.list, relative = TRUE,
   y <- panel[,col.list] 
   
   if(relative){
-    oracle <- pmin(panel$OLS, panel$TSLS)
-    y <- y[,!(col.list %in% c("OLS", "TSLS")), drop = FALSE]
+    oracle <- pmin(panel$Valid, panel$Full)
+    y <- y[,!(col.list %in% c("Valid", "Full")), drop = FALSE]
     y <- (y - oracle) / oracle * 100
     y.label <- "RMSE Relative to Oracle (\\%)"
   }else{
@@ -99,9 +99,9 @@ plot.grid <- function(results, nRows, nCols, ...){
 
 
 #Columns to include in the different plots
-baseline <- c("OLS", "TSLS", "FMSC")
-relative.DHW <- c("OLS", "TSLS", "FMSC", "DHW90", "DHW95")
-relative.all <- c("OLS", "TSLS", "FMSC", "AVG","DHW90", "DHW95")
+baseline <- c("Valid", "Full", "FMSC")
+relative.DHW <- c("Valid", "Full", "FMSC", "DHW90", "DHW95")
+relative.all <- c("Valid", "Full", "FMSC", "AVG","DHW90", "DHW95")
 
 
 #Create plots and export as tikz files
