@@ -1,5 +1,5 @@
 load("./Results/mse_results.Rdata")
-coarse.pi <- results$coarse.pi
+coarse.pi <- results$coarse.gamma
 coarse.rho <- results$coarse.rho
 rm(results)
 
@@ -24,9 +24,8 @@ par(mar = c(3,3,2,1), mgp = c(2, 0.7, 0), tck = -0.01)
 rmse.plot <- function(panel, col.list, relative = TRUE, 
                       legend.pos = "topright"){
   
-  results.cols <- setdiff(names(panel), c("n", "p", "r"))
+  results.cols <- setdiff(names(panel), c("n", "g", "r"))
   panel[,results.cols] <- sqrt(panel[,results.cols])
-  panel[,setdiff(names(panel), c("n", "p", "r"))]
   y <- panel[,col.list] 
   
   if(relative){
@@ -38,19 +37,19 @@ rmse.plot <- function(panel, col.list, relative = TRUE,
     y.label <- "RMSE"
   }
   
-  p <- unique(panel$p)
+  g <- unique(panel$g)
   r <- unique(panel$r)
   
-  if(length(p) != 1){
-    x <- p
-    x.label <- "$\\pi$"
+  if(length(g) != 1){
+    x <- g
+    x.label <- "$\\gamma$"
     fixed.value <- r
     fixed.label <- "\\rho"
   }else{
     x <- r
     x.label <- "$\\rho$"
-    fixed.value <- p
-    fixed.label <- "\\pi"
+    fixed.value <- g
+    fixed.label <- "\\gamma"
   }
   
   n <- unique(panel$n)
@@ -70,12 +69,12 @@ rmse.plot <- function(panel, col.list, relative = TRUE,
 
 #Convert simulation results into lists of "panels" for
 #passing to rmse.plot
-coarse.pi.params <- expand.grid(n = unique(coarse.pi$n), 
-                                p = unique(coarse.pi$p))
-coarse.pi <- mapply(function(x, y) 
-                    subset(coarse.pi, n == x & p == y),
-                    x = coarse.pi.params$n,
-                    y = coarse.pi.params$p, 
+coarse.gamma.params <- expand.grid(n = unique(coarse.gamma$n), 
+                                g = unique(coarse.gamma$g))
+coarse.gamma <- mapply(function(x, y) 
+                    subset(coarse.gamma, n == x & g == y),
+                    x = coarse.gamma.params$n,
+                    y = coarse.gamma.params$g, 
                     SIMPLIFY = FALSE)
 
 coarse.rho.params <- expand.grid(n = unique(coarse.rho$n), 
@@ -139,9 +138,9 @@ dev.off()
 
 
 #Clean up
-rm(coarse.pi, coarse.rho, nRows, nCols)
+rm(coarse.gamma, coarse.rho, nRows, nCols)
 rm(line.colors, line.types, line.width)
 rm(rmse.plot, plot.grid)
 rm(baseline, relative.DHW, relative.all)
 rm(plot.width, plot.height, legend.inset)
-rm(coarse.pi.params, coarse.rho.params)
+rm(coarse.gamma.params, coarse.rho.params)
