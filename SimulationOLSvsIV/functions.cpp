@@ -642,8 +642,8 @@ NumericVector mse_compare_default_cpp(double p , double r, int n,
   mat Vz = eye(3, 3) / 3;
   
   mat Ve;
-  Ve << 1 << r * sqrt(1 - pow(p,2)) << endr
-     << r * sqrt(1 - pow(p,2)) << 1 - pow(p, 2) << endr;
+  Ve << 1 << r  << endr
+     << r << 1 - pow(p, 2) << endr;
   
   NumericVector out = mse_compare_cpp(b, p_vec, Ve, Vz, n, n_reps);
   return(out);  
