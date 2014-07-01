@@ -13,7 +13,8 @@
 using namespace Rcpp;
 using namespace arma;
 
-mat mvrnorm(int n, vec mu, mat Sigma){
+// [[Rcpp::export]]
+mat mvrnorm_cpp(int n, vec mu, mat Sigma){
 /*-------------------------------------------------------
 # Generate draws from a multivariate normal distribution
 #--------------------------------------------------------
@@ -555,8 +556,8 @@ dgp::dgp(double b, vec p, double g, mat V, mat Q, int n){
 //n = sample size
   RNGScope scope;
   n_z = Q.n_cols;
-  z = mvrnorm(n, zeros(Q.n_cols), Q);
-  e_v_w = mvrnorm(n, zeros(3), V);
+  z = mvrnorm_cpp(n, zeros(Q.n_cols), Q);
+  e_v_w = mvrnorm_cpp(n, zeros(3), V);
   w = e_v_w.col(2);
   x = z * p + g * w + e_v_w.col(1);
   y = b * x + e_v_w.col(0);
