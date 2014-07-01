@@ -701,14 +701,13 @@ NumericVector mse_compare_default_cpp(double g, double r, int n,
                                       int n_reps){
 //This is simply a wrapper to mse_compare_cpp that runs the simulation
 //with default values for the "uninteresting parameters."
-//The setup is described in Section 3.4 of the
-//original version of the paper.
+//The setup is described in Section 3.6 of the paper.
   double b = 0.5;
-  colvec p = 0.1 * ones(3);
-  mat Q = eye(3, 3);
+  colvec p = 1.0 / 3.0 * ones(3);
+  mat Q = 1.0 / 3.0 * eye(3, 3);
   mat V(3,3); 
   V << 1 << 0.5 - g * r << r << endr
-    << 0.5  - g * r << 1 << 0 << endr
+    << 0.5 - g * r << 8.0 / 9.0 - pow(g, 2.0) << 0 << endr
     << r << 0 << 1 << endr;
     
   NumericVector out = mse_compare_cpp(b, g, p, V, Q, n, n_reps);
