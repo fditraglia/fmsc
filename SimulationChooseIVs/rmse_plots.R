@@ -98,49 +98,75 @@ plot.grid <- function(results, nRows, nCols, ...){
 
 
 #Columns to include in the different plots
-# baseline <- c("Valid", "Full", "FMSC")
-# relative.DHW <- c("Valid", "Full", "FMSC", "DHW90", "DHW95")
-# relative.all <- c("Valid", "Full", "FMSC", "AVG","DHW90", "DHW95")
+baseline <- c("Valid", "Full", "FMSC")
+rel.pos <- c("FMSC", "posFMSC")
+rel.J <- c("FMSC", "J90", "J95")
+rel.MSC <- c("FMSC", "AIC", "BIC", "HQ")
+rel.combMSC <- c("FMSC", "combAIC", "combBIC", "combHQ")
 
 
-# #Create plots and export as tikz files
-# tikz('./Results/RMSE_coarse_pi_baseline.tex',
-#      width = plot.width, height = plot.height)
-#   plot.grid(coarse.pi, nRows, nCols, baseline, relative = FALSE,
-#             legend.pos = "topleft")
-# dev.off()
-# 
-# tikz('./Results/RMSE_coarse_pi_relative_DHW.tex',
-#      width = plot.width, height = plot.height)
-# plot.grid(coarse.pi, nRows, nCols, relative.DHW)
-# dev.off()
-# 
-# tikz('./Results/RMSE_coarse_pi_relative_all.tex',
-#      width = plot.width, height = plot.height)
-# plot.grid(coarse.pi, nRows, nCols, relative.all)
-# dev.off()
-# 
-# tikz('./Results/RMSE_coarse_rho_baseline.tex',
-#      width = plot.width, height = plot.height)
-# plot.grid(coarse.rho, nRows, nCols, baseline, relative = FALSE)
-# dev.off()
-# 
-# tikz('./Results/RMSE_coarse_rho_relative_DHW.tex',
-#      width = plot.width, height = plot.height)
-# plot.grid(coarse.rho, nRows, nCols, relative.DHW, 
-#           legend.pos = "topleft")
-# dev.off()
-# 
-# tikz('./Results/RMSE_coarse_rho_relative_all.tex',
-#      width = plot.width, height = plot.height)
-# plot.grid(coarse.rho, nRows, nCols, relative.all)
-# dev.off()
+#Create plots and export as tikz files
 
+#Coarse grid for Gamma
+tikz('./Results/RMSE_coarse_gamma_baseline.tex',
+     width = plot.width, height = plot.height)
+  plot.grid(coarse.gamma, nRows, nCols, baseline, relative = FALSE,
+            legend.pos = "topleft")
+dev.off()
+ 
+tikz('./Results/RMSE_coarse_gamma_rel_pos.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.gamma, nRows, nCols, rel.pos)
+dev.off()
+
+tikz('./Results/RMSE_coarse_gamma_rel_J.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.gamma, nRows, nCols, rel.J)
+dev.off()
+
+tikz('./Results/RMSE_coarse_gamma_rel_MSC.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.gamma, nRows, nCols, rel.MSC)
+dev.off()
+
+tikz('./Results/RMSE_coarse_gamma_rel_combMSC.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.gamma, nRows, nCols, rel.combMSC)
+dev.off()
+
+
+
+#Coarse Grid for Rho
+tikz('./Results/RMSE_coarse_rho_baseline.tex',
+     width = plot.width, height = plot.height)
+  plot.grid(coarse.rho, nRows, nCols, baseline, relative = FALSE,
+            legend.pos = "topleft")
+dev.off()
+ 
+tikz('./Results/RMSE_coarse_rho_rel_pos.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.rho, nRows, nCols, rel.pos)
+dev.off()
+
+tikz('./Results/RMSE_coarse_rho_rel_J.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.rho, nRows, nCols, rel.J)
+dev.off()
+
+tikz('./Results/RMSE_coarse_rho_rel_MSC.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.rho, nRows, nCols, rel.MSC)
+dev.off()
+
+tikz('./Results/RMSE_coarse_rho_rel_combMSC.tex',
+     width = plot.width, height = plot.height)
+plot.grid(coarse.rho, nRows, nCols, rel.combMSC)
+dev.off()
 
 #Clean up
 rm(coarse.gamma, coarse.rho, nRows, nCols)
 rm(line.colors, line.types, line.width)
 rm(rmse.plot, plot.grid)
-rm(baseline, relative.DHW, relative.all)
+rm(baseline, rel.pos, rel.J, rel.MSC, rel.combMSC)
 rm(plot.width, plot.height, legend.inset)
 rm(coarse.gamma.params, coarse.rho.params)
