@@ -1,267 +1,130 @@
 %!TEX root = main.tex
 \subsection{Simulation Study: Choosing Instruments Example}\label{sec:fmscsim}
-\todo[inline]{Update with revised simulations and shorten. Be sure to show that even when we use trimmed AMSE or median absolute deviation we're getting what we want. Emphasize how large the gains are.}
-This section evaluates the performance of FMSC in a simple 2SLS instrument selection problem. The simulation setup is as follows:
+This section evaluates the performance of FMSC in the Instrument Selection Example described in Section \ref{sec:chooseIVFMSC} using the following simulation design:
 \begin{eqnarray}
 		\label{eq:secondstage}
-		y_i &=& 0.5 x_i + u_i\\ 
-		x_i &=& 0.1 (z_{1i} + z_{2i} + z_{3i}) + \gamma w_i + \epsilon_i 
+		y_i &=& 0.5 x_i + \epsilon_i\\ 
+		x_i &=& (z_{1i} + z_{2i} + z_{3i}) /3 + \gamma w_i + v_i 
 		\label{eq:firststage}
 	\end{eqnarray}
-for $i=1, 2, \hdots, n$ where $(u_i, \epsilon_i, w_i)' \sim \mbox{ iid  } \mathcal{N}(0,\mathcal{V})$ with	
+for $i=1, 2, \hdots, N$ where $(\epsilon_i, v_i, w_i, z_{i1}, z_{2i}, z_{3i})' \sim \mbox{ iid  } N(0,\mathcal{V})$ with	
 \begin{equation}
 			\label{eq:varmatrix}
 			\mathcal{V} = \left[  
-				\begin{array}{cccc}
-					1 & 0.5 - \gamma\rho & \rho\\
-					0.5 - \gamma \rho & 1 & 0\\
-					\rho & 0 & 1 \\
+				\begin{array}{cccccc}
+				1 & (0.5 - \gamma \rho) & \rho & 0 & 0 & 0\\
+				(0.5 - \gamma \rho) & (8/9 - \gamma^2) & 0 & 0 & 0 & 0 \\
+				\rho & 0 & 1 & 0 & 0 & 0\\
+				0 & 0 & 0 & 1/3 & 0 & 0\\
+				0 & 0 & 0 & 0 & 1/3 & 0\\
+				0 & 0 & 0 & 0 & 0 & 1/3\\
 				\end{array}
 		\right]
-\end{equation}	
-independently of $(z_{1i}, z_{2i}, z_{3i})\sim \mathcal{N}(0, \mathbf{I})$. This design keeps the endogeneity of $x$ fixed, $Cov(x,u) = 0.5$, while allowing the validity and relevance of $w$ to vary according to $Cov(w,u) =\rho$, $Cov(w,x) = \gamma$. The instruments $z_1, z_2, z_3$ are valid and relevant: they have first-stage coefficients of $0.1$ and are uncorrelated with the second stage error $u$. 
+\end{equation}
+This setup keeps the variance of $x$ fixed at one and the endogeneity of $x$, $Cor(x, \epsilon)$, fixed at $0.5$ while allowing us to vary the relevance, $\gamma = Cor(x,w)$, and endogeneity, $\rho = Cor(w, \epsilon)$, of the instrument $w$.
+The instruments $z_1, z_2, z_3$ are valid and exogenous: they have first-stage coefficients of $1/3$ and are uncorrelated with the second stage error $\epsilon$.
+The ``additional'' instrument $w$ is only relevant if $\gamma \neq 0$ and is only exogenous if $\rho = 0$.
+Since $x$ has unit variance, the first-stage R-squared for this simulation design is simply $1 - \sigma_v^2 = 1/9 + \gamma^2$.
+Hence, when  $\gamma = 0$, so that $w$ is irrelevant, the first-stage R-squared is just over 0.11.
+Increasing $\gamma$ increases the R-squared of the first-stage.
+When $\gamma = 0$, this simulation design is a special case of the DGP used in the Section \ref{sec:OLSvsIVsim}, namely $(\pi=1/3, \rho = 0.5)$.
+\todo[inline]{Should add a justification for these parameter values in terms of empirical work. What is the plim of OLS in this case? How weak are the baseline instruments? What is a real-world example for which this is plausible?}
+As in Section \ref{sec:OLSvsIVsim}, the goal of moment selection in this exercise is to estimate the effect of $x$ on $y$ with minimum MSE.
+In this case, however, we choose between \emph{two} 2SLS estimators rather than choosing between OLS and 2SLS.
+The \emph{valid} estimator the valid estimator that uses only $z_1, z_2,$ and $z_3$ as instruments, while the \emph{full} estimator that uses $z_1, z_2, z_3,$ and $w$. 
+The inclusion of $z_1, z_2$ and $z_3$ in both moment sets means that the order of over-identification is two for the valid estimator and three for the full estimator. 
+Because the moments of the 2SLS estimator only exist up to the order of over-identification \citep{Phillips1980}, this ensures that the small-sample MSE is well-defined.\footnote{Alternatively, one could use fewer instruments for the valid estimator and compare the results using \emph{trimmed} MSE: dropping the lowest and highest $k\%$ of the simulation draws.}
+All estimators in this section are calculated via 2SLS without a constant term using the expressions from Section \ref{sec:chooseIVFMSC}.
 
-Our goal is to estimate the effect of $x$ on $y$ with minimum MSE by choosing between two estimators: the valid estimator that uses only $z_1, z_2,$ and $z_3$ as instruments, and the full estimator that uses $z_1, z_2, z_3,$ and $w$. The inclusion of $z_1, z_2$ and $z_3$ in both moment sets means that the order of over-identification is two for the valid estimator and three for the full estimator. Because the moments of the 2SLS estimator only exist up to the order of over-identification \citep{Phillips1980}, this ensures that the small-sample MSE is well-defined. All simulations are carried out over a grid of values for $(\gamma, \rho)$ with $10,000$ replications at each point. Estimation is by 2SLS without a constant term, using the expressions from Section \ref{sec:chooseIVFMSC}.
+\todo[inline]{Update from here onwards with revised simulation results and shorten.}
 
-Table \ref{tab:trueRMSE} gives the difference in small-sample root mean squared error (RMSE) between the full and valid estimators for a sample size of 500. Negative values indicate parameter values at which the full instrument set has a lower RMSE. We see that even if $Cov(w,u)\neq 0$, so that $w$ is invalid, including it in the instrument set can dramatically lower RMSE provided that $Cov(w,x)$ is high. In other words, using an invalid but sufficiently relevant instrument can improve our estimates. Because a sample size of 500 effectively divides the parameter space into two halves, one where the full estimator has the advantage and one where the valid estimator does, I concentrate on this case. Summary results for smaller sample sizes appear in Table \ref{tab:summary}. (Details for sample sizes of 50 and 100 are available upon request.)
-\begin{table}[!tbp]
-\caption{Difference in RMSE between full and valid estimators.}
-
-\label{tab:trueRMSE}
-
- \begin{center}
- \small
- \begin{tabular}{r|rrrrrrrrr}\hline\hline
-&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
-\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
-\hline
-0.0&-0.01& 0.00& 0.02& 0.07& 0.13& 0.18& 0.25& 0.31&0.39\tabularnewline
-0.1&-0.06& 0.00& 0.09& 0.19& 0.30& 0.42& 0.53& 0.65&0.79\tabularnewline
-0.2&-0.10&-0.04& 0.07& 0.19& 0.32& 0.46& 0.58& 0.72&0.86\tabularnewline
-0.3&-0.14&-0.09& 0.01& 0.12& 0.24& 0.36& 0.48& 0.61&0.72\tabularnewline
-0.4&-0.17&-0.12&-0.03& 0.06& 0.16& 0.26& 0.36& 0.46&0.57\tabularnewline
-0.5&-0.19&-0.15&-0.07& 0.01& 0.10& 0.19& 0.27& 0.34&0.45\tabularnewline
-0.6&-0.20&-0.17&-0.10&-0.03& 0.04& 0.11& 0.19& 0.26&0.34\tabularnewline
-\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
-0.7&-0.21&-0.18&-0.13&-0.07&-0.01& 0.07& 0.14& 0.20&0.26\tabularnewline
-0.8&-0.22&-0.20&-0.15&-0.09&-0.04& 0.03& 0.09& 0.15&0.20\tabularnewline
-0.9&-0.23&-0.21&-0.16&-0.12&-0.07&-0.01& 0.04& 0.10&0.14\tabularnewline
-1.0&-0.25&-0.22&-0.19&-0.13&-0.08&-0.04& 0.01& 0.06&0.11\tabularnewline
-1.1&-0.24&-0.22&-0.20&-0.16&-0.10&-0.07&-0.02& 0.03&0.07\tabularnewline
-1.2&-0.26&-0.22&-0.19&-0.16&-0.12&-0.07&-0.05&-0.01&0.03\tabularnewline
-1.3&-0.29&-0.24&-0.20&-0.17&-0.14&-0.09&-0.06&-0.01&0.02\tabularnewline
-\hline
-\end{tabular}
-
-\end{center}
-\footnotesize
-\begin{tablenotes}
-	\item Negative values indicate that including $w$ gives a smaller RMSE. Results are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
-\end{tablenotes}
-\end{table}
-
-The FMSC chooses moment conditions to minimize an asymptotic approximation to small-sample MSE in the hope that this will provide reasonable performance in practice. The first question is how often the FMSC succeeds in identifying the instrument set that minimizes small sample MSE. Table \ref{tab:correctFMSC} gives the frequency of correct decisions made by the FMSC in percentage points for a sample size of 500. A correct decision is defined as an instance in which the FMSC selects the moment set that minimizes finite-sample MSE as indicated by Table \ref{tab:trueRMSE}. We see that the FMSC performs best when there are large differences in MSE between the full and valid estimators: in the top right and bottom left of the parameter space. The criterion performs less well in the borderline cases along the main diagonal.
-% latex.default(correct.FMSC, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
-%
-\begin{table}[!tbp]
-\caption{Correct decision rates for the FMSC in percentage points.}
-\label{tab:correctFMSC}
-\small
- \begin{center}
- \begin{tabular}{r|rrrrrrrrr}\hline\hline
-&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
-\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
-\hline
-0.0&79&61&69&85&91&94& 94& 95& 96\tabularnewline
-0.1&82&25&62&91&98&99& 99&100&100\tabularnewline
-0.2&84&82&46&80&96&99&100&100&100\tabularnewline
-0.3&85&85&31&60&82&94& 98& 99&100\tabularnewline
-0.4&84&86&77&42&65&82& 92& 96& 98\tabularnewline
-0.5&84&87&82&31&49&68& 81& 90& 95\tabularnewline
-0.6&84&88&84&75&38&54& 68& 80& 87\tabularnewline
-\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
-0.7&85&87&86&80&69&44& 57& 69& 79\tabularnewline
-0.8&84&87&86&82&74&36& 48& 60& 71\tabularnewline
-0.9&85&87&87&84&78&69& 41& 52& 61\tabularnewline
-1.0&85&88&87&85&79&74& 35& 45& 53\tabularnewline
-1.1&85&88&88&86&82&76& 68& 39& 48\tabularnewline
-1.2&85&88&88&87&84&79& 72& 65& 43\tabularnewline
-1.3&86&87&88&88&84&80& 75& 69& 39\tabularnewline
-\hline
-\end{tabular}
-\begin{tablenotes}
-\footnotesize
-\item A correct decision is an instance in which the FMSC identifies the estimator that minimizes small sample MSE (see Table \ref{tab:trueRMSE}). Values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
-\end{tablenotes}
-\end{center}
-
-\end{table}
-
-Ultimately, the goal of the FMSC is to produce estimators with low MSE. Because the FMSC is itself random, however, using it introduces an additional source of variation. Table \ref{tab:rmseFMSC} accounts for this fact by presenting the RMSE that results from using the estimator chosen by the FMSC. Because these values are difficult to interpret on their own, Tables \ref{tab:rmsevsVALID} and \ref{tab:rmsevsFULL} compare the realized RMSE of the FMSC to those of the valid and full estimators. Negative values indicate that the RMSE of the FMSC is lower. As we see from Table \ref{tab:rmsevsVALID}, the valid estimator outperforms the FMSC in the upper right region of the parameter space, the region where the valid estimator has a lower RMSE than the full. This is because the FMSC sometimes chooses the wrong instrument set, as indicated by Table \ref{tab:correctFMSC}. Accordingly, the FMSC performs substantially better in the bottom left of the parameter space, the region where the full estimator has a lower RMSE than the valid. Taken on the whole, however, the potential advantage of using the valid estimator is small: at best it yields an RMSE $0.06$ smaller than that of the FMSC. Indeed, many of the values in the top right of the parameter space are zero, indicating that the FMSC performs no worse than the valid estimator. In contrast, the potential advantage of using the FMSC is large: it can yield an RMSE $0.16$ smaller than the valid model. The situation is similar for the full estimator only in reverse, as shown in Table \ref{tab:rmsevsFULL}. The full estimator outperforms the FMSC in the bottom left of the parameter space, while the FMSC outperforms the full estimator in the top right. Again, the potential gains from using the FMSC are large compared to those of the full instrument set: a $0.86$ reduction in RMSE versus a $0.14$ reduction. Average and worst-case RMSE comparisons between the FMSC and the full and valid estimators appear in Table \ref{tab:summary}.
-% latex.default(rmse.FMSC, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = NULL, append = TRUE) 
-%
-\begin{table}[!tbp]
-\caption{RMSE of the estimator selected by the FMSC.}
-\label{tab:rmseFMSC}
-\small
- \begin{center}
- \begin{tabular}{r|rrrrrrrrr}\hline\hline
-&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
-\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
-\hline
-0.0&0.26&0.27&0.27&0.27&0.27&0.27&0.27&0.27&0.27\tabularnewline
-0.1&0.24&0.26&0.28&0.27&0.27&0.27&0.27&0.27&0.27\tabularnewline
-0.2&0.22&0.25&0.30&0.31&0.28&0.27&0.28&0.27&0.27\tabularnewline
-0.3&0.20&0.23&0.29&0.32&0.31&0.29&0.28&0.27&0.28\tabularnewline
-0.4&0.20&0.22&0.27&0.31&0.32&0.31&0.30&0.30&0.28\tabularnewline
-0.5&0.20&0.20&0.25&0.29&0.32&0.32&0.32&0.31&0.29\tabularnewline
-0.6&0.19&0.19&0.23&0.27&0.30&0.33&0.33&0.32&0.31\tabularnewline
-\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
-0.7&0.18&0.19&0.22&0.25&0.28&0.31&0.32&0.33&0.32\tabularnewline
-0.8&0.18&0.19&0.21&0.24&0.27&0.30&0.31&0.32&0.32\tabularnewline
-0.9&0.18&0.19&0.20&0.23&0.26&0.28&0.30&0.32&0.33\tabularnewline
-1.0&0.18&0.18&0.19&0.22&0.25&0.27&0.29&0.30&0.32\tabularnewline
-1.1&0.17&0.17&0.19&0.21&0.23&0.25&0.28&0.29&0.31\tabularnewline
-1.2&0.17&0.17&0.18&0.20&0.22&0.24&0.26&0.28&0.29\tabularnewline
-1.3&0.17&0.17&0.17&0.19&0.21&0.23&0.25&0.27&0.28\tabularnewline
-\hline
-\end{tabular}
-\end{center}
-\footnotesize
-\begin{tablenotes}
- \item Values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications..
-\end{tablenotes}
-\end{table}
-
-
-
-
-% latex.default(rmse.vs.valid, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
-%
-\begin{table}[!tbp]
-\caption{Difference in RMSE between FMSC and valid estimator.}
-\label{tab:rmsevsVALID}
-\small
- \begin{center}
- \begin{tabular}{r|rrrrrrrrr}\hline\hline
-&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
-\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
-\hline
-0.0&-0.01&-0.01&-0.01& 0.00& 0.00& 0.00& 0.00& 0.00&0.00\tabularnewline
-0.1&-0.04&-0.01& 0.01& 0.01& 0.00& 0.00& 0.00& 0.00&0.00\tabularnewline
-0.2&-0.05&-0.02& 0.03& 0.03& 0.00& 0.00& 0.00& 0.00&0.00\tabularnewline
-0.3&-0.07&-0.04& 0.02& 0.04& 0.04& 0.01& 0.01& 0.00&0.00\tabularnewline
-0.4&-0.08&-0.05& 0.00& 0.04& 0.05& 0.04& 0.03& 0.02&0.01\tabularnewline
-0.5&-0.08&-0.07&-0.02& 0.02& 0.05& 0.06& 0.05& 0.02&0.02\tabularnewline
-0.6&-0.09&-0.08&-0.04& 0.00& 0.03& 0.04& 0.05& 0.04&0.04\tabularnewline
-\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
-0.7&-0.09&-0.08&-0.06&-0.03& 0.00& 0.04& 0.05& 0.06&0.05\tabularnewline
-0.8&-0.10&-0.09&-0.07&-0.03&-0.01& 0.02& 0.04& 0.05&0.04\tabularnewline
-0.9&-0.10&-0.09&-0.08&-0.06&-0.03& 0.00& 0.02& 0.04&0.04\tabularnewline
-1.0&-0.12&-0.11&-0.10&-0.06&-0.04&-0.02& 0.00& 0.02&0.04\tabularnewline
-1.1&-0.11&-0.11&-0.11&-0.09&-0.05&-0.04&-0.02& 0.01&0.02\tabularnewline
-1.2&-0.13&-0.11&-0.11&-0.09&-0.07&-0.04&-0.04&-0.01&0.00\tabularnewline
-1.3&-0.16&-0.12&-0.11&-0.10&-0.09&-0.05&-0.04&-0.01&0.00\tabularnewline
-\hline
-\end{tabular}
-\end{center}
-\footnotesize
-\begin{tablenotes}
-\item Negative values indicate that the FMSC gives a lower realized RMSE. Results are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
-\end{tablenotes}
-\end{table}
-
-% latex.default(rmse.vs.full, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      rowname = NULL, append = TRUE) 
-%
-\begin{table}[!tbp]
-\caption{Difference in RMSE between FMSC and full estimator.}
-\label{tab:rmsevsFULL}
-\small
- \begin{center}
- \begin{tabular}{r|rrrrrrrrr}\hline\hline
-&\multicolumn{9}{c}{$\rho = Cov(w,u)$}\\
-\multicolumn{1}{c|}{$N = 500$}&\multicolumn{1}{c}{0}&\multicolumn{1}{c}{0.05}&\multicolumn{1}{c}{0.10}&\multicolumn{1}{c}{0.15}&\multicolumn{1}{c}{0.20}&\multicolumn{1}{c}{0.25}&\multicolumn{1}{c}{0.30}&\multicolumn{1}{c}{0.35}&\multicolumn{1}{c}{0.40}\tabularnewline
-\hline
-0.0&0.00&-0.01&-0.03&-0.07&-0.13&-0.18&-0.25&-0.31&-0.39\tabularnewline
-0.1&0.02&-0.01&-0.07&-0.18&-0.30&-0.42&-0.53&-0.65&-0.78\tabularnewline
-0.2&0.05& 0.02&-0.04&-0.16&-0.31&-0.46&-0.58&-0.72&-0.86\tabularnewline
-0.3&0.07& 0.05& 0.01&-0.08&-0.20&-0.34&-0.47&-0.61&-0.71\tabularnewline
-0.4&0.09& 0.07& 0.03&-0.02&-0.11&-0.22&-0.33&-0.44&-0.56\tabularnewline
-0.5&0.11& 0.08& 0.05& 0.01&-0.05&-0.13&-0.22&-0.32&-0.42\tabularnewline
-0.6&0.11& 0.09& 0.07& 0.03&-0.01&-0.06&-0.14&-0.22&-0.30\tabularnewline
-\multirow{4}{5mm}{\begin{sideways}\parbox{1mm}{$\gamma\;$=$\;Cov(w,x)$}\end{sideways}}
-0.7&0.12& 0.10& 0.07& 0.04& 0.01&-0.03&-0.08&-0.14&-0.22\tabularnewline
-0.8&0.13& 0.11& 0.08& 0.05& 0.03& 0.00&-0.05&-0.10&-0.15\tabularnewline
-0.9&0.13& 0.11& 0.08& 0.06& 0.04& 0.01&-0.02&-0.06&-0.10\tabularnewline
-1.0&0.13& 0.11& 0.09& 0.07& 0.05& 0.02&-0.01&-0.04&-0.07\tabularnewline
-1.1&0.13& 0.11& 0.09& 0.07& 0.05& 0.03& 0.01&-0.02&-0.05\tabularnewline
-1.2&0.14& 0.11& 0.09& 0.07& 0.05& 0.03& 0.02& 0.00&-0.03\tabularnewline
-1.3&0.13& 0.12& 0.09& 0.07& 0.05& 0.04& 0.02& 0.00&-0.02\tabularnewline
-\hline
-\end{tabular}
-\end{center}
-\footnotesize
-\begin{tablenotes}
-\item Negative values indicate that the FMSC gives a lower realized RMSE. Results are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications.
-\end{tablenotes}
-\end{table}
-
-I now compare the FMSC to a number of alternative procedures from the literature. \cite{Andrews1999} considers a family of moment selection critera that take the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $J_n(S)$ is the $J$-test statistic under moment set $S$ and we choose the moment set that \emph{minimizes} the criterion. If we take $h(|S|) = (p + |S| - r)$, then $\kappa_n = \log{n}$ gives a GMM analogue of Schwarz's Bayesian Information Criterion (GMM-BIC) while $\kappa_n = 2.01 \log{\log{n}}$ gives an analogue of the Hannan-Quinn Information Criterion (GMM-HQ), and $\kappa_n = 2$ gives an analogue of Akaike's Information Criterion (GMM-AIC). Under certain assumptions, the HQ and BIC-type criteria are consistent: they select any and all valid moment conditions with probability approaching one in the limit (w.p.a.1). When calculating the $J$-test statistic under potential mis-specification, Andrews recommends using a centered covariance matrix estimator and basing estimation on the weighting matrix that would be efficient under the assumption of correct specification. Accordingly, I calculate
+I now compare the FMSC to a number of alternative procedures from the literature. 
+\cite{Andrews1999} considers a family of moment selection critera that take the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $J_n(S)$ is the $J$-test statistic under moment set $S$ and we choose the moment set that \emph{minimizes} the criterion. 
+If we take $h(|S|) = (p + |S| - r)$, then $\kappa_n = \log{n}$ gives a GMM analogue of Schwarz's Bayesian Information Criterion (GMM-BIC) while $\kappa_n = 2.01 \log{\log{n}}$ gives an analogue of the Hannan-Quinn Information Criterion (GMM-HQ), and $\kappa_n = 2$ gives an analogue of Akaike's Information Criterion (GMM-AIC). 
+Under certain assumptions\todo{Reference my discussion above!}, the HQ and BIC-type criteria are consistent: they select any and all valid moment conditions with probability approaching one in the limit (w.p.a.1). 
+When calculating the $J$-test statistic under potential mis-specification, Andrews recommends using a centered covariance matrix estimator and basing estimation on the weighting matrix that would be efficient under the assumption of correct specification. 
+Accordingly, I calculate
+\todo[inline]{This needs to be updated: I now used the two-step!}
 	\begin{eqnarray}
 		J_{Full} &=&n^{-1}\; u( \widehat{\theta}_{f})'\;Z \; \widehat{\Omega}^{-1} \;Z' \;u( \widehat{\theta}_{f})\\
 		J_{Valid} &=&n^{-1}\; u( \widehat{\theta}_{v})'\;Z_1 \;\widetilde{\Omega}_{11}^{-1} \;Z_1'\;u( \widehat{\theta}_{v})
 	\end{eqnarray}
 for the full and valid instrument sets using the formulas from Section \ref{sec:chooseIVFMSC}. 
 
-Because the Andrews-type criteria only take account of instrument validity, not relevance, \cite{HallPeixe2003} suggest combining them with their canonical correlations information criterion (CCIC). The CCIC aims to detect and eliminate redundant instruments, those that add no further information beyond that contained in the other instruments. While including such instruments has no effect on the asymptotic distribution of the estimator, it could lead to poor finite-sample performance. By combining the CCIC with an Andrews-type criterion, the idea is to eliminate invalid instruments and then redundant ones. For the present simulation example, with a single endogenous regressor and no constant term, 
+Because the Andrews-type criteria only take account of instrument validity, not relevance, \cite{HallPeixe2003} suggest combining them with their canonical correlations information criterion (CCIC). 
+The CCIC aims to detect and eliminate redundant instruments, those that add no further information beyond that contained in the other instruments. 
+While including such instruments has no effect on the asymptotic distribution of the estimator, it could lead to poor finite-sample performance. 
+By combining the CCIC with an Andrews-type criterion, the idea is to eliminate invalid instruments and then redundant ones. 
+For the present simulation example, with a single endogenous regressor and no constant term, 
 	\begin{equation}
 	\mbox{CCIC}(S) = n \log\left[1 - R_n^2(S) \right] + h(p + |S|)\kappa_n
 	\end{equation}
-where $R_n^2(S)$ is the first-stage $R^2$ based on instrument set $S$ and $h(p + |S|)\mu_n$ is a penalty term \citep{Jana2005}. If we take $h(p + |S|) = (p + |S| - r)$, setting $\kappa_n = \log{n}$ gives the CCIC-BIC, while $\kappa_n = 2.01 \log{\log{n}}$ gives the CCIC-HQ  and $\kappa_n = 2$ gives the CCIC-AIC. I consider procedures that combine CCIC criteria with the \emph{corresponding} criterion of \cite{Andrews1999}. For example, CC-MSC-BIC is shorthand for the rule ``include $w$ iff it minimizes both  GMM-BIC \emph{and} CCIC-BIC.'' I define CC-MSC-AIC and CC-MSC-HQ analogously.
+where $R_n^2(S)$ is the first-stage $R^2$ based on instrument set $S$ and $h(p + |S|)\mu_n$ is a penalty term \citep{Jana2005}. 
+If we take $h(p + |S|) = (p + |S| - r)$, setting $\kappa_n = \log{n}$ gives the CCIC-BIC, while $\kappa_n = 2.01 \log{\log{n}}$ gives the CCIC-HQ  and $\kappa_n = 2$ gives the CCIC-AIC. 
+I consider procedures that combine CCIC criteria with the \emph{corresponding} criterion of \cite{Andrews1999}. 
+For example, CC-MSC-BIC is shorthand for the rule ``include $w$ iff it minimizes both  GMM-BIC \emph{and} CCIC-BIC.''\todo{Clarify: a ref was confused.} 
+I define CC-MSC-AIC and CC-MSC-HQ analogously.
 
-A less formal but fairly common procedure for moment selection in practice is the downward $J$-test. In the present context this takes a particularly simple form: if the $J$-test fails to reject the null hypothesis of correct specification for the full instrument set, use this set for estimation; otherwise, use the valid instrument set. In addition to the moment selection criteria given above, I compare the FMSC to selection by a downward $J$-test at the 90\% and 95\% significance levels. 
+A less formal but fairly common procedure for moment selection in practice is the downward $J$-test. 
+In the present context this takes a particularly simple form: if the $J$-test fails to reject the null hypothesis of correct specification for the full instrument set, use this set for estimation; otherwise, use the valid instrument set. 
+In addition to the moment selection criteria given above, I compare the FMSC to selection by a downward $J$-test at the 90\% and 95\% significance levels. 
 
-Table \ref{tab:summary} compares average and worst-case RMSE over the parameter space given in Table \ref{tab:trueRMSE} for sample sizes of 50, 100, and 500 observations. (Pointwise RMSE comparisons are available upon request.) For each sample size the FMSC outperforms all other moment selection procedures in both average and worst-case RMSE. The gains are particularly large for smaller sample sizes. The results given here suggest that the FMSC may be of considerable value for instrument selection in practice.
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_baseline.tex}
+	\caption{Caption goes here.}
+\end{figure}
 
-% latex.default(out.table, file = outfilename, greek = TRUE, numeric.dollar = FALSE,      na.blank = TRUE, landscape = FALSE, rowname = row.names(out.table),      append = FALSE) 
-%
-\begin{table}[!tbp]
-\caption{Summary of Simulation Results.}
-\label{tab:summary}
- \begin{center}
- \begin{tabular}{rlrrr}\hline\hline
-\multicolumn{2}{l}{Average RMSE}&\multicolumn{1}{c}{$N=50$}&\multicolumn{1}{c}{$N=100$}&\multicolumn{1}{c}{$N=500$}\tabularnewline
-\hline
-&Valid Estimator&0.69&0.59&0.28\tabularnewline
-&Full Estimator&0.44&0.40&0.34\tabularnewline
-&FMSC&0.47&0.41&0.26\tabularnewline
-&GMM-BIC&0.61&0.52&0.29\tabularnewline
-&GMM-HQ&0.64&0.56&0.29\tabularnewline
-&GMM-AIC&0.67&0.58&0.28\tabularnewline
-&Downward J-test 90\%&0.55&0.50&0.28\tabularnewline
-&Downward J-test 95\%&0.51&0.47&0.28\tabularnewline
-&CC-MSC-BIC&0.61&0.51&0.28\tabularnewline
-&CC-MSC-HQ&0.64&0.55&0.28\tabularnewline
-&CC-MSC-AIC&0.66&0.57&0.28\tabularnewline
-\hline\hline
-\multicolumn{2}{l}{Worst-case RMSE}&\multicolumn{1}{c}{$N=50$}&\multicolumn{1}{c}{$N=100$}&\multicolumn{1}{c}{$N=500$}\tabularnewline
-\hline
-&Valid Estimator&0.84&1.06&0.32\tabularnewline
-&Full Estimator&1.04&1.12&1.14\tabularnewline
-&FMSC&0.81&0.74&0.33\tabularnewline
-&GMM-BIC&0.99&0.99&0.47\tabularnewline
-&GMM-HQ&0.97&1.03&0.39\tabularnewline
-&GMM-AIC&0.95&1.04&0.35\tabularnewline
-&Downward J-test 90\%&0.99&0.98&0.41\tabularnewline
-&Downward J-test 95\%&1.01&1.00&0.46\tabularnewline
-&CC-MSC-BIC&0.86&0.99&0.47\tabularnewline
-&CC-MSC-HQ&0.87&1.03&0.39\tabularnewline
-&CC-MSC-AIC&0.87&1.04&0.35\tabularnewline
-\hline
-\end{tabular}
-\end{center}
-\footnotesize
-\begin{tablenotes}
-	\item Average and worst-case RMSE are calculated over the simulation grid from Table \ref{tab:trueRMSE}. All values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications at each point on the grid.
-\end{tablenotes}
-\end{table}
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_rho_baseline.tex}
+	\caption{Caption goes here.}
+\end{figure}
+
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_pos.tex}
+	\caption{Caption goes here.}
+\end{figure}
+
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_rho_rel_pos.tex}
+	\caption{Caption goes here.}
+\end{figure}
+
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_J.tex}
+	\caption{Caption goes here.}
+\end{figure}
+
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_rho_rel_J.tex}
+	\caption{Caption goes here.}
+\end{figure}
+
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_MSC.tex}
+	\caption{Caption goes here.}
+\end{figure}
+
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_rho_rel_MSC.tex}
+	\caption{Caption goes here.}
+\end{figure}
+
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_combMSC.tex}
+	\caption{Caption goes here.}
+\end{figure}
+
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_rho_rel_combMSC.tex}
+	\caption{Caption goes here.}
+\end{figure}

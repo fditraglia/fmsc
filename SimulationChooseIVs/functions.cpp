@@ -13,7 +13,7 @@
 using namespace Rcpp;
 using namespace arma;
 
-mat mvrnorm(int n, vec mu, mat Sigma){
+mat mvrnorm_cpp(int n, vec mu, mat Sigma){
 /*-------------------------------------------------------
 # Generate draws from a multivariate normal distribution
 #--------------------------------------------------------
@@ -541,7 +541,7 @@ class dgp {
     dgp(double, vec, double, mat, mat, int);
     colvec x, y, w;
     mat z;
-  //private: 
+  private: 
     int n_z;
     mat e_v_w;
 };
@@ -553,10 +553,9 @@ dgp::dgp(double b, vec p, double g, mat V, mat Q, int n){
 //V = variance matrix (3x3) for (epsilon, v, w)'
 //Q = variance matrix for exog instruments
 //n = sample size
-  RNGScope scope;
   n_z = Q.n_cols;
-  z = mvrnorm(n, zeros(Q.n_cols), Q);
-  e_v_w = mvrnorm(n, zeros(3), V);
+  z = mvrnorm_cpp(n, zeros<vec>(n_z), Q);
+  e_v_w = mvrnorm_cpp(n, zeros<vec>(3), V);
   w = e_v_w.col(2);
   x = z * p + g * w + e_v_w.col(1);
   y = b * x + e_v_w.col(0);
@@ -702,14 +701,13 @@ NumericVector mse_compare_default_cpp(double g, double r, int n,
                                       int n_reps){
 //This is simply a wrapper to mse_compare_cpp that runs the simulation
 //with default values for the "uninteresting parameters."
-//The setup is described in Section 3.4 of the
-//original version of the paper.
+//The setup is described in Section 3.6 of the paper.
   double b = 0.5;
-  colvec p = 0.1 * ones(3);
-  mat Q = eye(3, 3);
+  colvec p = 1.0 / 3.0 * ones(3);
+  mat Q = 1.0 / 3.0 * eye(3, 3);
   mat V(3,3); 
   V << 1 << 0.5 - g * r << r << endr
-    << 0.5  - g * r << 1 << 0 << endr
+    << 0.5 - g * r << 8.0 / 9.0 - pow(g, 2.0) << 0 << endr
     << r << 0 << 1 << endr;
     
   NumericVector out = mse_compare_cpp(b, g, p, V, Q, n, n_reps);
