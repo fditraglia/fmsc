@@ -1,5 +1,5 @@
 load("./Results/mse_results.Rdata")
-coarse.pi <- results$coarse.gamma
+coarse.gamma <- results$coarse.gamma
 coarse.rho <- results$coarse.rho
 rm(results)
 
