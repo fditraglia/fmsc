@@ -554,10 +554,9 @@ dgp::dgp(double b, vec p, double g, mat V, mat Q, int n){
 //V = variance matrix (3x3) for (epsilon, v, w)'
 //Q = variance matrix for exog instruments
 //n = sample size
-  RNGScope scope;
   n_z = Q.n_cols;
-  z = mvrnorm_cpp(n, zeros(Q.n_cols), Q);
-  e_v_w = mvrnorm_cpp(n, zeros(3), V);
+  z = mvrnorm_cpp(n, zeros<vec>(n_z), Q);
+  e_v_w = mvrnorm_cpp(n, zeros<vec>(3), V);
   w = e_v_w.col(2);
   x = z * p + g * w + e_v_w.col(1);
   y = b * x + e_v_w.col(0);
