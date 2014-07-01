@@ -13,7 +13,6 @@
 using namespace Rcpp;
 using namespace arma;
 
-// [[Rcpp::export]]
 mat mvrnorm_cpp(int n, vec mu, mat Sigma){
 /*-------------------------------------------------------
 # Generate draws from a multivariate normal distribution
@@ -542,7 +541,7 @@ class dgp {
     dgp(double, vec, double, mat, mat, int);
     colvec x, y, w;
     mat z;
-  //private: 
+  private: 
     int n_z;
     mat e_v_w;
 };
@@ -714,22 +713,4 @@ NumericVector mse_compare_default_cpp(double g, double r, int n,
     
   NumericVector out = mse_compare_cpp(b, g, p, V, Q, n, n_reps);
   return(out);  
-}
-
-// [[Rcpp::export]]
-List dgp_default(double g, double r, int n){
-  double b = 0.5;
-  colvec p = 1.0 / 3.0 * ones(3);
-  mat Q = 1.0 / 3.0 * eye(3, 3);
-  mat V(3,3); 
-  V << 1 << 0.5 - g * r << r << endr
-    << 0.5 - g * r << 8.0 / 9.0 - pow(g, 2.0) << 0 << endr
-    << r << 0 << 1 << endr;
-  
-  dgp sims(b, p, g, V, Q, n);
-  List out = List::create(sims.x, sims.y, sims.z, 
-                          sims.w, sims.e_v_w);
-  out.names() = CharacterVector::create("x", "y", "z",
-                                        "w", "e.v.w");
-  return(out);
 }
