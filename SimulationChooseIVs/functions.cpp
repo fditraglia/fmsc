@@ -719,11 +719,11 @@ NumericVector mse_compare_default_cpp(double g, double r, int n,
 // [[Rcpp::export]]
 List dgp_default(double g, double r, int n){
   double b = 0.5;
-  colvec p = double(1/3) * ones(3);
-  mat Q = double(1/3) *eye(3, 3);
+  colvec p = 1.0 / 3.0 * ones(3);
+  mat Q = 1.0 / 3.0 * eye(3, 3);
   mat V(3,3); 
   V << 1 << 0.5 - g * r << r << endr
-    << 0.5 - g * r << double(8/9) - pow(g, 2) << 0 << endr
+    << 0.5 - g * r << 8.0 / 9.0 - pow(g, 2.0) << 0 << endr
     << r << 0 << 1 << endr;
   
   dgp sims(b, p, g, V, Q, n);
