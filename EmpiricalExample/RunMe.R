@@ -21,3 +21,9 @@ source("make_2SLS_table.R")
 source("calculate_fmsc_ingredients.R")
 
 source("calculate_fmsc_values.R")
+
+#source("make_fmsc_table.R")
+
+#source("calculate_fmsc_CIs.R")
+
+#source("make_CI_table.R")
