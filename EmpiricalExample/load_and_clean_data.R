@@ -35,8 +35,8 @@ key <- data.frame(paper.names, dataset.names,
 rm(paper.names, dataset.names)
 
 for(i in 1:nrow(key)){
-  col <- which(names(CGdata) == key$dataset[i])
-  names(CGdata)[col] <- key$paper[i]
+  col <- which(names(CGdata) == key$dataset.names[i])
+  names(CGdata)[col] <- key$paper.names[i]
 }
 
 rm(key, col, i)
