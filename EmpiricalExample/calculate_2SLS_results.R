@@ -16,8 +16,6 @@ Baseline <- c("lnmort", "maleco")
 Climate <- c("frost", "humid", "latitude")
 Europe <- c("eurfrac", "engfrac")
 Openness <- c("coast", "trade")
-MalfalSq <- c("malfal.sq")
-RuleSq <- c("rule.sq")
 
 instrument.blocks <- list(
   c("Baseline"),
@@ -27,12 +25,7 @@ instrument.blocks <- list(
   c("Baseline", "Climate", "Europe"),
   c("Baseline", "Climate", "Openness"),
   c("Baseline", "Openness", "Europe"),
-  c("Baseline","Climate", "Openness", "Europe"),
-  c("Baseline", "MalfalSq"),
-  c("Baseline", "RuleSq"),
-  c("Baseline", "MalfalSq", "RuleSq"),
-  c("Baseline", "Climate", "Openness", "Europe", "MalfalSq", "RuleSq"))
-
+  c("Baseline","Climate", "Openness", "Europe"))
 
 #-----------------------------------------------
 #          LIST OF INSTRUMENT SETS
@@ -43,7 +36,7 @@ f <- function(x){
 }
 
 instrument.sets <- lapply(instrument.blocks, f)
-rm(f, Baseline, Climate, Europe, Openness, MalfalSq, RuleSq)
+rm(f, Baseline, Climate, Europe, Openness)
 
 #-----------------------------------------------
 #      FIT 2SLS FOR EACH INSTRUMENT SET 

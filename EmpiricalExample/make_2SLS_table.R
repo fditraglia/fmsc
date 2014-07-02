@@ -46,13 +46,9 @@ make.table <- function(range, from.last = FALSE){
 }
 
 #Assemble full table from two separate panels
-panel1 <- make.table(1:6)
-panel2 <- make.table(7:12, from.last = TRUE)
+panel1 <- make.table(1:4)
+panel2 <- make.table(5:8, from.last = TRUE)
 full.table <- paste(panel1, '\n \n \\vspace{2em} \n \n', panel2)
-
-#Make "MalfalSq" and "RuleSq" look prettier
-full.table <- gsub("MalfalSq", full.table, replacement = "\\emph{malfal}$^2$", fixed = TRUE)
-full.table <- gsub("RuleSq", full.table, replacement =  "\\emph{rule}$^2$", fixed = TRUE)
 
 cat(full.table, file = "./Results/table_2SLS.tex")
 rm(full.table, panel1, panel2, make.table)

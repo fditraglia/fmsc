@@ -60,10 +60,3 @@ rm(keep, keep.colnumbers)
 #-------------------------------------
 
 CGdata <- na.omit(CGdata)
-
-#-------------------------------------
-# APPEND rule^2 AND malfal^2 COLUMNS
-#-------------------------------------
-
-CGdata <- cbind(CGdata, rule.sq = CGdata$rule^2, 
-                        malfal.sq = CGdata$malfal^2)
