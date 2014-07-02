@@ -11,6 +11,7 @@ library(Rcpp)
 library(RcppArmadillo)
 
 sourceCpp("functions.cpp")
+source("functions.R") #Depends on functions.cpp
 
 source("load_and_clean_data.R")
 
