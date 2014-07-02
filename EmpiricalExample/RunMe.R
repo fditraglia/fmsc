@@ -6,10 +6,11 @@
 
 #Note that when estimating with the baseline instruments we could use 45 observations (as CG do in their paper), since lnmort and maleco are observed for Vietnam. We choose not to, however, so that everything is fixed across different specifications except the instruments used. The difference is miniscule in any case.
 
-
-
-#Load packages
 library(sem) #contains tsls routine
+library(Rcpp)
+library(RcppArmadillo)
+
+sourceCpp("functions.cpp")
 
 source("load_and_clean_data.R")
 
