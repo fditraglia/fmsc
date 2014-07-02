@@ -11,7 +11,6 @@ library(Rcpp)
 library(RcppArmadillo)
 
 sourceCpp("functions.cpp")
-source("functions.R") #Depends on functions.cpp
 
 source("load_and_clean_data.R")
 
@@ -19,3 +18,6 @@ source("calculate_2SLS_results.R")
 
 source("make_2SLS_table.R")
 
+source("calculate_fmsc_ingredients.R")
+
+source("calculate_fmsc_values.R")
