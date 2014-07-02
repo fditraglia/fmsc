@@ -55,72 +55,9 @@ tsls_fit::tsls_fit(const mat& X, const colvec& y, const mat& Z){
 
 
 //Class for FMSC calculations to choose IVs for 2SLS estimation.
-//As implemented, it only allows target parameters that are weighted 
-//averages of the elements of beta. A more general solution would be 
-//to pass a function pointer instead of a vector of weights.
 class fmsc_chooseIV {
   public:
     fmsc_chooseIV(const mat&, const colvec&, const mat&, const mat&, umat); 
-    //Extract Target parameter estimators 
-    //  All candidate specifications:
-    colvec mu(colvec weights){return(estimates.t() * weights);}
-    //  Valid model only:
-    double mu_valid(colvec weights){
-      colvec mu_estimates = mu(weights);
-      return(mu_estimates(0));
-    }
-    //  Full model only
-    double mu_full(colvec weights){
-      colvec mu_estimates = mu(weights);
-      return(mu_estimates(mu_estimates.n_elem - 1));
-    }
-    //Squared Asymptotic Bias of mu estimators 
-    //  (all candidate specifications)
-    colvec abias_sq(colvec weights){
-      colvec out(z2_indicators.n_cols);
-      for(int i = 0; i < K.n_elem; i++){
-        out(i) = as_scalar(weights.t() * sqbias_inner.slice(i) * weights);
-      }
-      return(out);
-    }
-    //Asymptotic Variance of mu estimators
-    //  (all candidate specifications)
-    colvec avar(colvec weights){
-      colvec out(z2_indicators.n_cols);
-      for(int i = 0; i < K.n_elem; i++){
-        out(i) = as_scalar(weights.t() * avar_inner.slice(i) * weights);
-      }
-      return(out);
-    }
-    //Plain vanilla FMSC
-    //  (allows negative squared bias estimate)
-    colvec fmsc(colvec weights){
-      return(abias_sq(weights) + avar(weights));
-    }
-    //Positive-Part FMSC
-    //  (set negative squared bias estimates to zero)
-    colvec fmsc_pos(colvec weights){
-      colvec first_term = abias_sq(weights);
-      first_term = max(first_term, zeros<colvec>(first_term.n_elem));
-      colvec second_term = avar(weights);
-      return(first_term + second_term);
-    }
-    //FMSC-selected estimator of mu
-    double mu_fmsc(colvec weights){
-      colvec criterion_values = fmsc(weights);
-      uword which_min;
-      criterion_values.min(which_min);
-      colvec b_fmsc = estimates.col(which_min);
-      return(dot(weights, b_fmsc));
-    }    
-    //positive-part FMSC-selected estimator of mu
-    double mu_fmsc_pos(colvec weights){
-      colvec criterion_values = fmsc_pos(weights);
-      uword which_min;
-      criterion_values.min(which_min);
-      colvec b_fmsc = estimates.col(which_min);
-      return(dot(weights, b_fmsc));
-    }   
     tsls_fit valid, full;
     colvec tau;
     mat Psi, tau_outer_est, Bias_mat, estimates;
