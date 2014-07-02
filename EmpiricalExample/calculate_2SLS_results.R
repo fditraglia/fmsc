@@ -68,6 +68,6 @@ reg.table <- function(tsls.object){
 }
 
 tsls.summaries <- lapply(tsls.fits, reg.table)
-rm(reg.table)
+rm(reg.table, tsls.fits)
 
 #There is a very slight discrepancy (a difference of up to 0.02 in a few places) between these results and those in the original version of my paper. This comes from the way I've chosen to handle missing observations: I now exclude Vietnam from the dataset completely, since we only observe the baseline instruments for this country and I want to hold everything constant except the instruments in this exercise. In constrast CG use Vietnam when it is available, as did I in the original version of the empirical example. Again, the difference in results is miniscule.
