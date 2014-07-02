@@ -27,3 +27,5 @@ rm(w.rule, w.malfal, g)
 rm(rule.sqbias, rule.avar, fmsc.rule, fmsc.pos.rule)
 rm(malfal.sqbias, malfal.avar, fmsc.malfal, fmsc.pos.malfal)
 rm(rule, malfal)
+
+#The FMSC values calculated here are slightly different from those in the original version of the paper for some of the candidates. This is because I originally used submatrices of the full variance matrix for *all* candidates except for the valid specification, whereas I now calculate the variance matrix for *each candidate* separately. Results for the full and valid specifications are completely unchanged.
