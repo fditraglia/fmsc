@@ -1,6 +1,7 @@
 %!TEX root = main.tex
 \section{Moment Averaging \& Post-Selection Estimators}
 \label{sec:avg}
+\todo[inline]{When talking about the problems with traditional CIs should point out that there are two problems distinct but related issues here. First is moment selection uncertainty: if the data had been different, we would have chosen a different set of MCs. This source of variation in the estimated parameters is not captured in the usual CIs. To put this another way, even if all the candidates were correctly specified, the CIs would be too narrow. Second, we think that some of the candidates are \emph{not} correctly specified. Even if we were trying to detect incorrect specification by doing consistent selection, we sould sometimes make a mistake and choose an incorrect specification. When this happens, the resulting interval is incorrectly centered. Since FMSC is going to \emph{deliberately} choose an incorrect specification in certain circumstances we need to deal with both of these issues.}
 In the preceding section we derived the FMSC as an asymptotically unbiased estimator of the AMSE of a candidate estimator.
 Besides presenting simulation results, however, we have thus far said nothing about the sampling properties of the FMSC selection procedure itself.
 Because it is constructed from $\widehat{\tau}$ the FMSC is a random variable, even in the limit.
