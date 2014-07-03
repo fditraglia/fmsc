@@ -1,4 +1,4 @@
-n.reps <- 10
+n.reps <- 10000
 gamma.fine <- seq(0, 0.4, 0.05)
 gamma.coarse <- c(0, 0.2, 0.4) 
 rho.fine <- seq(0, 0.4, 0.05)
