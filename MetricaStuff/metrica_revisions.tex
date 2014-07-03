@@ -958,11 +958,11 @@ and hence,
 \begin{eqnarray*}
   \sqrt{n}(\widehat{\beta}_S -\beta) &=& \sqrt{n}(X'Z_S W^S_n Z_S' X)^{-1}X'Z_S W^S_n Z_S'\boldsymbol{\epsilon}\\
       &=& \left[(X'Z_S/n) W^S_n (Z_S' X/n)\right]^{-1}(X'Z_S/n) W^S_n  \left( \Xi_S \; n^{-1/2} Z' \boldsymbol{\epsilon}\right)\\
-      &=& \widehat{K}_n^S \Xi_S \left(  n^{-1/2} Z' \boldsymbol{\epsilon}\right)
+      &=& -\widehat{K}_n^S \Xi_S \left(  n^{-1/2} Z' \boldsymbol{\epsilon}\right)
 \end{eqnarray*}
 where we have used the fact that $Z_S'  = \Xi_S Z'$ and have defined
   \begin{eqnarray*}
-    \widehat{K}_n^S &=& n(X'Z \Xi_S' W^S_n \Xi_S Z X)^{-1}X' Z \Xi_S' W^S_n \\
+    -\widehat{K}_n^S &=& n(X'Z \Xi_S' W^S_n \Xi_S Z X)^{-1}X' Z \Xi_S' W^S_n \\
                     &=& n(X'Z_S W^S_n Z_S' X)^{-1}X'Z_S W^S_n\\
         &=&\left[(X'Z_S/n) W^S_n (Z_S' X/n)\right]^{-1}(X'Z_S/n) W^S_n
   \end{eqnarray*}
@@ -995,12 +995,12 @@ Now, applying Lemma \ref{lem:CLT} to $n^{-1/2}Z'\boldsymbol{\epsilon}$, we have 
 
 \begin{pro}[Limit Distribution for GIV Estimators]
   Fourth and a bit moments (needed to get $L_2$ convergence for the triangular array, see Davidson 19.1), local mis-specification, limiting variance matrix exists and is positive-definite, instruments are relevant imply that
-    $$\sqrt{n}\left(\widehat{\beta}_S - \beta \right) \overset{d}{\rightarrow} K_S \Xi_S \left(\left[\begin{array}
+    $$\sqrt{n}\left(\widehat{\beta}_S - \beta \right) \overset{d}{\rightarrow} -K_S \Xi_S \left(\left[\begin{array}
            {c} \mathbf{0} \\ \boldsymbol{\tau}
          \end{array}\right] + M \right)$$
   where
       \begin{eqnarray*}
-        K_S &=& \left(\Pi' Q_Z \Xi_S' W_S \Xi_S Q_Z' \Pi\right)^{-1} \Pi'Q_Z \Xi_S'W_S\\
+        -K_S &=& \left(\Pi' Q_Z \Xi_S' W_S \Xi_S Q_Z' \Pi\right)^{-1} \Pi'Q_Z \Xi_S'W_S\\
         Q_Z &=&\lim_{n\rightarrow \infty}E_n[\mathbf{z}_i \mathbf{z}_i'] \\
         M &\sim& N(\mathbf{0}, \Omega)\\
         \Omega &=& \lim_{n\rightarrow \infty}E_n \left[\begin{array}
@@ -1014,6 +1014,7 @@ Now, applying Lemma \ref{lem:CLT} to $n^{-1/2}Z'\boldsymbol{\epsilon}$, we have 
 
 
 \subsection{Estimating $\tau$}
+\label{sec:est_tau}
 To simplify the notation in this section, define the following selection matrices corresponding to $Z_1$ and $Z_2$: 
   \begin{eqnarray*}
   \Xi_1 &=& \left[\begin{array}{cc} I_{q_1} & 0_{q_1 \times q_2}  \end{array}\right]\\
@@ -1022,32 +1023,62 @@ To simplify the notation in this section, define the following selection matrice
             \end{array}\right]
   \end{eqnarray*}
 The $q_1\times q$ matrix $\Xi_1$ extracts the first $q_1$ elements of a $(q_1 + q_2)\times 1$ while the $q_2\times q$ matrix $\Xi_2$ extracts the last $q_2$ elements. 
+Using this convention, $Z_1 = Z\Xi_1'$ and similarly $Z_2 = Z \Xi_2'$
 
 To estimate $\tau$ we need an an asymptotically unbiased estimator of $\beta$ to plug into the moment conditions for the ``suspect'' instruments contained in $Z_2$. 
 Let $\widehat{\beta}_1$ denote the GIV estimator based \emph{only} on the instruments contained in $Z_1$:
 \begin{equation}
-  \widehat{\beta}_1 = \left(X'Z_1 W^V_n Z_1' X\right)^{-1} X'Z_1 W_n^1 Z_1' \mathbf{y}
+  \widehat{\beta}_1 = \left(X'Z_1 W^1_n Z_1' X\right)^{-1} X'Z_1 W_n^1 Z_1' \mathbf{y}
 \end{equation}
 By the result in the previous section,
   \begin{eqnarray*}
     \sqrt{n} \left(\widehat{\beta}_1 - \beta \right) &\overset{d}{\rightarrow}& K_1 \left[\begin{array}{cc} I_{q_1} & 0_{q_2 \times q_2}  \end{array}\right] \left(\left[\begin{array}
            {c} \mathbf{0} \\ \boldsymbol{\tau}
          \end{array}\right] + M \right)\\
-         &=& K_1 \Xi_1  \left(\left[\begin{array}
+         &=& -K_1 \Xi_1  \left(\left[\begin{array}
            {c} \mathbf{0} \\ \boldsymbol{\tau}
-         \end{array}\right] + M \right) = K_1 \Xi_1 M\\
-          &\sim& K_1  \times N\left(0, \lim_{n\rightarrow \infty} E_n[\epsilon_i^2 \mathbf{z}_{i1}\mathbf{z}_{i1}']\right)
+         \end{array}\right] + M \right) = -K_1 \Xi_1 M\\
+          &\sim& -K_1  \times N\left(0, \lim_{n\rightarrow \infty} E_n[\epsilon_i^2 \mathbf{z}_{i1}\mathbf{z}_{i1}']\right)
   \end{eqnarray*}
 
 We estimate $\tau$ as follows:
 \begin{eqnarray*}
   \widehat{\tau} &=& \sqrt{n} \left[ Z_2' \left(\textbf{y} - X\widehat{\beta}_1\right)/n\right] = n^{-1/2} Z_2'\left(\textbf{y} - X\widehat{\beta}_1\right)\\
-      &=& n^{-1/2} Z_2'(X\beta + \boldsymbol{\epsilon} - X \widehat{\beta}_V) = n^{-1/2} Z_2' \left[\boldsymbol{\epsilon} - X(\widehat{\beta}_1 - \beta)\right]\\
+      &=& n^{-1/2} Z_2'(X\beta + \boldsymbol{\epsilon} - X \widehat{\beta}_1) = n^{-1/2} Z_2' \left[\boldsymbol{\epsilon} - X(\widehat{\beta}_1 - \beta)\right]\\
       &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - n^{-1/2} Z_2' X (\widehat{\beta}_1 - \beta)\\
       &=& n^{-1/2} Z_2'\boldsymbol{\epsilon} - (Z_2' X/n) \left[  \sqrt{n}(\widehat{\beta}_1 - \beta)\right]\\
-      &=&n^{-1/2} Z_2'\boldsymbol{\epsilon} - (Z_2' X/n)\widehat{K}_1 \Xi_1 (n^{-1/2}Z'\boldsymbol{\epsilon})
+      &=&n^{-1/2} \Xi_2 Z'\boldsymbol{\epsilon} - (Z_2' X/n)\left( -\widehat{K}_1 \Xi_1 n^{-1/2}Z'\boldsymbol{\epsilon} \right)\\
+      &=& \left[\Xi_2 + \left(\frac{-Z_2'X}{n}\right)\left(-\widehat{K}_1\right)\Xi_1\right](n^{-1/2}Z'\boldsymbol{\epsilon})\\
+      &=& \left[\left(\frac{-Z_2'X}{n}\right)\left(-\widehat{K}_1\right)\Xi_1 + \Xi_2 \right](n^{-1/2}Z'\boldsymbol{\epsilon})\\
+      &=& \left\{\left(\frac{-Z_2'X}{n}\right)\left(-\widehat{K}_1\right)\left[\begin{array}{cc} I_{q_1} & 0_{q_1 \times q_2}  \end{array}\right] + \left[ \begin{array}{cc}
+              0_{q_2 \times q_1}& I_{q_2}
+            \end{array}\right] \right\}(n^{-1/2}Z'\boldsymbol{\epsilon})\\
+      &=&\left\{\left[ \begin{array}
+        {cc} -n^{-1}Z_2'X \left( -\widehat{K}_1 \right)& 0_{q_2 \times q_2} 
+      \end{array} \right] +\left[ \begin{array}{cc}
+              0_{q_2 \times q_1}& I_{q_2}
+            \end{array}\right]\right\}(n^{-1/2}Z'\boldsymbol{\epsilon})\\
+      &=& \left[ 
+     \begin{array}
+        {cc}  -n^{-1}Z_2'X \left( -\widehat{K}_1 \right) & I_{q_2}
+      \end{array} 
+       \right] (n^{-1/2}Z'\boldsymbol{\epsilon})
 \end{eqnarray*}
-We have
+Noting that $Z_2'X(-\widehat{K}_1)$ is $q_2\times q_1$ since $Z'$ is $q_2\times n$, $X$ is $n\times p$ and $\widehat{K}_1$ is $p\times q_1$.
+We can read off our estimator $\widehat{\Psi}$ of $\Psi$ from the final equality above, namely
+\begin{eqnarray*}
+  \widehat{\Psi} &=& -n^{-1}Z_2'X \left( -\widehat{K}_1 \right)\\
+    &=& -n^{-1}Z_2'X \left[ n(X'Z_1 W^1_n Z_1' X)^{-1}X'Z_1 W^1_n \right]  \\
+    &=&-Z_2'X(X'Z_1 W^1_n Z_1' X)^{-1}X'Z_1 W^1_n\\
+    &=&n^{-1}Z_2'X \widehat{K}_1 
+\end{eqnarray*}
+\textcolor{red}{Note the sign convention here!} This comes from the fact that we defined
+\[
+-\widehat{K}_1 = n(X'Z_1 W^1_n Z_1' X)^{-1}X'Z_1 W^1_n
+\]
+for consistency with the notation for the generic GMM version of the problem.
+
+Now, taking limits, we have
   \begin{eqnarray*}
     Z_2'X/n &=& n^{-1} Z_2'(Z\Pi + \mathbf{v}) = n^{-1}Z_2'Z\Pi + n^{-1}Z_2'\mathbf{v}\\  
             &=& n^{-1}Z_2' \left[\begin{array}
@@ -1115,10 +1146,14 @@ We estimate $\nabla\mu_\beta(\beta)$ by $\nabla \mu_\beta(\widehat{\beta}_1)$ wh
 and
 \begin{eqnarray*}
   \widehat{\Psi} &=& \left[ \begin{array}{cc}
-      -n^{-1} Z_2'X \widehat{K}_1 & I_{q_2}
+      -n^{-1} Z_2'X (-\widehat{K}_1) & I_{q_2}
+  \end{array}\right]\\
+  &=& \left[ \begin{array}{cc}
+      n^{-1} Z_2'X \widehat{K}_1 & I_{q_2}
   \end{array}\right]
 \end{eqnarray*}
 where $\hat{\epsilon}_1$ is the vector of residuals constructed from the estimator $\widehat{\beta}_1$.
+\textcolor{red}{Be careful about $\Psi$! In particular, see the explanation about our sign convention described in Section \ref{sec:est_tau}.}
 
 \subsection{Special Case: Two-stage Least Squares}
 For the special case of two-stage least squares (2SLS), we have
@@ -1127,14 +1162,14 @@ For the special case of two-stage least squares (2SLS), we have
    \end{eqnarray*} 
 So we have
   \begin{eqnarray*}
-    \widehat{K}_n^S &=& n\left(X'Z \Xi_S' W^S_n \Xi_S Z' X\right)^{-1}X' Z \Xi_S' W^S_n \\
+    -\widehat{K}_n^S &=& n\left(X'Z \Xi_S' W^S_n \Xi_S Z' X\right)^{-1}X' Z \Xi_S' W^S_n \\
         &=& n\left(X'Z \Xi_S' \left[\Xi_S (Z'Z/n) \Xi_S'\right]^{-1}  \Xi_S Z' X\right)^{-1}X' Z \Xi_S' \left[\Xi_S (Z'Z/n) \Xi_S'\right]^{-1} \\
         &=& n\left[X'Z \Xi_S' \left(\Xi_S Z'Z \Xi_S'\right)^{-1}  \Xi_S Z' X\right]^{-1}X' Z \Xi_S' \left(\Xi_S Z'Z \Xi_S'\right)^{-1}\\
         &=& n\left[X' Z_S (Z_S' Z_S)^{-1} Z_S' X\right]^{-1} X'Z_S (Z_S' Z_S)^{-1}
   \end{eqnarray*}
 and
     \begin{equation}
-      K_S =  \left[\Pi' Q_Z \Xi_S' \left(\Xi_S Q_Z \Xi_S'\right)^{-1} \Xi_S Q_Z' \Pi\right]^{-1} \Pi'Q_z \Xi_S'\left(\Xi_S Q_Z \Xi_S'\right)^{-1}
+      -K_S =  \left[\Pi' Q_Z \Xi_S' \left(\Xi_S Q_Z \Xi_S'\right)^{-1} \Xi_S Q_Z' \Pi\right]^{-1} \Pi'Q_z \Xi_S'\left(\Xi_S Q_Z \Xi_S'\right)^{-1}
     \end{equation}    
 
 \todo[inline]{I don't know of any way to simplify this expression. The problem is that we can't decompose $\Xi_S Q_Z \Xi_S$ into a product of square matrices to there's no way to express the inverse of the product in terms of the product of inverses.}
