@@ -54,6 +54,12 @@ Table \ref{tab:replicate} presents FMSC results for instrument sets 1--8  as def
 The bottom panel of Table \ref{tab:replicate} presents a number of alternative 95\% confidence intervals for the effects of \emph{malfal} and \emph{rule}, respectively. The first row gives the traditional asymptotic confidence interval from Table \ref{tab:fullresults}, while the following three give simulation-based intervals accounting for the effects of instrument selection. I do not present intervals for the conservative procedure given in Algorithm \ref{alg:conf} because the results in this example are so insensitive to the value of $\tau$ that the minimization and maximization problems given in Step 2 of the Algorithm are badly behaved. To illustrate this, I instead present intervals that use the same simulation procedure as Algorithm \ref{alg:conf} but treat $\tau$ as fixed. I consider four possible values of the bias parameter. When $\tau = \widehat{\tau}$, we have the one-step corrected interval considered in Table \ref{tab:FMSCnaive}. When $\tau = 0$, we have an interval that assumes all instruments are valid. The remaining two values $\widehat{\tau}_{min}$ and $\widehat{\tau}_{max}$ correspond to the lower and upper bounds of \emph{elementwise} 95\% confidence intervals for $\tau$ based on the distributional result given in Theorem \ref{thm:tau}. These result in a region with greater than 95\% coverage for $\tau$ considered jointly. Corrected 95\% intervals for the effect of \emph{malfal} are similar regardless of the value of $\tau$ used in the simulation, and the same is true for \emph{rule}. We find no evidence that accounting for the effects of instrument selection changes our conclusions about the sign or significance of \emph{malfal} or \emph{rule}.
 
 \begin{table}[htbp]
+	\centering
+	\input{../EmpiricalExample/Results/table_fmsc_values.tex}
+	\caption{Caption goes here.}
+\end{table}
+
+\begin{table}[htbp]
 \caption{FMSC values and confidence intervals for instrument sets 1--8.}
 \label{tab:replicate}
 \small

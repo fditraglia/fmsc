@@ -22,7 +22,7 @@ source("calculate_fmsc_ingredients.R")
 
 source("calculate_fmsc_values.R")
 
-#source("make_fmsc_table.R")
+source("make_fmsc_table.R")
 
 #source("calculate_fmsc_CIs.R")
 
