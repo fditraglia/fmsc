@@ -84,11 +84,11 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     uvec full_indicator = ones<uvec>(n_z2);
     uvec z1_indicator = ones<uvec>(n_z1); //Always include z1
     
-    mat K_valid = n_obs * valid.C;
+    mat K_valid = -1.0 * n_obs * valid.C;
     mat Omega_valid = valid.Omega_robust(); //no centering needed
-    mat K_full = n_obs * full.C;
+    mat K_full = -1.0 * n_obs * full.C;
     mat Omega_full = full.Omega_center();
-    Psi =  join_rows(-1 * z2.t() * x * K_valid / n_obs, eye(n_z2, n_z2));
+    Psi =  join_rows(z2.t() * x * K_valid / n_obs, eye(n_z2, n_z2));
     tau = z2.t() * valid.resid() / sqrt(n_obs);
     tau_outer_est = tau * tau.t() - Psi * Omega_full * Psi.t();
     Bias_mat = mat(n_z, n_z, fill::zeros);
@@ -140,7 +140,7 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
       mat z2_candidate = z2.cols(find(candidates.col(i)));
       tsls_fit candidate_fit(x, y, join_rows(z1, z2_candidate));
       //Extract and store quantities needed for FMSC
-      mat K_candidate = n_obs * candidate_fit.C;
+      mat K_candidate = -1.0 * n_obs * candidate_fit.C;
       mat Omega_candidate = candidate_fit.Omega_center();
       K_temp(i + 1) = K_candidate;
       Omega_temp(i + 1) = Omega_candidate;
