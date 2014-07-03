@@ -31,3 +31,10 @@ tex.table <- gsub("est", tex.table, replacement = "$\\widehat{\\mu}$", fixed = T
 
 #Output TeX table
 cat(tex.table, file = "./Results/table_fmsc_values.tex")
+
+#Clean up
+rm(body, colNames, description, footer)
+rm(head1, head2, header)
+rm(tex.table)
+rm(malfal, rule)
+rm(fmsc.values)
