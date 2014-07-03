@@ -1,5 +1,5 @@
 #Frank DiTraglia
-#Last Updated: June 14th, 2014
+#Last Updated: July 2nd, 2014
 
 #This script constructs a table of 2SLS Results for all instrument sets considered in my empirical example. It should not be run on its own: it is called by run_empirical_example.R
 
@@ -46,13 +46,9 @@ make.table <- function(range, from.last = FALSE){
 }
 
 #Assemble full table from two separate panels
-panel1 <- make.table(1:6)
-panel2 <- make.table(7:12, from.last = TRUE)
+panel1 <- make.table(1:4)
+panel2 <- make.table(5:8, from.last = TRUE)
 full.table <- paste(panel1, '\n \n \\vspace{2em} \n \n', panel2)
 
-#Make "MalfalSq" and "RuleSq" look prettier
-full.table <- gsub("MalfalSq", full.table, replacement = "\\emph{malfal}$^2$", fixed = TRUE)
-full.table <- gsub("RuleSq", full.table, replacement =  "\\emph{rule}$^2$", fixed = TRUE)
-
-cat(full.table, file = "table_2SLS_results.tex")
+cat(full.table, file = "./Results/table_2SLS.tex")
 rm(full.table, panel1, panel2, make.table)

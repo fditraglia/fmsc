@@ -36,22 +36,28 @@ ln\emph{mort}&Log settler mortality (per 1000 settlers), early 19th century&Base
 
 To apply the FMSC to the present example, we need a minimum of two valid instruments besides the constant term. Based on the arguments given in \cite{Acemoglu}, \cite{Carstensen2006} and \cite{Sachs}, I proceed under the assumption that ln\emph{mort} and \emph{maleco}, measures of early settler mortality and malaria ecology, are exogenous. Rather than selecting over every possible subset of instruments, I consider a number of instrument blocks defined in \cite{Carstensen2006}. The baseline block contains ln\emph{mort}, \emph{maleco} and a constant; the climate block contains \emph{frost}, \emph{humid}, and \emph{latitude}; the Europe block contains \emph{eurfrac} and \emph{engfrac}; and the openness block contains \emph{coast} and \emph{trade}. Full descriptions of these variables appear in Table \ref{tab:desc}. Table \ref{tab:fullresults} gives 2SLS results and traditional 95\% confidence intervals for all instrument sets considered here.
 
-\begin{sidewaystable}[!tbp]
+\begin{table}[h]
 \caption{2SLS Results for all Instrument Sets}
 \label{tab:fullresults}
  \begin{center}
 
-\input{../EmpiricalExample/table_2SLS_results.tex}
+\input{../EmpiricalExample/Results/table_2SLS.tex}
 
 \end{center}
 
-\end{sidewaystable}
+\end{table}
 
-
+\todo[inline]{Need to update some of the text here since I'm no longer looking at instrument sets 9--12. The only remaining results to add are the CIs.}
 
 Table \ref{tab:replicate} presents FMSC results for instrument sets 1--8  as defined in Table \ref{tab:fullresults}. Results are presented for two cases: the first takes the effect of \emph{malfal}, a measure of malaria transmission, as the target parameter while the second uses the effect of \emph{rule}, a measure of institutions. In each case, the FMSC selects instrument set 8: the full instrument set containing the baseline, climate, Europe and openness blocks. The rankings, however, differ depending on the target parameter.  When the target is \emph{rule} instrument sets 8 and 5 are virtually identical in terms of FMSC: 0.26 versus 0.23. In Table 2 of their paper, \cite{Carstensen2006} report GMM-BIC and HQ results for selection over instrument sets 2--4 and 8 that also favor instrument set 8. However, the authors do not consider instrument sets 5--7. Although the FMSC also selects instrument set 8, the FMSC values of instrument set 5 are small enough to suggest that including the openness block does little to reduce MSE.
 
 The bottom panel of Table \ref{tab:replicate} presents a number of alternative 95\% confidence intervals for the effects of \emph{malfal} and \emph{rule}, respectively. The first row gives the traditional asymptotic confidence interval from Table \ref{tab:fullresults}, while the following three give simulation-based intervals accounting for the effects of instrument selection. I do not present intervals for the conservative procedure given in Algorithm \ref{alg:conf} because the results in this example are so insensitive to the value of $\tau$ that the minimization and maximization problems given in Step 2 of the Algorithm are badly behaved. To illustrate this, I instead present intervals that use the same simulation procedure as Algorithm \ref{alg:conf} but treat $\tau$ as fixed. I consider four possible values of the bias parameter. When $\tau = \widehat{\tau}$, we have the one-step corrected interval considered in Table \ref{tab:FMSCnaive}. When $\tau = 0$, we have an interval that assumes all instruments are valid. The remaining two values $\widehat{\tau}_{min}$ and $\widehat{\tau}_{max}$ correspond to the lower and upper bounds of \emph{elementwise} 95\% confidence intervals for $\tau$ based on the distributional result given in Theorem \ref{thm:tau}. These result in a region with greater than 95\% coverage for $\tau$ considered jointly. Corrected 95\% intervals for the effect of \emph{malfal} are similar regardless of the value of $\tau$ used in the simulation, and the same is true for \emph{rule}. We find no evidence that accounting for the effects of instrument selection changes our conclusions about the sign or significance of \emph{malfal} or \emph{rule}.
+
+\begin{table}[htbp]
+	\centering
+	\input{../EmpiricalExample/Results/table_fmsc_values.tex}
+	\caption{Caption goes here.}
+\end{table}
 
 \begin{table}[htbp]
 \caption{FMSC values and confidence intervals for instrument sets 1--8.}

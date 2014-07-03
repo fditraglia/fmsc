@@ -35,8 +35,8 @@ key <- data.frame(paper.names, dataset.names,
 rm(paper.names, dataset.names)
 
 for(i in 1:nrow(key)){
-  col <- which(names(CGdata) == key$dataset[i])
-  names(CGdata)[col] <- key$paper[i]
+  col <- which(names(CGdata) == key$dataset.names[i])
+  names(CGdata)[col] <- key$paper.names[i]
 }
 
 rm(key, col, i)
@@ -60,10 +60,3 @@ rm(keep, keep.colnumbers)
 #-------------------------------------
 
 CGdata <- na.omit(CGdata)
-
-#-------------------------------------
-# APPEND rule^2 AND malfal^2 COLUMNS
-#-------------------------------------
-
-CGdata <- cbind(CGdata, rule.sq = CGdata$rule^2, 
-                        malfal.sq = CGdata$malfal^2)

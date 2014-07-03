@@ -45,6 +45,7 @@ All that remains before we can substitute into Equation \ref{eq:fmsc} is to esti
 There are many possible ways to proceed, depending on the problem at hand and the assumptions one is willing to make. 
 In the simulation and empirical examples discussed below we examine the 2SLS estimator, that is $\widetilde{W}_S = (\Xi_S Z'Z\Xi_S)^{-1}$, and estimate $\Omega$ as follows. 
 For all specifications \emph{except} the valid estimator $\widehat{\beta}_v$, we employ the centered, heteroscedasticity-consistent estimator
+\todo[inline]{Correct this explanation! We in fact use $\widehat{\beta}_S$ and $\mathbf{z}_{i,S}$. That is, we use the centered, heteroskedasticity-consistent variance matrix estimator based on the residuals of specification $S$ itself!}
 \begin{equation}
 	\widehat{\Omega}= \frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_{full})^2\mathbf{z}_i \mathbf{z}_i'  - \left(\frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_{full})\mathbf{z}_i   \right)\left(\frac{1}{n}\sum_{i=1}^n  u_i(\widehat{\beta}_{full})\mathbf{z}_i'  \right)
 \end{equation}
