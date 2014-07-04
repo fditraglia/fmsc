@@ -1,5 +1,5 @@
 library(MASS)
-n.sims <- 1000
+n.sims <- 10
 set.seed(7382)
 
 #Calculate asymptotic variance matrix for tau.hat and its inverse
@@ -111,8 +111,30 @@ sqbias.R <- lapply(seq_along(B2), function(i)
 all.equal(sqbias.R, sqbias.cpp)
 rm(sqbias.cpp, tt, K.tt.K, sqbias.R)
 
-# Now that we know this works, we turn our attention to B1
+# Now that we know this works, we turn our attention to B1.
+# First, expand as follows:
+#     B1 = A1 + A2' + A2 + A3
+# where
+#     A1 = Psi * M * M' * Psi'
+#     A2 = Psi * M * tau.star'
+#     A3 = tau.star * tau.star'
+# 
 
+Psi.M <- Psi %*% M
+Psi.M <- lapply(1:ncol(Psi.M), function(i)
+                Psi.M[,i])
+Psi.M <- Psi.M[[1]]
 tau.star <- tau.hat
-Psi.M  <- Psi %*% M
 n <- nrow(CGdata)
+
+A1 <- outer(Psi.M, Psi.M)
+A2 <- Psi.M %*% t(tau.star)
+A3 <- outer(tau.star, tau.star)
+B1 <- A1 + t(A2) + A2 + A3
+B1 <- lapply(cand, function(x) B1[x,x])
+B1 <- lapply(seq_along(K.suspect), function(i)
+            K.suspect[[i]] %*% B1[[i]] %*% t(K.suspect[[i]]))
+
+lapply(Psi.M, function(x) x %o% x)
+
+
