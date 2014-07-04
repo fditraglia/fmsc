@@ -56,7 +56,7 @@ Centering accounts for this fact, and thus provides added robustness.
 Since the valid estimator $\widehat{\beta}_v$ has no asymptotic bias, the AMSE of any target parameter based on this estimator equals its asymptotic variance. 
 Accordingly, we use 
 \begin{equation}
-	\widetilde{\Omega}_{11}= n^{-1}\sum_{i=1}^n u_i(\widehat{\beta}_{full})^2\mathbf{z}_{1i}\mathbf{z}_{1i}'
+	\widetilde{\Omega}_{11}= n^{-1}\sum_{i=1}^n u_i(\widehat{\beta}_v)^2\mathbf{z}_{1i}\mathbf{z}_{1i}'
 \end{equation}
 rather than the $(p\times p)$ upper left sub-matrix of $\widehat{\Omega}$ to estimate this quantity. 
 This imposes the assumption that all instruments in $Z_1$ are valid so that no centering is needed, providing greater precision.
