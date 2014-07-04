@@ -101,7 +101,7 @@ B2 <- lapply(seq_along(K.suspect), function(i)
 # squared asymptotic bias matrix as the C++ code gave us
 # First we need to extract it and convert it to a list
 sqbias.cpp <- fmsc.ingredients$sqbias
-sqbias.cpp <- lapply(1:(dim(sqbias_cpp)[3]),
+sqbias.cpp <- lapply(1:(dim(sqbias.cpp)[3]),
                      function(i) sqbias.cpp[,,i])
 tt <- lapply(cand, function(x) tau.hat[x] %o% tau.hat[x])
 K.tt.K <- lapply(seq_along(tt), function(i)
@@ -109,6 +109,7 @@ K.tt.K <- lapply(seq_along(tt), function(i)
 sqbias.R <- lapply(seq_along(B2), function(i)
                 K.tt.K[[i]] - B2[[i]])
 all.equal(sqbias.R, sqbias.cpp)
+rm(sqbias.cpp, tt, K.tt.K, sqbias.R)
 
 # Now that we know this works, we turn our attention to B1
 
