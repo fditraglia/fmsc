@@ -1,5 +1,9 @@
+# Note: the algorithm given here is designed to be as efficient
+# as possible for the *particular* target parameters used in
+# the empirical example, but it does *not generalize* to other
+# settings. See the comments below for more details. 
 library(MASS)
-n.sims <- 10
+n.sims <- 1000
 set.seed(7382)
 
 #Calculate asymptotic variance matrix for tau.hat and its inverse
@@ -8,6 +12,9 @@ Omega.full <- fmsc.ingredients$Omega[[8]]
 Psi <- fmsc.ingredients$Psi
 tau.var <- Psi %*% Omega.full %*% t(Psi)
 tau.var.inv <- chol2inv(chol(tau.var))
+
+#Names of the regressors
+reg.names <- rownames(fmsc.ingredients$est)
 
 #Draw the simulations in advance;
 M <- t(mvrnorm(n = n.sims,
@@ -140,37 +147,50 @@ B2.S <- apply(B2.S, 3, diag)
 #
 # since it means we *never* have to explicitly form and
 # store the outer product matrices. First, we pre-compute
-# Psi * M
+# Psi * M where each *column* of the result is a sim draw
 Psi.M <- Psi %*% M
 
+# Now rather than computing the whole outer product as a 
+# function of tau.star and M, we can get the diagonal elements
+# for *all draws of M simultaneously* as follows
+B1.S <- function(tau.star, row){
+  sapply(seq_along(cand), function(i)
+    (K.suspect[[i]][row,] %*% (Psi.M + tau.star)[cand[[i]],])^2)
+}
 
-B1.diag <- lapply(seq_along(cand), function(i)
-          (K.suspect[[i]] %*% (Psi.M + tau.star)[cand[[i]],])^2)
-                    
-sqbias.diag.sim <- lapply(seq_along(B1.diag), function(i)
-                           B1.diag[[i]] - B2.diag[,i])
-
-FMSC.diag.sim <- sapply(seq_along(sqbias.diag.sim), function(i)
-                        sqbias.diag.sim[[i]] + avar.diag[,i],
-                        simplify = "array")
-
-posFMSC.diag.sim <- sapply(seq_along(sqbias.diag.sim), function(i)
-                pmax(sqbias.diag.sim[[i]], 0) + avar.diag[,i],
-                simplify = "array")
-
-
-apply(FMSC.diag.sim[3,,], 1, which.min)
-bar <- apply(posFMSC.diag.sim[3,,], 1, which.min)
-sapply(bar, function(i) K[[bar[i]]][3,] %*% M[cand[[bar[i]]],i])
+# Now we're ready to start putting the pieces back together.
+sqbias <- function(tau.star, row){
+  B1 <- B1.S(tau.star, row)
+  B2 <- B2.S[row,]
+  apply(B1, 1, function(x) x - B2)
+}
 
 
+sqbias.pos <- function(tau.star, row){
+  pmax(sqbias(tau.star, row), 0)
+}
 
-#Sanity Check
-testy <- apply(K.tt.K, 3, diag) - B2.diag + avar.diag
-all.equal(testy[2,], fmsc.values$rule[,1])
-all.equal(testy[3,], fmsc.values$malfal[,1])
+FMSC <- function(tau.star, row){
+  criterion <- apply(sqbias(tau.star, row), 2, 
+                     function(x) x + avar.S[row,])
+  apply(criterion, 2, which.min)
+}
+
+posFMSC <- function(tau.star, row){
+  criterion <- apply(sqbias.pos(tau.star, row), 2, 
+                     function(x) x + avar.S[row,])
+  apply(criterion, 2, which.min)
+}
 
 
-n <- nrow(CGdata)
+Lambda <- function(tau.star, row, criterion){
+  index <- criterion(tau.star, row)
+  g <- function(i){
+    K.row <- K[[index[i]]][row,,drop = FALSE]
+    M.ind <- c(TRUE, TRUE, TRUE, cand[[index[i]]])
+    -1 * K.row %*% M[M.ind, i, drop = FALSE]
+  }
+  sapply(seq_along(index), g)
+}
 
 
