@@ -9,6 +9,12 @@
 library(sem) #contains tsls routine
 library(Rcpp)
 library(RcppArmadillo)
+library(MASS)
+library(crs)
+
+#Number of simulations for simulation-based CI construction
+n.sims <- 1000
+set.seed(7382)
 
 sourceCpp("functions.cpp")
 
@@ -24,6 +30,8 @@ source("calculate_fmsc_values.R")
 
 source("make_fmsc_table.R")
 
-#source("calculate_fmsc_CIs.R")
+source("CI_functions.R")
+
+source("calculate_fmsc_CIs.R")
 
 #source("make_CI_table.R")
