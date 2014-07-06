@@ -32,6 +32,6 @@ source("make_fmsc_table.R")
 
 source("CI_functions.R")
 
-source("calculate_fmsc_CIs.R")
+#source("calculate_fmsc_CIs.R")
 
 #source("make_CI_table.R")
