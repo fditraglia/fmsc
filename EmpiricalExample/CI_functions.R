@@ -18,18 +18,6 @@ M <- t(mvrnorm(n = n.sims,
                mu = rep(0, ncol(Omega.full)),
                Sigma = Omega.full))
 
-#Function that returns TRUE if a vector x lies in the
-#(1 - delta) * 100% confidence region for tau based on 
-#the estimate tau.hat and its asymptotic variance matrix 
-#tau.var. Defaults to a 95% confidence region.
-R.tau <- function(x, delta = 0.05){
-  q <- length(tau.hat)
-  stopifnot(length(x) == q)  
-  crit <- qchisq(1 - delta, q)
-  diff <- tau.hat - x
-  t(diff) %*% tau.var.inv %*% diff < crit
-}
-
 # To construct valid confidence intervals, we first need code
 # to evaluate FMSC_S(tau.star, M) for each specification S
 # at simulation draw M and specified value tau.star for the 
