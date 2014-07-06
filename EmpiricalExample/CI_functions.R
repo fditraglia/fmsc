@@ -13,7 +13,9 @@ tau.var.inv <- chol2inv(chol(tau.var))
 #Names of the regressors
 reg.names <- rownames(fmsc.ingredients$est)
 
-#Draw the simulations in advance;
+#Draw the simulations in advance
+n.sims <- 10000
+set.seed(7382)
 M <- t(mvrnorm(n = n.sims,
                mu = rep(0, ncol(Omega.full)),
                Sigma = Omega.full))

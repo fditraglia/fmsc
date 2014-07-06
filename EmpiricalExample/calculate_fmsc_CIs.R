@@ -1,11 +1,15 @@
+# Coverage probabilities
+alpha <- 0.05
+delta <- 0.05
+
+#------------------------------------------------------------
 # Constraint Function - only consider values of tau.star
 # in (1 - delta) * 100% Confidence Region
-#
+#------------------------------------------------------------
 # Note that NOMAD requires constraints of the form c(x) <= 0
 # so we write this such that a *negative* value indicates
 # that tau.star lies within the confidence region and a 
 # positive value indicates that it lies outside this region
-delta <- 0.05
 q <- length(tau.hat)
 chisq.crit <- qchisq(1 - delta, q)
 
@@ -38,21 +42,53 @@ LambdaQuantile <- function(target, criterion, q){
 }
 
 
-g <- LambdaQuantile(target = "rule", criterion = FMSC, q = 0.95)
+#Set up parameters for optimization routine
+snomadr.default <- function(f){
+  snomadr(eval.f = f, n = q, x0 = tau.hat, bbin = rep(0,q),
+          bbout = c(0,1), lb = tau.lower, ub = tau.upper)
+}
 
 
-result <- snomadr(eval.f = function(x) c(-g(x), constraint(x)), 
-                  n = q,
-                  x0 = tau.hat,
-                  bbin = rep(0,q),
-                  bbout = c(0,1),
-                  lb = tau.lower,
-                  ub = tau.upper)
+#FMSC and posFMSC selected estimators of each target parameter
+fmsc.values <- lapply(fmsc.values, as.data.frame)
+selected <- lapply(fmsc.values, function(x) apply(x[,1:2], 2, which.min))
+mu.est <- lapply(fmsc.values, 
+                 function(x) x$est[apply(x[,1:2], 2, which.min)])
+names(mu.est$rule) <- c("FMSC", "posFMSC")
+names(mu.est$malfal) <- c("FMSC", "posFMSC")
 
-result$solution
-constraint(result$solution)
-g(result$solution)
+# Number of Observations for CI construction
+n <- nrow(CGdata)
+target <- "rule"
+criterion.name <- "FMSC"
+
+criterion <- match.fun(criterion.name)
+mu.hat <- mu.est[[target]][[criterion.name]]
+S.hat <- selected[[target]][[criterion.name]]
+
+g <- LambdaQuantile(target, criterion, 1 - alpha / 2)
+h <- LambdaQuantile(target, criterion, alpha / 2)
+
+Upper <- snomadr.default(function(x) c(-g(x), constraint(x)))
+Lower <- snomadr.default(function(x) c(h(x), constraint(x)))
+
+constraint(Upper$solution)
+constraint(Lower$solution)
+g(Upper$solution)
+h(Lower$solution)
 g(tau.hat)
+h(tau.hat)
+
+one.step <- mu.hat - c(g(tau.hat), 
+                       h(tau.hat)) / sqrt(n)
+two.step <- mu.hat - c(g(Upper$solution), 
+                       h(Lower$solution)) / sqrt(n)
+
+out <- rbind(one.step, two.step)
+row.names(out) <- c("1-Step", "2-Step")
+colnames(out) <- c("Lower", "Upper")
+
+#Need to calculate the Naive 1 - (alpha + delta) which requires that I store the regression results...
 
 
 
