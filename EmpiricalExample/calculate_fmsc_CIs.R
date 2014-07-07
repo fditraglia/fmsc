@@ -41,14 +41,6 @@ LambdaQuantile <- function(target, criterion, q){
   }
 }
 
-
-#Set up parameters for optimization routine
-snomadr.default <- function(f){
-  snomadr(eval.f = f, n = q, x0 = tau.hat, bbin = rep(0,q),
-          bbout = c(0,1), lb = tau.lower, ub = tau.upper)
-}
-
-
 #FMSC and posFMSC selected estimators of each target parameter
 fmsc.values <- lapply(fmsc.values, as.data.frame)
 selected <- lapply(fmsc.values, function(x) apply(x[,1:2], 2, which.min))
@@ -62,8 +54,7 @@ n <- nrow(CGdata)
 
 
 #Function to calculate various CIs
-target.name <- "malfal" 
-criterion.name <- "FMSC"
+CIs <- function(target.name, criterion.name){
   
   criterion <- match.fun(criterion.name)
   mu.hat <- mu.est[[target.name]][[criterion.name]]
@@ -72,28 +63,44 @@ criterion.name <- "FMSC"
   g <- LambdaQuantile(target.name, criterion, 1 - alpha / 2)
   h <- LambdaQuantile(target.name, criterion, alpha / 2)
   
-  Upper <- snomadr.default(function(x) c(-g(x), constraint(x)))
-  Lower <- snomadr.default(function(x) c(h(x), constraint(x)))
+#   Upper <- snomadr(eval.f = function(x) c(-g(x), constraint(x)),
+#                    n = q,
+#                    x0 = tau.hat,
+#                    bbin = rep(0,q),
+#                    bbout = c(0,1),
+#                    lb = tau.lower,
+#                    ub = tau.upper)
+#   
+#   Lower <- snomadr(eval.f = function(x) c(h(x), constraint(x)),
+#                    n = q,
+#                    x0 = tau.hat,
+#                    bbin = rep(0,q),
+#                    bbout = c(0,1),
+#                    lb = tau.lower,
+#                    ub = tau.upper)
   
-  constraint(Upper$solution)
-  constraint(Lower$solution)
-  g(Upper$solution)
-  h(Lower$solution)
-  g(tau.hat)
-  h(tau.hat)
+#   constraint(Upper$solution)
+#   constraint(Lower$solution)
+#   g(Upper$solution)
+#   h(Lower$solution)
+#   g(tau.hat)
+#   h(tau.hat)
   
   one.step <- mu.hat - c(g(tau.hat), 
                          h(tau.hat)) / sqrt(n)
-  two.step <- mu.hat - c(g(Upper$solution), 
-                         h(Lower$solution)) / sqrt(n)
+#   two.step <- mu.hat - c(g(Upper$solution), 
+#                          h(Lower$solution)) / sqrt(n)
 
   SE.naive <- sqrt(diag(tsls.fits[[S.hat]]$V)[[target.name]])
   z.naive <- qnorm(1 - alpha /2)
   naive <- mu.hat + z.naive * SE.naive * c(-1, 1)
   
-  out <- rbind(naive, one.step, two.step)
-  row.names(out) <- c("Naive", "1-Step", "2-Step")
+  out <- rbind(naive, one.step)#, two.step)
+  row.names(out) <- c("Naive", "1-Step")#, "2-Step")
   colnames(out) <- c("Lower", "Upper")
   
+  return(out)
+}
 
+rule.FMSC <- CIs("rule", "FMSC")
 
