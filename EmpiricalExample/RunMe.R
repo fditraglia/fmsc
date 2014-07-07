@@ -30,4 +30,4 @@ source("CI_functions.R")
 
 source("calculate_CIs.R")
 
-#source("make_CI_table.R")
+source("make_CI_table.R")
