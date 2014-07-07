@@ -59,39 +59,41 @@ names(mu.est$malfal) <- c("FMSC", "posFMSC")
 
 # Number of Observations for CI construction
 n <- nrow(CGdata)
-target <- "rule"
+
+
+#Function to calculate various CIs
+target.name <- "malfal" 
 criterion.name <- "FMSC"
+  
+  criterion <- match.fun(criterion.name)
+  mu.hat <- mu.est[[target.name]][[criterion.name]]
+  S.hat <- selected[[target.name]][[criterion.name]]
+  
+  g <- LambdaQuantile(target.name, criterion, 1 - alpha / 2)
+  h <- LambdaQuantile(target.name, criterion, alpha / 2)
+  
+  Upper <- snomadr.default(function(x) c(-g(x), constraint(x)))
+  Lower <- snomadr.default(function(x) c(h(x), constraint(x)))
+  
+  constraint(Upper$solution)
+  constraint(Lower$solution)
+  g(Upper$solution)
+  h(Lower$solution)
+  g(tau.hat)
+  h(tau.hat)
+  
+  one.step <- mu.hat - c(g(tau.hat), 
+                         h(tau.hat)) / sqrt(n)
+  two.step <- mu.hat - c(g(Upper$solution), 
+                         h(Lower$solution)) / sqrt(n)
 
-criterion <- match.fun(criterion.name)
-mu.hat <- mu.est[[target]][[criterion.name]]
-S.hat <- selected[[target]][[criterion.name]]
-
-g <- LambdaQuantile(target, criterion, 1 - alpha / 2)
-h <- LambdaQuantile(target, criterion, alpha / 2)
-
-Upper <- snomadr.default(function(x) c(-g(x), constraint(x)))
-Lower <- snomadr.default(function(x) c(h(x), constraint(x)))
-
-constraint(Upper$solution)
-constraint(Lower$solution)
-g(Upper$solution)
-h(Lower$solution)
-g(tau.hat)
-h(tau.hat)
-
-one.step <- mu.hat - c(g(tau.hat), 
-                       h(tau.hat)) / sqrt(n)
-two.step <- mu.hat - c(g(Upper$solution), 
-                       h(Lower$solution)) / sqrt(n)
-
-out <- rbind(one.step, two.step)
-row.names(out) <- c("1-Step", "2-Step")
-colnames(out) <- c("Lower", "Upper")
-
-#Need to calculate the Naive 1 - (alpha + delta) which requires that I store the regression results...
-
-
-
-
+  SE.naive <- sqrt(diag(tsls.fits[[S.hat]]$V)[[target.name]])
+  z.naive <- qnorm(1 - alpha /2)
+  naive <- mu.hat + z.naive * SE.naive * c(-1, 1)
+  
+  out <- rbind(naive, one.step, two.step)
+  row.names(out) <- c("Naive", "1-Step", "2-Step")
+  colnames(out) <- c("Lower", "Upper")
+  
 
 
