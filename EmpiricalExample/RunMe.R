@@ -9,8 +9,8 @@
 library(sem) #contains tsls routine
 library(Rcpp)
 library(RcppArmadillo)
-library(MASS)
-library(crs)
+library(MASS) #for mvrnorm function
+library(crs) #provides R interface to NOMAD
 
 sourceCpp("functions.cpp")
 
