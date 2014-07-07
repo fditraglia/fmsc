@@ -52,6 +52,20 @@ names(mu.est$malfal) <- c("FMSC", "posFMSC")
 # Number of Observations for CI construction
 n <- nrow(CGdata)
 
+# Set up parameters of optimization routine
+snomadr.default <- function(f){
+  snomadr(eval.f = f,
+          n = q,
+          x0 = tau.hat,
+          bbin = rep(0,q),
+          bbout = c(0,1),
+          lb = tau.lower,
+          ub = tau.upper,
+          #when enclosed in a function itself, snomadr gets 
+          #confused by closures and needs to be explicitly
+          #told to look in the calling environment
+          snomadr.environment = parent.frame())
+}
 
 #Function to calculate various CIs
 CIs <- function(target.name, criterion.name){
@@ -60,47 +74,34 @@ CIs <- function(target.name, criterion.name){
   mu.hat <- mu.est[[target.name]][[criterion.name]]
   S.hat <- selected[[target.name]][[criterion.name]]
   
-  g <- LambdaQuantile(target.name, criterion, 1 - alpha / 2)
-  h <- LambdaQuantile(target.name, criterion, alpha / 2)
+  q.lower <- LambdaQuantile(target.name, criterion, alpha / 2)
+  q.upper <- LambdaQuantile(target.name, criterion, 1 - alpha / 2)
   
-#   Upper <- snomadr(eval.f = function(x) c(-g(x), constraint(x)),
-#                    n = q,
-#                    x0 = tau.hat,
-#                    bbin = rep(0,q),
-#                    bbout = c(0,1),
-#                    lb = tau.lower,
-#                    ub = tau.upper)
-#   
-#   Lower <- snomadr(eval.f = function(x) c(h(x), constraint(x)),
-#                    n = q,
-#                    x0 = tau.hat,
-#                    bbin = rep(0,q),
-#                    bbout = c(0,1),
-#                    lb = tau.lower,
-#                    ub = tau.upper)
+  Lower <- snomadr.default(function(x) c(q.lower(x), constraint(x))) 
+  Upper <- snomadr.default(function(x) c(-q.upper(x), constraint(x)))
   
-#   constraint(Upper$solution)
-#   constraint(Lower$solution)
-#   g(Upper$solution)
-#   h(Lower$solution)
-#   g(tau.hat)
-#   h(tau.hat)
+  one.step <- mu.hat - c(q.upper(tau.hat), 
+                         q.lower(tau.hat)) / sqrt(n)
   
-  one.step <- mu.hat - c(g(tau.hat), 
-                         h(tau.hat)) / sqrt(n)
-#   two.step <- mu.hat - c(g(Upper$solution), 
-#                          h(Lower$solution)) / sqrt(n)
-
+  two.step <- mu.hat - c(q.upper(Upper$solution), 
+                         q.lower(Lower$solution)) / sqrt(n)
+  
   SE.naive <- sqrt(diag(tsls.fits[[S.hat]]$V)[[target.name]])
   z.naive <- qnorm(1 - alpha /2)
   naive <- mu.hat + z.naive * SE.naive * c(-1, 1)
   
-  out <- rbind(naive, one.step)#, two.step)
-  row.names(out) <- c("Naive", "1-Step")#, "2-Step")
+  out <- rbind(naive, one.step, two.step)
+  row.names(out) <- c("Naive", "1-Step", "2-Step")
   colnames(out) <- c("Lower", "Upper")
   
   return(out)
 }
 
+#Calculate CIs
 rule.FMSC <- CIs("rule", "FMSC")
+rule.posFMSC <- CIs("rule", "posFMSC")
+malfal.FMSC <- CIs("malfal", "FMSC")
+malfal.posFMSC <- CIs("malfal", "posFMSC")
 
+#Clean Up
+rm(list = setdiff(ls(), c("rule.FMSC", "rule.posFMSC", "malfal.FMSC", "malfal.posFMSC")))
