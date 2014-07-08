@@ -15,6 +15,7 @@ rm(rule.FMSC, rule.posFMSC)
 rm(collapseCI, formatCIs)
 
 CI.table <- cbind(malfal.panel, rule.panel)
+CI.table <- apply(CI.table, c(1,2), function(x) paste0("$", x, "$"))
 
 rowNames <- row.names(CI.table)
 body <- cbind(rowNames, CI.table)
