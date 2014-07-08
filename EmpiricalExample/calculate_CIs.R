@@ -88,7 +88,7 @@ CIs <- function(target.name, criterion.name){
   
   SE.naive <- sqrt(diag(tsls.fits[[S.hat]]$V)[[target.name]])
   z <- qt(0.975, n - 3) #Three regression coeffs in 2nd stage
-  naive <- mu.hat + z.naive * SE.naive * c(-1, 1)
+  naive <- mu.hat + z * SE.naive * c(-1, 1)
   
   out <- rbind(naive, one.step, two.step)
   row.names(out) <- c("Naive", "1-Step", "2-Step")
