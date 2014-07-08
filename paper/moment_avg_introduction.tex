@@ -141,3 +141,4 @@ Consider a moment selection criterion of the form $MSC(S) = J_n(S) - h(|S|)\kapp
 \end{thm}
 The preceding result is a special case of a more general phenomenon: consistent selection procedures cannot detect model violations of order $O(n^{-1/2})$.
 Because moment selection using the GMM-BIC or HQ leads to weights with a degenerate asymptotic distribution, one that does not capture the effects of selection on inference, these criteria are not considered further below.
+\todo[inline]{Should clarify that in the simulation study that I present, GMM-AIC actually \emph{is} consistent whenever $\rho\neq 0$. This is because the GMM-AIC never selects an invalid moment condition in the limit but may fail to select all valid moment conditions. See my lecture notes for Econ 722 for a full explanation.}
