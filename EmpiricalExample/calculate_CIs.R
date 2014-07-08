@@ -87,7 +87,7 @@ CIs <- function(target.name, criterion.name){
                          q.lower(Lower$solution)) / sqrt(n)
   
   SE.naive <- sqrt(diag(tsls.fits[[S.hat]]$V)[[target.name]])
-  z.naive <- qnorm(1 - alpha /2)
+  z <- qt(0.975, N - length(coef))
   naive <- mu.hat + z.naive * SE.naive * c(-1, 1)
   
   out <- rbind(naive, one.step, two.step)
