@@ -416,7 +416,6 @@ class fmsc_chooseIV {
       colvec b_fmsc = estimates.col(which_min);
       return(dot(weights, b_fmsc));
     }   
-//  private:
     tsls_fit valid, full;
     colvec tau;
     mat Psi, tau_outer_est, Bias_mat, estimates;
@@ -533,6 +532,31 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     avar_inner = avar_inner_temp;
 }
 
+
+//Class for post-FMSC CI construction in the case of a single
+//endogenous regressor (whose coefficient is the target
+//parameter), a single "suspect" instrument and any number of
+//valid instruments. In this case, tau is a scalar.
+class fmsc_CI_simple{
+  public:
+    fmsc_CI_cimple(const colvec&, const colvec& const mat&, 
+                   const colvec&, int);
+  private:  
+    fmsc_chooseIV fmsc;
+    mat Psi, PsiM, Omega;
+    double mu_full, mu_valid;
+  
+  
+};
+//Class constructor
+fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y, 
+              const mat& z_valid, const colvec& z_suspect, 
+              int n_sims = 500): fmsc(x, y, z_valid, z_suspect){
+  
+  
+  
+
+}
 
 
 
