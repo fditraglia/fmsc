@@ -539,34 +539,64 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
 //valid instruments. In this case, tau is a scalar.
 class fmsc_CI_simple{
   public:
-    fmsc_CI_cimple(const colvec&, const colvec& const mat&, 
-                   const colvec&, int);
+    fmsc_CI_simple(const colvec&, const colvec& const mat&, 
+                   const colvec&, int, int, double, double);
   private:  
+    colvec B1(double tau){
+      colvec tau_vec = tau * ones<vec>(PsiM.n_elem);
+      return(pow(K_suspect * (PsiM + tau_vec), 2.0));
+    }
+    colvec simFMSC_full(double tau){
+      colvec one_vec = ones<vec>(Psi.n_elem);
+      return(B1(tau) + (avar_full - B2) * one_vec);
+    }
+    //Function that indicates whether we chose full or valid
+    //for a given simulation value as a function of tau
     fmsc_chooseIV results;
     mat Psi, Omega;
-    vec PsiM, K;
+    vec PsiM, K, tau_star;
     double K_suspect, mu_full, mu_valid, tau_var, tau_hat;
-    double FMSC_valid, posFMSC_valid;
-    int p;
+    double avar_full, avar_valid, B2, FMSC_valid, posFMSC_valid;
+    double mu_FMSC, mu_posFMSC;
+    double tau_lower, tau_upper;
+    int p, n;
 };
 //Class constructor
 fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y, 
               const mat& z_valid, const colvec& z_suspect, 
-              int n_sims = 500): results(x, y, z_valid, z_suspect){
+              int n_sims = 500, int tau_grid = 100, 
+              double alpha = 0.05, 
+              double delta = 0.05): results(x, y, z_valid, z_suspect){
 
+  //The FMSC weight vector is simply one in this example
+  colvec w = ones<vec>(1);
   p = z_valid.n_rows;
+  n = x.n_rows;
   K = conv_to<vec>::from(results.K(1));
   K_suspect = K(p); //Zero-indexing!
   Omega = results.Omega(1);
   M = trans(mvrnorm_cpp(n_sims, zeros<vec>(p + 1), Omega));
   Psi = results.Psi;
   PsiM = conv_to<vec>::from(Psi * M);
-  tau_hat = fmsc.tau;
-  tau_var = Psi * Omega * Psi.t();
-
+  tau_hat = results.tau;
+  tau_var = as_scalar(Psi * Omega * Psi.t());
+  B2 = pow(K_suspect, 2.0) * tau_var;
+  double q_normal = R::qnorm(1 - delta/2, 0, 1, 1, 0);
+  double SE_tau = sqrt(tau_var);
+  double tau_lower = tau_hat - q_normal * SE_tau;
+  double tau_upper = tau_hat + q_normal * SE_tau;
+  tau_star = linspace(tau_lower, tau_upper, tau_grid); 
+  avar_valid = results.avar_inner(0);
+  avar_full = results.avar_inner(1);
+  mu_full = results.mu_full(w);
+  mu_valid = results.mu_valid(w);
+  mu_FMSC = results.mu_fmsc(w);
+  mu_posFMSC = results.mu_fmsc_pos(w);
+  colvec FMSC = results.fmsc(w);
+  FMSC_valid = as_scalar(FMSC(0));
+  colvec posFMSC = results.fmsc_pos(w);
+  posFMSC_valid = as_scalar(posFMSC(0));
 }
-
-
 
 class dgp {
   public:
