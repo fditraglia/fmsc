@@ -542,19 +542,27 @@ class fmsc_CI_simple{
     fmsc_CI_cimple(const colvec&, const colvec& const mat&, 
                    const colvec&, int);
   private:  
-    fmsc_chooseIV fmsc;
-    mat Psi, PsiM, Omega;
-    double mu_full, mu_valid;
-  
-  
+    fmsc_chooseIV results;
+    mat Psi, Omega;
+    vec PsiM, K;
+    double K_suspect, mu_full, mu_valid, tau_var, tau_hat;
+    double FMSC_valid, posFMSC_valid;
+    int p;
 };
 //Class constructor
 fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y, 
               const mat& z_valid, const colvec& z_suspect, 
-              int n_sims = 500): fmsc(x, y, z_valid, z_suspect){
-  
-  
-  
+              int n_sims = 500): results(x, y, z_valid, z_suspect){
+
+  p = z_valid.n_rows;
+  K = conv_to<vec>::from(results.K(1));
+  K_suspect = K(p); //Zero-indexing!
+  Omega = results.Omega(1);
+  M = trans(mvrnorm_cpp(n_sims, zeros<vec>(p + 1), Omega));
+  Psi = results.Psi;
+  PsiM = conv_to<vec>::from(Psi * M);
+  tau_hat = fmsc.tau;
+  tau_var = Psi * Omega * Psi.t();
 
 }
 
