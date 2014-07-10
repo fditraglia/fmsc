@@ -11,6 +11,7 @@ A number of well-known studies find little or no direct effect of geographic end
 \end{equation}
 Treating both institutions and malaria transmission as endogenous, they consider a variety of measures of each and a number of instrument sets. 
 In each case, they find large negative effects of malaria transmission, lending further support to Sach's conclusion. 
+
 In this section, I expand on the instrument selection exercise given in Table 2 of \cite{Carstensen2006} using the FMSC and corrected confidence intervals described above. I consider two questions. 
 First, based on the FMSC methodology, which instruments should we choose to produce the best estimate of $\beta_3$, the effect of malaria transmission on per capita income? 
 Second, after correcting confidence intervals for instrument selection, do we still find evidence of large and negative effects of malaria transmission on income? 
@@ -20,10 +21,8 @@ In keeping with Table 2 of \cite{Carstensen2006}, I use ln\emph{gdpc} as the dep
 
 
 \begin{table}[!tbp]
-\caption{Description of Variables}
 \small
-\label{tab:desc}
-\begin{center}
+\centering
 \begin{tabular}{lll}
 \hline \hline
 Name& Description &\\
@@ -42,7 +41,8 @@ ln\emph{mort}&Log settler mortality (per 1000 settlers), early 19th century&Base
 \emph{trade}&Log Frankel-Romer predicted trade share&Openness\\
 \hline
 \end{tabular}
-\end{center}
+\caption{Description of variables for Empirical Example.}
+\label{tab:desc}
 \end{table}
 
 To apply the FMSC to the present example, we need a minimum of two valid instruments besides the constant term. 
@@ -53,13 +53,10 @@ Full descriptions of these variables appear in Table \ref{tab:desc}.
 Table \ref{tab:fullresults} gives 2SLS results and traditional 95\% confidence intervals for all instrument sets considered here.
 
 \begin{table}[h]
-\caption{2SLS Results for all Instrument Sets}
-\label{tab:fullresults}
- \begin{center}
-
+\centering
 \input{../EmpiricalExample/Results/table_2SLS.tex}
-
-\end{center}
+\caption{Two-stage least squares estimation results for all instrument sets.}
+\label{tab:fullresults}
 
 \end{table}
 
@@ -73,127 +70,23 @@ In Table 2 of their paper, \cite{Carstensen2006} report GMM-BIC and HQ results f
 However, the authors do not consider instrument sets 5--7. 
 Although the FMSC also selects instrument set 8, the FMSC values of instrument set 5 are small enough to suggest that including the openness block does little to reduce MSE.
 
-The bottom panel of Table \ref{tab:replicate} presents a number of alternative 95\% confidence intervals for the effects of \emph{malfal} and \emph{rule}, respectively. 
-The first row gives the traditional asymptotic confidence interval from Table \ref{tab:fullresults}, while the following three give simulation-based intervals accounting for the effects of instrument selection. 
-I do not present intervals for the conservative procedure given in Algorithm \ref{alg:conf} because the results in this example are so insensitive to the value of $\tau$ that the minimization and maximization problems given in Step 2 of the Algorithm are badly behaved. 
-To illustrate this, I instead present intervals that use the same simulation procedure as Algorithm \ref{alg:conf} but treat $\tau$ as fixed. 
-I consider four possible values of the bias parameter. When $\tau = \widehat{\tau}$, we have the one-step corrected interval considered in Table \ref{tab:FMSCnaive}. When $\tau = 0$, we have an interval that assumes all instruments are valid. 
-The remaining two values $\widehat{\tau}_{min}$ and $\widehat{\tau}_{max}$ correspond to the lower and upper bounds of \emph{elementwise} 95\% confidence intervals for $\tau$ based on the distributional result given in Theorem \ref{thm:tau}. 
-These result in a region with greater than 95\% coverage for $\tau$ considered jointly. Corrected 95\% intervals for the effect of \emph{malfal} are similar regardless of the value of $\tau$ used in the simulation, and the same is true for \emph{rule}. 
+
 We find no evidence that accounting for the effects of instrument selection changes our conclusions about the sign or significance of \emph{malfal} or \emph{rule}.
 
 \begin{table}[htbp]
 	\centering
 	\input{../EmpiricalExample/Results/table_fmsc_values.tex}
-	\caption{Caption goes here.}
+		\caption{FMSC and and positive-part FMSC values for selection over the instrument sets presented in Table ???.}
 \end{table}
 
 \begin{table}[htbp]
 	\centering
 	\input{../EmpiricalExample/Results/table_CIs.tex}
-	\caption{Caption goes here.}
+	\caption{Post-selection confidence intervals for the instrument selection exercise presented in Table ???. Explain the meaning of each row!}
 \end{table}
 
 \todo[inline]{There is a very slight discrepancy between the Na\"{i}ve CIs and the corresponding CIs in the table of 2SLS results. This is intentional. The 2SLS results are designed to be as close a possible to C\&G. Since they use a t-distribution to construct CIs, I do the same in that table.  who use a t-distribution to construct their CIs.}
 
-\begin{table}[htbp]
-\caption{FMSC values and confidence intervals for instrument sets 1--8.}
-\label{tab:replicate}
-\small
- \begin{center}
- \begin{tabular}{lcccc}\hline\hline
- & \multicolumn{2}{c}{$\mu=$\emph{malfal}}& \multicolumn{2}{c}{$\mu=$\emph{rule}}\\
-&\multicolumn{1}{c}{FMSC}&\multicolumn{1}{c}{$\widehat{\mu}$}&\multicolumn{1}{c}{FMSC}&\multicolumn{1}{c}{$\widehat{\mu}$}\tabularnewline
-\hline
-Valid (1)&3.03&-1.04&1.27&0.89\tabularnewline
-Climate (2)&2.67&-0.90&0.92&0.97\tabularnewline   
-Openness (3)&2.31&-1.09&1.23&0.81\tabularnewline  
-Europe (4)&1.83&-1.14&0.55&0.86\tabularnewline
-Openness, Europe (7)&1.72&-1.16&0.77&0.81\tabularnewline  
-Climate, Openness (6)&1.65&-0.98&0.43&0.86\tabularnewline
-Climate, Europe (5)&0.71&-1.02&0.26&0.93\tabularnewline
-Full (8)&0.53&-1.08&0.23&0.84\tabularnewline
-\hline 
-Traditional&\multicolumn{2}{c}{(-1.58, -0.58)}&\multicolumn{2}{c}{(0.57, 1.10)}\\
-$\tau = \widehat{\tau}$&\multicolumn{2}{c}{(-1.54, -0.61)}&\multicolumn{2}{c}{(0.55, 1.13)}\\
-$\tau = 0$&\multicolumn{2}{c}{(-1.53, -0.64)}&\multicolumn{2}{c}{(0.55, 1.12)}\\
-$\tau = \widehat{\tau}_{max}$&\multicolumn{2}{c}{(-1.51, -0.55)}&\multicolumn{2}{c}{(0.55, 1.17)}\\
-$\tau = \widehat{\tau}_{min}$&\multicolumn{2}{c}{(-1.61, -0.58)}&\multicolumn{2}{c}{(0.49, 1.15)}\\
-\hline
+Although it provides an asymptotically unbiased estimator of AMSE, the FMSC may be negative because it subtracts $\widehat{\Psi}\widehat{\Omega}\widehat{\Psi}'$ from $\widehat{\tau}\widehat{\tau}'$ to estimate squared bias.
 
-\end{tabular}
-\end{center}
-\end{table}
-
-
-
-FMSC is designed to include invalid instruments when doing so will reduce AMSE. 
-Table \ref{tab:endog} considers adding two almost certainly invalid instruments to the baseline instrument set: \emph{rule}$^2$ and \emph{malfal}$^2$. 
-Because they are constructed from the endogenous regressors, these instruments are likely to be highly relevant. Unless the effect of institutions and malaria transmission on GDP per capita is exactly linear, however, they are invalid. 
-When the target is \emph{malfal}, we see that the FMSC selects an instrument set including \emph{malfal}$^2$ and the baseline instruments. 
-FMSC is negative in this case. Although it provides an asymptotically unbiased estimator of AMSE, the FMSC may be negative because it subtracts $\widehat{\Psi}\widehat{\Omega}\widehat{\Psi}'$ from $\widehat{\tau}\widehat{\tau}'$ to estimate squared bias. 
-When the target is \emph{rule}, FMSC chooses the full instrument set, including the baseline instruments along with \emph{rule}$^2$ and \emph{malfal}$^2$. 
-While these instruments are likely invalid, FMSC chooses to include them because its estimate of the bias they induce is small compared to the reduction in variance they provide. 
-Table \ref{tab:all} further expands the instrument sets under consideration to include 1--4 and 9--12. 
-In this case, the FMSC chooses instrument set 12 for both target parameters. 
-However, we see from the FMSC rankings that most of the reduction in MSE achieved by instrument set 12 comes from the inclusion of the squared endogenous regressors in the instrument set.
-Turning our attention to the confidence intervals in Tables \ref{tab:endog} and \ref{tab:all}, we again see that the simulation-based intervals are extremely insensitive to the value of $\tau$ used.
-Again, the sign and significance of \emph{malfal} and \emph{rule} is insensitive to the effects of instrument selection. 
 These results lend support to the view of \cite{Carstensen2006} and \cite{Sachs} that malaria transmission has a direct effect on development.
-
-\begin{table}[htbp]
-\caption{FMSC values and confidence intervals for instrument sets 1 and 9--11}
-\label{tab:endog}
-\small
-\centering
- \begin{tabular}{lrrrr}\hline\hline
- & \multicolumn{2}{c}{$\mu=$\emph{malfal}}& \multicolumn{2}{c}{$\mu=$\emph{rule}}\\
-&\multicolumn{1}{c}{FMSC}&\multicolumn{1}{c}{$\widehat{\mu}$}&\multicolumn{1}{c}{FMSC}&\multicolumn{1}{c}{$\widehat{\mu}$}\tabularnewline
-\hline
-Valid (1)& 3.03&-1.04& 1.27&0.89\tabularnewline
-\emph{rule}$^2$ (10)& 2.05&-0.84& 0.28&1.02\tabularnewline
-Full (11)&-0.20&-0.85& -0.06&1.02\tabularnewline
-\emph{malfal}$^2$ (9)&-0.41&-0.92&0.18&0.93\tabularnewline
-\hline
-Traditional&\multicolumn{2}{r}{(-1.39, -0.46)}&\multicolumn{2}{r}{(0.72, 1.32)}\\
-$\tau = \widehat{\tau}$&\multicolumn{2}{r}{(-1.49, -0.38)}&\multicolumn{2}{r}{(0.68, 1.36)}\\
-$\tau = 0$&\multicolumn{2}{r}{(-1.46, -0.38)}&\multicolumn{2}{r}{(0.71, 1.32)}\\
-$\tau = \widehat{\tau}_{max}$&\multicolumn{2}{r}{(-1.51, -0.38)}&\multicolumn{2}{r}{(0.66, 1.37)}\\
-$\tau = \widehat{\tau}_{min}$&\multicolumn{2}{r}{(-1.49, -0.38)}&\multicolumn{2}{r}{(0.71, 1.35)}\\
-\hline
-\end{tabular}
-
-
-\footnotesize
-\end{table}
-
-
-\begin{table}[htbp]
-\caption{FMSC values and confidence intervals for instrument sets 1--4 and 9--12}
-\label{tab:all}
-\small
-\centering
- \begin{tabular}{lcccc}\hline\hline
- & \multicolumn{2}{c}{$\mu=$\emph{malfal}}& \multicolumn{2}{c}{$\mu=$\emph{rule}}\\
-&\multicolumn{1}{c}{FMSC}&\multicolumn{1}{c}{$\widehat{\mu}$}&\multicolumn{1}{c}{FMSC}&\multicolumn{1}{c}{$\widehat{\mu}$}\tabularnewline
-\hline
-Valid (1)& 3.03&-1.04& 1.27&0.89\tabularnewline
-Climate (2)& 2.85&-0.90& 0.95&0.97\tabularnewline
-Openness (3)& 2.51&-1.09& 1.26&0.81\tabularnewline
-Europe (4)& 1.94&-1.14& 0.58&0.86\tabularnewline
-\emph{rule}$^2$ (10)& 1.88&-0.84& 0.25&1.02\tabularnewline
-\emph{malfal}$^2$, \emph{rule}$^2$ (11)& 0.06&-0.85&-0.03&1.02\tabularnewline
-\emph{malfal}$^2$ (9)&-0.20&-0.92& 0.15&0.93\tabularnewline
-Full (12)&-1.38&-1.00&-0.61&0.88\tabularnewline
-\hline
-Traditional&\multicolumn{2}{c}{(-1.42, -0.57)}&\multicolumn{2}{c}{(0.63, 1.12)}\\
-$\tau = \widehat{\tau}$&\multicolumn{2}{c}{(-1.51, -0.51)}&\multicolumn{2}{c}{(0.57, 1.17)}\\
-$\tau = 0$&\multicolumn{2}{c}{(-1.48, -0.52)}&\multicolumn{2}{c}{(0.60, 1.15)}\\
-$\tau = \widehat{\tau}_{max}$&\multicolumn{2}{c}{(-1.50, -0.50)}&\multicolumn{2}{c}{(0.55, 1.17)}\\
-$\tau = \widehat{\tau}_{min}$&\multicolumn{2}{c}{(-1.50, -0.49)}&\multicolumn{2}{c}{(0.59, 1.18)}\\
-\hline
-\end{tabular}
-
-
-\footnotesize
-\end{table}
