@@ -539,7 +539,7 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
 //valid instruments. In this case, tau is a scalar.
 class fmsc_CI_simple{
   public:
-    fmsc_CI_simple(const colvec&, const colvec& const mat&, 
+    fmsc_CI_simple(const colvec&, const colvec&, const mat&, 
                    const colvec&, int, int, double, double);
   private:  
     colvec B1(double tau){
@@ -553,7 +553,7 @@ class fmsc_CI_simple{
     //Function that indicates whether we chose full or valid
     //for a given simulation value as a function of tau
     fmsc_chooseIV results;
-    mat Psi, Omega;
+    mat M, Psi, Omega;
     vec PsiM, K, tau_star;
     double K_suspect, mu_full, mu_valid, tau_var, tau_hat;
     double avar_full, avar_valid, B2, FMSC_valid, posFMSC_valid;
@@ -578,7 +578,7 @@ fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y,
   M = trans(mvrnorm_cpp(n_sims, zeros<vec>(p + 1), Omega));
   Psi = results.Psi;
   PsiM = conv_to<vec>::from(Psi * M);
-  tau_hat = results.tau;
+  tau_hat = as_scalar(results.tau);
   tau_var = as_scalar(Psi * Omega * Psi.t());
   B2 = pow(K_suspect, 2.0) * tau_var;
   double q_normal = R::qnorm(1 - delta/2, 0, 1, 1, 0);
