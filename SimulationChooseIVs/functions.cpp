@@ -533,6 +533,8 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
 }
 
 
+
+
 //Class for post-FMSC CI construction in the case of a single
 //endogenous regressor (whose coefficient is the target
 //parameter), a single "suspect" instrument and any number of
@@ -565,13 +567,59 @@ class fmsc_CI_simple{
       return(sim_posFMSC_full(tau) < posFMSC_valid_vec);
     }
     colvec simLambda_FMSC(double tau){
-      return();
+      uvec full_indicators = sim_FMSC_choose_full(tau);
+      uvec full_ind = find(full_indicators == 1);
+      uvec valid_ind = find(full_indicators == 0);
+      return(join_cols(mu_sim_valid(valid_ind), mu_sim_full(full_ind)));
     }
     colvec simLambda_posFMSC(double tau){
-      return();
+      uvec full_indicators = sim_posFMSC_choose_full(tau);
+      uvec full_ind = find(full_indicators == 1);
+      uvec valid_ind = find(full_indicators == 0);
+      return(join_cols(mu_sim_valid(valid_ind), mu_sim_full(full_ind)));
     }
-    //Function that indicates whether we chose full or valid
-    //for a given simulation value as a function of tau
+    rowvec CI_tau(double delta){
+      double q_normal = R::qnorm(1 - delta/2, 0, 1, 1, 0);
+      double SE_tau = sqrt(tau_var);
+      double lower = tau_hat - q_normal * SE_tau;
+      double upper = tau_hat + q_normal * SE_tau;
+      rowvec out(2);
+      out(0) = lower;
+      out(1) = upper;
+      return(out);
+    }
+//tau_star = linspace(tau_lower, tau_upper, tau_grid); 
+//The following should be public members
+//    rowvec CI_valid(double alpha){
+//      return();
+//    }
+//    rowvec CI_full(double alpha){
+//      return();
+//    }
+//    rowvec CI_naive_FMSC(double alpha){
+//      return();
+//    }
+//    rowvec CI_naive_posFMSC(double alpha){
+//      return();  
+//    }
+    rowvec LambdaCI_FMSC(double tau, double alpha){
+      colvec Lambda_sims = sim_Lambda_FMSC(tau);
+      double lower = sample_quantile(Lambda_sims, alpha / 2.0);
+      double upper = sample_quantile(Lambda_sims, 1 - alpha / 2.0);
+      rowvec out(2);
+      out(0) = lower;
+      out(1) = upper;
+      return(out);
+    }
+    rowvec LambdaCI_posFMSC(double tau, double alpha){
+      colvec Lambda_sims = simLambda_posFMSC(tau);
+      double lower = sample_quantile(Lambda_sims, alpha / 2.0);
+      double upper = sample_quantile(Lambda_sims, 1 - alpha / 2.0);
+      rowvec out(2);
+      out(0) = lower;
+      out(1) = upper;
+      return(out);
+    }
     fmsc_chooseIV results;
     mat M, Psi, Omega;
     colvec PsiM, tau_star, mu_sim_valid, mu_sim_full;
@@ -586,9 +634,8 @@ class fmsc_CI_simple{
 //Class constructor
 fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y, 
               const mat& z_valid, const colvec& z_suspect, 
-              int n_sims = 500, int tau_grid = 100, 
-              double alpha = 0.05, 
-              double delta = 0.05): results(x, y, z_valid, z_suspect){
+              int n_sims = 1000,
+              int tau_grid = 100): results(x, y, z_valid, z_suspect){
 
   //The FMSC weight vector is simply one in this example
   colvec w = ones<vec>(1);
@@ -605,11 +652,6 @@ fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y,
   tau_var = as_scalar(Psi * Omega * Psi.t());
   B2 = pow(K_suspect, 2.0) * tau_var;
   B2_vec = B2 * ones<vec>(PsiM.n_elem);
-  double q_normal = R::qnorm(1 - delta/2, 0, 1, 1, 0);
-  double SE_tau = sqrt(tau_var);
-  double tau_lower = tau_hat - q_normal * SE_tau;
-  double tau_upper = tau_hat + q_normal * SE_tau;
-  tau_star = linspace(tau_lower, tau_upper, tau_grid); 
   avar_valid = results.avar_inner(0);
   avar_full = results.avar_inner(1);
   avar_full_vec = avar_full * ones<vec>(PsiM.n_elem);
@@ -626,6 +668,9 @@ fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y,
   posFMSC_valid = as_scalar(posFMSC(0));
   posFMSC_valid_vec = posFMSC_valid * ones<vec>(PsiM.n_elem);
 }
+
+
+
 
 class dgp {
   public:
