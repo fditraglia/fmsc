@@ -10,12 +10,12 @@ A number of well-known studies find little or no direct effect of geographic end
 Treating both institutions and malaria transmission as endogenous, they consider a variety of measures of each and a number of instrument sets. 
 In each case, they find large negative effects of malaria transmission, lending support to Sach's conclusion.
 
-In this section, I expand on the instrument selection exercise given in Table 2 of \cite{Carstensen2006} using the FMSC and corrected confidence intervals described above. I consider two questions. 
-First, based on the FMSC methodology, which instruments should we choose to produce the best estimate of $\beta_3$, the effect of malaria transmission on per capita income? 
-Second, after correcting confidence intervals for instrument selection, do we still find evidence of large and negative effects of malaria transmission on income? 
+In this section, I revisit the instrument selection exercise given in Table 2 of \cite{Carstensen2006} using the FMSC and corrected confidence intervals described above. I consider two questions. 
+First, based on the FMSC methodology, which instruments should we choose if our target parameter is $\beta_3$, the effect of malaria transmission on per capita income?
+Does the selected instrument set change if our target parameter is $\beta_2$, the effect of institutions?
+Second, are the results presented in \cite{Carstensen2006} robust to the effects of instrument selection on inference?
 All results given here are calculated by 2SLS using the formulas from Section \ref{sec:chooseIVFMSC} and the variables described in Table \ref{tab:desc}. 
 In keeping with Table 2 of \cite{Carstensen2006}, I use ln\emph{gdpc} as the dependent variable and \emph{rule} and \emph{malfal} as measures of institutions and malaria transmission throughout.
-\todo[inline]{Explain about the sample size: I use 44 whereas they use 45 when available.} 
 
 
 \begin{table}[!tbp]
@@ -43,12 +43,13 @@ ln\emph{mort}&Log settler mortality (per 1000 settlers), early 19th century&Base
 \label{tab:desc}
 \end{table}
 
-To apply the FMSC to the present example, we need a minimum of two valid instruments besides the constant term. 
+To apply the FMSC to the present example, we require a minimum of two valid instruments besides the constant term. 
 Based on the arguments given in \cite{Acemoglu}, \cite{Carstensen2006} and \cite{Sachs}, I proceed under the assumption that ln\emph{mort} and \emph{maleco}, measures of early settler mortality and malaria ecology, are exogenous.
-Rather than selecting over every possible subset of instruments, I consider a number of instrument blocks defined in \cite{Carstensen2006}.
+Rather than selecting over all 128 possible instrument sets, I consider eight specifications formed from four sets of instrument ``blocks'' defined by \cite{Carstensen2006}.
 The baseline block contains ln\emph{mort}, \emph{maleco} and a constant; the climate block contains \emph{frost}, \emph{humid}, and \emph{latitude}; the Europe block contains \emph{eurfrac} and \emph{engfrac}; and the openness block contains \emph{coast} and \emph{trade}. 
 Full descriptions of these variables appear in Table \ref{tab:desc}.
-Table \ref{tab:fullresults} gives 2SLS results and traditional 95\% confidence intervals for all instrument sets considered here.
+Table \ref{tab:fullresults} lists the eight instrument sets considered here, along with 2SLS estimates and traditional 95\% confidence intervals for all instrument sets considered here.\footnote{The results presented in Table \ref{tab:fullresults} are virtually identical to those of \cite{Carstensen2006}. The slight discrepancy in the results for the baseline instrument set, Panel 1, comes from the fact that \cite{Carstensen2006} include an additional observation for this specification: Vietnam. Because the climate, Europe and openness instruments are missing for this country, I exclude it in the interest of consistency.}
+
 
 \begin{table}[h]
 \centering
@@ -58,33 +59,55 @@ Table \ref{tab:fullresults} gives 2SLS results and traditional 95\% confidence i
 
 \end{table}
 
-\todo[inline]{Need to update some of the text here since I'm no longer looking at instrument sets 9--12. The only remaining results to add are the CIs.}
-
-Table \ref{tab:replicate} presents FMSC results for instrument sets 1--8  as defined in Table \ref{tab:fullresults}. Results are presented for two cases: the first takes the effect of \emph{malfal}, a measure of malaria transmission, as the target parameter while the second uses the effect of \emph{rule}, a measure of institutions. 
-In each case, the FMSC selects instrument set 8: the full instrument set containing the baseline, climate, Europe and openness blocks. 
-The rankings, however, differ depending on the target parameter.  
-When the target is \emph{rule} instrument sets 8 and 5 are virtually identical in terms of FMSC: 0.26 versus 0.23. 
-In Table 2 of their paper, \cite{Carstensen2006} report GMM-BIC and HQ results for selection over instrument sets 2--4 and 8 that also favor instrument set 8. 
-However, the authors do not consider instrument sets 5--7. 
-Although the FMSC also selects instrument set 8, the FMSC values of instrument set 5 are small enough to suggest that including the openness block does little to reduce MSE.
-
-
-We find no evidence that accounting for the effects of instrument selection changes our conclusions about the sign or significance of \emph{malfal} or \emph{rule}.
-
+Table \ref{tab:FMSC_values} presents FMSC and positive-part FMSC results for instrument sets 1--8  as defined in Table \ref{tab:fullresults}. 
+As described above, the positive-part FMSC sets a negative squared asymptotic bias estimate to zero when esimating AMSE.
+When the squared bias estimate is positive, the FMSC and positive-part FMSC coincide; when the squared bias estimate is negative, the positive-part FMSC is strictly larger than the FMSC. 
+The table presents two cases: the first takes the effect of \emph{malfal}, a measure of malaria transmission, as the target parameter while the second uses the effect of \emph{rule}, a measure of institutions. 
+In each, the two best instrument sets are numbers 5 (baseline, climate and Europe) and 8 (all instruments).\footnote{In Table 2 of their paper, \cite{Carstensen2006} report GMM-BIC and HQ results for selection over instrument sets 2--4 and 8 that favor instrument set 8. They do not consider instrument sets 5--7. however.}
+When the target parameter is the coefficient on \emph{malfal}, 8 is the clear winner under both the plain-vanilla and positive-part FMSC, leading to an estimate of $-1.08$ for the effect of malaria transmission on per-capita income.
+When the target parameter is the coefficient on \emph{rule}, however, instrument sets 5 and 8 are virtually indistinguishable.
+Indeed, while the plain-vanilla FMSC selects instrument set 8, leading to an estimate of $0.84$ for the effect of instutitions on per-capita income, the positive-part FMSC selects instrument set 5, leading to an estimate of $0.93$. 
+Thus the FMSC methodology shows that, while helpful for estimating the effect of malaria transmission, the openness instruments \emph{coast} and \emph{trade} provide essentially no additional information when estimating the effect of institutions.
+ 
 \begin{table}[htbp]
 	\centering
 	\input{../EmpiricalExample/Results/table_fmsc_values.tex}
-		\caption{FMSC and and positive-part FMSC values for selection over the instrument sets presented in Table ???.}
+		\caption{FMSC and and positive-part FMSC values corresponding to the instrument sets from Table \ref{tab:fullresults}}
+		\label{tab:FMSC_values}
 \end{table}
+
+Table \ref{tab:postFMSC_CIs} presents three alternative post-selection confidence intervals for each of the instrument selection exercises from Table \ref{tab:FMSC_values}: ``Na\"{i}ve,'' ``1-Step'' and ``2-step.''
+The Na\"{i}ve intervals are standard, nominal 95\% confidence intervals that ignore the fact that we have carried out instrument selection. 
+There are constructed by simply identifying the selected instrument set from Table \ref{tab:FMSC_values} and reporting the corresponding nominal 95\% interval from Table \ref{tab:fullresults}.
+These intervals ignore both the additional uncertainty that comes from instrument selection -- if the data had been slightly different we would have chosen a different estimator -- and the fact that some of the instruments used in estimation may in fact be endogenous.\footnote{For more discussion of this point, see the introduction to Section \ref{sec:avg}.}
+The 1-Step intervals are simulation-based nominal 95\% intervals constructed using a simplified, and less computationally intensive, version of the procedure given in Algorithm \ref{alg:conf}.
+Rather than taking the minimum lower confidence limit and maximum upper confidence limit over all values in a given confidence region for $\tau$, this procedure simply assumes that the estimated value $\widehat{\tau}$ equals the true value and generates $10,000$ simulations for $\Lambda$ with $\tau^* =\widehat{\tau}$ \emph{only}.
+Accordingly, it constructs a confidence interval for $\widehat{\mu}$ using simulations $\{\Lambda_j(\widehat{\tau})\}_{j=1}^J$ \emph{only} with $J = 10,000$.
+Neither the Na\"{i}ve nor the 1-Step procedures yield valid 95\% confidence intervals.
+They are provided merely for comparison with the 2-Step procedure, which fully implements Algorithm \ref{alg:conf} with $\alpha = \delta = 0.05$ and $J=10,000$. As explained above, the 2-Step interval is guaranteed to have asymptotic coverage probability of \emph{at least} $1 - \alpha - \delta$ , in this case 90\%.
+From the 2-Step intervals, we see that the results of \cite{Carstensen2006} are \emph{highly robust}. 
+There is no evidence that accounting for the effects of instrument selection changes our conclusions about the sign or significance of \emph{malfal} or \emph{rule}.
 
 \begin{table}[htbp]
 	\centering
 	\input{../EmpiricalExample/Results/table_CIs.tex}
-	\caption{Post-selection confidence intervals for the instrument selection exercise presented in Table ???. Explain the meaning of each row!}
+	\caption{Post-selection CIs for the instrument selection exercise from Table \ref{tab:FMSC_values}.}
+	\label{tab:postFMSC_CIs}
 \end{table}
 
-\todo[inline]{There is a very slight discrepancy between the Na\"{i}ve CIs and the corresponding CIs in the table of 2SLS results. This is intentional. The 2SLS results are designed to be as close a possible to C\&G. Since they use a t-distribution to construct CIs, I do the same in that table.  who use a t-distribution to construct their CIs.}
 
-Although it provides an asymptotically unbiased estimator of AMSE, the FMSC may be negative because it subtracts $\widehat{\Psi}\widehat{\Omega}\widehat{\Psi}'$ from $\widehat{\tau}\widehat{\tau}'$ to estimate squared bias.
+This is admittedly a simple example, but its simplity is deliberate. 
 
-These results lend support to the view of \cite{Carstensen2006} and \cite{Sachs} that malaria transmission has a direct effect on development.
+This example is as simple as possible, but no simpler.
+This is admittedly a simple example in certain respects.
+Indeed, the second stage only contains two regressors and a constant.
+
+
+
+While this is admittedly a simple example in certain respects -- indeed, the second stage only contains only two regressors and a constant -- 
+
+The calculations required for the FMSC and positive-part FMSC are trivial on a modern machine: they simply require that we fit each specification under consideration and store the usual quantities associated with them.
+Even with a complicated first-stage and hundreds of instrument sets under consideration, the time required is measured in seconds rather than minutes.
+The true computational cost comes from the two-stage confidence interval procedure and depends solely on the \emph{number of suspect instruments in the full instrument set}.
+Here there are seven, so we need to carry out constrained optimization of a stochastic objective function in seven dimensions \emph{twice}: once for the lower confidence limit and again for the upper confidence limit.
+This empirical example was chosen to be as simple as possible in all respects that do not materially affect the computational complexity while being realistic in those that do
