@@ -650,7 +650,7 @@ fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y,
 
   //The FMSC weight vector is simply one in this example
   colvec w = ones<vec>(1);
-  p = z_valid.n_rows;
+  p = z_valid.n_cols;
   n = x.n_rows;
   K_valid = conv_to<rowvec>::from(results.K(0));
   K_full = conv_to<rowvec>::from(results.K(1));
@@ -670,7 +670,7 @@ fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y,
   mu_valid = results.mu_valid(w);
   mu_FMSC = results.mu_fmsc(w);
   mu_posFMSC = results.mu_fmsc_pos(w);
-  mu_sim_valid = conv_to<vec>::from(-1.0 * K_valid * M);
+  mu_sim_valid = conv_to<vec>::from(-1.0 * K_valid * M.rows(0, p - 1));
   mu_sim_full = conv_to<vec>::from(-1.0 * K_full * M);
   colvec FMSC = results.fmsc(w);
   FMSC_valid = as_scalar(FMSC(0));
