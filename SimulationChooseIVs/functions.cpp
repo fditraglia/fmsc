@@ -542,7 +542,7 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
 class fmsc_CI_simple{
   public:
     fmsc_CI_simple(const colvec&, const colvec&, const mat&, 
-                   const colvec&, int, int);
+                   const colvec&, int);
     rowvec CI_valid(double alpha){
       double q_norm = R::qnorm(1 - alpha / 2.0, 0, 1, 1, 0);
       double ME = q_norm * sqrt(avar_valid / double(n));
@@ -572,7 +572,9 @@ class fmsc_CI_simple{
         return(CI_full(alpha));
     } 
     rowvec CI_1step_FMSC(double);
+    rowvec CI_2step_FMSC(double, double, int);
     rowvec CI_1step_posFMSC(double);
+    rowvec CI_2step_posFMSC(double, double, int);
   private:  
     colvec B1(double tau){
       colvec tau_vec = tau * ones<vec>(PsiM.n_elem);
@@ -616,7 +618,6 @@ class fmsc_CI_simple{
       out(1) = tau_hat + q_normal * ME_tau;
       return(out);
     }
-//tau_star = linspace(tau_lower, tau_upper, tau_grid); 
     rowvec LambdaCI_FMSC(double tau, double alpha){
       colvec Lambda_sims = simLambda_FMSC(tau);
       rowvec out(2);
@@ -645,8 +646,7 @@ class fmsc_CI_simple{
 //Class constructor
 fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y, 
               const mat& z_valid, const colvec& z_suspect, 
-              int n_sims = 1000,
-              int tau_grid = 100): results(x, y, z_valid, z_suspect){
+              int n_sims = 1000): results(x, y, z_valid, z_suspect){
 
   //The FMSC weight vector is simply one in this example
   colvec w = ones<vec>(1);
@@ -695,15 +695,60 @@ rowvec fmsc_CI_simple::CI_1step_FMSC(double alpha){
   return(out);
 }
 
-rowvec fmsc_CI_simple::CI_1step_posFMSC(alpha){
+rowvec fmsc_CI_simple::CI_1step_posFMSC(double alpha){
 //1-step corrected CI post-positive-part-FMSC
 //substitutes tau = tau_hat rather than taking the 
 //min and max over a confidence region for tau
   rowvec Lambda_interval = LambdaCI_posFMSC(tau_hat, alpha);
   double Lambda_lower = Lambda_interval(0);
   double Lambda_upper = Lambda_interval(1);
-  double lower = b_fmsc() - Lambda_upper / sqrt(n);
-  double upper = b_fmsc() - Lambda_lower / sqrt(n);
+  double lower = mu_posFMSC - Lambda_upper / sqrt(n);
+  double upper = mu_posFMSC - Lambda_lower / sqrt(n);
+  rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
+
+rowvec fmsc_CI_simple::CI_2step_FMSC(double alpha, double delta, 
+                                     int n_grid = 100){
+//2-step corrected CI post-FMSC
+//Asymptotic coverage probability of at least
+//1 - alpha - delta
+  rowvec tau_interval = CI_tau(delta);
+  double tau_lower = tau_interval(0);
+  double tau_upper = tau_interval(1);
+  colvec tau_star = linspace(tau_lower, tau_upper, n_grid);
+  mat CIs_Lambda(n_grid, 2);
+  for(int i = 0; i < n_grid; i++){
+    CIs_Lambda.row(i) = LambdaCI_FMSC(tau_star(i), alpha);
+  }
+  double Lambda_lower_min = min(CIs_Lambda.col(0));
+  double Lambda_upper_max = max(CIs_Lambda.col(1));
+  double lower = mu_FMSC - Lambda_upper_max / sqrt(n);
+  double upper = mu_FMSC - Lambda_lower_min / sqrt(n);
+  rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
+rowvec fmsc_CI_simple::CI_2step_posFMSC(double alpha, double delta, 
+                                     int n_grid = 100){
+//2-step corrected CI post-positive-part-FMSC
+//Asymptotic coverage probability of at least
+//1 - alpha - delta
+  rowvec tau_interval = CI_tau(delta);
+  double tau_lower = tau_interval(0);
+  double tau_upper = tau_interval(1);
+  colvec tau_star = linspace(tau_lower, tau_upper, n_grid);
+  mat CIs_Lambda(n_grid, 2);
+  for(int i = 0; i < n_grid; i++){
+    CIs_Lambda.row(i) = LambdaCI_posFMSC(tau_star(i), alpha);
+  }
+  double Lambda_lower_min = min(CIs_Lambda.col(0));
+  double Lambda_upper_max = max(CIs_Lambda.col(1));
+  double lower = mu_posFMSC - Lambda_upper_max / sqrt(n);
+  double upper = mu_posFMSC - Lambda_lower_min / sqrt(n);
   rowvec out(2);
   out(0) = lower;
   out(1) = upper;
