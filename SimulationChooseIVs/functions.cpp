@@ -546,39 +546,31 @@ class fmsc_CI_simple{
     rowvec CI_valid(double alpha){
       double q_norm = R::qnorm(1 - alpha / 2.0, 0, 1, 1, 0);
       double ME = q_norm * sqrt(avar_valid / double(n));
-      double lower = mu_valid - ME;
-      double upper = mu_valid + ME;
       rowvec out(2);
-      out(0) = lower;
-      out(1) = upper;
+      out(0) = mu_valid - ME;
+      out(1) = mu_valid + ME;
       return(out);
     }
     rowvec CI_full(double alpha){
       double q_norm = R::qnorm(1 - alpha / 2.0, 0, 1, 1, 0);
       double ME = q_norm * sqrt(avar_full / double(n));
-      double lower = mu_full - ME;
-      double upper = mu_full + ME;
       rowvec out(2);
-      out(0) = lower;
-      out(1) = upper;
+      out(0) = mu_full - ME;
+      out(1) = mu_full + ME;
       return(out);
     }
     rowvec CI_naive_FMSC(double alpha){
-      rowvec out(2);
       if (mu_FMSC == mu_valid) 
-        out = CI_valid(alpha);  
+        return(CI_valid(alpha));  
       else 
-        out = CI_full(alpha);
-      return(out);
+        return(CI_full(alpha));
     }
     rowvec CI_naive_posFMSC(double alpha){
-      rowvec out(2);
       if (mu_posFMSC == mu_valid) 
-        out = CI_valid(alpha);  
+        return(CI_valid(alpha));  
       else 
-        out = CI_full(alpha);
-      return(out);
-    }  
+        return(CI_full(alpha));
+    } 
   private:  
     colvec B1(double tau){
       colvec tau_vec = tau * ones<vec>(PsiM.n_elem);
@@ -616,31 +608,25 @@ class fmsc_CI_simple{
     }
     rowvec CI_tau(double delta){
       double q_normal = R::qnorm(1 - delta/2, 0, 1, 1, 0);
-      double SE_tau = sqrt(tau_var);
-      double lower = tau_hat - q_normal * SE_tau;
-      double upper = tau_hat + q_normal * SE_tau;
+      double ME_tau = q_normal * sqrt(tau_var);
       rowvec out(2);
-      out(0) = lower;
-      out(1) = upper;
+      out(0) = tau_hat - q_normal * ME_tau;
+      out(1) = tau_hat + q_normal * ME_tau;
       return(out);
     }
 //tau_star = linspace(tau_lower, tau_upper, tau_grid); 
     rowvec LambdaCI_FMSC(double tau, double alpha){
       colvec Lambda_sims = simLambda_FMSC(tau);
-      double lower = sample_quantile(Lambda_sims, alpha / 2.0);
-      double upper = sample_quantile(Lambda_sims, 1 - alpha / 2.0);
       rowvec out(2);
-      out(0) = lower;
-      out(1) = upper;
+      out(0) = sample_quantile(Lambda_sims, alpha / 2.0);
+      out(1) = upper = sample_quantile(Lambda_sims, 1 - alpha / 2.0);
       return(out);
     }
     rowvec LambdaCI_posFMSC(double tau, double alpha){
       colvec Lambda_sims = simLambda_posFMSC(tau);
-      double lower = sample_quantile(Lambda_sims, alpha / 2.0);
-      double upper = sample_quantile(Lambda_sims, 1 - alpha / 2.0);
       rowvec out(2);
-      out(0) = lower;
-      out(1) = upper;
+      out(0) = sample_quantile(Lambda_sims, alpha / 2.0);
+      out(1) = sample_quantile(Lambda_sims, 1 - alpha / 2.0);
       return(out);
     }
     fmsc_chooseIV results;
