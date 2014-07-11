@@ -543,6 +543,42 @@ class fmsc_CI_simple{
   public:
     fmsc_CI_simple(const colvec&, const colvec&, const mat&, 
                    const colvec&, int, int);
+    rowvec CI_valid(double alpha){
+      double q_norm = R::qnorm(1 - alpha / 2.0, 0, 1, 1, 0);
+      double ME = q_norm * sqrt(avar_valid / double(n));
+      double lower = mu_valid - ME;
+      double upper = mu_valid + ME;
+      rowvec out(2);
+      out(0) = lower;
+      out(1) = upper;
+      return(out);
+    }
+    rowvec CI_full(double alpha){
+      double q_norm = R::qnorm(1 - alpha / 2.0, 0, 1, 1, 0);
+      double ME = q_norm * sqrt(avar_full / double(n));
+      double lower = mu_full - ME;
+      double upper = mu_full + ME;
+      rowvec out(2);
+      out(0) = lower;
+      out(1) = upper;
+      return(out);
+    }
+    rowvec CI_naive_FMSC(double alpha){
+      rowvec out(2);
+      if (mu_FMSC == mu_valid) 
+        out = CI_valid(alpha);  
+      else 
+        out = CI_full(alpha);
+      return(out);
+    }
+    rowvec CI_naive_posFMSC(double alpha){
+      rowvec out(2);
+      if (mu_posFMSC == mu_valid) 
+        out = CI_valid(alpha);  
+      else 
+        out = CI_full(alpha);
+      return(out);
+    }  
   private:  
     colvec B1(double tau){
       colvec tau_vec = tau * ones<vec>(PsiM.n_elem);
@@ -589,19 +625,6 @@ class fmsc_CI_simple{
       return(out);
     }
 //tau_star = linspace(tau_lower, tau_upper, tau_grid); 
-//The following should be public members
-//    rowvec CI_valid(double alpha){
-//      return();
-//    }
-//    rowvec CI_full(double alpha){
-//      return();
-//    }
-//    rowvec CI_naive_FMSC(double alpha){
-//      return();
-//    }
-//    rowvec CI_naive_posFMSC(double alpha){
-//      return();  
-//    }
     rowvec LambdaCI_FMSC(double tau, double alpha){
       colvec Lambda_sims = simLambda_FMSC(tau);
       double lower = sample_quantile(Lambda_sims, alpha / 2.0);
