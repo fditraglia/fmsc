@@ -934,3 +934,85 @@ NumericVector mse_compare_default_cpp(double g, double r, int n,
   NumericVector out = mse_compare_cpp(b, g, p, V, Q, n, n_reps);
   return(out);  
 }
+
+
+
+// [[Rcpp::export]]
+List CIs_compare_default_cpp(double g, double r, int n,
+                                      int n_reps){
+//Same default parameter values as mse_compare_default_cpp
+  double b = 0.5;
+  colvec p = 1.0 / 3.0 * ones(3);
+  mat Q = 1.0 / 3.0 * eye(3, 3);
+  mat V(3,3); 
+  V << 1 << 0.5 - g * r << r << endr
+    << 0.5 - g * r << 8.0 / 9.0 - pow(g, 2.0) << 0 << endr
+    << r << 0 << 1 << endr;  
+                                        
+//Default to nominal 90% CIs
+  double nominal_coverage = 0.9;
+  double alpha_1step = 1 - nominal_coverage;
+//Same level for each interval in the 2-step procedures
+  double alpha_2step = alpha_1step / 2; 
+//Number of simulations for sim-based CIs
+  int n_CI_sims = 1000;
+//Grid for tau
+  int n_tau_grid = 100;
+
+  mat Valid(n_reps, 2, fill::zeros);
+  mat Full(n_reps, 2, fill::zeros);
+  mat FMSC_naive(n_reps, 2, fill::zeros);
+  mat FMSC_1step(n_reps, 2, fill::zeros);
+  mat FMSC_2step(n_reps, 2, fill::zeros);
+  mat posFMSC_naive(n_reps, 2, fill::zeros);
+  mat posFMSC_1step(n_reps, 2, fill::zeros);
+  mat posFMSC_2step(n_reps, 2, fill::zeros);
+  
+  for(int i = 0; i < n_reps; i++){ 
+    dgp data(b, p, g, V, Q, n);
+    fmsc_CI_simple results(data.x, data.y, data.z, data.w, n_CI_sims);
+    Valid.row(i) = results.CI_valid(alpha_1step);
+    Full.row(i) = results.CI_full(alpha_1step);
+    FMSC_naive.row(i) = results.CI_naive_FMSC(alpha_1step);
+    FMSC_1step.row(i) = results.CI_1step_FMSC(alpha_1step);
+    FMSC_2step.row(i) = results.CI_2step_FMSC(alpha_2step, 
+                                              alpha_2step, 
+                                              n_tau_grid);
+    posFMSC_naive.row(i) = results.CI_naive_posFMSC(alpha_1step);
+    posFMSC_1step.row(i) = results.CI_1step_posFMSC(alpha_1step);
+    posFMSC_2step.row(i) = results.CI_2step_posFMSC(alpha_2step,
+                                                    alpha_2step,
+                                                    n_tau_grid);
+  }
+  
+  CharacterVector col_names = CharacterVector::create("Valid",
+                                                      "Full",
+                                                      "FMSC_naive",
+                                                      "FMSC_1step",
+                                                      "FMSC_2step", 
+                                                      "posFMSC_naive",                                                    "FMSC_naive",
+                                                      "posFMSC_1step",
+                                                      "posFMSC_2step"); 
+  
+  NumericVector cover = NumericVector::create(coverage_prob(Valid, b),
+                                              coverage_prob(Full, b),
+                                              coverage_prob(FMSC_naive, b),
+                                              coverage_prob(FMSC_1step, b),
+                                              coverage_prob(FMSC_2step, b),
+                                              coverage_prob(posFMSC_naive, b),
+                                              coverage_prob(posFMSC_1step, b),
+                                              coverage_prob(posFMSC_2step, b));
+  
+  NumericVector width = NumericVector::create(median_width(Valid),
+                                              median_width(Full),
+                                              median_width(FMSC_naive),
+                                              median_width(FMSC_1step),
+                                              median_width(FMSC_2step),
+                                              median_width(posFMSC_naive),
+                                              median_width(posFMSC_1step),
+                                              median_width(posFMSC_2step));
+  cover.names() = col_names;
+  width.names() = col_names;
+  return List::create(Named("coverage.prob") = cover,
+                      Named("median.width") = width);
+}
