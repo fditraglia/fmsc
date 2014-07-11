@@ -116,8 +116,54 @@ Then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asy
 		\caption{AMSE-Averaging Estimator}
 		\input{../SimulationOLSvsIV/Results/width_AVG_correct.tex}
 	\end{subtable}
-	\caption{Median CI width relative to that of 2SLS (\%)}
+	\caption{Median CI width of conservative intervals relative to that of 2SLS (\%)}
 \end{table}
 
 
 \subsubsection{Choosing Instrumental Variables Example}
+
+
+\begin{table}[h]
+\footnotesize
+\centering
+	\begin{subtable}{0.48\textwidth}
+		\caption{FMSC}
+		\input{../SimulationChooseIVs/Results/coverage_FMSC_2step.tex}
+	\end{subtable}	
+	~
+	\begin{subtable}{0.48\textwidth}
+		\caption{positive-part FMSC}
+		\input{../SimulationChooseIVs/Results/coverage_posFMSC_2step.tex}
+	\end{subtable}
+	\caption{Actual coverage probabilities of simulation-based interval (nominal $>90\%$)}
+\end{table}
+
+\begin{table}[h]
+\footnotesize
+\centering
+	\begin{subtable}{0.48\textwidth}
+		\caption{Valid Estimator}
+		\input{../SimulationChooseIVs/Results/coverage_Valid.tex}
+	\end{subtable}	
+	~
+	\begin{subtable}{0.48\textwidth}
+		\caption{Na\"{i}ve post-FMSC}
+		\input{../SimulationChooseIVs/Results/coverage_FMSC_naive.tex}
+	\end{subtable}
+	\caption{Actual coverage probabilities nominal 90\% CIs}
+\end{table}
+
+\begin{table}[h]
+\footnotesize
+\centering
+	\begin{subtable}{0.48\textwidth}
+		\caption{FMSC}
+		\input{../SimulationChooseIVs/Results/width_FMSC_2step.tex}
+	\end{subtable}	
+	~
+	\begin{subtable}{0.48\textwidth}
+		\caption{positive-part FMSC}
+		\input{../SimulationChooseIVs/Results/width_posFMSC_2step.tex}
+	\end{subtable}
+	\caption{Median CI width of conservative intervals relative to that of Valid estimator. (\%)}
+\end{table}
