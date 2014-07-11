@@ -416,7 +416,6 @@ class fmsc_chooseIV {
       colvec b_fmsc = estimates.col(which_min);
       return(dot(weights, b_fmsc));
     }   
-//  private:
     tsls_fit valid, full;
     colvec tau;
     mat Psi, tau_outer_est, Bias_mat, estimates;
@@ -533,6 +532,228 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
     avar_inner = avar_inner_temp;
 }
 
+
+
+
+//Class for post-FMSC CI construction in the case of a single
+//endogenous regressor (whose coefficient is the target
+//parameter), a single "suspect" instrument and any number of
+//valid instruments. In this case, tau is a scalar.
+class fmsc_CI_simple{
+  public:
+    fmsc_CI_simple(const colvec&, const colvec&, const mat&, 
+                   const colvec&, int);
+    rowvec CI_valid(double alpha){
+      double q_norm = R::qnorm(1 - alpha / 2.0, 0, 1, 1, 0);
+      double ME = q_norm * sqrt(avar_valid / double(n));
+      rowvec out(2);
+      out(0) = mu_valid - ME;
+      out(1) = mu_valid + ME;
+      return(out);
+    }
+    rowvec CI_full(double alpha){
+      double q_norm = R::qnorm(1 - alpha / 2.0, 0, 1, 1, 0);
+      double ME = q_norm * sqrt(avar_full / double(n));
+      rowvec out(2);
+      out(0) = mu_full - ME;
+      out(1) = mu_full + ME;
+      return(out);
+    }
+    rowvec CI_naive_FMSC(double alpha){
+      if (mu_FMSC == mu_valid) 
+        return(CI_valid(alpha));  
+      else 
+        return(CI_full(alpha));
+    }
+    rowvec CI_naive_posFMSC(double alpha){
+      if (mu_posFMSC == mu_valid) 
+        return(CI_valid(alpha));  
+      else 
+        return(CI_full(alpha));
+    } 
+    rowvec CI_1step_FMSC(double);
+    rowvec CI_2step_FMSC(double, double, int);
+    rowvec CI_1step_posFMSC(double);
+    rowvec CI_2step_posFMSC(double, double, int);
+  private:  
+    colvec B1(double tau){
+      colvec tau_vec = tau * ones<vec>(PsiM.n_elem);
+      return(pow(K_suspect * (PsiM + tau_vec), 2.0));
+    }
+    colvec sim_sqbias(double tau){
+      return(B1(tau) - B2_vec);
+    }
+    colvec sim_pos_sqbias(double tau){
+      return(arma::max(sim_sqbias(tau), zeros<vec>(PsiM.n_elem)));
+    }
+    colvec sim_FMSC_full(double tau){
+      return(sim_sqbias(tau) + avar_full_vec);
+    }
+    colvec sim_posFMSC_full(double tau){
+      return(sim_pos_sqbias(tau) + avar_full_vec);
+    }
+    uvec sim_FMSC_choose_full(double tau){
+      return(sim_FMSC_full(tau) < FMSC_valid_vec);
+    }
+    uvec sim_posFMSC_choose_full(double tau){
+      return(sim_posFMSC_full(tau) < posFMSC_valid_vec);
+    }
+    colvec simLambda_FMSC(double tau){
+      uvec full_indicators = sim_FMSC_choose_full(tau);
+      uvec full_ind = find(full_indicators == 1);
+      uvec valid_ind = find(full_indicators == 0);
+      return(join_cols(mu_sim_valid(valid_ind), mu_sim_full(full_ind)));
+    }
+    colvec simLambda_posFMSC(double tau){
+      uvec full_indicators = sim_posFMSC_choose_full(tau);
+      uvec full_ind = find(full_indicators == 1);
+      uvec valid_ind = find(full_indicators == 0);
+      return(join_cols(mu_sim_valid(valid_ind), mu_sim_full(full_ind)));
+    }
+    rowvec CI_tau(double delta){
+      double q_normal = R::qnorm(1 - delta/2, 0, 1, 1, 0);
+      double ME_tau = q_normal * sqrt(tau_var);
+      rowvec out(2);
+      out(0) = tau_hat - q_normal * ME_tau;
+      out(1) = tau_hat + q_normal * ME_tau;
+      return(out);
+    }
+    rowvec LambdaCI_FMSC(double tau, double alpha){
+      colvec Lambda_sims = simLambda_FMSC(tau);
+      rowvec out(2);
+      out(0) = sample_quantile(Lambda_sims, alpha / 2.0);
+      out(1) = sample_quantile(Lambda_sims, 1 - alpha / 2.0);
+      return(out);
+    }
+    rowvec LambdaCI_posFMSC(double tau, double alpha){
+      colvec Lambda_sims = simLambda_posFMSC(tau);
+      rowvec out(2);
+      out(0) = sample_quantile(Lambda_sims, alpha / 2.0);
+      out(1) = sample_quantile(Lambda_sims, 1 - alpha / 2.0);
+      return(out);
+    }
+    fmsc_chooseIV results;
+    mat M, Psi, Omega;
+    colvec PsiM, tau_star, mu_sim_valid, mu_sim_full;
+    colvec B2_vec, avar_full_vec, FMSC_valid_vec, posFMSC_valid_vec;
+    rowvec K_full, K_valid; 
+    double K_suspect, mu_full, mu_valid, tau_var, tau_hat;
+    double avar_full, avar_valid, B2, FMSC_valid, posFMSC_valid;
+    double mu_FMSC, mu_posFMSC;
+    double tau_lower, tau_upper;
+    int p, n;
+};
+//Class constructor
+fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y, 
+              const mat& z_valid, const colvec& z_suspect, 
+              int n_sims = 1000): results(x, y, z_valid, z_suspect){
+
+  //The FMSC weight vector is simply one in this example
+  colvec w = ones<vec>(1);
+  p = z_valid.n_cols;
+  n = x.n_rows;
+  K_valid = conv_to<rowvec>::from(results.K(0));
+  K_full = conv_to<rowvec>::from(results.K(1));
+  K_suspect = K_full(p); //Zero-indexing!
+  Omega = results.Omega(1);
+  M = trans(mvrnorm_cpp(n_sims, zeros<vec>(p + 1), Omega));
+  Psi = results.Psi;
+  PsiM = conv_to<vec>::from(Psi * M);
+  tau_hat = as_scalar(results.tau);
+  tau_var = as_scalar(Psi * Omega * Psi.t());
+  B2 = pow(K_suspect, 2.0) * tau_var;
+  B2_vec = B2 * ones<vec>(PsiM.n_elem);
+  avar_valid = results.avar_inner(0);
+  avar_full = results.avar_inner(1);
+  avar_full_vec = avar_full * ones<vec>(PsiM.n_elem);
+  mu_full = results.mu_full(w);
+  mu_valid = results.mu_valid(w);
+  mu_FMSC = results.mu_fmsc(w);
+  mu_posFMSC = results.mu_fmsc_pos(w);
+  mu_sim_valid = conv_to<vec>::from(-1.0 * K_valid * M.rows(0, p - 1));
+  mu_sim_full = conv_to<vec>::from(-1.0 * K_full * M);
+  colvec FMSC = results.fmsc(w);
+  FMSC_valid = as_scalar(FMSC(0));
+  FMSC_valid_vec = FMSC_valid * ones<vec>(PsiM.n_elem);
+  colvec posFMSC = results.fmsc_pos(w);
+  posFMSC_valid = as_scalar(posFMSC(0));
+  posFMSC_valid_vec = posFMSC_valid * ones<vec>(PsiM.n_elem);
+}
+
+rowvec fmsc_CI_simple::CI_1step_FMSC(double alpha){
+//1-step corrected CI post-FMSC
+//substitutes tau = tau_hat rather than taking the 
+//min and max over a confidence region for tau
+  rowvec Lambda_interval = LambdaCI_FMSC(tau_hat, alpha);
+  double Lambda_lower = Lambda_interval(0);
+  double Lambda_upper = Lambda_interval(1);
+  double lower = mu_FMSC - Lambda_upper / sqrt(n);
+  double upper = mu_FMSC - Lambda_lower / sqrt(n);
+  rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
+
+rowvec fmsc_CI_simple::CI_1step_posFMSC(double alpha){
+//1-step corrected CI post-positive-part-FMSC
+//substitutes tau = tau_hat rather than taking the 
+//min and max over a confidence region for tau
+  rowvec Lambda_interval = LambdaCI_posFMSC(tau_hat, alpha);
+  double Lambda_lower = Lambda_interval(0);
+  double Lambda_upper = Lambda_interval(1);
+  double lower = mu_posFMSC - Lambda_upper / sqrt(n);
+  double upper = mu_posFMSC - Lambda_lower / sqrt(n);
+  rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
+
+rowvec fmsc_CI_simple::CI_2step_FMSC(double alpha, double delta, 
+                                     int n_grid = 100){
+//2-step corrected CI post-FMSC
+//Asymptotic coverage probability of at least
+//1 - alpha - delta
+  rowvec tau_interval = CI_tau(delta);
+  double tau_lower = tau_interval(0);
+  double tau_upper = tau_interval(1);
+  colvec tau_star = linspace(tau_lower, tau_upper, n_grid);
+  mat CIs_Lambda(n_grid, 2);
+  for(int i = 0; i < n_grid; i++){
+    CIs_Lambda.row(i) = LambdaCI_FMSC(tau_star(i), alpha);
+  }
+  double Lambda_lower_min = min(CIs_Lambda.col(0));
+  double Lambda_upper_max = max(CIs_Lambda.col(1));
+  double lower = mu_FMSC - Lambda_upper_max / sqrt(n);
+  double upper = mu_FMSC - Lambda_lower_min / sqrt(n);
+  rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
+rowvec fmsc_CI_simple::CI_2step_posFMSC(double alpha, double delta, 
+                                     int n_grid = 100){
+//2-step corrected CI post-positive-part-FMSC
+//Asymptotic coverage probability of at least
+//1 - alpha - delta
+  rowvec tau_interval = CI_tau(delta);
+  double tau_lower = tau_interval(0);
+  double tau_upper = tau_interval(1);
+  colvec tau_star = linspace(tau_lower, tau_upper, n_grid);
+  mat CIs_Lambda(n_grid, 2);
+  for(int i = 0; i < n_grid; i++){
+    CIs_Lambda.row(i) = LambdaCI_posFMSC(tau_star(i), alpha);
+  }
+  double Lambda_lower_min = min(CIs_Lambda.col(0));
+  double Lambda_upper_max = max(CIs_Lambda.col(1));
+  double lower = mu_posFMSC - Lambda_upper_max / sqrt(n);
+  double upper = mu_posFMSC - Lambda_lower_min / sqrt(n);
+  rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
 
 
 
@@ -712,4 +933,86 @@ NumericVector mse_compare_default_cpp(double g, double r, int n,
     
   NumericVector out = mse_compare_cpp(b, g, p, V, Q, n, n_reps);
   return(out);  
+}
+
+
+
+// [[Rcpp::export]]
+List CIs_compare_default_cpp(double g, double r, int n,
+                                      int n_reps){
+//Same default parameter values as mse_compare_default_cpp
+  double b = 0.5;
+  colvec p = 1.0 / 3.0 * ones(3);
+  mat Q = 1.0 / 3.0 * eye(3, 3);
+  mat V(3,3); 
+  V << 1 << 0.5 - g * r << r << endr
+    << 0.5 - g * r << 8.0 / 9.0 - pow(g, 2.0) << 0 << endr
+    << r << 0 << 1 << endr;  
+                                        
+//Default to nominal 90% CIs
+  double nominal_coverage = 0.9;
+  double alpha_1step = 1 - nominal_coverage;
+//Same level for each interval in the 2-step procedures
+  double alpha_2step = alpha_1step / 2; 
+//Number of simulations for sim-based CIs
+  int n_CI_sims = 1000;
+//Grid for tau
+  int n_tau_grid = 100;
+
+  mat Valid(n_reps, 2, fill::zeros);
+  mat Full(n_reps, 2, fill::zeros);
+  mat FMSC_naive(n_reps, 2, fill::zeros);
+  mat FMSC_1step(n_reps, 2, fill::zeros);
+  mat FMSC_2step(n_reps, 2, fill::zeros);
+  mat posFMSC_naive(n_reps, 2, fill::zeros);
+  mat posFMSC_1step(n_reps, 2, fill::zeros);
+  mat posFMSC_2step(n_reps, 2, fill::zeros);
+  
+  for(int i = 0; i < n_reps; i++){ 
+    dgp data(b, p, g, V, Q, n);
+    fmsc_CI_simple results(data.x, data.y, data.z, data.w, n_CI_sims);
+    Valid.row(i) = results.CI_valid(alpha_1step);
+    Full.row(i) = results.CI_full(alpha_1step);
+    FMSC_naive.row(i) = results.CI_naive_FMSC(alpha_1step);
+    FMSC_1step.row(i) = results.CI_1step_FMSC(alpha_1step);
+    FMSC_2step.row(i) = results.CI_2step_FMSC(alpha_2step, 
+                                              alpha_2step, 
+                                              n_tau_grid);
+    posFMSC_naive.row(i) = results.CI_naive_posFMSC(alpha_1step);
+    posFMSC_1step.row(i) = results.CI_1step_posFMSC(alpha_1step);
+    posFMSC_2step.row(i) = results.CI_2step_posFMSC(alpha_2step,
+                                                    alpha_2step,
+                                                    n_tau_grid);
+  }
+  
+  CharacterVector col_names = CharacterVector::create("Valid",
+                                                      "Full",
+                                                      "FMSC_naive",
+                                                      "FMSC_1step",
+                                                      "FMSC_2step",
+                                                      "posFMSC_naive",
+                                                      "posFMSC_1step",
+                                                      "posFMSC_2step");
+  
+  NumericVector cover = NumericVector::create(coverage_prob(Valid, b),
+                                              coverage_prob(Full, b),
+                                              coverage_prob(FMSC_naive, b),
+                                              coverage_prob(FMSC_1step, b),
+                                              coverage_prob(FMSC_2step, b),
+                                              coverage_prob(posFMSC_naive, b),
+                                              coverage_prob(posFMSC_1step, b),
+                                              coverage_prob(posFMSC_2step, b));
+  
+  NumericVector width = NumericVector::create(median_width(Valid),
+                                              median_width(Full),
+                                              median_width(FMSC_naive),
+                                              median_width(FMSC_1step),
+                                              median_width(FMSC_2step),
+                                              median_width(posFMSC_naive),
+                                              median_width(posFMSC_1step),
+                                              median_width(posFMSC_2step));
+  cover.names() = col_names;
+  width.names() = col_names;
+  return List::create(Named("coverage.prob") = cover,
+                      Named("median.width") = width);
 }

@@ -28,15 +28,15 @@ source("rmse_plots.R")
 
 #Calculate Confidence Interval results for simulation
 #and store them in ./Results/CI_results.Rdata
-#source("CI_calculations.R")
+source("CI_calculations.R")
 
 #Load CI_results.Rdata and 
 #format into two lists of tables
 #One for coverage probability
 #and another for median CI width relative
 #to TSLS
-#source("CI_Rtables.R")
+source("CI_Rtables.R")
 
 #Convert the lists of CI tables
 #to LaTeX and output to ./Results/
-#source("CI_TeXtables.R")
+source("CI_TeXtables.R")
