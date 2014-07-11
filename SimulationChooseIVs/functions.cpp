@@ -542,7 +542,7 @@ fmsc_chooseIV::fmsc_chooseIV(const mat& x, const colvec& y, const mat& z1,
 class fmsc_CI_simple{
   public:
     fmsc_CI_simple(const colvec&, const colvec&, const mat&, 
-                   const colvec&, int, int, double, double);
+                   const colvec&, int, int);
   private:  
     colvec B1(double tau){
       colvec tau_vec = tau * ones<vec>(PsiM.n_elem);
@@ -603,7 +603,7 @@ class fmsc_CI_simple{
 //      return();  
 //    }
     rowvec LambdaCI_FMSC(double tau, double alpha){
-      colvec Lambda_sims = sim_Lambda_FMSC(tau);
+      colvec Lambda_sims = simLambda_FMSC(tau);
       double lower = sample_quantile(Lambda_sims, alpha / 2.0);
       double upper = sample_quantile(Lambda_sims, 1 - alpha / 2.0);
       rowvec out(2);
