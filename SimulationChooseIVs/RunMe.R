@@ -28,7 +28,7 @@ source("rmse_plots.R")
 
 #Calculate Confidence Interval results for simulation
 #and store them in ./Results/CI_results.Rdata
-#source("CI_calculations.R")
+source("CI_calculations.R")
 
 #Load CI_results.Rdata and 
 #format into two lists of tables
