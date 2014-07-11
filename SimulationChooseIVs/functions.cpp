@@ -989,10 +989,10 @@ List CIs_compare_default_cpp(double g, double r, int n,
                                                       "Full",
                                                       "FMSC_naive",
                                                       "FMSC_1step",
-                                                      "FMSC_2step", 
-                                                      "posFMSC_naive",                                                    "FMSC_naive",
+                                                      "FMSC_2step",
+                                                      "posFMSC_naive",
                                                       "posFMSC_1step",
-                                                      "posFMSC_2step"); 
+                                                      "posFMSC_2step");
   
   NumericVector cover = NumericVector::create(coverage_prob(Valid, b),
                                               coverage_prob(Full, b),
