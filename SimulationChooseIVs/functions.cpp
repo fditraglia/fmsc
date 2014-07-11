@@ -584,7 +584,7 @@ class fmsc_CI_simple{
       return(B1(tau) - B2_vec);
     }
     colvec sim_pos_sqbias(double tau){
-      return(arma::max(sim_sqbias(tau), zeros<vec>(Psi.n_elem)));
+      return(arma::max(sim_sqbias(tau), zeros<vec>(PsiM.n_elem)));
     }
     colvec sim_FMSC_full(double tau){
       return(sim_sqbias(tau) + avar_full_vec);
