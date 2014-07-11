@@ -621,7 +621,7 @@ class fmsc_CI_simple{
       colvec Lambda_sims = simLambda_FMSC(tau);
       rowvec out(2);
       out(0) = sample_quantile(Lambda_sims, alpha / 2.0);
-      out(1) = upper = sample_quantile(Lambda_sims, 1 - alpha / 2.0);
+      out(1) = sample_quantile(Lambda_sims, 1 - alpha / 2.0);
       return(out);
     }
     rowvec LambdaCI_posFMSC(double tau, double alpha){
@@ -680,7 +680,6 @@ fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y,
   posFMSC_valid_vec = posFMSC_valid * ones<vec>(PsiM.n_elem);
 }
 
- 
 rowvec fmsc_CI_simple::CI_1step_FMSC(double alpha){
 //1-step corrected CI post-FMSC
 //substitutes tau = tau_hat rather than taking the 
@@ -688,8 +687,8 @@ rowvec fmsc_CI_simple::CI_1step_FMSC(double alpha){
   rowvec Lambda_interval = LambdaCI_FMSC(tau_hat, alpha);
   double Lambda_lower = Lambda_interval(0);
   double Lambda_upper = Lambda_interval(1);
-  double lower = b_fmsc() - Lambda_upper / sqrt(n);
-  double upper = b_fmsc() - Lambda_lower / sqrt(n);
+  double lower = mu_FMSC - Lambda_upper / sqrt(n);
+  double upper = mu_FMSC - Lambda_lower / sqrt(n);
   rowvec out(2);
   out(0) = lower;
   out(1) = upper;
