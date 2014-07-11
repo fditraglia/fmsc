@@ -571,6 +571,8 @@ class fmsc_CI_simple{
       else 
         return(CI_full(alpha));
     } 
+    rowvec CI_1step_FMSC(double);
+    rowvec CI_1step_posFMSC(double);
   private:  
     colvec B1(double tau){
       colvec tau_vec = tau * ones<vec>(PsiM.n_elem);
@@ -678,6 +680,36 @@ fmsc_CI_simple::fmsc_CI_simple(const colvec& x, const colvec& y,
   posFMSC_valid_vec = posFMSC_valid * ones<vec>(PsiM.n_elem);
 }
 
+ 
+rowvec fmsc_CI_simple::CI_1step_FMSC(double alpha){
+//1-step corrected CI post-FMSC
+//substitutes tau = tau_hat rather than taking the 
+//min and max over a confidence region for tau
+  rowvec Lambda_interval = LambdaCI_FMSC(tau_hat, alpha);
+  double Lambda_lower = Lambda_interval(0);
+  double Lambda_upper = Lambda_interval(1);
+  double lower = b_fmsc() - Lambda_upper / sqrt(n);
+  double upper = b_fmsc() - Lambda_lower / sqrt(n);
+  rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
+
+rowvec fmsc_CI_simple::CI_1step_posFMSC(alpha){
+//1-step corrected CI post-positive-part-FMSC
+//substitutes tau = tau_hat rather than taking the 
+//min and max over a confidence region for tau
+  rowvec Lambda_interval = LambdaCI_posFMSC(tau_hat, alpha);
+  double Lambda_lower = Lambda_interval(0);
+  double Lambda_upper = Lambda_interval(1);
+  double lower = b_fmsc() - Lambda_upper / sqrt(n);
+  double upper = b_fmsc() - Lambda_lower / sqrt(n);
+  rowvec out(2);
+  out(0) = lower;
+  out(1) = upper;
+  return(out);
+}
 
 
 
