@@ -3,7 +3,7 @@
 \label{sec:FMSC}
 
 \subsection{The General Case}
-FMSC chooses among the potentially invalid moment conditions contained in $h$ to minimize estimator AMSE for a target parameter. 
+The FMSC chooses among the potentially invalid moment conditions contained in $h$ to minimize estimator AMSE for a target parameter. 
 Denote this target parameter by $\mu$, a real-valued, $Z$-almost continuous function of the parameter vector $\theta$ that is differentiable in a neighborhood of $\theta_0$. 
 Further, define the GMM estimator of $\mu$ based on $\widehat{\theta}_S$ by $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ and the true value of $\mu$ by $\mu_0 = \mu(\theta_0)$. 
 Applying the Delta Method to Theorem \ref{thm:normality} gives the AMSE of $\widehat{\mu}_S$.
@@ -25,8 +25,7 @@ In contrast, any candidate estimator $\widehat{\mu}_S$ that includes moment cond
 We see that the extent and direction of this bias depends both on $K_S$ and $\nabla_\theta\mu(\theta_0)$. 
 Adding moment conditions from $h$, however, generally decreases asymptotic variance. 
 In particular, the usual proof that adding moment conditions cannot increase asymptotic variance under efficient GMM \citep[see for example][ch.\ 6]{Hallbook} continues to hold under local mis-specification, because all moment conditions are correctly specified in the limit. 
-Thus, we see that local mis-specification gives an asymptotic analogue of the bias-variance tradeoff that we encounter in finite samples.
-\footnote{The general result for adding moment conditions in GMM is only relevant in situations where the valid moment set is strictly nested inside of all other candidate moment sets. When this does not hold, such as in the OLS verus IV example, we establish an analogous ordering of asymptotic variances by direct calculation.} 
+Thus, we see that local mis-specification gives an asymptotic analogue of the bias-variance tradeoff that we encounter in finite samples.\footnote{The general result for adding moment conditions in GMM is only relevant in situations where the valid moment set is strictly nested inside of all other candidate moment sets. When this does not hold, such as in the OLS verus IV example, we establish an analogous ordering of asymptotic variances by direct calculation.} 
 
 To use this framework for moment selection, we need to construct estimators of the unknown quantities: $\theta_0$, $K_S$, $\Omega$, and $\tau$. 
 Under local mis-specification, the estimator of $\theta$ under \emph{any} moment set is consistent. 
@@ -37,9 +36,9 @@ The remaining quantities $F_S$ and $W_S$ that make up $K_S$ are consistently est
 Similarly, consistent estimators of $\Omega$ are readily available under local mis-specification, although the precise form depends on the situation.
 We consider this point further below as it relates to our two running examples.
 
-The only remaining unknown is $\tau$. Local mis-specification is essential for making meaningful comparisons of AMSE because it prevents the bias term from dominating the comparison. U
-nfortunately, it also prevents us from consistently estimating this asymptotic bias parameter. 
-Under Assumption \ref{assump:Identification}, however, we can construct an \emph{asymptotically unbiased} estimator $\widehat{\tau}$ of $\tau$ by substituting $\widehat{\theta}_v$, the estimator of $\theta_0$ that uses only correctly specified moment conditions, into $h_n$, the sample analogue of the (potentially) mis-specified moment conditions. 
+The only remaining unknown is $\tau$. Local mis-specification is essential for making meaningful comparisons of AMSE because it prevents the bias term from dominating the comparison. 
+Unfortunately, it also prevents us from consistently estimating this asymptotic bias parameter. 
+Under Assumption \ref{assump:Identification}, however, we can construct an \emph{asymptotically unbiased} estimator $\widehat{\tau}$ of $\tau$ by substituting $\widehat{\theta}_v$, the estimator of $\theta_0$ that uses only correctly specified moment conditions, into $h_n$, the sample analogue of the potentially mis-specified moment conditions. 
 In other words,  $\widehat{\tau} = \sqrt{n} h_n(\widehat{\theta}_v)$. 
 
 \begin{thm}[Asymptotic Distribution of $\widehat{\tau}$] 

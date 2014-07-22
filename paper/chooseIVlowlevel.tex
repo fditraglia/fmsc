@@ -1,7 +1,7 @@
 %!TEX root = main.tex
 \subsection{Example: Choosing Instrumental Variables}
 \label{sec:chooseIVlowlevel}
-The preceding example was quite specific, but it a sense it amounted to a problem of instrument selection: if $x$ is exogenous, it is clearly its ``own best instrument.'' 
+The preceding example was quite specific, but it a sense it amounted to a problem of instrument selection: if $x$ is exogenous, it is clearly ``its own best instrument.'' 
 Viewed from this perspective, the FMSC amounted to trading off endogeneity against instrument strength. We now consider instrument selection \emph{in general} for linear GMM estimators in an iid setting. 
 Consider the following model:
 \begin{eqnarray}
@@ -18,7 +18,6 @@ If we were confident that they were exogenous, we would certainly use them in es
 Yet the very fact that we expect them to be strongly correlated with $\mathbf{x}$ gives us reason to fear that the instruments contained in $Z_2$ may be endogenous. 
 The exact opposite is true of $Z_1$. These are the instruments that we are prepared to assume are exogenous. 
 But when is such an assumption plausible? Precisely when the instruments contained in $Z_1$ are \emph{not especially strong}. 
-\todo[inline]{Should briefly mention some situations in which this setup arises. Panel data, etc. Also refer to my empirical example.}
 In this setting, the FMSC attempts to trade off a small increase in bias from using a \emph{slightly} endogenous instrument against a larger decrease in variance from increasing the overall strength of the instruments used in estimation.
 
 To this end, consider a general linear GMM estimator of the form
@@ -52,7 +51,7 @@ The following low-level conditions are sufficient for the asymptotic normality o
 \end{assump}
 
 The preceding conditions are similar to although more general than those contained in Assumption \ref{assump:OLSvsIV}. 
-While we no longer assume homoskedasticity, for simplicity we retain the assumption that the triangular array is iid in each row. 
+Although we no longer assume homoskedasticity, for simplicity we retain the assumption that the triangular array is iid in each row. 
 
 \begin{thm}[Choosing IVs Limit Distribution]
 \label{thm:chooseIV} Suppose that $\widetilde{W}_S \rightarrow_p W_S >0$. Then, under Assumption \ref{assump:chooseIV}

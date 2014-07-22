@@ -26,11 +26,11 @@ Define the sample analogue of the expectations in Assumption \ref{assump:drift} 
 $$f_n(\theta) = \frac{1}{n}\sum_{i=1}^n f(Z_{ni},\theta) = \left[\begin{array}{c} g_n(\theta)\\ h_n(\theta) \end{array} \right]=\left[\begin{array}{c}n^{-1}\sum_{i=1}^n g(Z_{ni},\theta) \\ n^{-1}\sum_{i=1}^n h(Z_{ni},\theta) \end{array}\right]$$
 where $g_n$ is the sample analogue of the correctly specified moment conditions and $h_n$ is that of the (potentially) mis-specified moment conditions.
 A candidate GMM estimator $\widehat{\theta}_S$ uses some subset $S$ of the moment conditions contained in $f$ in estimation. 
-Let $|S|$ denote the number of moment conditions used. For $\widehat{\theta}_S$ to be identified, we require that $|S|>r$. 
+Let $|S|$ denote the number of moment conditions used and suppose that $|S|>r$ so the GMM estimator is unique.\footnote{Identifying $\tau$ requires futher assumptions, as discussed in Section \ref{sec:ident}.} 
 Let $\Xi_S$ be the $|S| \times(p +q)$ \emph{moment selection matrix} corresponding to $S$. That is, $\Xi_S$ is a matrix of ones and zeros arranged such that $\Xi_S f_n(\theta)$ contains only the sample moment conditions used to estimate $\widehat{\theta}_S$. 
 Thus, the GMM estimator of $\theta$ based on moment set $S$ is given by 
 $$\widehat{\theta}_S = \underset{\theta \in \Theta}{\mbox{arg min}}\; \left[\Xi_S f_n(\theta)\right]' \widetilde{W}_S \; \left[ \Xi_S f_n(\theta)\right].$$
-where $\widetilde{W}_S$ is an $|S|\times |S|$, positive semi-definite weight matrix. Note that we place no restrictions on $S$ other than $|S| >r$ so that the estimator exists. 
+where $\widetilde{W}_S$ is an $|S|\times |S|$, positive semi-definite weight matrix. Note that we place no restrictions on $S$ other than $|S| >r$ so that the GMM estimate is well-defined. 
 In particular, $S$ may \emph{exclude} some or all of the valid moment conditions contained in $g$.
 While this may seem strange, it allows us to accomodate a wider range of examples, including choosing between least squares and instrumental variables estimators.
 
@@ -85,6 +85,7 @@ This captures in asymptotic form the bias-variance tradeoff that we see in finit
 In constrast, fixed mis-specification results in a degenerate bias-variance tradeoff in the limit: scaling up by $\sqrt{n}$ to yield an asymptotic variance causes the bias component to diverge.
 
 \subsection{Identification}
+\label{sec:ident}
 Any form of moment selection requires an identifying assumption: we need to make clear which parameter value $\theta_0$ counts as the ``truth.''
 One approach, following \cite{Andrews1999}, is to assume that there exists a unique, maximal set of correctly specified moment conditions that identifies $\theta_0$. 
 In the notation of the present paper\footnote{Although \cite{Andrews1999}, \cite{AndrewsLu}, and \cite{HongPrestonShum} consider \emph{fixed} mis-specification, we can view this as a version of local mis-specification in which $\tau \rightarrow \infty$.} this is equivalent to the following:
@@ -92,7 +93,7 @@ In the notation of the present paper\footnote{Although \cite{Andrews1999}, \cite
 \begin{assump}[\cite{Andrews1999} Identification Condition]
 	\label{assump:Andrews}
 There exists a subset $S_{max}$ of at least $r$ moment conditions satisfying:
-	\begin{enumerate}
+	\begin{enumerate}[(a)]
 	 	\item $\Xi_{S_{max}} E[f(Z_{ni},\theta_0)]= 0$
 	 	\item For any $S' \neq S_{max}$ such that $\Xi_{S'} E[f(Z_{ni},\theta')]= 0$ for some $\theta' \in \Theta$, $|S_{max}| > |S'|$.
 	 \end{enumerate}
@@ -104,8 +105,8 @@ In the notation of the present paper this corresponds to having no moment condit
 When it does fail, the selected GMM estimator may no longer be consistent for $\theta_0$. 
 
 A different approach to identification is to assume that there is a minimal set of at least $r$ moment conditions \emph{known} to be correctly specified.
-This is the approach we follow here, one shared by \cite{Liao} and \cite{ChengLiao}. 
-With the exception of Section \ref{subsec:digress}, we maintain the following assumption throughout.
+This is the approach we follow here, as do \cite{Liao} and \cite{ChengLiao}. 
+With the exception of a short digression in Section \ref{subsec:digress}, we maintain the following assumption throughout.
 
 \begin{assump}[FMSC Identification Condition] 
 \label{assump:Identification}
@@ -133,5 +134,5 @@ But why would we ever consider using controversial assumptions?
 FMSC is designed for settings in which the $h$--block is expected to contain a substantial amount of information beyond that already contained in the $g$--block. 
 The idea is that, if we knew the $h$--block was correctly specified, we would expect a large gain in efficiency by including it in estimation. 
 This motivates the idea of trading off the variance reduction from including $h$ against the potential increase in bias. 
-Not all applications have the structure, but many important ones do. 
-We now consider two motivating examples. 
+Not all applications have the structure, but many do.
+We now consider two simple, empirically relevant examples.
