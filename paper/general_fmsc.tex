@@ -67,8 +67,34 @@ It follows that
 	\mbox{FMSC}_n(S) = \nabla_\theta\mu(\widehat{\theta})'\widehat{K}_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\widehat{\tau}\widehat{\tau}' - \widehat{\Psi}\widehat{\Omega}\widehat{\Psi}'\end{array}\right] + \widehat{\Omega}\right\}\Xi_S'\widehat{K}_S' \nabla_\theta\mu(\widehat{\theta})
 \end{equation}
 provides an asymptotically unbiased estimator of AMSE.
-\todo[inline]{Comment on how we could look at other risk functions. Talk about why an asymptotically unbiased estimator can make sense. At least try to justify why this is reasonable.}
+Given a set $\mathscr{S}$ of candidate specifications, the FMSC selects the candidate $S^*$ that \emph{minimizes} the expression given in Equation \ref{eq:fmsc}, that is $S^*_{FMSC} =  \arg \min_{S\in \mathscr{S}} \;\mbox{FMSC}_n(S)$.
 
+At this point, it is worth taking a brief pause to survey the ground covered thus far.
+We began with a target parameter, $\mu$, a risk function, mean-squared error, and a collection of candidate estimators, $\widehat{\mu}_S$ for $S\in\mathcal{S}$. 
+Our goal was to choose the estimator with the lowest risk.
+Because finite-sample distributions were unavailable, we resorted to an asymptotic experiment, local mis-specification, that preserved the bias-variance tradeoff embodied in our chosen risk function.
+We then calculated the risk of the \emph{limit distribution} of $\widehat{\mu}_S$ to use as a stand-in for the finite-sample risk. 
+This quantity involved several unknown parameters.
+We estimated these in such a way that the resulting asymptotic risk estimate would converge in distribution to a random variable with mean equal to the true asymptotic risk.
+The result was the FMSC: an asymptotically unbiased estimator of the AMSE of $\widehat{\mu}_S$.
+Viewing the FMSC at this level of abstraction raises two questions.
+First, could we have chosen a risk function other than mean-squared error?
+Second, why should we use an \emph{asymptotically unbiased} risk estimator? 
+
+The answer to the first question is a straightforward yes.
+The idea of using asymptotic risk to stand-in for finite sample risk requires only that we can characterize the limit distribution of each $\widehat{\mu}_S$ and use it to evaluate the chosen risk function.
+\cite{Claeskens2006} and \cite{ClaeskensHjort2008}, for example, show how the FIC for model selection in maximum likelihood models can be extended from squared error to $L_p$ and linex loss, respectively, in precisely this way.
+One could easily do the same for the FMSC although we will not consider this possibility futher here.
+
+Answering the second question is more difficult.
+Under local mis-specification it is impossible to consistently estimate AMSE.\footnote{This is not a defect of the FMSC: there is a fundamental trade-off between consistency and desirable risk properties. See Section \ref{sec:avg} for a discussion of this point.}
+If we merely use the plug-in estimator of the squared asymptotic bias based on $\widehat{\tau}$, the resulting AMSE estimate will ``overshoot'' asymptotically.
+Accordingly, it seems natural to correct this bias as explained in Corollary \ref{cor:tautau}.
+This is the same heuristic that underlies the classical AIC and TIC model selection criteria as well as more recent procedures such as those described in \cite{ClaeskensHjort2003} and \cite{Schorfheide2005}.
+A heuristic, however, is not a rigorous justification: there could certainly be situations in which it makes sense to use a risk estimator other than the asymptotically unbiased one suggested here.
+If we wish to consider risk functions other than MSE, to take a simple example, it may not be possible to derive an asymptotically unbiased risk estimator.
+The plug-in estimator, however, is always available.
+Although we will not consider them further below, alternative risk estimators in the FMSC framework could be an interesting topic for future research.
 
 \subsection{Digression: Failure of the Identification Condition}
 \label{subsec:digress}
