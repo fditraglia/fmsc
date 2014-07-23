@@ -45,11 +45,10 @@ All that remains before we can substitute into Equation \ref{eq:fmsc} is to esti
 There are many possible ways to proceed, depending on the problem at hand and the assumptions one is willing to make. 
 In the simulation and empirical examples discussed below we examine the 2SLS estimator, that is $\widetilde{W}_S = (\Xi_S Z'Z\Xi_S)^{-1}$, and estimate $\Omega$ as follows. 
 For all specifications \emph{except} the valid estimator $\widehat{\beta}_v$, we employ the centered, heteroscedasticity-consistent estimator
-\todo[inline]{Correct this explanation! We in fact use $\widehat{\beta}_S$ and $\mathbf{z}_{i,S}$. That is, we use the centered, heteroskedasticity-consistent variance matrix estimator based on the residuals of specification $S$ itself!}
 \begin{equation}
-	\widehat{\Omega}= \frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_{full})^2\mathbf{z}_i \mathbf{z}_i'  - \left(\frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_{full})\mathbf{z}_i   \right)\left(\frac{1}{n}\sum_{i=1}^n  u_i(\widehat{\beta}_{full})\mathbf{z}_i'  \right)
+	\widehat{\Omega}_S = \frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_S)^2\mathbf{z}_{iS} \mathbf{z}_{iS}'  - \left(\frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_S)\mathbf{z}_{iS}   \right)\left(\frac{1}{n}\sum_{i=1}^n  u_i(\widehat{\beta}_S)\mathbf{z}_{iS}'  \right)
 \end{equation}
-where $u_i(\beta) = y_i - \mathbf{x}_i'\beta$ and $\widehat{\beta}_{full} = (X'Z(Z'Z)^{-1}Z'X)^{-1}X'Z(Z'Z)^{-1}Z'\mathbf{y}$.
+where $u_i(\beta) = y_i - \mathbf{x}_i'\beta$, $\widehat{\beta}_S = (X'Z_S(Z_S'Z_S)^{-1}Z_S'X)^{-1}X'Z_S(Z_S'Z_S)^{-1}Z_S'\mathbf{y}$, $\mathbf{z}_{iS} = \Xi_S \mathbf{z}_i$ and $Z_S' = \Xi_S Z'$.
 Centering allows moment functions to have non-zero means. 
 While the local mis-specification framework implies that these means tend to zero in the limit, they are non-zero for any fixed sample size. 
 Centering accounts for this fact, and thus provides added robustness. 
