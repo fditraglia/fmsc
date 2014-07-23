@@ -100,8 +100,8 @@ plot.grid <- function(results, nRows, nCols, ...){
 
 #Columns to include in the different plots
 baseline <- c("OLS", "TSLS", "FMSC")
-relative.DHW <- c("OLS", "TSLS", "FMSC", "DHW90", "DHW95")
-relative.all <- c("OLS", "TSLS", "FMSC", "AVG","DHW90", "DHW95")
+relative.DHW <- c("FMSC", "DHW90", "DHW95")
+relative.all <- c("FMSC", "AVG","DHW90", "DHW95")
 
 
 #Create plots and export as tikz files
