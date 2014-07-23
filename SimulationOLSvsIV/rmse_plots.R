@@ -21,7 +21,7 @@ par(mar = c(3,3,2,1), mgp = c(2, 0.7, 0), tck = -0.01)
 #plot appropriately. The default relative = TRUE gives RMSE
 #relative to the oracle, i.e. the infeasible estimator that
 #takes the lower RMSE envelope of OLS and TSLS.
-rmse.plot <- function(panel, col.list, relative = TRUE, 
+rmse.plot <- function(panel, col.list, relative = FALSE, 
                       legend.pos = "topright"){
   
   results.cols <- setdiff(names(panel), c("n", "p", "r"))
@@ -107,7 +107,7 @@ relative.all <- c("OLS", "TSLS", "FMSC", "AVG","DHW90", "DHW95")
 #Create plots and export as tikz files
 tikz('./Results/RMSE_coarse_pi_baseline.tex',
      width = plot.width, height = plot.height)
-  plot.grid(coarse.pi, nRows, nCols, baseline, relative = FALSE,
+  plot.grid(coarse.pi, nRows, nCols, baseline, 
             legend.pos = "topleft")
 dev.off()
 
@@ -123,7 +123,7 @@ dev.off()
 
 tikz('./Results/RMSE_coarse_rho_baseline.tex',
      width = plot.width, height = plot.height)
-plot.grid(coarse.rho, nRows, nCols, baseline, relative = FALSE)
+plot.grid(coarse.rho, nRows, nCols, baseline)
 dev.off()
 
 tikz('./Results/RMSE_coarse_rho_relative_DHW.tex',
