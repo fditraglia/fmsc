@@ -2,13 +2,14 @@
 \subsection{Simulation Study: OLS versus 2SLS Example}
 \label{sec:OLSvsIVsim}
 We now examine the performance of the FMSC when used to choose between OLS and 2SLS in a simple simulation experiment. 
-All calculations in this section are based on the formulas from Sections
-\ref{sec:OLSvsIVlowlevel} and \ref{sec:FMSCforOLSvsIV}. 
+All calculations in this section are based on the formulas from Sections \ref{sec:OLSvsIVlowlevel} and \ref{sec:FMSCforOLSvsIV} and 10,000 simulation replications. 
 
 The data generating process is given by 
 \begin{eqnarray}
 	y_i &=& 0.5 x_i + \epsilon_i\\
+	\label{eq:OLSvsIVDGP1}
 	x_i &=& \pi(z_{1i} + z_{2i} + z_{3i}) + v_i
+	\label{eq:OLSvsIVDGP2}
 \end{eqnarray}
 where $(\epsilon_i, v_i, z_{1i}, z_{2i}, z_{3i}) \sim \mbox{ iid } N(0, \mathcal{S})$
 \begin{equation}
@@ -20,35 +21,44 @@ where $(\epsilon_i, v_i, z_{1i}, z_{2i}, z_{3i}) \sim \mbox{ iid } N(0, \mathcal
 		0 & 0 & 0 & 1/3 & 0 \\
 		0 & 0 & 0 & 0 & 1/3
 	\end{array}\right]
+	\label{eq:OLSvsIVDGP3}
 \end{equation}
 for $i= 1, \hdots, N$ and we vary $N$, $\rho$ and $\pi$ over a grid.
 Our goal is to estimate the effect of $x$ on $y$, in this case 0.5, with minimum MSE by choosing between OLS and 2SLS estimators.
 To ensure that the finite-sample MSE of the 2SLS estimator exists, this DGP includes three instruments leading to two overidentifying restrictions \citep{Phillips1980}.\footnote{Alternatively, one could use fewer instruments in the DGP and use work with trimmed MSE.}
-This design satisfies the conditions of Assumption \ref{assump:OLSvsIV} and, for simplicity, keeps the variance of $x$ fixed at one.
-This normalization implies that $\pi = Corr(x_i, z_{1i} + z_{2i} + z_{3i})$ and $\rho = Corr(x_i,\epsilon_i)$.
+This design satisfies the conditions of Assumption \ref{assump:OLSvsIV} and keeps the variance of $x$ fixed at one so that $\pi = Corr(x_i, z_{1i} + z_{2i} + z_{3i})$ and $\rho = Corr(x_i,\epsilon_i)$.
 The first-stage R-squared is simply $1 - \sigma_v^2/\sigma_x^2 = \pi^2$ so that larger values of $|\pi|$ \emph{reduce} the variance of the 2SLS estimator.
 Since $\rho$ controls the endogeneity of $x$, larger values of $|\rho|$ \emph{increase} the bias of the OLS estimator.
 
 Figure \ref{fig:OLSvsIV_RMSEbaseline} compares the root mean-squared error (RMSE) of the post-FMSC estimator to those of the simple OLS and 2SLS estimators.
-In keeping with our intuition, for any values of $N$ and $\pi$ there is a value of $\rho$ below which OLS outperforms 2SLS. 
-As $N$ and $\pi$ increase, this value approaches zero; as they decrease it approaches one.
+For any values of $N$ and $\pi$ there is a value of $\rho$ below which OLS outperforms 2SLS. 
+As $N$ and $\pi$ increase this value approaches zero; as they decrease it approaches one.
 Although the first two moments of the 2SLS estimator exist in this simulation design, none of its higher moments do. 
 This fact is clearly evident for small values of $N$ and $\pi$: even with 10,000 simulation replications, the RMSE of the 2SLS estimator shows a noticable degree of simulation error unlike those of the OLS and post-FMSC estimators.
 
-The FMSC represents a compromise between OLS and 2SLS: when the RMSE of 2SLS is high it behaves more like OLS and when the RMSE of OLS is high it behaves more like 2SLS.
-Because the FMSC is itself a random variable, however, it sometimes makes moment selection mistakes.\footnote{For more discussion of this point, see Section \label{sec:avg}.} 
-For this reason it does attain an RMSE equal to the lower envelope of the OLS and 2SLS estimators: moment selection is not a free lunch.
+The FMSC represents a compromise between OLS and 2SLS.
+When the RMSE of 2SLS is high, the FMSC behaves more like OLS; when the RMSE of OLS is high it behaves more like 2SLS.
+Because the FMSC is itself a random variable, however, it sometimes makes moment selection mistakes.\footnote{For more discussion of this point, see Section \ref{sec:avg}.} 
+For this reason it does not attain an RMSE equal to the lower envelope of the OLS and 2SLS estimators: moment selection is not a free lunch.
 The larger the RMSE difference between OLS and 2SLS, however, the closer FMSC comes to this lower envelope: the more costly the mistake, the rarer.
 
-\todo[inline]{Talk about how it fares compared to 2SLS. Of course, can't beat it uniformly over the parameter space. Don't do much worse though and could do much better, particularly if we have reason to suspect that $\rho$ may be small. This is exactly the situation for which the FMSC was designed. And if $\rho$ is large we're fine too. It's only for moderate values that we can do worse.}
+The question remains: should we carry out moment selection via the FMSC or avoid selection altogether and use the correctly specified 2SLS estimator?
+As usual the answer depends where we happen to be in the parameter space.
+Because it is sometimes makes mistakes, the post-FMSC estimator cannot provide a uniform improvement over 2SLS.
+And indeed, as we see from the simulation results, it does not.
+The worst-case RMSE of the post-FMSC estimator, however, is never much higher than that of 2SLS while the worst-case RMSE of 2SLS can be dramatically higher than that of the FMSC, depending on parameter values.
+Moreover, as discussed above, the FMSC is intended for situations in which an applied researcher fears that her ``baseline'' assumptions may be too weak and consequently considers adding one or more ``controversial'' assumptions. 
+In this case, she fears that the exogenous instruments $z_1, z_2, z_3$ are not particularly strong, $\pi$ is small relative to $N$, and thus entertains the assumption that $x$ is exogenous.
+It is precisely in these situations that the FMSC is likely to provide large performance gains over 2SLS.
+
 \begin{figure}
 \centering
 	\input{../SimulationOLSvsIV/Results/RMSE_coarse_pi_baseline.tex}
-	\caption{Caption goes here.}
+	\caption{RMSE values for the two-stage least squares (TSLS) estimator, the ordinary least squares (OLS) estimator, and the post-Focused Moment Selection Criterion (FMSC) estimator based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas described in Sections \ref{sec:OLSvsIVlowlevel} and \ref{sec:FMSCforOLSvsIV}.}
 	\label{fig:OLSvsIV_RMSEbaseline}
 \end{figure}
 
-As discussed in the preceding section, the FMSC takes a very special form in this example: it is equivalent to a DHW test with $\alpha \approx 0.16$.
+As shown in the preceding section, the FMSC takes a very special form in this example: it is equivalent to a DHW test with $\alpha \approx 0.16$.
 Accordingly, Figure \ref{fig:OLSvsIV_RMSEvsDHW} compares the RMSE of the post-FMSC estimator to those of DHW pre-test estimators with significance levels $\alpha = 0.05$ and $\alpha = 0.1$, indicated in the legend by DHW95 and DHW90.
 Since these three procedures differ only in their critical values, they show similar qualitative behavior.
 When $\rho$ is sufficiently close to zero, we saw from Figure \ref{fig:OLSvsIV_RMSEbaseline} that OLS has a lower RMSE than 2SLS.
@@ -62,6 +72,6 @@ In terms of worst-case RMSE, however, FMSC gives the best performance of the thr
 \begin{figure}
 \centering
 	\input{../SimulationOLSvsIV/Results/RMSE_coarse_pi_relative_DHW.tex}
-	\caption{Caption goes here.}
+	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator and Durbin-Hausman-Wu pre-test estimators with $\alpha = 0.1$ (DWH90) and $\alpha = 0.05$ (DHW95) based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas described in Sections \ref{sec:OLSvsIVlowlevel} and \ref{sec:FMSCforOLSvsIV}.}
 	\label{fig:OLSvsIV_RMSEvsDHW}
 \end{figure}
