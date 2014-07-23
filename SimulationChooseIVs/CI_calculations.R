@@ -1,8 +1,8 @@
 #Define simulation parameters
 n.reps <- 10000
-rho.grid <- seq(from = 0, to = 0.5, by = 0.1)
-gamma.grid <- seq(from = 0, to = 0.5, by = 0.1)
-n.grid <- c(50, 100, 250)
+rho.grid <- seq(from = 0, to = 0.25, by = 0.05)
+gamma.grid <- seq(from = 0, to = 0.25, by = 0.05)
+n.grid <- c(50, 100, 500)
 
 params <- expand.grid(n = n.grid, g = gamma.grid, r = rho.grid)
 
