@@ -5,45 +5,6 @@ Accordingly, when competing moment sets have similar criterion values in the pop
 Thus, it may be possible to achieve better performance by using smooth weights rather than discrete selection.
 In this section we explore this possibility via two examples: one based on a simple heursitic and another on more detailed analytical calculations.
 
-\subsubsection{Exponential Weights}
-\todo[inline]{Possibly remove this section later.}
-In the context of maximum likelihood estimation, \cite{Burnhametal} suggest averaging the estimators resulting from a number of competing models using exponential weights of the form $w_k = \exp(-I_k/2)/\sum_{i=1}^K \exp(-I_i/2)$ where $I_k$ is an information criterion evaluated for model $k$, and $i$ indexes the set of $K$ candidate models. This expression, constructed by an analogy with Bayesian model averaging, gives more weight to models with lower values of the information criterion but non-zero weight to all models. Applying this idea to the moment selection criteria given above, consider
-	\begin{equation}	
-		\widehat{\omega}_S = \left.\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S)\right\}\right/\sum_{S' \in \mathscr{S}}\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S')\right\}
-		\label{eq:expweight}
-\end{equation}
-where MSC$(\cdot)$ is a moment selection criterion and the parameter $\kappa$ varies the uniformity of the weighting. As $\kappa \rightarrow 0$ the weights become more uniform; as $\kappa \rightarrow \infty$ they approach the moment selection procedure given by minimizing the corresponding criterion. Table \ref{tab:avg} compares moment averaging against moment selection by substituting FMSC, GMM-AIC, BIC and HQ into Equation \ref{eq:expweight} using the simulation experiment described in Section \ref{sec:fmscsim}. Calculations are based on 10,000 replications, each with a sample size of 500. For FMSC averaging $\kappa = 1/100$ to account for the fact that the FMSC is generally more variable than criteria based on the $J$-test. Weights for GMM-BIC, HQ, and AIC averaging set $\kappa = 1$. Both in terms of average and worst-case RMSE, moment selection is inferior to moment averaging. The only exception is worst-case RMSE for the FMSC. (Pointwise comparisons are available upon request.) If our goal is estimators with low RMSE, moment averaging may be preferable to moment selection. 
-
-
-% latex.default(RMSE.average.vs.select, file = outfilename, greek = TRUE,      numeric.dollar = FALSE, na.blank = TRUE, landscape = FALSE,      append = TRUE) 
-%
-\begin{table}[!tbp]
- \begin{center}
-\caption{Average and worst-case RMSE of moment averaging versus selection.}
-\label{tab:avg}
-\small
- \begin{tabular}{lrr}\hline\hline
-\multicolumn{1}{l}{Average RMSE}&\multicolumn{1}{c}{Averaging}&\multicolumn{1}{c}{Selection}\tabularnewline
-\hline
-FMSC&0.24&0.26\tabularnewline
-GMM-BIC&0.26&0.29\tabularnewline
-GMM-HQ&0.26&0.29\tabularnewline
-GMM-AIC&0.26&0.28\tabularnewline
-\hline
-\multicolumn{1}{l}{Worst-Case RMSE}&\multicolumn{1}{c}{Averaging}&\multicolumn{1}{c}{Selection}\tabularnewline
-\hline
-FMSC&0.36&0.33\tabularnewline
-GMM-BIC&0.41&0.47\tabularnewline
-GMM-HQ&0.36&0.39\tabularnewline
-GMM-AIC&0.33&0.35\tabularnewline
-\hline
-\end{tabular}
-\end{center}
-\footnotesize
-\begin{tablenotes}
-	\item  Averaging is based on $\kappa = 1/100$ for FMSC weights and $\kappa = 1$ for all other weights. Values are calculated by simulating from Equations \ref{eq:secondstage}--\ref{eq:varmatrix} with $10,000$ replications at each combination of parameter values from Table ??? and a sample size of $500$.
-\end{tablenotes}
-\end{table}
 
 \subsubsection{Minimum AMSE Weights for OLS versus 2SLS Example}
 The preceding example was based on the simple heuristic of ``exponential smoothing.'' 
