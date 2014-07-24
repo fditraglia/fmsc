@@ -1,15 +1,22 @@
 %!TEX root = main.tex
-\subsection{Moment Averaging Examples}
+\subsection{Moment Averaging for the OLS versus 2SLS Example}
 Although it is a special case of moment averaging, moment selection is a somewhat crude procedure: it gives full weight to the estimator that minimizes the moment selection criterion no matter how close its nearest competitor lies. 
 Accordingly, when competing moment sets have similar criterion values in the population, sampling variation can be \emph{magnified} in the selected estimator. 
 Thus, it may be possible to achieve better performance by using smooth weights rather than discrete selection.
-In this section we explore this possibility via two examples: one based on a simple heursitic and another on more detailed analytical calculations.
+But how should these smooth weights be constructed?
+One possibility is to adapt a proposal from \cite{Burnhametal}, who suggest averaging a collection of competing maximum likelihood estimator with weights of the form 
+\[w_k =\left. \exp(-I_k/2)\right/\sum_{i=1}^K \exp(-I_i/2)\] 
+where $I_k$ is an information criterion evaluated for model $k$, and $i$ indexes the set of $K$ candidate models. 
+This expression, constructed by an analogy with Bayesian model averaging, gives more weight to models with lower values of the information criterion but non-zero weight to all models. 
+Applying a slightly more general form of this idea, suggested by \cite{ClaeskensHjortbook}, to the moment selection criteria examined above, we might consider using weights of the form	
+\[		\widehat{\omega}_S = \left.\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S)\right\}\right/\sum_{S' \in \mathscr{S}}\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S')\right\}\]
+where MSC$(\cdot)$ is a moment selection criterion and the parameter $\kappa \geq 0$ varies the uniformity of the weighting. 
+As $\kappa \rightarrow 0$ the weights become more uniform; as $\kappa \rightarrow \infty$ they approach the moment selection procedure given by minimizing the corresponding criterion. 
+Setting $\kappa = 1$ gives the \cite{Burnhametal} weights.
 
-
-\subsubsection{Minimum AMSE Weights for OLS versus 2SLS Example}
-The preceding example was based on the simple heuristic of ``exponential smoothing.'' 
-In some applications, however, it is possible to \emph{analytically} derive weights that minimize AMSE.\footnote{I thank Bruce Hansen for suggesting this idea.} 
-The OLS versus 2SLS example from Sections \ref{sec:OLSvsIVlowlevel} and \ref{sec:FMSCforOLSvsIV} is one such case. 
+Some preliminary simulation results, reported in an earlier draft of this paper, suggest that exponential weighting can indeed provide MSE improvements, so long as we choose an appropriate value for $\kappa$.
+And there's the rub: while it is easy to experiment with different values of $\kappa$ in a simulation study, it is far from clear how to set about formulating a rule to choose $\kappa$ in practice. In at least some applications, however, there is a compelling alternative to the exponential weighting scheme: we can instead derive weights \emph{analytically} to minimize AMSE within the FMSC framework.\footnote{I thank Bruce Hansen for suggesting this idea.} 
+To illustrate this idea, we revisit the OLS versus 2SLS example from Sections \ref{sec:OLSvsIVlowlevel} and \ref{sec:FMSCforOLSvsIV}. 
 
 To begin, define an arbitrary weighted average of the OLS and 2SLS estimators from Equations \ref{eq:OLS} and \ref{eq:2SLS} by  
 \begin{equation}
@@ -37,7 +44,7 @@ and accordingly
 \begin{equation}
 	\mbox{AMSE}\left[\widehat{\beta}(\omega) \right] =  \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (\omega^2 - 2 \omega)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left( \frac{\sigma_x^2}{\gamma^2} - 1\right) + \frac{\sigma_\epsilon^2}{\gamma^2}.
 \end{equation}
-The preceding is a globally convex function of $\omega$. 
+The preceding expression is a globally convex function of $\omega$. 
 Taking the first order condition and rearranging, we find that the unique global minimizer is
 \begin{equation}
 \label{eq:AMSEoptimal}
@@ -59,25 +66,27 @@ To actually use the corresponding moment average estimator in practice, however,
 As discussed above in Section \ref{sec:FMSCforOLSvsIV} the usual estimators of $\sigma_x^2$ and $\gamma$ remain consistent under local mis-specification, and the residuals from the 2SLS estimator provide a robust estimator of $\sigma_\epsilon^2$.
 As before, the problem is estimating $\tau^2$.
 A natural idea is to substitute the asymptotically unbiased estimator that arises from Theorem \ref{thm:tauOLSvsIV}, namely $\widehat{\tau}^2 - \widehat{V}$. 
-The problem with this approach is that, while $\tau^2$ is always greater than or equal to zero as is $\widehat{\tau}^2$, the difference $\widehat{\tau}^2 - \widehat{V}$ \emph{can easily be negative}, yielding a \emph{negative} estimate of $\mbox{ABIAS(OLS)}^2$.
-To solve this problem, we borrow an idea from the literature on shrinkage estimation and use the \emph{positive part} instead, namely $\max\left\{0, \; \widehat{\tau}^2 - \widehat{V}\right\}$, as in the positive-part James-Stein estimator.
+The problem with this approach is that, while $\tau^2$ is always greater than or equal to zero as is $\widehat{\tau}^2$, the difference $\widehat{\tau}^2 - \widehat{V}$ can easily be negative, yielding a \emph{negative} estimate of $\mbox{ABIAS(OLS)}^2$.
+To solve this problem, we borrow an idea from the literature on shrinkage estimation and use the \emph{positive part} instead, namely $\max\{0, \; \widehat{\tau}^2 - \widehat{V}\}$, as in the positive-part James-Stein estimator.
 This ensures that our estimator of $\omega^*$ lies inside the interval $[0,1]$.
 Accordingly, we define 
 \begin{equation}
 	\widehat{\beta}^*_{AVG} = \widehat{\omega}^* \widehat{\beta}_{OLS} + (1 - \widehat{\omega}^*)\widetilde{\beta}_{2SLS}
+	\label{eq:OLSvsIV_AVG1}
 \end{equation}
 where
 \begin{equation}
 \widehat{\omega }^* = \left[1 + \frac{\max \left\{0, \; \left(\widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2  \left(\widehat{\sigma}_x^2/\widehat{\gamma}^2 - 1 \right) \right)/\;\widehat{\sigma}_x^4 \right\}}{\widehat{\sigma}_\epsilon^2 (1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2)}\right]^{-1}
+	\label{eq:OLSvsIV_AVG2}
 \end{equation}
- 
-\todo[inline]{Add simulation study. Also talk about how the estimator of the weight isn't asymptotically unbiased and how we might want to try other approaches, a question we leave for future research. This section is meant to illustrate the possibilities for moment averaging.
-In the simulations, it works well. How to get a CI for such a procedure? We'll see in the next section.}
 
+Returning to the simulation experiment from Section \ref{sec:OLSvsIVsim}, Figure \ref{fig:OLSvsIV_AVG} compares the RMSE of the minimum-AMSE moment average estimator presented in Equations \ref{eq:OLSvsIV_AVG1} and \ref{eq:OLSvsIV_AVG2} to those of the FMSC and DHW pre-test estimators from Figure \ref{fig:OLSvsIV_RMSEvsDHW}.
+The performance of the minimum-AMSE moment average estimator is strong: it provides the lowest worst-case RMSE and improves uniformly on the FMSC for all but the largest values of $\rho$.
+While a complete examination of this estimator is beyond the scope of the present paper, these results suggest that the minimum-AMSE moment averaging idea could be extremely useful in practice.
+In the following section we will see how to construct a valid confidence interval for this and related procedures.
 \begin{figure}
 \centering
 	\input{../SimulationOLSvsIV/Results/RMSE_coarse_pi_relative_all.tex}
 	\caption{Comparison of OLS-IV averaging estimator against FMSC selection and DHW selection.}
+	\label{fig:OLSvsIV_AVG}
 \end{figure}
-
-
