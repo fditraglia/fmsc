@@ -23,9 +23,11 @@ First, as discussed above, the goal of the FMSC is not to consistently select th
 In fact, the goal of consistent selection is very much at odds with that of controlling estimator risk.
 As explained by \cite{Yang2005} and \cite{LeebPoetscher2008}, the worst-case risk of a consistent selection procedure \emph{diverges} with sample size. 
 
-Second, while we know from simulation studies that selection can dramatically change the sampling distribution of our estimators, the asymptotics of consistent selection give the misleading impression that this effect can be ignored.
+Second, while we know from both simulation studies \citep{Demetrescu} and analytical examples \citep{LeebPoetscher2005} that selection can dramatically change the sampling distribution of our estimators, the asymptotics of consistent selection give the misleading impression that this effect can be ignored.
 For example Lemma 1.1 of \citet[p.\ 168]{Poetscher1991}, which states that the limit distributions of an estimator pre- and post-consistent selection are identical, has been interpreted by some as evidence that consistent selection is innocuous. 
 \citet[pp.\ 179--180]{Poetscher1991} makes it very clear, however, this result does not hold uniformly in the parameter space and hence ``only creates an illusion of conducting valid inference'' \citep[p.\ 22]{LeebPoetscher2005}.
+While it is indeed true for \emph{fixed} parameter values that consistent selection has a negligible effect on inference, so long as the sample size is sufficiently large, very small changes in parameter values can lead to very large changes in coverage probabilities. 
+
 Figure \ref{fig:consist} illustrates this problem using the simulation experiment from Section \ref{sec:fmscsim} with a sample size of $500$ and $\gamma = 0.4$, $\rho= 0.2$.
 At these parameter values, $w$ is an invalid instrument.
 Because they are consistent criteria, and hence will exclude any invalid instruments in the limit, a na\"{i}ve reading of P\"{o}tscher's Lemma 1.1 would suggest that the post-selection distributions of GMM-BIC and HQ should be close to that of the valid estimator, given in dashed lines.
