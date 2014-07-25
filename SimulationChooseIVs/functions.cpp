@@ -234,7 +234,7 @@ class linearGMM_msc {
   public:
     linearGMM_msc(const mat&, const colvec&, const mat&);
     double Jstat(){return(J);}
-    double pJtest(){return(R::pchisq(J, n_overid, 1, 0));}
+    double pJtest(){return(R::pchisq(J, n_overid, 0, 0));}
     //the arguments of R::pchisq are (q, df, lower.tail, log.p)
     double GMM_AIC(){return(J - 2 * n_overid);}
     double GMM_BIC(){return(J - log(n_obs) * n_overid);}
