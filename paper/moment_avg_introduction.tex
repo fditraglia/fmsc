@@ -14,7 +14,6 @@ Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} gives the follo
 	\end{eqnarray*}
 \end{cor}
 
-
 Because the FMSC is itself random, so is the FMSC-selected estimator.
 This means that the FMSC is a ``conservative'' rather than ``consistent'' selection procedure.
 While this lack of consistency may sound like a ``bug,'' it is in fact a desirable feature of the FMSC for two reasons.
@@ -28,20 +27,29 @@ Smaller critical values, however, lead to a deterioration in worst-case performa
 Second, while we know from both simulation studies \citep{Demetrescu} and analytical examples \citep{LeebPoetscher2005} that selection can dramatically change the sampling distribution of our estimators, the asymptotics of consistent selection give the misleading impression that this effect can be ignored.
 For example Lemma 1.1 of \citet[p.\ 168]{Poetscher1991}, which states that the limit distributions of an estimator pre- and post-consistent selection are identical, has been interpreted by some as evidence that consistent selection is innocuous. 
 \citet[pp.\ 179--180]{Poetscher1991} makes it very clear, however, this result does not hold uniformly in the parameter space and hence ``only creates an illusion of conducting valid inference'' \citep[p.\ 22]{LeebPoetscher2005}.
-While it is indeed true for \emph{fixed} parameter values that consistent selection has a negligible effect on inference, so long as the sample size is sufficiently large, very small changes in parameter values can lead to very large changes in coverage probabilities. 
-
+While it is indeed true for \emph{fixed} parameter values that consistent selection has a negligible effect on inference in large samples, small changes in parameter values can lead to large changes in coverage probabilities. 
 In constrast to those of consistent selection, the asymptotics of conservative selection  under local mis-specification provide a far more accurate picture of the distribution of post-selection estimators.
 The point is not that conservative criteria -- such as the FMSC, GMM-AIC and $J$-test at a fixed significance level -- are immune to the effects of selection on inference.
 Rather, it is that conservative criteria can be studied in a framework that allows us to capture the effects of selection on inference.
-The intuition is as follows. 
+It is to this problem that we now direct our attention.
+
+Although the sampling distributions of post-selection estimators are complicated, the key to understanding them is surprisingly simple.
 Each candidate estimator has a sampling distribution that is approximately normal by the central limit theorem.
-The post-selection estimator, however, is a \emph{randomly-weighted average} of the candidate estimators.
-Accordingly, its distribution is approximately a \emph{mixture} of normals in finite samples.
-Because it chooses a \emph{single} specification with probability approaching one in the limit, consistent selection gives us no way to represent this non-normality in the limit distribution.
-In constrast, conservative selection procedures remain random \emph{even in the limit}, allowing us to derive a non-normal limit distribution.
+The post-selection estimator, however, is a data-dependent, randomly-weighted average of these.
+Hence, it follows a \emph{mixture} distribution that may be highly non-normal.
+
+
+
+
+Because they choose a single candidate with probability approaching one in the limit, consistent selection procedures make it impossible to represent this non-normality in the limit.
+In constrast, conservative selection procedures remain random even as the sample size goes to infinity, allowing us to derive a non-normal limit distribution.
+
+
+This section presents a method for carrying out valid inference post-conservative moment selection
+
+
 
 \todo[inline]{Just talked about the non-normality etc. But what are the effects of moment selection inference? There are really two pieces here. The first is moment selection uncertainty if the data had been different, we would have chosen a different set of MCs. This source of variation in the estimated parameters is not captured in the usual CIs. To put this another way, even if all the candidates were correctly specified, the CIs would be too narrow. Second, we think that some of the candidates are \emph{not} correctly specified. Even if we were trying to detect incorrect specification by doing consistent selection, we sould sometimes make a mistake and choose an incorrect specification. When this happens, the resulting interval is incorrectly centered. Since FMSC is going to \emph{deliberately} choose an incorrect specification in certain circumstances we need to deal with both of these issues. We need to be able to represent these effects in our asymptotics. How can we do it?}
-
 
 To this end, we derive the asymptotic distribution of generic ``moment average'' estimators by extending the idea underlying the frequentist model average estimators of \cite{HjortClaeskens}. 
 Such estimators are interesting in their own right and include, as a special case, a variety of post-conservative moment selection estimators including the FMSC.
