@@ -17,7 +17,7 @@ Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} gives the follo
 
 Because the FMSC is itself random, so is the FMSC-selected estimator.
 This means that the FMSC is a ``conservative'' rather than ``consistent'' selection procedure.
-While this lack of consistency may sound like a ``bug'' it is in fact a desirable feature of the FMSC for two reasons.
+While this lack of consistency may sound like a ``bug,'' it is in fact a desirable feature of the FMSC for two reasons.
 First, as discussed above, the goal of the FMSC is not to consistently select the correct moment conditions: it is to choose an estimator with a low finite-sample MSE as approximated by AMSE.
 In fact, the goal of consistent selection is very much at odds with that of controlling estimator risk.
 As explained by \cite{Yang2005} and \cite{LeebPoetscher2008}, the worst-case risk of a consistent selection procedure \emph{diverges} with sample size. 
@@ -30,18 +30,18 @@ For example Lemma 1.1 of \citet[p.\ 168]{Poetscher1991}, which states that the l
 \citet[pp.\ 179--180]{Poetscher1991} makes it very clear, however, this result does not hold uniformly in the parameter space and hence ``only creates an illusion of conducting valid inference'' \citep[p.\ 22]{LeebPoetscher2005}.
 While it is indeed true for \emph{fixed} parameter values that consistent selection has a negligible effect on inference, so long as the sample size is sufficiently large, very small changes in parameter values can lead to very large changes in coverage probabilities. 
 
-\todo[inline]{Asymptotics of consistent selection would have us believe that we can simply report the standard CI for the selected model. So what goes wronge if we do this? First, we failt to account for moment selection uncertainty: if the data had been different, we would have chosen a different set of MCs. This source of variation in the estimated parameters is not captured in the usual CIs. To put this another way, even if all the candidates were correctly specified, the CIs would be too narrow. Second, we think that some of the candidates are \emph{not} correctly specified. Even if we were trying to detect incorrect specification by doing consistent selection, we sould sometimes make a mistake and choose an incorrect specification. When this happens, the resulting interval is incorrectly centered. Since FMSC is going to \emph{deliberately} choose an incorrect specification in certain circumstances we need to deal with both of these issues. We need to be able to represent these effects in our asymptotics. How can we do it?}
-
 In constrast to those of consistent selection, the asymptotics of conservative selection  under local mis-specification provide a far more accurate picture of the distribution of post-selection estimators.
 The point is not that conservative criteria -- such as the FMSC, GMM-AIC and $J$-test at a fixed significance level -- are immune to the effects of selection on inference.
 Rather, it is that conservative criteria can be studied in a framework that allows us to capture the effects of selection on inference.
-The intuition is as follows.
+The intuition is as follows. 
 Each candidate estimator has a sampling distribution that is approximately normal by the central limit theorem.
 The post-selection estimator, however, is a \emph{randomly-weighted average} of the candidate estimators.
 Accordingly, its distribution is approximately a \emph{mixture} of normals in finite samples.
-Under the asymptotics of consistent selection, a single specification is selected with probability approaching one in the limit so the mixture becomes degenerate.
+Because it chooses a \emph{single} specification with probability approaching one in the limit, consistent selection gives us no way to represent this non-normality in the limit distribution.
+In constrast, conservative selection procedures remain random \emph{even in the limit}, allowing us to derive a non-normal limit distribution.
 
-\todo[inline]{No way for consistent selection asymptotics to represent the non-normality. In contrast, conservative selection is random even in the limit, allowing us to give the non-normality encountered in finite-samples an asymptotic representation.}
+\todo[inline]{Just talked about the non-normality etc. But what are the effects of moment selection inference? There are really two pieces here. The first is moment selection uncertainty if the data had been different, we would have chosen a different set of MCs. This source of variation in the estimated parameters is not captured in the usual CIs. To put this another way, even if all the candidates were correctly specified, the CIs would be too narrow. Second, we think that some of the candidates are \emph{not} correctly specified. Even if we were trying to detect incorrect specification by doing consistent selection, we sould sometimes make a mistake and choose an incorrect specification. When this happens, the resulting interval is incorrectly centered. Since FMSC is going to \emph{deliberately} choose an incorrect specification in certain circumstances we need to deal with both of these issues. We need to be able to represent these effects in our asymptotics. How can we do it?}
+
 
 To this end, we derive the asymptotic distribution of generic ``moment average'' estimators by extending the idea underlying the frequentist model average estimators of \cite{HjortClaeskens}. 
 Such estimators are interesting in their own right and include, as a special case, a variety of post-conservative moment selection estimators including the FMSC.
@@ -74,7 +74,7 @@ Under Assumption \ref{assump:weights} and the conditions of Theorem \ref{thm:nor
 \end{cor}
 Notice that the limit random variable from Corollary \ref{cor:momentavg}, denoted $\Lambda(\tau)$, is a \emph{randomly weighted average} of the multivariate normal vector $M$. 
 Hence, $\Lambda(\tau)$ is non-normal. 
-This is precisely the behavior that Figure \ref{fig:consist} suggests our limit theory should capture.
+This is precisely the behavior for which we set out to construct an asymptotic representation.
 The conditions of Assumption \ref{assump:weights} are fairly mild. 
 Requiring that the weights sum to one ensures that $\widehat{\mu}$ is a consistent estimator of $\mu_0$ and leads to a simpler expression for the limit distribution. 
 While somewhat less transparent, the second condition is satisfied by weighting schemes based on a number of familiar moment selection criteria.
@@ -105,4 +105,3 @@ Consider a moment selection criterion of the form $MSC(S) = J_n(S) - h(|S|)\kapp
 \end{thm}
 The preceding result is a special case of a more general phenomenon: consistent selection procedures cannot detect model violations of order $O(n^{-1/2})$.
 Because moment selection using the GMM-BIC or HQ leads to weights with a degenerate asymptotic distribution, one that does not capture the effects of selection on inference, these criteria are not considered further below.
-\todo[inline]{Should clarify that in the simulation study that I present, GMM-AIC actually \emph{is} consistent whenever $\rho\neq 0$. This is because the GMM-AIC never selects an invalid moment condition in the limit but may fail to select all valid moment conditions. See my lecture notes for Econ 722 for a full explanation.}
