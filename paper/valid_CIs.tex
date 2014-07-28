@@ -68,24 +68,15 @@ Then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asy
 \end{thm}
 
 \subsection{Simulation Study: Valid Confidence Intervals}
+To evaluate the the performance of Algorithm \ref{alg:conf} in finite-samples, we now revisit the simulation experiments introduced above in Sections \ref{sec:OLSvsIVsim} and \ref{sec:chooseIVsim}.
+
+
 \todo[inline]{Need to talk about coverage versus width. Explore in the simulations and empirical example. There is a cost to moment selection. But this cost is still present when selection is carried out informally: we're just trying to make it formal here. One could indeed make a case that, if inference is your primary goal, you shouldn't be doing moment selection. We have shown above that if your goal is estimation, moment selection can produce superior estimates. But more generally, people carry out moment selection all the time, albeit informally for example with a J-test and it is useful to have a means of checking the robustness of inferences in this setting. Should also add results looking at the one-step procedure. This will allow me to make the point that it is the worst-case aspect of the problem that makes things difficult. Indeed, should see shorter intervals than the 2SLS in some cases here. Talk about the impossibility results.}
 
 
-\begin{table}[h]
-\footnotesize
-\centering
-	\begin{subtable}{0.48\textwidth}
-		\caption{post-FMSC Estimator}
-		\input{../SimulationOLSvsIV/Results/coverage_FMSC_correct.tex}
-	\end{subtable}	
-	~
-	\begin{subtable}{0.48\textwidth}
-		\caption{AMSE-Averaging Estimator}
-		\input{../SimulationOLSvsIV/Results/coverage_AVG_correct.tex}
-	\end{subtable}
-	\caption{Actual coverage probabilities of simulation-based interval (nominal $>90\%$)}
-\end{table}
-
+Tables \ref{tab:OLSvsIVsim_cover_naiveFMSC} and \ref{tab:chooseIVsim_cover_naiveFMSC} show the problem of ignoring moment selection.
+Naive CI can be extremely poor or close to correct, depending on parameter values.
+This is precisely the uniformity problem: even in large samples small changes in parameters can lead to large changes in coverage.
 
 \begin{table}[h]
 \footnotesize
@@ -93,15 +84,92 @@ Then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asy
 	\begin{subtable}{0.48\textwidth}
 		\caption{Two-Stage Least Squares}
 		\input{../SimulationOLSvsIV/Results/coverage_TSLS.tex}
+		\label{tab:OLSvsIVsim_cover_TSLS}
 	\end{subtable}	
 	~
 	\begin{subtable}{0.48\textwidth}
 		\caption{Na\"{i}ve post-FMSC}
 		\input{../SimulationOLSvsIV/Results/coverage_FMSC_naive.tex}
+		\label{tab:OLSvsIVsim_cover_naiveFMSC}
 	\end{subtable}
-	\caption{Actual coverage probabilities nominal 90\% CIs}
+	\caption{Coverage probabilities of nominal 90\% CIs for the OLS versus 2SLS example. Based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}}
 \end{table}
 
+
+\begin{table}[h]
+\footnotesize
+\centering
+	\begin{subtable}{0.48\textwidth}
+		\caption{Valid Estimator}
+		\label{tab:chooseIVsim_cover_Valid}
+		\input{../SimulationChooseIVs/Results/coverage_Valid.tex}
+	\end{subtable}	
+	~
+	\begin{subtable}{0.48\textwidth}
+		\caption{Na\"{i}ve post-FMSC}
+		\label{tab:chooseIVsim_cover_naiveFMSC}
+		\input{../SimulationChooseIVs/Results/coverage_FMSC_naive.tex}
+	\end{subtable}
+	\caption{Coverage probabilities of nominal $90\%$ CIs for the choosing instrumental variables example. Based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
+\end{table}
+
+Table \ref{tab:OLSvsIVsim_cover_FMSC} gives the results for the two-step CI in the OLS versus IV example.
+Table \ref{tab:OLSvsIVsim_cover_AVG} gives results for the AMSE-optimal averaging estimator.
+These achieve their nominal minimum coverage but are generally quite conservative, especially for small sample size, small $\pi$ and small $\rho$.
+This comes from the fact that the 2SLS intervals are also quite conservative in these cases, as we can see from Table \ref{tab:OLSvsIVsim_cover_TSLS}.
+(Rounded to the nearest percentage point, so 100 actually means greater than or equal to 99.5)
+Median width relative to traditional 90\% CI for 2SLS in Tables \ref{tab:OLSvsIVsim_width_AVG} \ref{tab:OLSvsIVsim_width_FMSC}.
+A fair bit wider, particularly the post-FMSC which is around 40\% wider.
+For nearly all parameter values and sample sizes the AVG estimator is narrrower: typically a bit over a third wider than the 2SLS.
+
+Table \ref{tab:chooseIVsim_cover_FMSC} gives the results for the two-step post-FMSC CI in the choosing IVs example.
+These intervals can be slightly below their nominal minimum level, particularly for the smaller sample sizes.
+At worst 81\% relative to a nominal 90\% when $N=50, \gamma = 0.6, \rho = 0.5$. 
+This comes from the fact that the traditional intervals for the valid estimator systematically under-cover except when $N = 500$.
+But in general, the two-step intervals work fairly well and they are much less conservative in this example.
+Table \ref{tab:chooseIVsim_width_FMSC} gives widths relative to traditional CI for valid estimator.
+Not that much wider: worst-case is 22\% wider but generally closer to 10\% wider.
+Tables \ref{tab:chooseIVsim_cover_posFMSC} and \ref{tab:chooseIVsim_width_posFMSC} give results for positive part, but these are practically identical.
+
+\begin{table}[h]
+\footnotesize
+\centering
+	\begin{subtable}{0.48\textwidth}
+		\caption{FMSC}
+		\input{../SimulationOLSvsIV/Results/coverage_FMSC_correct.tex}
+		\label{tab:OLSvsIVsim_cover_FMSC}
+	\end{subtable}	
+	~
+	\begin{subtable}{0.48\textwidth}
+		\caption{AMSE-Averaging Estimator}
+		\input{../SimulationOLSvsIV/Results/coverage_AVG_correct.tex}
+		\label{tab:OLSvsIVsim_cover_AVG}
+	\end{subtable}
+	\caption{Coverage probabilities of two-step, simulation-based nominal $>90\%$ CIs for the OLS versus 2SLS example. Based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
+\end{table}
+
+
+
+
+
+\begin{table}[h]
+\footnotesize
+\centering
+	\begin{subtable}{0.48\textwidth}
+		\caption{FMSC}
+		\label{tab:chooseIVsim_cover_FMSC}
+		\input{../SimulationChooseIVs/Results/coverage_FMSC_2step.tex}
+	\end{subtable}	
+	~
+	\begin{subtable}{0.48\textwidth}
+		\caption{positive-part FMSC}
+		\label{tab:chooseIVsim_cover_posFMSC}
+		\input{../SimulationChooseIVs/Results/coverage_posFMSC_2step.tex}
+	\end{subtable}
+	\caption{Coverage probabilities of two-step, simulation-based nominal $>90\%$ CIs for the choosing instrumental variables example. Based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
+\end{table}
+
+\todo[inline]{Now talk about width. There's a cost here. Talk about impossibility results etc. Not as bad in the choosing IVs example. Talk about how they could be made shorter, McCloskey, etc.}
 
 \begin{table}[h]
 \footnotesize
@@ -109,16 +177,16 @@ Then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asy
 	\begin{subtable}{0.48\textwidth}
 		\caption{post-FMSC Estimator}
 		\input{../SimulationOLSvsIV/Results/width_FMSC_correct.tex}
+		\label{tab:OLSvsIVsim_width_FMSC}
 	\end{subtable}	
 	~
 	\begin{subtable}{0.48\textwidth}
 		\caption{AMSE-Averaging Estimator}
 		\input{../SimulationOLSvsIV/Results/width_AVG_correct.tex}
+		\label{tab:OLSvsIVsim_width_AVG}
 	\end{subtable}
-	\caption{Median CI width of conservative intervals relative to that of 2SLS (\%)}
+	\caption{Median width of simulation-based $>90\%$ CIs relative to traditional 90\% CI for the 2SLS estimator in the OLS versus 2SLS example. Based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
 \end{table}
-
-
 
 
 \begin{table}[h]
@@ -126,42 +194,14 @@ Then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asy
 \centering
 	\begin{subtable}{0.48\textwidth}
 		\caption{FMSC}
-		\input{../SimulationChooseIVs/Results/coverage_FMSC_2step.tex}
-	\end{subtable}	
-	~
-	\begin{subtable}{0.48\textwidth}
-		\caption{positive-part FMSC}
-		\input{../SimulationChooseIVs/Results/coverage_posFMSC_2step.tex}
-	\end{subtable}
-	\caption{Actual coverage probabilities of simulation-based interval (nominal $>90\%$)}
-\end{table}
-
-\begin{table}[h]
-\footnotesize
-\centering
-	\begin{subtable}{0.48\textwidth}
-		\caption{Valid Estimator}
-		\input{../SimulationChooseIVs/Results/coverage_Valid.tex}
-	\end{subtable}	
-	~
-	\begin{subtable}{0.48\textwidth}
-		\caption{Na\"{i}ve post-FMSC}
-		\input{../SimulationChooseIVs/Results/coverage_FMSC_naive.tex}
-	\end{subtable}
-	\caption{Actual coverage probabilities nominal 90\% CIs}
-\end{table}
-
-\begin{table}[h]
-\footnotesize
-\centering
-	\begin{subtable}{0.48\textwidth}
-		\caption{FMSC}
+		\label{tab:chooseIVsim_width_FMSC}
 		\input{../SimulationChooseIVs/Results/width_FMSC_2step.tex}
 	\end{subtable}	
 	~
 	\begin{subtable}{0.48\textwidth}
 		\caption{positive-part FMSC}
+		\label{tab:chooseIVsim_width_posFMSC}
 		\input{../SimulationChooseIVs/Results/width_posFMSC_2step.tex}
 	\end{subtable}
-	\caption{Median CI width of conservative intervals relative to that of Valid estimator. (\%)}
+		\caption{Median width of simulation-based $>90\%$ CIs relative to traditional 90\% CI for the Valid estimator in the choosing instrumental variables example. Based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
 \end{table}
