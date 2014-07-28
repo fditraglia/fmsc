@@ -56,7 +56,7 @@ Taking the first order condition and rearranging, we find that the unique global
 In other words,
 $$\omega^* = \left[1 + \frac{\mbox{ABIAS(OLS)}^2}{\mbox{AVAR(2SLS)}-\mbox{AVAR(OLS)}} \right]^{-1}$$
 
-The preceding expression has several important consequences. 
+This expression has several important consequences. 
 First, since the variance of the 2SLS estimator is always strictly greater than that of the OLS estimator, the optimal value of $\omega$ \emph{cannot} be zero. 
 No matter how strong the endogeneity of $x$ as measured by $\tau$, we should always give some weight to the OLS estimator. 
 Second, when $\tau = 0$ the optimal value of $\omega$ is one. If $x$ is exogenous, OLS is strictly preferable to 2SLS. 
@@ -82,7 +82,7 @@ where
 	\label{eq:OLSvsIV_AVG2}
 \end{equation}
 
-Returning to the simulation experiment from Section \ref{sec:OLSvsIVsim}, Figure \ref{fig:OLSvsIV_AVG} compares the RMSE of the minimum-AMSE moment average estimator presented in Equations \ref{eq:OLSvsIV_AVG1} and \ref{eq:OLSvsIV_AVG2} to those of the FMSC and DHW pre-test estimators from Figure \ref{fig:OLSvsIV_RMSEvsDHW}.
+Returning to the simulation experiment from Section \ref{sec:OLSvsIVsim}, Figure \ref{fig:OLSvsIV_AVG} compares the finite-sample RMSE of the minimum-AMSE moment average estimator presented in Equations \ref{eq:OLSvsIV_AVG1} and \ref{eq:OLSvsIV_AVG2} to those of the FMSC and DHW pre-test estimators from Figure \ref{fig:OLSvsIV_RMSEvsDHW}.
 The performance of the minimum-AMSE moment average estimator is strong: it provides the lowest worst-case RMSE and improves uniformly on the FMSC for all but the largest values of $\rho$.
 While a complete examination of minimum-AMSE moment averaging is beyond the scope of the present paper, these results suggest that it could prove extremely useful in practice.
 In the following section we will see how to construct a valid confidence interval for this and related procedures.
