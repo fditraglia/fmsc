@@ -9,7 +9,6 @@ This section evaluates the performance of FMSC in the Instrument Selection Examp
 	\end{eqnarray}
 for $i=1, 2, \hdots, N$ where $(\epsilon_i, v_i, w_i, z_{i1}, z_{2i}, z_{3i})' \sim \mbox{ iid  } N(0,\mathcal{V})$ with	
 \begin{equation}
-			\label{eq:varmatrix}
 			\mathcal{V} = \left[  
 				\begin{array}{cccccc}
 				1 & (0.5 - \gamma \rho) & \rho & 0 & 0 & 0\\
@@ -24,25 +23,62 @@ for $i=1, 2, \hdots, N$ where $(\epsilon_i, v_i, w_i, z_{i1}, z_{2i}, z_{3i})' \
 \end{equation}
 This setup keeps the variance of $x$ fixed at one and the endogeneity of $x$, $Cor(x, \epsilon)$, fixed at $0.5$ while allowing us to vary the relevance, $\gamma = Cor(x,w)$, and endogeneity, $\rho = Cor(w, \epsilon)$, of the instrument $w$.
 The instruments $z_1, z_2, z_3$ are valid and exogenous: they have first-stage coefficients of $1/3$ and are uncorrelated with the second stage error $\epsilon$.
-The ``additional'' instrument $w$ is only relevant if $\gamma \neq 0$ and is only exogenous if $\rho = 0$.
+The additional instrument $w$ is only relevant if $\gamma \neq 0$ and is only exogenous if $\rho = 0$.
 Since $x$ has unit variance, the first-stage R-squared for this simulation design is simply $1 - \sigma_v^2 = 1/9 + \gamma^2$.
 Hence, when  $\gamma = 0$, so that $w$ is irrelevant, the first-stage R-squared is just over 0.11.
 Increasing $\gamma$ increases the R-squared of the first-stage.
 When $\gamma = 0$, this simulation design is a special case of the DGP used in the Section \ref{sec:OLSvsIVsim}, namely $(\pi=1/3, \rho = 0.5)$.
-\todo[inline]{Should add a justification for these parameter values in terms of empirical work. What is the plim of OLS in this case? How weak are the baseline instruments? What is a real-world example for which this is plausible?}
-As in Section \ref{sec:OLSvsIVsim}, the goal of moment selection in this exercise is to estimate the effect of $x$ on $y$ with minimum MSE.
+
+As in Section \ref{sec:OLSvsIVsim}, the goal of moment selection in this exercise is to estimate the effect of $x$ on $y$, as before 0.5, with minimum MSE.
 In this case, however, we choose between \emph{two} 2SLS estimators rather than choosing between OLS and 2SLS.
-The \emph{valid} estimator the valid estimator that uses only $z_1, z_2,$ and $z_3$ as instruments, while the \emph{full} estimator that uses $z_1, z_2, z_3,$ and $w$. 
+The \emph{valid} estimator uses only $z_1, z_2,$ and $z_3$ as instruments, while the \emph{full} estimator that uses $z_1, z_2, z_3,$ and $w$. 
 The inclusion of $z_1, z_2$ and $z_3$ in both moment sets means that the order of over-identification is two for the valid estimator and three for the full estimator. 
 Because the moments of the 2SLS estimator only exist up to the order of over-identification \citep{Phillips1980}, this ensures that the small-sample MSE is well-defined.\footnote{Alternatively, one could use fewer instruments for the valid estimator and compare the results using \emph{trimmed} MSE: dropping the lowest and highest $k\%$ of the simulation draws.}
-All estimators in this section are calculated via 2SLS without a constant term using the expressions from Section \ref{sec:chooseIVFMSC}.
+All estimators in this section are calculated via 2SLS without a constant term using the expressions from Section \ref{sec:chooseIVFMSC} and 20,000 simulation replications.
+ 
+Figure \ref{fig:chooseIVsim_RMSEbaseline} presents RMSE values for the valid estimator, the full estimator, and the post-FMSC estimator for various combinations of $\gamma$, $\rho$, and $N$.
+The results are broadly similar to those from the OLS versus 2SLS example presented in Figure \ref{fig:OLSvsIV_RMSEbaseline}.
+For any combination $(\gamma,N)$ there is a positive value of $\rho$ below which the full estimator yields a lower RMSE than the full estimator.
+As the sample size increases, this cutoff becomes smaller; as $\gamma$ increases, it becomes larger.
+As in the OLS versus IV example, the FMSC represents a compromise between the two estimators between which it selects.
+Unlike in the previous example, however, when $N$ is sufficiently small there is a range of values for $\rho$ within which the FMSC yields a lower RMSE than \emph{both} the valid and full estimators.
+This comes from the fact that the valid estimator is quite erratic for small sample sizes: even with 20,000 simulation replications it exhibits a noticable degree of simulation error for $N=50$.
+Such behavior is unsurprising given that its first stage is not especially strong, $\mbox{R-squared}\approx 11\%$, and it has only two moments.
+In contrast, the full estimator has three moments and a stronger first stage and hence exhibits very little simulation error.
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_baseline.tex}
+	\caption{RMSE values for the valid estimator, including only $(z_1, z_2, z_3)$, the full estimator, including $(z_1, z_2, z_3, w)$, and the post-Focused Moment Selection Criterion (FMSC) estimator based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVlowlevel} and \ref{sec:chooseIVFMSC}.}
+	\label{fig:chooseIVsim_RMSEbaseline}
+\end{figure}
 
-\todo[inline]{Update from here onwards with revised simulation results and shorten.}
-
-I now compare the FMSC to a number of alternative procedures from the literature. 
-\cite{Andrews1999} considers a family of moment selection critera that take the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $J_n(S)$ is the $J$-test statistic under moment set $S$ and we choose the moment set that \emph{minimizes} the criterion. 
+We now compare the FMSC to a number of alternative moment selection procedures.
+The first is a downward $J$-test, an informal but for fairly common procedure for moment selection in practice.
+This procedure uses the full estimator unless it is rejected by a $J$-test.
+For robustness, we calculate the $J$-test statistic using a centered covariance matrix estimator, as in the FMSC formulas from section \ref{sec:chooseIVFMSC}.
+Table \label{fig:chooseIVsim_RMSErelJ} compares the RMSE of the post-FMSC estimator to that of the downward $J$-test with $\alpha = 0.1$ (J90), and $\alpha = 0.05$ (J95).
+Unlike the FMSC, the downward $J$-test is very badly behaved for small sample sizes, particularly for the smaller values of $\gamma$.
+For larger sample sizes, the relative performance of the FMSC and the $J$-test is quite similar to what we saw in Figure \ref{fig:OLSvsIV_RMSEvsDHW} for the OLS versus 2SLS example.
+The $J$-test performs best for the smallest values of $\rho$, the FMSC performs best for moderate values, and the two procedures perform similarly for large values.
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_J.tex}
+	\caption{Choose IVs simulation.}
+	\label{fig:chooseIVsim_RMSErelJ}
+\end{figure}
+\cite{Andrews1999} considers a more formal moment selection procedure based on criteria of the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $J_n(S)$ is the $J$-test statistic under moment set $S$ and we choose the moment set that \emph{minimizes} the criterion. 
 If we take $h(|S|) = (p + |S| - r)$, then $\kappa_n = \log{n}$ gives a GMM analogue of Schwarz's Bayesian Information Criterion (GMM-BIC) while $\kappa_n = 2.01 \log{\log{n}}$ gives an analogue of the Hannan-Quinn Information Criterion (GMM-HQ), and $\kappa_n = 2$ gives an analogue of Akaike's Information Criterion (GMM-AIC). 
-Under certain assumptions\todo{Reference my discussion above!}, the HQ and BIC-type criteria are consistent: they select any and all valid moment conditions with probability approaching one in the limit (w.p.a.1). 
+Like the maximum likelihood model selection criteria upon which they are based, the GMM-BIC and GMM-HQ are consistent, provided that Assumption \label{assump:Andrews} holds, while the GMM-AIC, like the FMSC, is conservative.\footnote{We discuss this further in Section \ref{sec:avg} below.} 
+Figure \ref{fig:chooseIVsim_RMSErelMSC} gives the RMSE values for the post-FMSC estimator alongside those of the post-GMM-BIC, HQ and AIC estimators.
+As above, we calculate the $J$-test statistic using a centered covariance matrix estimator, following the recommendation of \cite{Andrews1999}.
+\begin{figure}
+\centering
+	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_MSC.tex}
+	\caption{Caption goes here.}
+	\label{fig:chooseIVsim_RMSErelMSC}
+\end{figure}
+
+
 When calculating the $J$-test statistic under potential mis-specification, Andrews recommends using a centered covariance matrix estimator and basing estimation on the weighting matrix that would be efficient under the assumption of correct specification. 
 Accordingly, I calculate
 \todo[inline]{This needs to be updated: I now used the two-step!}
@@ -66,25 +102,7 @@ I consider procedures that combine CCIC criteria with the \emph{corresponding} c
 For example, CC-MSC-BIC is shorthand for the rule ``include $w$ iff it minimizes both  GMM-BIC \emph{and} CCIC-BIC.''\todo{Clarify: a ref was confused.} 
 I define CC-MSC-AIC and CC-MSC-HQ analogously.
 
-A less formal but fairly common procedure for moment selection in practice is the downward $J$-test. 
-In the present context this takes a particularly simple form: if the $J$-test fails to reject the null hypothesis of correct specification for the full instrument set, use this set for estimation; otherwise, use the valid instrument set. 
+
 In addition to the moment selection criteria given above, I compare the FMSC to selection by a downward $J$-test at the 90\% and 95\% significance levels. 
 
-\begin{figure}
-\centering
-	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_baseline.tex}
-	\caption{Caption goes here.}
-\end{figure}
-
-
-\begin{figure}
-\centering
-	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_MSC.tex}
-	\caption{Caption goes here.}
-\end{figure}
-
-\begin{figure}
-\centering
-	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_J.tex}
-	\caption{Choose IVs simulation.}
-\end{figure}
+\todo[inline]{Mention briefly about the positive-part FMSC, how it's indistinguishable in nearly all cases, but provides a uniform improvement when sample size and $\gamma$ are sufficiently small. Details available upon request. This suggests it should be preferred in applications. Didn't look at a positive-part FMSC for the OLS versus IV example since we wanted to preserve the analogy with the DHW test, making it easy for practitioners to implement, but one could easily do this. Also looked at combination CCIC and MSC procedures. In this example, however, practically indistinguishable from the valid estimator for all the combinations. Details available upon request.}
