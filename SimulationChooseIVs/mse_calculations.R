@@ -1,6 +1,6 @@
 n.reps <- 20000
-gamma.fine <- seq(0, 0.3, 0.01)
-gamma.coarse <- c(0.1, 0.2, 0.3) 
+gamma.fine <- seq(0.1, 0.4, 0.01)
+gamma.coarse <- c(0.2, 0.3, 0.4) 
 rho.fine <- seq(0, 0.3, 0.01)
 rho.coarse <- c(0.1, 0.2, 0.3)
 n.grid <- c(50, 100, 500)  
