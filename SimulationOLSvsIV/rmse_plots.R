@@ -113,12 +113,14 @@ dev.off()
 
 tikz('./Results/RMSE_coarse_pi_relative_DHW.tex',
      width = plot.width, height = plot.height)
-plot.grid(coarse.pi, nRows, nCols, relative.DHW)
+plot.grid(coarse.pi, nRows, nCols, relative.DHW,
+          legend.pos = "bottomright")
 dev.off()
 
 tikz('./Results/RMSE_coarse_pi_relative_all.tex',
      width = plot.width, height = plot.height)
-plot.grid(coarse.pi, nRows, nCols, relative.all)
+plot.grid(coarse.pi, nRows, nCols, relative.all,
+          legend.pos = "bottomright")
 dev.off()
 
 tikz('./Results/RMSE_coarse_rho_baseline.tex',

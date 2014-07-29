@@ -121,12 +121,14 @@ dev.off()
 
 tikz('./Results/RMSE_coarse_gamma_rel_J.tex',
      width = plot.width, height = plot.height)
-plot.grid(coarse.gamma, nRows, nCols, rel.J)
+plot.grid(coarse.gamma, nRows, nCols, rel.J,
+          legend.pos = "bottomright")
 dev.off()
 
 tikz('./Results/RMSE_coarse_gamma_rel_MSC.tex',
      width = plot.width, height = plot.height)
-plot.grid(coarse.gamma, nRows, nCols, rel.MSC)
+plot.grid(coarse.gamma, nRows, nCols, rel.MSC,
+          legend.pos = "bottomright")
 dev.off()
 
 tikz('./Results/RMSE_coarse_gamma_rel_combMSC.tex',
