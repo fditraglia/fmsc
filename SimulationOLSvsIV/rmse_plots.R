@@ -99,7 +99,7 @@ plot.grid <- function(results, nRows, nCols, ...){
 
 
 #Columns to include in the different plots
-baseline <- c("OLS", "TSLS", "FMSC")
+baseline <- c("FMSC", "OLS", "TSLS")
 relative.DHW <- c("FMSC", "DHW90", "DHW95")
 relative.all <- c("FMSC", "AVG","DHW90", "DHW95")
 

@@ -98,7 +98,7 @@ plot.grid <- function(results, nRows, nCols, ...){
 
 
 #Columns to include in the different plots
-baseline <- c("Valid", "Full", "FMSC")
+baseline <- c("FMSC", "Valid", "Full")
 rel.pos <- c("FMSC", "posFMSC")
 rel.J <- c("FMSC", "J90", "J95")
 rel.MSC <- c("FMSC", "AIC", "BIC", "HQ")
