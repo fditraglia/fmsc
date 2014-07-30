@@ -1,11 +1,15 @@
 %!TEX root = main.tex
 \section{Conclusion}
 \label{sec:conclude}
-\todo[inline]{Update to talk about my works in progress: trying to surmount the computational challenges of the post-selection CIs and improve their width, simultaneous model and moment selection along with more examples, and different and more complicated risk functions. Talk about when the FMSC is useful. Defend it both in terms of other procedures and informal moment selection that takes place all the time. Not a panacea and not an argument that we should always be doing moment selection. There is a cost. In particular, if we want valid CIs, they will be wider. Research to try to make them less conservative, and also point out that the intervals people report when they fail to account for selection are simply incorrect. Present a framework to fix this and it doesn't just apply to FMSC: can also use it with other conservative procedures such as the J-test and GMM-BIC.} 
 This paper has introduced the FMSC, a proposal to choose moment conditions using AMSE. 
-The criterion performs well in simulations, and the framework used to derive it allows us to construct valid confidence intervals for moment average and post-selection estimators.  
-While I focus here on an cross-section application, the FMSC could prove useful in any context in which moment conditions arise from more than one source. 
+The criterion performs well in simulations, and the framework used to derive it allows us to construct valid confidence intervals for post-selection and moment-average estimators.  
+Although computationally intensive, this procedure remains feasible for problems of a realistic scale without the need for specialized computing resources, as demonstrated in the empirical example above.
+Moment selection is not a panacea, but the FMSC and related confidence interval procedures can yield sizeable benefits in empirically relevant settings, making them a valuable complement to existing methods.
+While the discussion here concentrates on two cross-section examples, the FMSC could prove useful in any context in which moment conditions arise from more than one source. 
 In a panel model, for example, the assumption of contemporaneously exogenous instruments may be plausible while that of predetermined instruments is more dubious.
 Using the FMSC, we could assess whether the extra information contained in the lagged instruments outweighs their potential invalidity. 
-In a macro model, measurement error could be present in the intra--Euler equation but not the \emph{inter}--Euler equation, as considered by \cite{Eichenbaum}. 
-The FMSC could be used to select over the intra-Euler moment conditions.
+Work in progress explores this idea in both static and dynamic panel settings by extending the FMSC to allow for simultaneous moment and model selection.
+Other potentially fruitful extensions include the consideration of risk functions other than MSE, and an explicit treatment of weak identification.
+
+% In a macro model, measurement error could be present in the intra--Euler equation but not the \emph{inter}--Euler equation, as considered by \cite{Eichenbaum}. 
+% The FMSC could be used to select over the intra-Euler moment conditions.
