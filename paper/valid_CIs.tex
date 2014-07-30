@@ -69,11 +69,17 @@ Then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asy
 
 \subsection{Simulation Study: Valid Confidence Intervals}
 To evaluate the the performance of Algorithm \ref{alg:conf} in finite-samples, we now revisit the simulation experiments introduced above in Sections \ref{sec:OLSvsIVsim} and \ref{sec:chooseIVsim}.
-Tables \ref{tab:OLSvsIVsim_cover_naiveFMSC} and \ref{tab:chooseIVsim_cover_naiveFMSC} show the problem of ignoring moment selection in confidence interval construction.
-In each case, the actual coverage probability of a ``na\"{i}ve'' 90\% confidence interval for the selected estimator can be made practically as close to zero as we like by choosing appropriate parameter values.
+All results in this section are based on 10,000 simulation replications from the appropriate DGP.
+Coverage probabilities and relative widths are all given in percentage points, rounded to the nearest whole percent.
+
+Tables \ref{tab:OLSvsIVsim_cover_naiveFMSC} and \ref{tab:chooseIVsim_cover_naiveFMSC} show the problem of ignoring moment selection by presenting the the actual coverage probability of a na\"{i}ve 90\%, post-FMSC confidence interval.
+The na\"{i}ve procedure simply constructs a textbook 90\% interval around the FMSC-selected estimator. 
+As such it completely ignores both moment selection uncertainty, and the possibility that the selected estimator shows an asymptotic bias and is hence incorrectly centered.
+Table \ref{tab:OLSvsIVsim_cover_naiveFMSC} reports results for the OLS versus 2SLS simulation experiment, and Table \ref{tab:chooseIVsim_cover_naiveFMSC} for the choosing instrumental variables simulation experiment.
+In each case, coverage probabilities can be made practically as close to zero as we like by choosing appropriate parameter values.
 This effect persists even for large sample sizes.
-At the same time, for many values in the parameter space the coverage probability is close of even equal to its nominal level.
-This is precisely the lack of uniformity described by \cite{LeebPoetscher2005}, and the reason why post-selection is such a knotty problem.
+At the same time, for many values in the parameter space the coverage probabilities are close or even equal to their nominal level.
+This is precisely the lack of uniformity described by \cite{LeebPoetscher2005}, and the reason why post-selection inference is such a knotty problem.
 
 \begin{table}[h]
 \footnotesize
@@ -110,11 +116,32 @@ This is precisely the lack of uniformity described by \cite{LeebPoetscher2005}, 
 	\caption{Coverage probabilities of nominal $90\%$ CIs for the choosing instrumental variables simulation experiment described in Section \ref{sec:chooseIVsim}, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
 \end{table}
 
-Table \ref{tab:OLSvsIVsim_cover_FMSC} gives the results for the two-step CI in the OLS versus IV example.
-Table \ref{tab:OLSvsIVsim_cover_AVG} gives results for the AMSE-optimal averaging estimator.
-These achieve their nominal minimum coverage but are generally quite conservative, especially for small sample size, small $\pi$ and small $\rho$.
-This comes from the fact that the 2SLS intervals are also quite conservative in these cases, as we can see from Table \ref{tab:OLSvsIVsim_cover_TSLS}.
-(Rounded to the nearest percentage point, so 100 actually means greater than or equal to 99.5)
+Table \ref{tab:OLSvsIVsim_cover_FMSC} gives the actual coverage probability of the conservative, 90\% post-FMSC confidence interval, constructed according to Algorithm \ref{alg:conf}, for the OLS versus 2SLS example.
+As we see from the table, these intervals achieve their nominal minimum coverage probability uniformly over the parameter space for all sample sizes.
+In general, however, they can be quite conservative, particularly for smaller values of $\pi, \rho$ and $N$: coverage probabilities never fall below 94\% and occasionally exceed $99.5\%$.\footnote{Recall that coverage probabilities are given in percentage points, rounded to the nearest whole percent. Thus a value of 100, for example, in fact means $>\geq 99.5$.}
+Some conservatism is inevitable given the nature of the two-step procedure, which takes \emph{worst-case} lower and upper bounds over a collection of intervals.
+In this example, however, the real culprit is the 2SLS estimator itself.
+Table \ref{tab:OLSvsIVsim_cover_TSLS} presents coverage probabilities for a nominal 90\% confidence interval for the 2SLS estimator.
+Although this estimator is correctly specified and is not subject to moment selection uncertainty, so that the textbook asymptotic theory applies, coverage probabilities are far above their nominal level for smaller values of $\pi$ even if $N$ is fairly large, a manifestation of the weak instrument problem.
+This additional source of conservatism is inherited by the two-step post-FMSC intervals.
+Results for the minimum-AMSE moment average estimator, given in Table \ref{tab:OLSvsIVsim_cover_AVG}, are broadly similar.
+Although the two-step intervals continue to achieve their nominal minimum coverage probability for all parameter values, they are quite conservative.
+If anything, the minimum-AMSE intervals a bit more conserative than the the post-FMSC intervals from Table \ref{tab:OLSvsIVsim_cover_TSLS}.
+
+The worry, of course, is not conservatism as such but the attendent increase in confidence interval width.
+Tables \ref{tab:OLSvsIVsim_width_AVG} \ref{tab:OLSvsIVsim_width_FMSC} compare the median width of the two-step post-FMSC interval and the minimum-AMSE interval to that of the 2SLS estimator in the OLS verus 2SLS simulation experiment.
+A value of 25, for example indicates that the two-step interval is 25\% wider than the corresponding interval for the 2SLS estimator.
+This comparison shows us the inferential ``cost'' of carrying out moment selection relative to simply using the correctly-specified 2SLS estimator and calling it a day.
+We see that moment selection is not a free lunch: the averaging and post-selection intervals are indeed wider than those of the 2SLS estimator, sometimes considerably so.
+Intriguingly, although the minimum-AMSE intervals are generally more conservative than the post-FMSC intervals, they are also considerably shorter for nearly all parameter values.
+
+
+
+
+
+The situation is qualitatively similar although much less dramatic for the choosing instrumental variables example.
+Tables 
+
 Median width relative to traditional 90\% CI for 2SLS in Tables \ref{tab:OLSvsIVsim_width_AVG} \ref{tab:OLSvsIVsim_width_FMSC}.
 A fair bit wider, particularly the post-FMSC which is around 40\% wider.
 For nearly all parameter values and sample sizes the AVG estimator is narrrower: typically a bit over a third wider than the 2SLS.
