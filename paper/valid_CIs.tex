@@ -118,7 +118,7 @@ This is precisely the lack of uniformity described by \cite{LeebPoetscher2005}, 
 
 Table \ref{tab:OLSvsIVsim_cover_FMSC} gives the actual coverage probability of the conservative, 90\% post-FMSC confidence interval, constructed according to Algorithm \ref{alg:conf}, for the OLS versus 2SLS example.
 As we see from the table, these intervals achieve their nominal minimum coverage probability uniformly over the parameter space for all sample sizes.
-In general, however, they can be quite conservative, particularly for smaller values of $\pi, \rho$ and $N$: coverage probabilities never fall below 94\% and occasionally exceed $99.5\%$.\footnote{Recall that coverage probabilities are given in percentage points, rounded to the nearest whole percent. Thus a value of 100, for example, in fact means $>\geq 99.5$.}
+In general, however, they can be quite conservative, particularly for smaller values of $\pi, \rho$ and $N$: coverage probabilities never fall below 94\% and occasionally exceed $99.5\%$.\footnote{Recall that coverage probabilities are given in percentage points, rounded to the nearest whole percent. Thus a value of 100, for example, in fact means $\geq 99.5$.}
 Some conservatism is inevitable given the nature of the two-step procedure, which takes \emph{worst-case} lower and upper bounds over a collection of intervals.
 In this example, however, the real culprit is the 2SLS estimator itself.
 Table \ref{tab:OLSvsIVsim_cover_TSLS} presents coverage probabilities for a nominal 90\% confidence interval for the 2SLS estimator.
