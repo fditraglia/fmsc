@@ -128,13 +128,31 @@ Results for the minimum-AMSE moment average estimator, given in Table \ref{tab:O
 Although the two-step intervals continue to achieve their nominal minimum coverage probability for all parameter values, they are quite conservative.
 If anything, the minimum-AMSE intervals a bit more conserative than the the post-FMSC intervals from Table \ref{tab:OLSvsIVsim_cover_TSLS}.
 
-The worry, of course, is not conservatism as such but the attendent increase in confidence interval width.
-Tables \ref{tab:OLSvsIVsim_width_AVG} \ref{tab:OLSvsIVsim_width_FMSC} compare the median width of the two-step post-FMSC interval and the minimum-AMSE interval to that of the 2SLS estimator in the OLS verus 2SLS simulation experiment.
-A value of 25, for example indicates that the two-step interval is 25\% wider than the corresponding interval for the 2SLS estimator.
-This comparison shows us the inferential ``cost'' of carrying out moment selection relative to simply using the correctly-specified 2SLS estimator and calling it a day.
-We see that moment selection is not a free lunch: the averaging and post-selection intervals are indeed wider than those of the 2SLS estimator, sometimes considerably so.
-Intriguingly, although the minimum-AMSE intervals are generally more conservative than the post-FMSC intervals, they are also considerably shorter for nearly all parameter values.
 
+The worry, of course, is not conservatism as such but the attendent increase in confidence interval width.
+Tables \ref{tab:OLSvsIVsim_width_FMSC} and \ref{tab:OLSvsIVsim_width_AVG} compare the median width of the two-step post-FMSC and minimum-AMSE intervals to that of the 2SLS estimator in the OLS verus 2SLS simulation experiment from section \ref{sec:OLSvsIVsim}.
+A value of 25, for example indicates that the two-step interval is 25\% wider than the corresponding interval for the 2SLS estimator.
+This comparison shows us the inferential cost of carrying out moment selection relative to simply using the correctly-specified 2SLS estimator and calling it a day.
+We see immediately that moment selection is not a free lunch: the averaging and post-selection intervals are indeed wider than those of the 2SLS estimator, sometimes considerably so.
+Intriguingly, although the minimum-AMSE intervals are generally more conservative than the post-FMSC intervals, they are also considerably shorter for nearly all parameter values.
+\begin{table}[h]
+\footnotesize
+\centering
+	\begin{subtable}{0.48\textwidth}
+		\caption{post-FMSC Estimator}
+		\input{../SimulationOLSvsIV/Results/width_FMSC_correct.tex}
+		\label{tab:OLSvsIVsim_width_FMSC}
+	\end{subtable}	
+	~
+	\begin{subtable}{0.48\textwidth}
+		\caption{AMSE-Averaging Estimator}
+		\input{../SimulationOLSvsIV/Results/width_AVG_correct.tex}
+		\label{tab:OLSvsIVsim_width_AVG}
+	\end{subtable}
+	\caption{Median width of simulation-based $>90\%$ CIs relative to traditional 90\% CI for the 2SLS estimator in the OLS versus 2SLS example. Based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
+\end{table}
+
+Turning our attention now to the choosing instrumental variables simulation experiment from section \ref{sec:chooseIVsim}, 
 
 
 
@@ -195,22 +213,6 @@ Tables \ref{tab:chooseIVsim_cover_posFMSC} and \ref{tab:chooseIVsim_width_posFMS
 
 \todo[inline]{Now talk about width. There's a cost here. Talk about impossibility results etc. Not as bad in the choosing IVs example. Talk about how they could be made shorter, McCloskey, etc.}
 
-\begin{table}[h]
-\footnotesize
-\centering
-	\begin{subtable}{0.48\textwidth}
-		\caption{post-FMSC Estimator}
-		\input{../SimulationOLSvsIV/Results/width_FMSC_correct.tex}
-		\label{tab:OLSvsIVsim_width_FMSC}
-	\end{subtable}	
-	~
-	\begin{subtable}{0.48\textwidth}
-		\caption{AMSE-Averaging Estimator}
-		\input{../SimulationOLSvsIV/Results/width_AVG_correct.tex}
-		\label{tab:OLSvsIVsim_width_AVG}
-	\end{subtable}
-	\caption{Median width of simulation-based $>90\%$ CIs relative to traditional 90\% CI for the 2SLS estimator in the OLS versus 2SLS example. Based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
-\end{table}
 
 
 \begin{table}[h]
