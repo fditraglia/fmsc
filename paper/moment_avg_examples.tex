@@ -1,5 +1,6 @@
 %!TEX root = main.tex
 \subsection{Moment Averaging for the OLS versus 2SLS Example}
+\label{sec:momentavgexample}
 Although it is a special case of moment averaging, moment selection is a somewhat crude procedure: it gives full weight to the estimator that minimizes the moment selection criterion no matter how close its nearest competitor lies. 
 Accordingly, when competing moment sets have similar criterion values in the population, sampling variation can be \emph{magnified} in the selected estimator. 
 Thus, it may be possible to achieve better performance by using smooth weights rather than discrete selection.
@@ -89,6 +90,6 @@ In the following section we will see how to construct a valid confidence interva
 \begin{figure}
 \centering
 	\input{../SimulationOLSvsIV/Results/RMSE_coarse_pi_relative_all.tex}
-	\caption{Comparison of OLS-IV averaging estimator against FMSC selection and DHW selection.}
+	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator, Durbin-Hausman-Wu pre-test estimators with $\alpha = 0.1$ (DWH90) and $\alpha = 0.05$ (DHW95), and the minmum-AMSE averaging estimator, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas described in Sections \ref{sec:OLSvsIVlowlevel}, \ref{sec:FMSCforOLSvsIV}, and \ref{sec:momentavgexample}.}
 	\label{fig:OLSvsIV_AVG}
 \end{figure}
