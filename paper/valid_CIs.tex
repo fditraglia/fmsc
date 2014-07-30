@@ -57,7 +57,7 @@ The precise algorithm is as follows.
 \end{alg}
 
 \begin{thm}[Simulation-based Confidence Interval for $\widehat{\mu}$]
-\label{pro:sim}
+\label{thm:sim}
 Let $\widehat{\Psi}$, $\widehat{\Omega}$, $\widehat{\theta}$, $\widehat{K}_S$, $\widehat{\varphi}_S$ be consistent estimators of $\Psi$, $\Omega$, $\theta_0$, $K_S$, $\varphi_S$ and define 
 \begin{eqnarray*}
 	\Delta_n(\widehat{\tau},\tau^*) &=& \left(\widehat{\tau} - \tau^*\right)' \left(\widehat{\Psi}\widehat{\Omega}\widehat{\Psi}'\right)^{-1} \left(\widehat{\tau} - \tau^*\right)\\
@@ -213,14 +213,13 @@ Moreover, although formal moment selection is relatively rare in applied work, \
 Downward $J$-tests, DHW tests and the like are a standard part of the applied econometrician's toolkit.
 Because it can be employed to construct confidence intervals that account for the effect of such specification tests, Algorithm \ref{alg:conf} can provide a valuable robustness check in empirical work.
 
-
-
-\todo[inline]{
-Question of whether these intervals can be improved. Yes and no. 
-No because there are impossibility results here: Leeb etc. 
-This is the cost of trying to be uniform: you have to be conservative.
-Yes because \emph{any} combination of $\alpha$ and $\delta$ that sum to 0.1 will yield an interval with asymptotic coverage of at least 0.9.
-Could try to optimize these to get the shortest possible interval, as McCloskey.
-Primary obstacle is computational: these intervals are already computationally intensive.
-Adding another layer to the problem only makes it worse.
-Important topic for future research.}
+But is there any way to avoid the conservativeness of the simulation-based interval?
+The short answer is no.
+Various impossibility results for post-selection inference, outlined in \cite{LeebPoetscher2005}, imply that conservative intervals are the best we require inference with uniform coverage guarantees.
+This does not imply, however, that the intervals presented above are the shortest possible.
+Notice from Theorem \ref{thm:sim} that \emph{any} values of $\alpha$ and $\delta$ that sum to 0.1 yield an interval with asymptotic coverage probability no less than 90\%.
+Accordingly, as suggested by \cite{ClaeskensHjortbook} and investigated for a more general class of problems by \cite{McCloskey}, one could attempt to \emph{optimize} confidence interval width while maintaining uniform asymptotic coverage by varying $\alpha$ and $\delta$.
+The primary obstacle to this idea is computational.
+The simulation-based interval from Algorithm \ref{alg:conf} is quite computationally intensive when the dimension of $\tau$ is large.\footnote{For more discussion of this point, see Section \ref{sec:application}.}
+Adding another layer to the optimization procedure only makes things worse.
+Developing clever computational shortcuts to surmount this problem is an interesting topic for future research.
