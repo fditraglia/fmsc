@@ -2,10 +2,10 @@
 \section{Computational Details}
 \label{append:comp}
 This paper is fully replicable using freely available, open-source software.
-Full source code and replication details are provided at \url{https://github.com/fditraglia/fmsc}.
+For full source code and replication details, see \url{https://github.com/fditraglia/fmsc}.
 Results for the simulation studies and empirical example were generated using in R version 3.1.0 \citep{R} and C\raisebox{0.5ex}{\tiny\textbf{++}} via the Rcpp \citep{RcppArticle,RcppBook} and RcppArmadillo \citep{RcppArmadillo} packages, versions 0.11.2 and 0.4.300.8.0, respectively.
 RcppArmadillo version 0.4.300.8.0 provides an interface to version 4.300 of the Armadillo C\raisebox{0.5ex}{\tiny\textbf{++}} linear algebra library \citep{Armadillo}.
 All figures in the paper were converted to tikz using version 0.7.0 of the tikzDevice package \citep{tikzDevice}.
-The simulation-based confidence intervals from Section \ref{sec:CIsim} were calculated using Algorithm \ref{alg:conf} with $J = 1000$ and $\alpha = \delta = 0.05$ by searching over a grid of 100 equally spaced values within a 95\% confidence interval for the scalar $\tau$.
-Although they also take $\alpha = \delta = 0.05$, the simulation-based intervals for the empirical example from Section \ref{sec:application} sets $J = 10,000$ and employ a mesh-adaptive search algorithm provided by version 3.6 of the NOMAD C\raisebox{0.5ex}{\tiny\textbf{++}} optimization package \citep{NOMADalgorithm,NOMADcode,NOMADuserguide}, called from R using version 0.15-22 of the crs package \citep{crs}.
+The simulation-based confidence intervals from Section \ref{sec:CIsim} were calculated using Algorithm \ref{alg:conf} with $J = 1000$ by searching over a grid of 100 equally spaced values within a 95\% confidence interval for the scalar $\tau$.
+In constrast, the simulation-based intervals for the empirical example from Section \ref{sec:application} set $J = 10,000$ and employ a mesh-adaptive search algorithm provided by version 3.6 of the NOMAD C\raisebox{0.5ex}{\tiny\textbf{++}} optimization package \citep{NOMADalgorithm,NOMADcode,NOMADuserguide}, called from R using version 0.15-22 of the crs package \citep{crs}.
 TSLS results for Table \ref{tab:fullresults} were generated using version 3.1-4 of the sem package \citep{sem}.
