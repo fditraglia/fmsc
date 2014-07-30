@@ -202,10 +202,25 @@ This could be a fruitful extension of the work presented here.
 Second, and more importantly, moment selection is not without cost: all of the simulation-based intervals are on average wider than a textbook confidence interval for the valid estimator.
 This raises an important question: why do moment selection at all?
 Wouldn't it be better to simply use the valid estimator and report a traditional confidence interval?
-This is a fair point: moment selection is not a panacea and should not be employed mindlessly.
+This is a fair point.
+Moment selection is not a panacea and should not be employed mindlessly.
 The primary goal of the the FMSC, however, is \emph{estimation} rather than inference.
 And as shown above, using it can indeed provide a sizeable reduction in estimator RMSE relative to the valid estimator.
+Once the decision to carry out moment selection has been taken, however, we cannot simply ignore this fact and report the usual confidence intervals.
+Algorithm \ref{alg:conf} provides a way to carry out honest inference post-selection and construct confidence intervals for non-standard estimators such as the minimum-AMSE averaging estimator from Section \ref{sec:momentavgexample}.
+The simulation results presented above show that it works fairly well in practice. 
+Moreover, although formal moment selection is relatively rare in applied work, \emph{informal} moment selection is extremely common.
+Downward $J$-tests, DHW tests and the like are a standard part of the applied econometrician's toolkit.
+Because it can be employed to construct confidence intervals that account for the effect of such specification tests, Algorithm \ref{alg:conf} can provide a valuable robustness check in empirical work.
 
-Once the decision to carry out moment selection has been taken, however, we cannot simply ignore this fact and report 
 
-\todo[inline]{There is a cost to moment selection. But this cost is still present when selection is carried out informally: we're just trying to make it formal here. One could indeed make a case that, if inference is your primary goal, you shouldn't be doing moment selection. We have shown above that if your goal is estimation, moment selection can produce superior estimates. But more generally, people carry out moment selection all the time, albeit informally for example with a J-test and it is useful to have a means of checking the robustness of inferences in this setting. Should also add results looking at the one-step procedure. This will allow me to make the point that it is the worst-case aspect of the problem that makes things difficult. Indeed, should see shorter intervals than the 2SLS in some cases here. Talk about the impossibility results. Talk about impossibility results etc. Not as bad in the choosing IVs example. Talk about how they could be made shorter, McCloskey, etc.}
+
+\todo[inline]{
+Question of whether these intervals can be improved. Yes and no. 
+No because there are impossibility results here: Leeb etc. 
+This is the cost of trying to be uniform: you have to be conservative.
+Yes because \emph{any} combination of $\alpha$ and $\delta$ that sum to 0.1 will yield an interval with asymptotic coverage of at least 0.9.
+Could try to optimize these to get the shortest possible interval, as McCloskey.
+Primary obstacle is computational: these intervals are already computationally intensive.
+Adding another layer to the problem only makes it worse.
+Important topic for future research.}
