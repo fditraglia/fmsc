@@ -70,7 +70,7 @@ For larger sample sizes, the relative performance of the FMSC and the $J$-test i
 \end{figure}
 \cite{Andrews1999} considers a more formal moment selection procedure based on criteria of the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $J_n(S)$ is the $J$-test statistic under moment set $S$, $-h(|S|)\kappa_n$ is a ``bonus term'' that rewards the inclusion of more moment conditions and we choose we choose the moment set that \emph{minimizes} the criterion. 
 If we take $h(|S|) = (p + |S| - r)$, then $\kappa_n = \log{n}$ gives a GMM analogue of Schwarz's Bayesian Information Criterion (GMM-BIC) while $\kappa_n = 2.01 \log{\log{n}}$ gives an analogue of the Hannan-Quinn Information Criterion (GMM-HQ), and $\kappa_n = 2$ gives an analogue of Akaike's Information Criterion (GMM-AIC). 
-Like the maximum likelihood model selection criteria upon which they are based, the GMM-BIC and GMM-HQ are consistent provided that Assumption \label{assump:Andrews} holds, while the GMM-AIC, like the FMSC, is conservative.\footnote{We discuss this further in Section \ref{sec:avg} below.} 
+Like the maximum likelihood model selection criteria upon which they are based, the GMM-BIC and GMM-HQ are consistent provided that Assumption \ref{assump:Andrews} holds, while the GMM-AIC, like the FMSC, is conservative.\footnote{We discuss this further in Section \ref{sec:avg} below.} 
 Figure \ref{fig:chooseIVsim_RMSErelMSC} gives the RMSE values for the post-FMSC estimator alongside those of the post-GMM-BIC, HQ and AIC estimators.
 As above, we calculate the $J$-test statistic using a centered covariance matrix estimator, following the recommendation of \cite{Andrews1999}.
 We saw above that the $J$-test is quite erratic for small sample sizes.
