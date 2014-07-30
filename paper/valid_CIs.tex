@@ -96,7 +96,7 @@ This is precisely the lack of uniformity described by \cite{LeebPoetscher2005}, 
 		\input{../SimulationOLSvsIV/Results/coverage_FMSC_naive.tex}
 		\label{tab:OLSvsIVsim_cover_naiveFMSC}
 	\end{subtable}
-	\caption{Coverage probabilities of nominal 90\% CIs for the OLS versus 2SLS simulation experiment from Section \ref{sec:OLSvsIVsim}, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}}
+	\caption{Coverage probabilities of nominal 90\% CIs for the OLS versus 2SLS simulation experiment from Section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}}
 \end{table}
 
 
@@ -114,7 +114,7 @@ This is precisely the lack of uniformity described by \cite{LeebPoetscher2005}, 
 		\label{tab:chooseIVsim_cover_naiveFMSC}
 		\input{../SimulationChooseIVs/Results/coverage_FMSC_naive.tex}
 	\end{subtable}
-	\caption{Coverage probabilities of nominal $90\%$ CIs for the choosing instrumental variables simulation experiment described in Section \ref{sec:chooseIVsim}, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
+	\caption{Coverage probabilities of nominal $90\%$ CIs for the choosing instrumental variables simulation experiment described in Section \ref{sec:chooseIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
 \end{table}
 
 Table \ref{tab:OLSvsIVsim_cover_FMSC} gives the actual coverage probability of the conservative, 90\% post-FMSC confidence interval, constructed according to Algorithm \ref{alg:conf}, for the OLS versus 2SLS example.
@@ -143,12 +143,12 @@ If anything, the minimum-AMSE intervals a bit more conserative than the the post
 		\input{../SimulationOLSvsIV/Results/coverage_AVG_correct.tex}
 		\label{tab:OLSvsIVsim_cover_AVG}
 	\end{subtable}
-	\caption{Coverage probabilities of two-step, simulation-based conservative $90\%$ CIs for the OLS versus 2SLS example. Based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
+	\caption{Coverage probabilities of simulation-based conservative $90\%$ CIs for the OLS versus 2SLS simulation experiment from Section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
 \end{table}
 
 The worry, of course, is not conservatism as such but the attendent increase in confidence interval width.
-Tables \ref{tab:OLSvsIVsim_width_FMSC} and \ref{tab:OLSvsIVsim_width_AVG} compare the median width of the two-step post-FMSC and minimum-AMSE intervals to that of the 2SLS estimator in the OLS verus 2SLS simulation experiment from section \ref{sec:OLSvsIVsim}.
-A value of 25, for example indicates that the two-step interval is 25\% wider than the corresponding interval for the 2SLS estimator.
+Accordingly, Tables \ref{tab:OLSvsIVsim_width_FMSC} and \ref{tab:OLSvsIVsim_width_AVG} compare the median width of the simulation-based, two-step post-FMSC and minimum-AMSE intervals to that of the 2SLS estimator in the OLS versus 2SLS simulation experiment from section \ref{sec:OLSvsIVsim}.
+A value of 25, for example indicates that the simulation-based interval is 25\% wider than the corresponding interval for the 2SLS estimator.
 This comparison shows us the inferential cost of carrying out moment selection relative to simply using the correctly-specified 2SLS estimator and calling it a day.
 We see immediately that moment selection is not a free lunch: the averaging and post-selection intervals are indeed wider than those of the 2SLS estimator, sometimes considerably so.
 Intriguingly, although the minimum-AMSE intervals are generally more conservative than the post-FMSC intervals, they are also considerably shorter for nearly all parameter values.
@@ -166,27 +166,16 @@ Intriguingly, although the minimum-AMSE intervals are generally more conservativ
 		\input{../SimulationOLSvsIV/Results/width_AVG_correct.tex}
 		\label{tab:OLSvsIVsim_width_AVG}
 	\end{subtable}
-	\caption{Median width of two-step, simulation-based conservative $90\%$ CI relative to that of a traditional 90\% CI for the 2SLS estimator in the OLS versus 2SLS example from section \ref{sec:OLSvsIVsim}, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
+	\caption{Median width of two-step, simulation-based conservative $90\%$ CI relative to that of a traditional 90\% CI for the 2SLS estimator in the OLS versus 2SLS example from section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
 \end{table}
 
-Turning our attention now to the choosing instrumental variables simulation experiment from section \ref{sec:chooseIVsim}, 
-
-
-
-
-The situation is qualitatively similar although much less dramatic for the choosing instrumental variables example.
-Tables 
-
-
-
-Table \ref{tab:chooseIVsim_cover_FMSC} gives the results for the two-step post-FMSC CI in the choosing IVs example.
-These intervals can be slightly below their nominal minimum level, particularly for the smaller sample sizes.
-At worst 81\% relative to a nominal 90\% when $N=50, \gamma = 0.6, \rho = 0.5$. 
-This comes from the fact that the traditional intervals for the valid estimator systematically under-cover except when $N = 500$.
-But in general, the two-step intervals work fairly well and they are much less conservative in this example.
-Table \ref{tab:chooseIVsim_width_FMSC} gives widths relative to traditional CI for valid estimator.
-Not that much wider: worst-case is 22\% wider but generally closer to 10\% wider.
-
+Turning our attention now to the choosing instrumental variables simulation experiment from section \ref{sec:chooseIVsim}, Table \ref{tab:chooseIVsim_cover_FMSC} gives the coverage probability and Table \ref{tab:chooseIVsim_width_FMSC} the median relative width of the conservative, 90\%, simulation-based, post-FMSC confidence interval.
+In this case, the width calculation is relative to the valid estimator, the 2SLS estimator includes the exogenous instruments $z_1, z_2, z_3$ but excludes the potentially endogenous instrument $w$.
+In this example, the simulation-based intervals are far less conservative and, for the smallest sample sizes, sometimes fall slightly below their nominal minimum coverage probability.
+The worst case, 81\% actual coverage compared to 90\% nominal coverage, occurs when $N=50, \gamma = 0.6, \rho = 0.5$.
+This problem stems from the fact that traditional interval for the valid estimator systematically under-covers when $N = 50$ or 100, as we see from Table \ref{tab:chooseIVsim_cover_Valid}.
+In spite of this, however, the simulation-based interval works quite well overall in this example.
+At the worst-case parameter values, for example, its median with is only 22\% greater than that of the valid estimator.
 
 \begin{table}[h]
 \footnotesize
@@ -202,8 +191,21 @@ Not that much wider: worst-case is 22\% wider but generally closer to 10\% wider
 		\label{tab:chooseIVsim_width_FMSC}
 		\input{../SimulationChooseIVs/Results/width_FMSC_2step.tex}
 	\end{subtable}
-\caption{Coverage probabilities of two-step, simulation-based nominal $>90\%$ CIs for the choosing instrumental variables example. Based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
+\caption{Performance of the simulation-based, conservative 90\% post-FMSC confidence interval in the choosing instrumental variables simulation from Section \ref{sec:chooseIVsim}. The left panel gives coverage probabilities, and the right panel gives median widths relative to that of a traditional 90\% interval for the valid estimator. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
 \end{table}
 
+On the whole, the simulation-based intervals constructed using Algorithm \ref{alg:conf} work well, but there are two caveats.
+First, in situations where the standard first-order asymptotic theory begins to break down, such as a weak instruments example, the simulation-based intervals can inherit an under-- or over--coverage problem from the valid estimator.
+It may be possible to address this problem by casting the moment selection problem explicitly within a weak identification framework.
+This could be a fruitful extension of the work presented here.
+
+Second, and more importantly, moment selection is not without cost: all of the simulation-based intervals are on average wider than a textbook confidence interval for the valid estimator.
+This raises an important question: why do moment selection at all?
+Wouldn't it be better to simply use the valid estimator and report a traditional confidence interval?
+This is a fair point: moment selection is not a panacea and should not be employed mindlessly.
+The primary goal of the the FMSC, however, is \emph{estimation} rather than inference.
+And as shown above, using it can indeed provide a sizeable reduction in estimator RMSE relative to the valid estimator.
+
+Once the decision to carry out moment selection has been taken, however, we cannot simply ignore this fact and report 
 
 \todo[inline]{There is a cost to moment selection. But this cost is still present when selection is carried out informally: we're just trying to make it formal here. One could indeed make a case that, if inference is your primary goal, you shouldn't be doing moment selection. We have shown above that if your goal is estimation, moment selection can produce superior estimates. But more generally, people carry out moment selection all the time, albeit informally for example with a J-test and it is useful to have a means of checking the robustness of inferences in this setting. Should also add results looking at the one-step procedure. This will allow me to make the point that it is the worst-case aspect of the problem that makes things difficult. Indeed, should see shorter intervals than the 2SLS in some cases here. Talk about the impossibility results. Talk about impossibility results etc. Not as bad in the choosing IVs example. Talk about how they could be made shorter, McCloskey, etc.}
