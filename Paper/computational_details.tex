@@ -1,5 +1,11 @@
 %!TEX root = main.tex
 \section{Computational Details}
 \label{append:comp}
-Mac OS X version 10.7.5, R version 3.1.0 ``Spring Dance,'' RcppArmadillo version 0.4.300.8.0, Rcpp version 0.11.2, crs version 0.15-22. 
-\todo[inline]{Talk about NOMAD optimization toolkit. Explain that everything is fully replicable using free, open-source software and give the github repo.}
+Everything is fully replicable using free, open-source software.
+Replication details along with full source code for simulations, the empirical example, and indeed this paper itself appear in the github repo.
+LINK TO GITHUB REPO GOES HERE.
+Mac OS X version 10.7.5, R version 3.1.0 ``Spring Dance,'' RcppArmadillo version 0.4.300.8.0, Rcpp version 0.11.2.
+Provides an interface to the Armadillo C++ linear algebra library, version 4.300. 
+
+For the simulation studies in which $\tau$ is one-dimensional, optimization by a simple grid search over 100 equally-spaced points in the CI with 1000 sim reps for the numerical integration.
+In the empirical example, used mesh adaptive search (MADS) algorithm provided by the NOMAD C++ optimization package (version 3.6), called from R using the crs package (version 0.15-22)
