@@ -58,10 +58,10 @@ Table \ref{tab:fullresults} lists the eight instrument sets considered here, alo
 
 \end{table}
 
-\todo[inline]{Need to spend a bit more time talking about the positive-part FMSC. Relate it to what we did in the AVG estimator. Mention that we did a simulation for choosing instruments and it was identical for larger sample sizes but provided a uniform improvement over FMSC for $N=50$. Mention that the CI performance was essentially identical to that of the plain-FMSC in the simulation experiment. Details available upon request.}
-Table \ref{tab:FMSC_values} presents FMSC and positive-part FMSC results for instrument sets 1--8  as defined in Table \ref{tab:fullresults}. 
-As described above, the positive-part FMSC sets a negative squared asymptotic bias estimate to zero when estimating AMSE.
-If the squared bias estimate is positive, FMSC and positive-part FMSC coincide; when the squared bias estimate is negative, positive-part FMSC is strictly greater than FMSC. 
+Table \ref{tab:FMSC_values} presents FMSC and positive-part FMSC results for instrument sets 1--8  as defined in Table \ref{tab:fullresults}.
+The positive-part FMSC sets a negative squared asymptotic bias estimate to zero when estimating AMSE.
+When the squared bias estimate is positive, FMSC and positive-part FMSC coincide; when the squared bias estimate is negative, positive-part FMSC is strictly greater than FMSC. 
+Additional simulation results for the choosing instrumental variables experiment from Section \ref{sec:chooseIVsim}, available upon request, reveal that the positive-part FMSC never performs worse than the ordinary FMSC and sometimes performs better, suggesting that it should be preferred in real-world applications. 
 For each criterion Table \ref{tab:FMSC_values} presents two cases: the first takes the effect of \emph{malfal}, a measure of malaria transmission, as the target parameter while the second uses the effect of \emph{rule}, a measure of institutions. 
 In each case the two best instrument sets are numbers 5 (baseline, climate and Europe) and 8 (all instruments).\footnote{In Table 2 of their paper, \cite{Carstensen2006} report results for selection over instrument sets 2--4 and 8 using the GMM-BIC and HQ of \cite{Andrews1999}. Both favor instrument set 8. They do not consider instrument sets 5--7.}
 When the target parameter is the coefficient on \emph{malfal}, 8 is the clear winner under both the plain-vanilla and positive-part FMSC, leading to an estimate of $-1.08$ for the effect of malaria transmission on per-capita income.
