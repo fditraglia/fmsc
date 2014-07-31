@@ -11,6 +11,7 @@ The idea behind FMSC is to trade off these two effects in the limit as an approx
 I consider a setting in which two blocks of moment conditions are available: one that is assumed correctly specified, and another that may not be.
 When the correctly specified block identifies the model, I derive an asymptotically unbiased estimator of AMSE: the FMSC. When this is not the case, it remains possible to use the AMSE framework to carry out a sensitivity analysis. 
 \todo[inline]{Should relate this to Andrews-style papers as well as Liao and Cheng.}
+\todo[inline]{Should have a footnote making it clear that finite-sample MSE doesn't always exist for GMM estimators. Still the AMSE is meaningful if we think of it as the limit of a sequence of trimmed quadratic loss functions, as in Hansen 2013.}
 
 Continuing under the local mis-specification assumption, I show how the ideas used to derive FMSC can be applied to the important problem of inference post-moment selection. 
 Because they use the same data twice, first to choose a moment set and then to carry out estimation, post-selection estimators are randomly weighted averages of many individual estimators.
@@ -20,12 +21,19 @@ By deriving the limiting distribution of moment average estimators, I propose a 
 
 While the methods described here apply to any model estimated by GMM, subject to standard regularity conditions, I focus on their application to linear instrumental variables (IV) models. 
 In simulations for two-stage least squares (2SLS), FMSC performs well relative to alternatives suggested in the literature. 
+\todo[inline]{Stress that the gains from the FMSC can be very large in practice.}
 Further, the procedure for constructing valid confidence intervals achieves its stated minimum coverage, even in situations where instrument selection leads to highly non-normal sampling distributions. 
-I conclude with an empirical application from development economics, exploring the effect of instrument selection on the estimated relationship between malaria transmission and income. 
+I conclude with an empirical application from development economics, exploring the effect of instrument selection on the estimated relationship between malaria transmission and income.
+\todo[inline]{Update preceding to make it clear what this criterion is for, and mention the examples used.}
+
+\todo[inline]{Make sure to stress the contributions. Moment selection better targeted at empirical practice. Novel justification for DHW test, novel estimator that combines OLS and 2SLS. General framework for inference that accounts for moment selection, including various Hausman and J pre-tests}
+
+\todo[inline]{Important limitation: do not consider weak identification. Topic for future work. Sim results partially address this.}
 
 My approach to moment selection under mis-specification is inspired by the focused information criterion of \citet{ClaeskensHjort2003}, a model selection criterion for models estimated by maximum likelihood. 
 Like them, I allow for mis-specification and use AMSE to approximate small-sample MSE in a drifting asymptotic framework. 
 In contradistinction, however, I consider moment rather than model selection, and general GMM estimation rather than maximum likelihood.
+\todo[inline]{Mention other papers that use the local mis-specification idea. Newey studies GMM estimation and specification testing with locally mis-specified moment conditions. Cite Schorfheide here: similar in spirit to the FIC but developed independently and covers VARs.}
  
 The existing literature on moment selection under mis-specification is comparatively small. 
 \cite{Andrews1999} proposes a family of moment selection criteria for GMM by adding a penalty term to the J-test statistic. 
@@ -34,25 +42,31 @@ Under an identification assumption and certain restrictions on the form of the p
 More recently, \cite{Liao} proposes a shrinkage procedure for simultaneous GMM moment selection and estimation. 
 Given a set of correctly specified moment conditions that identifies the model, this method consistently chooses all valid conditions from a second set of potentially mis-specified conditions.
 In contrast to these proposals, which examine only the validity of the moment conditions under consideration, the FMSC balances validity against relevance to minimize MSE. 
+\todo[inline]{Cite Cheng and Liao here. Similar to Hall and Peixi but Lasso-based.}
 The only other proposal from the literature to consider both validity and relevance in moment selection is a suggestion by \cite{HallPeixe2003} to combine their canonical correlations information criterion (CCIC) -- a relevance criterion that seeks to avoid including redundant instruments -- with Andrews' GMM moment selection criteria. 
 This procedure, however, merely seeks to avoid including redundant instruments after eliminating invalid ones: it does not allow for the intentional inclusion of a slightly invalid but highly relevant instrument to reduce MSE. 
 
-\todo[inline]{Mention Cheng and Liu here. Similar in spirit to Hall \& Peixe, but LASSO-based estimator.}
+\todo[inline]{Need some mention of the fact that FMSC is conservative rather tha consistent. Briefly mention why this is a good thing: consistent selection leads to bad risk properties, and we want to do inference.}
 
 The idea of choosing instruments to minimize MSE is shared by the procedures in \cite{DonaldNewey2001} and \cite{DonaldImbensNewey2009}. 
 \cite{KuersteinerOkui2010} also aim to minimize MSE but, rather than choosing a particular instrument set, suggest averaging over the first-stage predictions implied by many instrument sets and using this average in the second stage. 
 Unlike FMSC, these papers consider the higher-order bias that arises from including many valid instruments rather than the first-order bias that arises from the use of invalid instruments.
 
-The literature on post-selection, or ``pre-test'' estimators is vast. \citet{LeebPoetscher2005, LeebPoetscher2009}  give a theoretical overview, while \cite{Demetrescu} illustrate the practical consequences via a simulation experiment. There are several proposals to construct valid confidence intervals post-model selection, including \cite{Kabaila1998}, \cite{HjortClaeskens} and \cite{KabailaLeeb2006}. 
-To my knowledge, however, this is the first paper to examine the problem specifically from the perspective of moment selection. The approach adopted here, treating post-moment selection estimators as a specific example of moment averaging, is adapted from the frequentist model average estimators of \cite{HjortClaeskens}.
-Another paper that considers weighting GMM estimators based on different moment sets is \cite{Xiao}. While Xiao combines estimators based on valid moment conditions to achieve a minimum variance estimator, I combine estimators based on potentially invalid conditions to minimize MSE. 
+The literature on post-selection, or ``pre-test'' estimators is vast. 
+\citet{LeebPoetscher2005, LeebPoetscher2009}  give a theoretical overview, while \cite{Demetrescu} illustrate the practical consequences via a simulation experiment. 
+There are several proposals to construct valid confidence intervals post-model selection, including \cite{Kabaila1998}, \cite{HjortClaeskens} and \cite{KabailaLeeb2006}. 
+To my knowledge, however, this is the first paper to give a general treatment of the problem specifically from the perspective of moment selection. 
+\todo[inline]{Cite the various pre-test and IV papers here.}
+The approach adopted here, treating post-moment selection estimators as a specific example of moment averaging, is adapted from the frequentist model average estimators of \cite{HjortClaeskens}.
+\todo[inline]{Might want to mention the Leeb and Poetscher stuff here.}
+Another paper that considers weighting GMM estimators based on different moment sets is \cite{Xiao}. 
+While Xiao combines estimators based on valid moment conditions to achieve a minimum variance estimator, I combine estimators based on potentially invalid conditions to minimize MSE. 
+\todo[inline]{Also cite the Linton et al paper.}
 A similar idea underlies the combined moments (CM) estimator of \cite{Judge2007}, who emphasize that incorporating the information from an incorrect specification could lead to favorable bias-variance tradeoff. 
 %Their proposal uses a Cressie-Read divergence measure to combine the information from competing moment specifications, for example OLS versus two-stage least squares (2SLS), yielding a data-driven compromise estimator. Unlike the FMSC, however, the CM estimator is not targeted to a particular research goal and does not explicitly aim to minimize MSE.
 
 The remainder of the paper is organized as follows.
 Section \ref{sec:asymp} describes the local mis-specification framework and gives the main limiting results used later in the paper. 
 Section \ref{sec:FMSC} derives FMSC as an asymptotically unbiased estimator of AMSE, presents specialized results for 2SLS, and examines their performance in a Monte Carlo experiment. 
-Section \ref{sec:avg} describes a simulation-based procedure to construct valid confidence intervals for moment average estimators and examines its performance in a Monte Carlo experiment. Section \ref{sec:application} presents the empirical application and Section \ref{sec:conclude} concludes. 
-Proofs appear in the Appendix.
-
-\todo[inline]{Final step: rewrite abstract and intro. Main additions: (1) Add some of the additional refsthat the referees suggested, (2) Add some further refs backing up my approach and some more recent FIC-style work, (3) mention the limitation of strong identification but try to suggest that the simulation studies partially address this, (4) stress large gains to be had from using this procedure. Most importantly, try to make it clear why I'm doing conservative/efficient model selection rather than consistent model selection. Refer to the Hansen shrinkage paper? Explain that the limitation is weak instruments, since we're only looking at first-order asymptotics here.}
+Section \ref{sec:avg} describes a simulation-based procedure to construct valid confidence intervals for moment average estimators and examines its performance in a Monte Carlo experiment. Section \ref{sec:application} presents the empirical application and Section \ref{sec:conclude} concludes.
+Proofs and computational details appear in the Appendix.
