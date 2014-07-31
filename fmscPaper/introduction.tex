@@ -10,8 +10,8 @@ The idea behind FMSC is to trade off these two effects in the limit as an approx
 %While estimating asymptotic variance is straightforward, even under local mis-specification, estimating asymptotic bias requires over-identifying information. 
 I consider a setting in which two blocks of moment conditions are available: one that is assumed correctly specified, and another that may not be.
 When the correctly specified block identifies the model, I derive an asymptotically unbiased estimator of AMSE: the FMSC. When this is not the case, it remains possible to use the AMSE framework to carry out a sensitivity analysis. 
-\todo[inline]{Should relate this to Andrews-style papers as well as Liao and Cheng.}
-\todo[inline]{Should have a footnote making it clear that finite-sample MSE doesn't always exist for GMM estimators. Still the AMSE is meaningful if we think of it as the limit of a sequence of trimmed quadratic loss functions, as in Hansen 2013.}
+\todo[inline]{Should relate this to Andrews-style papers as well as \cite{ChengLiao}.}
+\todo[inline]{Should have a footnote making it clear that finite-sample MSE doesn't always exist for GMM estimators. Still the AMSE is meaningful if we think of it as the limit of a sequence of trimmed quadratic loss functions, as in \cite{Hansen2013}}
 
 Continuing under the local mis-specification assumption, I show how the ideas used to derive FMSC can be applied to the important problem of inference post-moment selection. 
 Because they use the same data twice, first to choose a moment set and then to carry out estimation, post-selection estimators are randomly weighted averages of many individual estimators.
@@ -33,7 +33,7 @@ I conclude with an empirical application from development economics, exploring t
 My approach to moment selection under mis-specification is inspired by the focused information criterion of \citet{ClaeskensHjort2003}, a model selection criterion for models estimated by maximum likelihood. 
 Like them, I allow for mis-specification and use AMSE to approximate small-sample MSE in a drifting asymptotic framework. 
 In contradistinction, however, I consider moment rather than model selection, and general GMM estimation rather than maximum likelihood.
-\todo[inline]{Mention other papers that use the local mis-specification idea. Newey studies GMM estimation and specification testing with locally mis-specified moment conditions. Cite Schorfheide here: similar in spirit to the FIC but developed independently and covers VARs.}
+\todo[inline]{Mention other papers that use the local mis-specification idea. \cite{Newey1985} studies GMM estimation and specification testing with locally mis-specified moment conditions. Cite \cite{Schorfheide2005} here: similar in spirit to the FIC but developed independently and covers VARs.}
  
 The existing literature on moment selection under mis-specification is comparatively small. 
 \cite{Andrews1999} proposes a family of moment selection criteria for GMM by adding a penalty term to the J-test statistic. 
@@ -42,7 +42,7 @@ Under an identification assumption and certain restrictions on the form of the p
 More recently, \cite{Liao} proposes a shrinkage procedure for simultaneous GMM moment selection and estimation. 
 Given a set of correctly specified moment conditions that identifies the model, this method consistently chooses all valid conditions from a second set of potentially mis-specified conditions.
 In contrast to these proposals, which examine only the validity of the moment conditions under consideration, the FMSC balances validity against relevance to minimize MSE. 
-\todo[inline]{Cite Cheng and Liao here. Similar to Hall and Peixi but Lasso-based.}
+\todo[inline]{Cite \cite{ChengLiao} here. Similar to Hall and Peixi but Lasso-based.}
 The only other proposal from the literature to consider both validity and relevance in moment selection is a suggestion by \cite{HallPeixe2003} to combine their canonical correlations information criterion (CCIC) -- a relevance criterion that seeks to avoid including redundant instruments -- with Andrews' GMM moment selection criteria. 
 This procedure, however, merely seeks to avoid including redundant instruments after eliminating invalid ones: it does not allow for the intentional inclusion of a slightly invalid but highly relevant instrument to reduce MSE. 
 
@@ -56,12 +56,12 @@ The literature on post-selection, or ``pre-test'' estimators is vast.
 \citet{LeebPoetscher2005, LeebPoetscher2009}  give a theoretical overview, while \cite{Demetrescu} illustrate the practical consequences via a simulation experiment. 
 There are several proposals to construct valid confidence intervals post-model selection, including \cite{Kabaila1998}, \cite{HjortClaeskens} and \cite{KabailaLeeb2006}. 
 To my knowledge, however, this is the first paper to give a general treatment of the problem specifically from the perspective of moment selection. 
-\todo[inline]{Cite the various pre-test and IV papers here.}
+\todo[inline]{Cite the various pre-test and IV papers here: \cite{Berkowitz}, \cite{Guggenberger2010}, \cite{Guggenberger2012}, \cite{GuggenbergerKumar}}
 The approach adopted here, treating post-moment selection estimators as a specific example of moment averaging, is adapted from the frequentist model average estimators of \cite{HjortClaeskens}.
 \todo[inline]{Might want to mention the Leeb and Poetscher stuff here.}
 Another paper that considers weighting GMM estimators based on different moment sets is \cite{Xiao}. 
 While Xiao combines estimators based on valid moment conditions to achieve a minimum variance estimator, I combine estimators based on potentially invalid conditions to minimize MSE. 
-\todo[inline]{Also cite the Linton et al paper.}
+\todo[inline]{Also cite \cite{ChenChavezLinton}.}
 A similar idea underlies the combined moments (CM) estimator of \cite{Judge2007}, who emphasize that incorporating the information from an incorrect specification could lead to favorable bias-variance tradeoff. 
 %Their proposal uses a Cressie-Read divergence measure to combine the information from competing moment specifications, for example OLS versus two-stage least squares (2SLS), yielding a data-driven compromise estimator. Unlike the FMSC, however, the CM estimator is not targeted to a particular research goal and does not explicitly aim to minimize MSE.
 

@@ -1,6 +1,14 @@
 % This file was created with JabRef 2.8.1.
 % Encoding: Cp1252
 
+@MISC{NOMADcode,
+  author = {M.A. Abramson and C. Audet and G. Couture and J.E. {Dennis, Jr.}
+	and S. {Le~Digabel} and C. Tribes},
+  title = {The {NOMAD} project},
+  howpublished = {Software available at \url{http://www.gerad.ca/nomad}},
+  year = {2013}
+}
+
 @ARTICLE{Acemoglu,
   author = {Daron Acemoglu and Simon Johnson and James A. Robinson},
   title = {The Colonial Origins of Comparative Development: An Empirical investigation},
@@ -78,19 +86,6 @@
   timestamp = {2011.10.17}
 }
 
-@techreport{Armadillo,
-  Author      = {Conrad Sanderson},
-  Title       = {{Armadillo}: An Open Source {C++} Linear Algebra Library for Fast Prototyping and Computationally Intensive Experiments},
-  Institution = {NICTA},
-  Url         = {http://arma.sourceforge.net/armadillo_nicta_2010.pdf},
-  Year        = {2010}
-}
-
-Conrad Sanderson.
-Armadillo: An Open Source C++ Linear Algebra Library for Fast Prototyping and Computationally Intensive Experiments.
-Technical Report, NICTA, 2010. 
-
-
 @ARTICLE{Ashley2009,
   author = {Richard A. Ashley},
   title = {Assessing the Credibility of Instrumental Variables Inference with
@@ -111,6 +106,15 @@ Technical Report, NICTA, 2010.
   year = {2010},
   owner = {rt356},
   timestamp = {2011.01.23}
+}
+
+@TECHREPORT{NOMADuserguide,
+  author = {C. Audet and S. {Le~Digabel} and C. Tribes},
+  title = {{NOMAD} user guide},
+  institution = {Les cahiers du GERAD},
+  year = {2009},
+  number = {G-2009-37},
+  url = {http://www.gerad.ca/NOMAD/Downloads/user_guide.pdf}
 }
 
 @UNPUBLISHED{Behl2012,
@@ -219,6 +223,18 @@ Technical Report, NICTA, 2010.
   timestamp = {2011.09.18}
 }
 
+@UNPUBLISHED{ChenChavezLinton,
+  author = {Xiaohong Chen and David T. Jacho-Chávez and Oliver Linton},
+  title = {An Alternative Way of Computing Efficient Instrumental Variables
+	Estimators},
+  note = {LSE STICERD Research Paper EM/2009/536},
+  month = {June},
+  year = {2009},
+  owner = {fditra},
+  timestamp = {2014.07.31},
+  url = {http://sticerd.lse.ac.uk/dps/em/em536.pdf}
+}
+
 @UNPUBLISHED{ChengLiao,
   author = {Xu Cheng and Zhipeng Liao},
   title = {Select the Valid and Relevant Moments: An Information-Based {LASSO}
@@ -227,8 +243,8 @@ Technical Report, NICTA, 2010.
   month = {October},
   year = {2013},
   owner = {fditra},
-  url = {http://economics.sas.upenn.edu/system/files/13-062.pdf},
-  timestamp = {2014.05.08}
+  timestamp = {2014.05.08},
+  url = {http://economics.sas.upenn.edu/system/files/13-062.pdf}
 }
 
 @ARTICLE{Claeskens2007a,
@@ -358,14 +374,6 @@ Technical Report, NICTA, 2010.
   timestamp = {2011.10.24}
 }
 
-@Manual{crs,
-  title = {crs: Categorical Regression Splines},
-  author = {Jeffrey S. Racine and Zhenghua Nie},
-  year = {2014},
-  note = {R package version 0.15-22},
-  url = {http://CRAN.R-project.org/package=crs},
-  }
-
 @BOOK{Davidson1994,
   title = {Stochastic Limit Theory},
   publisher = {Oxford},
@@ -447,6 +455,38 @@ Technical Report, NICTA, 2010.
   timestamp = {2011.11.02}
 }
 
+@BOOK{RcppBook,
+  title = {Seamless {R} and {C++} Integration with {Rcpp}},
+  publisher = {Springer},
+  year = {2013},
+  author = {Dirk Eddelbuettel},
+  address = {New York},
+  note = {ISBN 978-1-4614-6867-7}
+}
+
+@ARTICLE{RcppArticle,
+  author = {Dirk Eddelbuettel and Romain Fran\c{c}ois},
+  title = {{Rcpp}: Seamless {R} and {C++} Integration},
+  journal = {Journal of Statistical Software},
+  year = {2011},
+  volume = {40},
+  pages = {1--18},
+  number = {8},
+  url = {http://www.jstatsoft.org/v40/i08/}
+}
+
+@ARTICLE{RcppArmadillo,
+  author = {Dirk Eddelbuettel and Conrad Sanderson},
+  title = {{RcppArmadillo}: Accelerating {R} with high-performance {C++} linear
+	algebra},
+  journal = {Computational Statistics and Data Analysis},
+  year = {2014},
+  volume = {71},
+  pages = {1054--1063},
+  month = {March},
+  url = {http://dx.doi.org/10.1016/j.csda.2013.02.005}
+}
+
 @ARTICLE{Eichenbaum,
   author = {Martin S. Eichenbaum and Lars Peter Hansen and Kenneth J. Singleton},
   title = {A Time Series Analysis of Representative Agent Models of Consumption
@@ -471,15 +511,48 @@ Technical Report, NICTA, 2010.
   timestamp = {2011.01.23}
 }
 
-@ARTICLE{Guggenberger,
+@MANUAL{sem,
+  title = {sem: Structural Equation Models},
+  author = {John Fox and Zhenghua Nie and Jarrett Byrnes},
+  year = {2014},
+  note = {R package version 3.1-4},
+  url = {http://CRAN.R-project.org/package=sem}
+}
+
+@ARTICLE{Guggenberger2012,
   author = {Patrik Guggenberger},
   title = {On the Asymptotic Size Distortion of Tests When Instruments Locally
 	Violate the Exogeneity Assumption},
   journal = {Econometric Theory},
-  year = {2011},
-  volume = {Forthcoming},
-  owner = {fjd26},
-  timestamp = {2011.12.17}
+  year = {2012},
+  volume = {28},
+  pages = {387-421},
+  owner = {fditra},
+  timestamp = {2014.07.31}
+}
+
+@ARTICLE{Guggenberger2010,
+  author = {Patrik Guggenberger},
+  title = {The Impact of a Hausman Pretest on the Asymptotic Size of a Hypothesis
+	Test},
+  journal = {Econometric Theory},
+  year = {2010},
+  volume = {26},
+  pages = {369-382},
+  owner = {fditra},
+  timestamp = {2014.07.31}
+}
+
+@ARTICLE{GuggenbergerKumar,
+  author = {Patrik Guggenberger and Gitanjali Kumar},
+  title = {On the Size Distortion of Tests After an Overidentifying Restrictions
+	Pretest},
+  journal = {Journal of Applied Econometrics},
+  year = {2012},
+  volume = {27},
+  pages = {1138-1160},
+  owner = {fditra},
+  timestamp = {2014.07.31}
 }
 
 @BOOK{Hallbook,
@@ -515,6 +588,16 @@ Technical Report, NICTA, 2010.
   pages = {269-288},
   owner = {rt356},
   timestamp = {2011.02.11}
+}
+
+@UNPUBLISHED{Hansen2013,
+  author = {Bruce E. Hansen},
+  title = {Efficient Shrinkage in Parametric Models},
+  note = {University of Wisconsin},
+  month = {September},
+  year = {2013},
+  owner = {fditra},
+  timestamp = {2014.07.31}
 }
 
 @ARTICLE{Hansen2005,
@@ -653,8 +736,8 @@ Technical Report, NICTA, 2010.
   journal = {Journal of Applied Econometrics},
   year = {2012},
   volume = {27},
-  number = {1},
   pages = {108-128},
+  number = {1},
   owner = {fjd26},
   timestamp = {2011.10.24}
 }
@@ -697,6 +780,16 @@ Technical Report, NICTA, 2010.
   timestamp = {2012.07.23}
 }
 
+@ARTICLE{NOMADalgorithm,
+  author = {S. {Le~Digabel}},
+  title = {Algorithm 909: {NOMAD}: Nonlinear Optimization with the {MADS} algorithm},
+  journal = {{ACM} Transactions on Mathematical Software},
+  year = {2011},
+  volume = {37},
+  pages = {1--15},
+  number = {4}
+}
+
 @UNPUBLISHED{Leeb,
   author = {Leeb, H. and P\"{o}tscher, B. M.},
   title = {Testing in the Presence of Nuisance Parameters: Some Comments on
@@ -704,9 +797,9 @@ Technical Report, NICTA, 2010.
   note = {{U}niversity of {V}ienna},
   month = {September},
   year = {2014},
-  url = {http://arxiv.org/pdf/1209.4543.pdf},
   owner = {fditra},
-  timestamp = {2012.11.17}
+  timestamp = {2012.11.17},
+  url = {http://arxiv.org/pdf/1209.4543.pdf}
 }
 
 @INCOLLECTION{LeebPoetscher2009,
@@ -775,8 +868,8 @@ Technical Report, NICTA, 2010.
   month = {October},
   year = {2012},
   owner = {fjd26},
-  url = {http://www.econ.brown.edu/fac/adam_mccloskey/Research_files/McCloskey_BBCV.pdf},
-  timestamp = {2011.12.17}
+  timestamp = {2011.12.17},
+  url = {http://www.econ.brown.edu/fac/adam_mccloskey/Research_files/McCloskey_BBCV.pdf}
 }
 
 @UNPUBLISHED{McCloskey2011,
@@ -826,6 +919,17 @@ Technical Report, NICTA, 2010.
   timestamp = {2011.01.23}
 }
 
+@ARTICLE{Newey1985,
+  author = {Whitney K. Newey},
+  title = {Genearlized Method of Moments Specification Testing},
+  journal = {Journal of Econometrics},
+  year = {1985},
+  volume = {29},
+  pages = {229-256},
+  owner = {fditra},
+  timestamp = {2014.07.31}
+}
+
 @INBOOK{NeweyMcFadden1994,
   chapter = {36},
   pages = {2111-2245},
@@ -849,35 +953,6 @@ Technical Report, NICTA, 2010.
   number = {1},
   date-added = {2011-02-13 18:55:59 +0000},
   date-modified = {2011-02-13 18:56:59 +0000}
-}
-
-@article{NOMADalgorithm,
-  Author   = {S. {Le~Digabel}},
-  Title    = {Algorithm 909: {NOMAD}:
-              Nonlinear Optimization with the {MADS} algorithm},
-  Journal  = {{ACM} Transactions on Mathematical Software},
-  Volume   = {37},
-  Number   = {4},
-  Pages    = {1--15},
-  Year     = {2011}
-}
-
-@misc{NOMADcode,
-  Author       = {M.A. Abramson and C. Audet and G. Couture
-                 and J.E. {Dennis, Jr.} and S. {Le~Digabel} and C. Tribes},
-  Title        = {The {NOMAD} project},
-  Howpublished = {Software available at
-                  \url{http://www.gerad.ca/nomad}},
-  Year = {2013}
-}
-
-@techreport{NOMADuserguide,
-  Author      = {C. Audet and S. {Le~Digabel} and C. Tribes},
-  Title       = {{NOMAD} user guide},
-  Institution = {Les cahiers du GERAD},
-  Number      = {G-2009-37},
-  Url         = {http://www.gerad.ca/NOMAD/Downloads/user_guide.pdf},
-  Year        = {2009}
 }
 
 @ARTICLE{Poetscher1991,
@@ -904,6 +979,23 @@ Technical Report, NICTA, 2010.
   timestamp = {2011.10.24}
 }
 
+@MANUAL{crs,
+  title = {crs: Categorical Regression Splines},
+  author = {Jeffrey S. Racine and Zhenghua Nie},
+  year = {2014},
+  note = {R package version 0.15-22},
+  url = {http://CRAN.R-project.org/package=crs}
+}
+
+@MANUAL{R,
+  title = {R: A Language and Environment for Statistical Computing},
+  author = {{R Core Team}},
+  organization = {R Foundation for Statistical Computing},
+  address = {Vienna, Austria},
+  year = {2014},
+  url = {http://www.R-project.org/}
+}
+
 @ARTICLE{Rodrik,
   author = {Dani Rodrik and Arvind Subramanian and Francesco Trebbi},
   title = {Institutions Rule: The Primacy of Institutions over Geography and
@@ -915,47 +1007,6 @@ Technical Report, NICTA, 2010.
   owner = {fjd26},
   timestamp = {2011.11.02}
 }
-
-@Manual{R,
-  title = {R: A Language and Environment for Statistical Computing},
-  author = {{R Core Team}},
-  organization = {R Foundation for Statistical Computing},
-  address = {Vienna, Austria},
-  year = {2014},
-  url = {http://www.R-project.org/},
-  }
-
-@Article{RcppArmadillo,
-  title = {{RcppArmadillo}: Accelerating {R} with high-performance {C++} linear algebra},
-  author = {Dirk Eddelbuettel and Conrad Sanderson},
-  journal = {Computational  Statistics and Data Analysis},
-  year = {2014},
-  volume = {71},
-  month = {March},
-  pages = {1054--1063},
-  url = {http://dx.doi.org/10.1016/j.csda.2013.02.005},
-}
-
-@Article{RcppArticle,
-  title = {{Rcpp}: Seamless {R} and {C++} Integration},
-  author = {Dirk Eddelbuettel and Romain Fran\c{c}ois},
-  journal = {Journal of Statistical Software},
-  year = {2011},
-  volume = {40},
-  number = {8},
-  pages = {1--18},
-  url = {http://www.jstatsoft.org/v40/i08/},
-  }
-
-@Book{RcppBook,
-  title = {Seamless {R} and {C++} Integration with {Rcpp}},
-  author = {Dirk Eddelbuettel},
-  publisher = {Springer},
-  address = {New York},
-  year = {2013},
-  note = {ISBN 978-1-4614-6867-7},
-}
-
 
 @ARTICLE{Roodman2009,
   author = {David Roodman},
@@ -996,13 +1047,14 @@ Technical Report, NICTA, 2010.
   url = {http://www.nber.org/papers/w9490}
 }
 
-@Manual{sem,
-  title = {sem: Structural Equation Models},
-  author = {John Fox and Zhenghua Nie and Jarrett Byrnes},
-  year = {2014},
-  note = {R package version 3.1-4},
-  url = {http://CRAN.R-project.org/package=sem},
-  }
+@TECHREPORT{Armadillo,
+  author = {Conrad Sanderson},
+  title = {{Armadillo}: An Open Source {C++} Linear Algebra Library for Fast
+	Prototyping and Computationally Intensive Experiments},
+  institution = {NICTA},
+  year = {2010},
+  url = {http://arma.sourceforge.net/armadillo_nicta_2010.pdf}
+}
 
 @ARTICLE{Schorfheide2005,
   author = {Frank Schorfheide},
@@ -1014,6 +1066,14 @@ Technical Report, NICTA, 2010.
   __markedentry = {[fditra:]},
   owner = {fjd26},
   timestamp = {2012.07.24}
+}
+
+@MANUAL{tikzDevice,
+  title = {tikzDevice: R Graphics Output in LaTeX Format},
+  author = {Charlie Sharpsteen and Cameron Bracken},
+  year = {2013},
+  note = {R package version 0.7.0},
+  url = {http://CRAN.R-project.org/package=tikzDevice}
 }
 
 @ARTICLE{Silvapulle1996,
@@ -1085,14 +1145,6 @@ Technical Report, NICTA, 2010.
   timestamp = {2011.01.23}
 }
 
-@Manual{tikzDevice,
-  title = {tikzDevice: R Graphics Output in LaTeX Format},
-  author = {Charlie Sharpsteen and Cameron Bracken},
-  year = {2013},
-  note = {R package version 0.7.0},
-  url = {http://CRAN.R-project.org/package=tikzDevice},
-  }
-
 @BOOK{vanderVaart,
   title = {Asymptotic Statistics},
   publisher = {Cambridge},
@@ -1140,8 +1192,8 @@ Technical Report, NICTA, 2010.
 
 @ARTICLE{Yang2005,
   author = {Yuhong Yang},
-  title = {Can the Strengths of {AIC} and {BIC} Be Shared? A Conflict Between Model
-	Identification and Regression Estimation},
+  title = {Can the Strengths of {AIC} and {BIC} Be Shared? A Conflict Between
+	Model Identification and Regression Estimation},
   journal = {Biometrika},
   year = {2005},
   volume = {92},
