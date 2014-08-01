@@ -175,8 +175,8 @@ In this case, the width calculation is relative to the valid estimator, the TSLS
 In this example, the simulation-based intervals are far less conservative and, for the smallest sample sizes, sometimes fall slightly below their nominal minimum coverage probability.
 The worst case, 81\% actual coverage compared to 90\% nominal coverage, occurs when $N=50, \gamma = 0.6, \rho = 0.5$.
 This problem stems from the fact that traditional interval for the valid estimator systematically under-covers when $N = 50$ or 100, as we see from Table \ref{tab:chooseIVsim_cover_Valid}.
-In spite of this, however, the simulation-based interval works quite well overall in this example.
-At the worst-case parameter values, for example, its median width is only 22\% greater than that of the valid estimator.
+In spite of this, however, the simulation-based interval works well in this example.
+At the worst-case parameter values its median width is only 22\% greater than that of the valid estimator.
 
 \begin{table}[h]
 \footnotesize
@@ -199,7 +199,6 @@ On the whole, the simulation-based intervals constructed using Algorithm \ref{al
 First, in situations where the standard first-order asymptotic theory begins to break down, such as a weak instruments example, the simulation-based intervals can inherit an under-- or over--coverage problem from the valid estimator.
 It may be possible to address this problem by casting the moment selection problem explicitly within a weak identification framework.
 This could be a fruitful extension of the work presented here.
-
 Second, and more importantly, moment selection is not without cost: all of the simulation-based intervals are on average wider than a textbook confidence interval for the valid estimator.
 This raises an important question: why do moment selection at all?
 Wouldn't it be better to simply use the valid estimator and report a traditional confidence interval?
@@ -212,15 +211,12 @@ Algorithm \ref{alg:conf} provides a way to carry out honest inference post-selec
 The simulation results presented above show that it works fairly well in practice. 
 Moreover, although formal moment selection is relatively rare in applied work, \emph{informal} moment selection is extremely common.
 Downward $J$-tests, DHW tests and the like are a standard part of the applied econometrician's toolkit.
-Because it can be employed to construct confidence intervals that account for the effect of such specification tests, Algorithm \ref{alg:conf} can provide a valuable robustness check in empirical work.
+Because it can be employed to construct confidence intervals that account for the effect of such specification tests, Algorithm \ref{alg:conf} can provide a valuable robustness check.
 
-But is there any way to avoid the conservativeness of the simulation-based interval?
-The short answer is no.
-Various impossibility results for post-selection inference, outlined in \cite{LeebPoetscher2005}, imply that conservative intervals are the best we can do if we desire inference with uniform coverage guarantees.
-This does not imply, however, that the intervals presented above are the shortest possible.
-Although the simulation results presented above take $\alpha = \delta = 0.05$, note from Theorem \ref{thm:sim} that \emph{any} values of $\alpha$ and $\delta$ that sum to 0.1 yield an interval with asymptotic coverage probability no less than 90\%.
-Accordingly, as suggested by \cite{ClaeskensHjortbook} and investigated for a more general class of problems by \cite{McCloskey}, one could attempt to \emph{optimize} confidence interval width while maintaining uniform asymptotic coverage by varying $\alpha$ and $\delta$.
+Although various impossibility results for post-selection inference, outlined in \cite{LeebPoetscher2005}, imply that conservative intervals are the best we can do if we desire inference with uniform coverage guarantees, the intervals presented above are the shortest possible.
+Note from Theorem \ref{thm:sim} that \emph{any} values of $\alpha$ and $\delta$ that sum to 0.1 yield an interval with asymptotic coverage probability no less than 90\%.
+Accordingly, as suggested by \cite{ClaeskensHjortbook} and investigated for a more general class of problems by \cite{McCloskey}, one could attempt to \emph{optimize} confidence interval width by varying $\alpha$ and $\delta$.
 The primary obstacle to this idea is computational.
-The simulation-based interval from Algorithm \ref{alg:conf} is quite computationally intensive when the dimension of $\tau$ is large.\footnote{For more discussion of this point, see Section \ref{sec:application}.}
+The simulation-based interval from Algorithm \ref{alg:conf} is quite computationally intensive when the dimension of $\tau$ is large.
 Adding another layer to the optimization procedure only makes things worse.
 Developing clever computational shortcuts to surmount this problem is an interesting topic for future research.
