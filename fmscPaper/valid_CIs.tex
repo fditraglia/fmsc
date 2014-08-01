@@ -15,9 +15,9 @@ As an example, consider the case of moment selection based on the FMSC. Here $\w
 	\label{eq:FMSCindicate}
 	\widehat{\omega}_S = \mathbf{1}\left\{\mbox{FMSC}_n(S) = \min_{S'\in \mathscr{S}} \mbox{FMSC}_n(S')\right\}
 \end{equation}
-To estimate $\varphi_S$, we first substitute consistent estimators of $\Omega$, $K_S$ and $\theta_0$ into $\mbox{FMSC}_S(\tau,M)$, defined in Corollary \ref{cor:FMSClimit}, yielding,
+To estimate $\varphi_S$, first substitute consistent estimators of $\Omega$, $K_S$ and $\theta_0$ into $\mbox{FMSC}_S(\tau,M)$, defined in Corollary \ref{cor:FMSClimit}, yielding,
 \begin{equation}
-	\widehat{\mbox{FMSC}}_S(\tau,M) = \nabla_\theta\mu(\widehat{\theta})'\widehat{K}_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\widehat{\mathcal{B}}(\tau,M) \end{array}\right] + \widehat{\Omega}\right\}\Xi_S'\widehat{K}_S'\nabla_\theta\mu(\widehat{\theta}).
+	\widehat{\mbox{FMSC}}_S(\tau,M) = \nabla_\theta\mu(\widehat{\theta})'\widehat{K}_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\widehat{\mathcal{B}}(\tau,M) \end{array}\right] + \widehat{\Omega}\right\}\Xi_S'\widehat{K}_S'\nabla_\theta\mu(\widehat{\theta})
 \end{equation}
 where
 \begin{equation}
@@ -26,7 +26,7 @@ where
 Combining this with Equation \ref{eq:FMSCindicate},
 \begin{equation}
 \label{eq:omegahat}
-	\widehat{\varphi}_S(\tau,M) = \mathbf{1}\left\{\widehat{\mbox{FMSC}}_S(\tau,M) = \min_{S'\in \mathscr{S}} \widehat{\mbox{FMSC}}_{S'}(\tau,M)\right\}
+	\widehat{\varphi}_S(\tau,M) = \mathbf{1}\left\{\widehat{\mbox{FMSC}}_S(\tau,M) = \min_{S'\in \mathscr{S}} \widehat{\mbox{FMSC}}_{S'}(\tau,M)\right\}.
 \end{equation}
 For GMM-AIC moment selection or selection based on a downward $J$-test, $\varphi_S(\cdot,\cdot)$ may be estimated analogously, following  Theorem \ref{pro:jstat}. 
 
@@ -69,7 +69,7 @@ Then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asy
 
 \subsection{Simulation Study: Valid Confidence Intervals}
 \label{sec:CIsim}
-To evaluate the the performance of Algorithm \ref{alg:conf} in finite-samples, we now revisit the simulation experiments introduced above in Sections \ref{sec:OLSvsIVsim} and \ref{sec:chooseIVsim}.
+To evaluate the the performance of Algorithm \ref{alg:conf} in finite-samples, I now revisit the simulation experiments introduced above in Sections \ref{sec:OLSvsIVsim} and \ref{sec:chooseIVsim}.
 All results in this section are based on 10,000 simulation replications from the appropriate DGP with $\alpha = \delta = 0.05$.
 For more computational details, see Appendix \ref{append:comp}.
 Coverage probabilities and relative widths are all given in percentage points, rounded to the nearest whole percent.
@@ -77,7 +77,7 @@ Coverage probabilities and relative widths are all given in percentage points, r
 Tables \ref{tab:OLSvsIVsim_cover_naiveFMSC} and \ref{tab:chooseIVsim_cover_naiveFMSC} show the problem of ignoring moment selection by presenting the the actual coverage probability of a na\"{i}ve 90\%, post-FMSC confidence interval.
 The na\"{i}ve procedure simply constructs a textbook 90\% interval around the FMSC-selected estimator. 
 As such it completely ignores both moment selection uncertainty, and the possibility that the selected estimator shows an asymptotic bias and is hence incorrectly centered.
-Table \ref{tab:OLSvsIVsim_cover_naiveFMSC} reports results for the OLS versus 2SLS simulation experiment, and Table \ref{tab:chooseIVsim_cover_naiveFMSC} for the choosing instrumental variables simulation experiment.
+Table \ref{tab:OLSvsIVsim_cover_naiveFMSC} reports results for the OLS versus TSLS simulation experiment, and Table \ref{tab:chooseIVsim_cover_naiveFMSC} for the choosing instrumental variables simulation experiment.
 In each case, coverage probabilities can be made practically as close to zero as we like by choosing appropriate parameter values.
 This effect persists even for large sample sizes.
 At the same time, for many values in the parameter space the coverage probabilities are close or even equal to their nominal level.
@@ -97,7 +97,7 @@ This is precisely the lack of uniformity described by \cite{LeebPoetscher2005}, 
 		\input{../SimulationOLSvsIV/Results/coverage_FMSC_naive.tex}
 		\label{tab:OLSvsIVsim_cover_naiveFMSC}
 	\end{subtable}
-	\caption{Coverage probabilities of nominal 90\% CIs for the OLS versus 2SLS simulation experiment from Section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}}
+	\caption{Coverage probabilities of nominal 90\% CIs for the OLS versus TSLS simulation experiment from Section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}}
 \end{table}
 
 
@@ -118,12 +118,12 @@ This is precisely the lack of uniformity described by \cite{LeebPoetscher2005}, 
 	\caption{Coverage probabilities of nominal $90\%$ CIs for the choosing instrumental variables simulation experiment described in Section \ref{sec:chooseIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
 \end{table}
 
-Table \ref{tab:OLSvsIVsim_cover_FMSC} gives the actual coverage probability of the conservative, 90\% post-FMSC confidence interval, constructed according to Algorithm \ref{alg:conf}, for the OLS versus 2SLS example.
+Table \ref{tab:OLSvsIVsim_cover_FMSC} gives the actual coverage probability of the conservative, 90\% post-FMSC confidence interval, constructed according to Algorithm \ref{alg:conf}, for the OLS versus TSLS example.
 As we see from the table, these intervals achieve their nominal minimum coverage probability uniformly over the parameter space for all sample sizes.
 In general, however, they can be quite conservative, particularly for smaller values of $\pi, \rho$ and $N$: coverage probabilities never fall below 94\% and occasionally exceed $99.5\%$.\footnote{Recall that coverage probabilities are given in percentage points, rounded to the nearest whole percent. Thus a value of 100, for example, in fact means $\geq 99.5$.}
 Some conservatism is inevitable given the nature of the two-step procedure, which takes \emph{worst-case} lower and upper bounds over a collection of intervals.
-In this example, however, the real culprit is the 2SLS estimator itself.
-Table \ref{tab:OLSvsIVsim_cover_TSLS} presents coverage probabilities for a nominal 90\% confidence interval for the 2SLS estimator.
+In this example, however, the real culprit is the TSLS estimator itself.
+Table \ref{tab:OLSvsIVsim_cover_TSLS} presents coverage probabilities for a nominal 90\% confidence interval for the TSLS estimator.
 Although this estimator is correctly specified and is not subject to moment selection uncertainty, so that the textbook asymptotic theory applies, coverage probabilities are far above their nominal level for smaller values of $\pi$ even if $N$ is fairly large, a manifestation of the weak instrument problem.
 This additional source of conservatism is inherited by the two-step post-FMSC intervals.
 Results for the minimum-AMSE moment average estimator, given in Table \ref{tab:OLSvsIVsim_cover_AVG}, are broadly similar.
@@ -144,14 +144,14 @@ If anything, the minimum-AMSE intervals a bit more conserative than the the post
 		\input{../SimulationOLSvsIV/Results/coverage_AVG_correct.tex}
 		\label{tab:OLSvsIVsim_cover_AVG}
 	\end{subtable}
-	\caption{Coverage probabilities of simulation-based conservative $90\%$ CIs for the OLS versus 2SLS simulation experiment from Section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
+	\caption{Coverage probabilities of simulation-based conservative $90\%$ CIs for the OLS versus TSLS simulation experiment from Section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
 \end{table}
 
 The worry, of course, is not conservatism as such but the attendent increase in confidence interval width.
-Accordingly, Tables \ref{tab:OLSvsIVsim_width_FMSC} and \ref{tab:OLSvsIVsim_width_AVG} compare the median width of the simulation-based, two-step post-FMSC and minimum-AMSE intervals to that of the 2SLS estimator in the OLS versus 2SLS simulation experiment from section \ref{sec:OLSvsIVsim}.
-A value of 25, for example indicates that the simulation-based interval is 25\% wider than the corresponding interval for the 2SLS estimator.
-This comparison shows us the inferential cost of carrying out moment selection relative to simply using the correctly-specified 2SLS estimator and calling it a day.
-We see immediately that moment selection is not a free lunch: the averaging and post-selection intervals are indeed wider than those of the 2SLS estimator, sometimes considerably so.
+Accordingly, Tables \ref{tab:OLSvsIVsim_width_FMSC} and \ref{tab:OLSvsIVsim_width_AVG} compare the median width of the simulation-based, two-step post-FMSC and minimum-AMSE intervals to that of the TSLS estimator in the OLS versus TSLS simulation experiment from section \ref{sec:OLSvsIVsim}.
+A value of 25, for example indicates that the simulation-based interval is 25\% wider than the corresponding interval for the TSLS estimator.
+This comparison shows us the inferential cost of carrying out moment selection relative to simply using the correctly-specified TSLS estimator and calling it a day.
+We see immediately that moment selection is not a free lunch: the averaging and post-selection intervals are indeed wider than those of the TSLS estimator, sometimes considerably so.
 Intriguingly, although the minimum-AMSE intervals are generally more conservative than the post-FMSC intervals, they are also considerably shorter for nearly all parameter values.
 \begin{table}[h]
 \footnotesize
@@ -167,11 +167,11 @@ Intriguingly, although the minimum-AMSE intervals are generally more conservativ
 		\input{../SimulationOLSvsIV/Results/width_AVG_correct.tex}
 		\label{tab:OLSvsIVsim_width_AVG}
 	\end{subtable}
-	\caption{Median width of two-step, simulation-based conservative $90\%$ CI relative to that of a traditional 90\% CI for the 2SLS estimator in the OLS versus 2SLS example from section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
+	\caption{Median width of two-step, simulation-based conservative $90\%$ CI relative to that of a traditional 90\% CI for the TSLS estimator in the OLS versus TSLS example from section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
 \end{table}
 
 Turning our attention now to the choosing instrumental variables simulation experiment from section \ref{sec:chooseIVsim}, Table \ref{tab:chooseIVsim_cover_FMSC} gives the coverage probability and Table \ref{tab:chooseIVsim_width_FMSC} the median relative width of the conservative, 90\%, simulation-based, post-FMSC confidence interval.
-In this case, the width calculation is relative to the valid estimator, the 2SLS estimator includes the exogenous instruments $z_1, z_2, z_3$ but excludes the potentially endogenous instrument $w$.
+In this case, the width calculation is relative to the valid estimator, the TSLS estimator includes the exogenous instruments $z_1, z_2, z_3$ but excludes the potentially endogenous instrument $w$.
 In this example, the simulation-based intervals are far less conservative and, for the smallest sample sizes, sometimes fall slightly below their nominal minimum coverage probability.
 The worst case, 81\% actual coverage compared to 90\% nominal coverage, occurs when $N=50, \gamma = 0.6, \rho = 0.5$.
 This problem stems from the fact that traditional interval for the valid estimator systematically under-covers when $N = 50$ or 100, as we see from Table \ref{tab:chooseIVsim_cover_Valid}.
