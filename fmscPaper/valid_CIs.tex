@@ -119,7 +119,7 @@ This is precisely the lack of uniformity described by \cite{LeebPoetscher2005}, 
 \end{table}
 
 Table \ref{tab:OLSvsIVsim_cover_FMSC} gives the actual coverage probability of the conservative, 90\% post-FMSC confidence interval, constructed according to Algorithm \ref{alg:conf}, for the OLS versus TSLS example.
-As we see from the table, these intervals achieve their nominal minimum coverage probability uniformly over the parameter space for all sample sizes.
+As seen from the table, these intervals achieve their nominal minimum coverage probability uniformly over the parameter space for all sample sizes.
 In general, however, they can be quite conservative, particularly for smaller values of $\pi, \rho$ and $N$: coverage probabilities never fall below 94\% and occasionally exceed $99.5\%$.\footnote{Recall that coverage probabilities are given in percentage points, rounded to the nearest whole percent. Thus a value of 100, for example, in fact means $\geq 99.5$.}
 Some conservatism is inevitable given the nature of the two-step procedure, which takes \emph{worst-case} lower and upper bounds over a collection of intervals.
 In this example, however, the real culprit is the TSLS estimator itself.
@@ -128,7 +128,7 @@ Although this estimator is correctly specified and is not subject to moment sele
 This additional source of conservatism is inherited by the two-step post-FMSC intervals.
 Results for the minimum-AMSE moment average estimator, given in Table \ref{tab:OLSvsIVsim_cover_AVG}, are broadly similar.
 Although the two-step intervals continue to achieve their nominal minimum coverage probability for all parameter values, they are quite conservative.
-If anything, the minimum-AMSE intervals a bit more conserative than the the post-FMSC intervals from Table \ref{tab:OLSvsIVsim_cover_TSLS}.
+If anything, the minimum-AMSE intervals are a bit more conserative than the post-FMSC intervals from Table \ref{tab:OLSvsIVsim_cover_TSLS}.
 
 \begin{table}[h]
 \footnotesize
@@ -148,7 +148,7 @@ If anything, the minimum-AMSE intervals a bit more conserative than the the post
 \end{table}
 
 The worry, of course, is not conservatism as such but the attendent increase in confidence interval width.
-Accordingly, Tables \ref{tab:OLSvsIVsim_width_FMSC} and \ref{tab:OLSvsIVsim_width_AVG} compare the median width of the simulation-based, two-step post-FMSC and minimum-AMSE intervals to that of the TSLS estimator in the OLS versus TSLS simulation experiment from section \ref{sec:OLSvsIVsim}.
+Accordingly, Tables \ref{tab:OLSvsIVsim_width_FMSC} and \ref{tab:OLSvsIVsim_width_AVG} compare the median width of the simulation-based, two-step post-FMSC and minimum-AMSE intervals to that of the TSLS estimator.
 A value of 25, for example indicates that the simulation-based interval is 25\% wider than the corresponding interval for the TSLS estimator.
 This comparison shows us the inferential cost of carrying out moment selection relative to simply using the correctly-specified TSLS estimator and calling it a day.
 We see immediately that moment selection is not a free lunch: the averaging and post-selection intervals are indeed wider than those of the TSLS estimator, sometimes considerably so.
@@ -171,12 +171,12 @@ Intriguingly, although the minimum-AMSE intervals are generally more conservativ
 \end{table}
 
 Turning our attention now to the choosing instrumental variables simulation experiment from section \ref{sec:chooseIVsim}, Table \ref{tab:chooseIVsim_cover_FMSC} gives the coverage probability and Table \ref{tab:chooseIVsim_width_FMSC} the median relative width of the conservative, 90\%, simulation-based, post-FMSC confidence interval.
-In this case, the width calculation is relative to the valid estimator, the TSLS estimator includes the exogenous instruments $z_1, z_2, z_3$ but excludes the potentially endogenous instrument $w$.
+In this case, the width calculation is relative to the valid estimator, the TSLS estimator that includes the exogenous instruments $z_1, z_2, z_3$ but excludes the potentially endogenous instrument $w$.
 In this example, the simulation-based intervals are far less conservative and, for the smallest sample sizes, sometimes fall slightly below their nominal minimum coverage probability.
 The worst case, 81\% actual coverage compared to 90\% nominal coverage, occurs when $N=50, \gamma = 0.6, \rho = 0.5$.
 This problem stems from the fact that traditional interval for the valid estimator systematically under-covers when $N = 50$ or 100, as we see from Table \ref{tab:chooseIVsim_cover_Valid}.
 In spite of this, however, the simulation-based interval works quite well overall in this example.
-At the worst-case parameter values, for example, its median with is only 22\% greater than that of the valid estimator.
+At the worst-case parameter values, for example, its median width is only 22\% greater than that of the valid estimator.
 
 \begin{table}[h]
 \footnotesize
@@ -207,7 +207,7 @@ This is a fair point.
 Moment selection is not a panacea and should not be employed mindlessly.
 The primary goal of the the FMSC, however, is \emph{estimation} rather than inference.
 And as shown above, using it can indeed provide a sizeable reduction in estimator RMSE relative to the valid estimator.
-Once the decision to carry out moment selection has been taken, however, we cannot simply ignore this fact and report the usual confidence intervals.
+Once the decision to carry out moment selection has been taken, however, one cannot simply ignore this fact and report the usual confidence intervals.
 Algorithm \ref{alg:conf} provides a way to carry out honest inference post-selection and construct confidence intervals for non-standard estimators such as the minimum-AMSE averaging estimator from Section \ref{sec:momentavgexample}.
 The simulation results presented above show that it works fairly well in practice. 
 Moreover, although formal moment selection is relatively rare in applied work, \emph{informal} moment selection is extremely common.
@@ -216,9 +216,9 @@ Because it can be employed to construct confidence intervals that account for th
 
 But is there any way to avoid the conservativeness of the simulation-based interval?
 The short answer is no.
-Various impossibility results for post-selection inference, outlined in \cite{LeebPoetscher2005}, imply that conservative intervals are the best we require inference with uniform coverage guarantees.
+Various impossibility results for post-selection inference, outlined in \cite{LeebPoetscher2005}, imply that conservative intervals are the best we can do if we desire inference with uniform coverage guarantees.
 This does not imply, however, that the intervals presented above are the shortest possible.
-Although the simulation results presented above take $\alpha = \delta = 0.05$, notice from Theorem \ref{thm:sim} that \emph{any} values of $\alpha$ and $\delta$ that sum to 0.1 yield an interval with asymptotic coverage probability no less than 90\%.
+Although the simulation results presented above take $\alpha = \delta = 0.05$, note from Theorem \ref{thm:sim} that \emph{any} values of $\alpha$ and $\delta$ that sum to 0.1 yield an interval with asymptotic coverage probability no less than 90\%.
 Accordingly, as suggested by \cite{ClaeskensHjortbook} and investigated for a more general class of problems by \cite{McCloskey}, one could attempt to \emph{optimize} confidence interval width while maintaining uniform asymptotic coverage by varying $\alpha$ and $\delta$.
 The primary obstacle to this idea is computational.
 The simulation-based interval from Algorithm \ref{alg:conf} is quite computationally intensive when the dimension of $\tau$ is large.\footnote{For more discussion of this point, see Section \ref{sec:application}.}

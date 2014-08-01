@@ -14,7 +14,7 @@ In this section, I revisit the instrument selection exercise given in Table 2 of
 First, based on the FMSC methodology, which instruments should we choose if our target parameter is $\beta_3$, the effect of malaria transmission on per capita income?
 Does the selected instrument set change if our target parameter is $\beta_2$, the effect of institutions?
 Second, are the results robust to the effects of instrument selection on inference?
-All results are calculated by 2SLS using the formulas from Section \ref{sec:chooseIVFMSC} and the variables described in Table \ref{tab:desc}, with ln\emph{gdpc} as the outcome  variable and \emph{rule} and \emph{malfal} as measures of institutions and malaria transmission.
+All results are calculated by TSLS using the formulas from Section \ref{sec:chooseIVFMSC} and the variables described in Table \ref{tab:desc}, with ln\emph{gdpc} as the outcome  variable and \emph{rule} and \emph{malfal} as measures of institutions and malaria transmission.
 
 
 \begin{table}[!tbp]
@@ -47,7 +47,7 @@ Based on the arguments given by \cite{Acemoglu} and \cite{Sachs}, I proceed unde
 Rather than selecting over all 128 possible instrument sets, I consider eight specifications formed from the four instrument blocks defined by \cite{Carstensen2006}.
 The baseline block contains ln\emph{mort}, \emph{maleco} and a constant; the climate block contains \emph{frost}, \emph{humid}, and \emph{latitude}; the Europe block contains \emph{eurfrac} and \emph{engfrac}; and the openness block contains \emph{coast} and \emph{trade}. 
 Full descriptions of these variables appear in Table \ref{tab:desc}.
-Table \ref{tab:fullresults} lists the eight instrument sets considered here, along with 2SLS estimates and traditional 95\% confidence intervals for all eight instrument sets.\footnote{The results presented in Table \ref{tab:fullresults} are virtually identical to those of \cite{Carstensen2006}. The slight discrepancy in the results for the baseline instrument set, Panel 1, comes from the fact that \cite{Carstensen2006} include an additional observation for this specification: Vietnam. Because the climate, Europe and openness instruments are missing for this country, I exclude it in the interest of consistency.}
+Table \ref{tab:fullresults} lists the eight instrument sets considered here, along with TSLS estimates and traditional 95\% confidence intervals for each.\footnote{The results presented in Table \ref{tab:fullresults} are virtually identical to those of \cite{Carstensen2006}. The slight discrepancy in the results for the baseline instrument set, Panel 1, comes from the fact that \cite{Carstensen2006} include an additional observation for this specification: Vietnam. Because the climate, Europe and openness instruments are missing for this country, I exclude it in the interest of consistency.}
 
 
 \begin{table}[h]
