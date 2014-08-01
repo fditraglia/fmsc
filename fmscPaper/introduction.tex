@@ -64,13 +64,9 @@ For these reasons, the fact that the FMSC is conservative rather than consistent
 
 Because it studies inference post-moment selection, this paper relates to a vast literature on ``pre-test'' and post-selection inference.
 \citet{LeebPoetscher2005, LeebPoetscher2009} give a theoretical overview of the consequences of model selection for subsequent inference, while \cite{Demetrescu} illustrate them in a simulation study. 
-
-\todo[inline]{Cite the various pre-test and IV papers here: \cite{Berkowitz}, \cite{Guggenberger2010}, \cite{Guggenberger2012}, \cite{GuggenbergerKumar}}
-The approach adopted here, 
-\todo[inline]{Might want to mention the Leeb and Poetscher stuff here.}
-
 There are several proposals to construct valid confidence intervals post-model selection, including \cite{Kabaila1998}, \cite{HjortClaeskens} and \cite{KabailaLeeb2006}. 
-To my knowledge, however, this is the first paper to treat the problem in general for post-moment selection and moment average estimators.
+To my knowledge, however, this is the first paper to treat the problem in general for post-moment selection and moment average estimators in the presence of mis-specification.\footnote{Some related results appear in \cite{Berkowitz}, \cite{Guggenberger2010}, \cite{Guggenberger2012}, and \cite{GuggenbergerKumar}.}
+While I developed the simulation-based, two-stage confidence interval procedure described below by analogy to \cite{ClaeskensHjortbook}, \cite{Leeb} kindly pointed out that similar constructions have appear in \cite{Loh1985}, \cite{Berger1994}, and \cite{Silvapulle1996}. More recently, \cite{McCloskey} takes a similar approach to study a class of non-standard testing problems.
 
 The idea of treating post-moment selection estimators as a special case example of moment averaging, is adapted from the frequentist model average estimators of \cite{HjortClaeskens}.
 Two other papers that consider weighting estimators based on different moment conditions are \cite{Xiao} and \cite{ChenChavezLinton}.
@@ -78,10 +74,12 @@ Whereas these papers combine estimators based on valid moment conditions to achi
 A similar idea underlies the combined moments (CM) estimator of \cite{Judge2007}, who emphasize that incorporating the information from an incorrect specification could lead to favorable bias-variance tradeoff. 
 Their proposal uses a Cressie-Read divergence measure to combine the information from competing moment specifications, for example OLS versus two-stage least squares (2SLS), yielding a data-driven compromise estimator. Unlike the FMSC, however, the CM estimator is not targeted to a particular research goal and does not explicitly aim to minimize AMSE.
 
-\todo[inline]{Important limitation: do not consider weak identification. Topic for future work. Sim results partially address this.}
+An important limitation of the results presented here is that they are based upon the assumption of strong identification and a fixed number of moment conditions.
+I do not, for example, consider weak-- or many--instrument asymptotics.
+Extending the idea behind the FMSC to a more general framework that allows for weak identification and a growing number of moment conditions is a challenging and important topic that I leave for future research.
 
 The remainder of the paper is organized as follows.
-Section \ref{sec:asymp} describes the local mis-specification framework and gives the main limiting results used later in the paper. 
-Section \ref{sec:FMSC} derives FMSC as an asymptotically unbiased estimator of AMSE, presents specialized results for 2SLS, and examines their performance in a Monte Carlo experiment. 
+Section \ref{sec:asymp} describes the local mis-specification framework, introduces the two running examples, OLS versus TSLS and choosing instruments, and gives the main limiting results used later in the paper. 
+Section \ref{sec:FMSC} derives FMSC as an asymptotically unbiased estimator of AMSE, presents specialized results for the two running examples, and examines their performance in a Monte Carlo experiment. 
 Section \ref{sec:avg} describes a simulation-based procedure to construct valid confidence intervals for moment average estimators and examines its performance in a Monte Carlo experiment. Section \ref{sec:application} presents the empirical application and Section \ref{sec:conclude} concludes.
 Proofs and computational details appear in the Appendix.
