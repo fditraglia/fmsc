@@ -14,10 +14,10 @@ When this is not the case, it remains possible to use the AMSE framework to carr
 Continuing under the local mis-specification assumption, I show how the framework employed in the derivation of the FMSC can be used to address the important problem of inference post-moment selection.
 I treat post-selection estimators as a special case of moment averaging: combining estimators based on different moment sets with data-dependent weights.
 By deriving the limiting distribution of this class of estimators in general, I propose a simulation-based procedure for constructing valid confidence intervals. 
-This technique can be applied to a variety of moment averaging and post-selection estimators including the FMSC. 
+This technique can be applied to a variety of formal moment averaging and post-selection estimators, such as the FMSC, as well as pre-test estimators based on the $J$- and Durbin-Hausman-Wu (DHW) statistics.
 
 While the methods described here apply to any model estimated by GMM, subject to standard regularity conditions, I focus on two simple but empirically relevant examples: choosing between ordinary least squares (OLS) and two-stage least squares (TSLS) estimators, and selecting instruments in linear instrumental variables (IV) models. 
-In the OLS versus TSLS example the FMSC takes a particularly intuitive and transparent form, providing a novel justification for the Durbin-Hausman-Wu (DHW) test, and leading to a novel ``minimum-AMSE'' estimator that optimally combines the information contained in the OLS and TSLS estimators.
+In the OLS versus TSLS example the FMSC takes a particularly intuitive and transparent form, providing a novel justification for the DHW test, and leading to a novel ``minimum-AMSE'' estimator that optimally combines the information contained in the OLS and TSLS estimators.
 In simulation studies for both examples, the FMSC and related procedures perform well relative to alternatives from the literature. 
 I conclude with an empirical application from development economics, exploring the effect of instrument selection on the estimated relationship between malaria transmission and income.
 
@@ -34,18 +34,20 @@ This idea begins with \cite{Andrews1999}, who proposes a family of consistent mo
 More recently, \cite{Liao} proposes a shrinkage procedure for simultaneous GMM moment selection and estimation. 
 Given a set of correctly specified moment conditions that identifies the model, this method consistently chooses all valid conditions from a second set of potentially mis-specified conditions.
 In contrast to these proposals, which examine only the validity of the moment conditions under consideration, the FMSC balances validity against relevance to minimize AMSE.
-Although \cite{HallPeixe2003} and \cite{ChengLiao} do consider relevance, they first consistently eliminate any invalid moment conditions and examine the relevance of only those that remain.
-Unlike the FMSC, which trades bias against variance, these papers consider relevance only as a means of eliminating ``redundant'' moment conditions, after first eliminating any invalid ones.
-
-
-
-Moreover, the FMSC is not a single criterion but rather a \emph{method} for constructing application-specific criteria.
+Although \cite{HallPeixe2003} and \cite{ChengLiao} do consider relevance, these procedures aim to avoid including redundant instruments after consistently eliminating invalid ones.
+Unlike the FMSC, they do not allow for the intentional inclusion of a slightly invalid but highly relevant instrument to reduce AMSE. 
+Moreover, in constrast to all of these proposals, the FMSC is an application-specific moment selection criterion.
 Consider, for example, a simple dynamic panel model. If your target parameter is a long-run effect while mine is a contemporaneous effect, there is no reason to suppose a priori that we should use the same moment conditions in estimation, even if we share the same dataset.
-The FMSC explicitly takes this difference of research goals into account, inlike other moment selection criteria from the literature.
+The FMSC explicitly takes this difference of research goals into account, unlike other moment selection criteria from the literature.
 
-FMSC is conservative, like AIC, not consistent, like BIC. 
-But isn't consistency a good idea? 
-It depends on what you're trying to do.
+Like Akaike's Information Criterion (AIC), the FMSC is a conservative rather than consistent selection procedure.
+As such, unlike the consistent criteria mentioned above, it is random \emph{even in the limit}.
+This may sound disconcerting.
+Although consistency is a crucial minimal property in many settings, the situation is far more complex for model and moment selection.
+The problem is that consistent and conservative selection procedures have different strengths, but these strengths cannot be combined \cite{Yang2005}.
+Which should be preferred depends on the application one has in mind.
+
+
 No such thing as selection that is always best and always beats others.
 FMSC is intended for a particular setting.
 Two kinds of assumptions etc.
@@ -54,16 +56,9 @@ In this setting, as we see from simulations, the gains can be very large.
 Even if you may not be in this setting, conservative criteria have better worst-case performance and the FMSC is no exception.
 Consistent criteria have, in general, unbounded minimax risk.
 Cite \cite{LeebPoetscher2008}.
+No way to share the strengths of conservative and consistent criteria \cite{Yang2005}.
 Also, need to use conservative selection to get an accurate picture of effects of selection on inference.
 
-\todo[inline]{Cite \cite{ChengLiao} here. Similar to Hall and Peixi but Lasso-based.}
-The only other proposal from the literature to consider both validity and relevance in moment selection is a suggestion by \cite{HallPeixe2003} to combine their canonical correlations information criterion (CCIC) -- a relevance criterion that seeks to avoid including redundant instruments -- with Andrews' GMM moment selection criteria. 
-This procedure, however, merely seeks to avoid including redundant instruments after eliminating invalid ones: it does not allow for the intentional inclusion of a slightly invalid but highly relevant instrument to reduce MSE. 
-
-\todo[inline]{Need some mention of the fact that FMSC is conservative rather tha consistent. Briefly mention why this is a good thing: consistent selection leads to bad risk properties, and we want to do inference.}
-
-
-\todo[inline]{Update preceding to make it clear what this criterion is for, and mention the examples used.}
 
 \todo[inline]{Make sure to stress the contributions. Moment selection better targeted at empirical practice. Novel justification for DHW test, novel estimator that combines OLS and 2SLS. General framework for inference that accounts for moment selection, including various Hausman and J pre-tests}
 
