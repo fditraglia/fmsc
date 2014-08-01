@@ -1,7 +1,7 @@
 %!TEX root = main.tex
 \subsection{FMSC for Instrument Selection Example}
 \label{sec:chooseIVFMSC}
-As explained above, the OLS versus 2SLS example can be viewed as a special case of the more general instrument selection problem from Section \ref{sec:chooseIVlowlevel}.
+As explained above, the OLS versus TSLS example can be viewed as a special case of the more general instrument selection problem from Section \ref{sec:chooseIVlowlevel}.
 To apply the FMSC to this problem, we simply need to specialize Equation \ref{eq:fmsc}.
 Recall that $Z_1$ is the matrix containing the $p$ instruments known to be exogenous, $Z_2$ is the matrix containing the $q$ potentially endogenous instruments and $Z = (Z_1, Z_2)$.
 To simplify the notation in this section, let
@@ -24,7 +24,7 @@ Similarly,
 $$-\widehat{K}_S = n\left(X'Z \Xi_S' \widetilde{W}_S \Xi_S Z' X\right)^{-1}X' Z \Xi_S' \widetilde{W}_S$$
 is the natural consistent estimator of $-K_S$ in this setting.\footnote{The negative sign is squared in the FMSC expression and hence disappears. We write it here only to be consistent with the notation of Theorem \ref{thm:normality}.}
 Since $\Xi_S$ is known, the only remaining quantities from Equation \ref{eq:fmsc} are $\widehat{\boldsymbol{\tau}}$, $\widehat{\Psi}$ and $\widehat{\Omega}$. 
-To proceed further, we first specialize Theorem \ref{thm:tau} as follows.
+The following result specializes Theorem \ref{thm:tau} to the present example.
 \begin{thm}
 Let $\widehat{\boldsymbol{\tau}} = n^{-1/2} Z_2' ( \mathbf{y} - X\widehat{\beta}_v)$ where $\widehat{\beta}_v$ is as defined in Equation \ref{eq:betav}. Under Assumption \ref{assump:chooseIV} we have
 $\widehat{\boldsymbol{\tau}} \rightarrow_d \boldsymbol{\tau} + \Psi M$
@@ -35,16 +35,16 @@ where $M$ is defined in Theorem \ref{thm:chooseIV},
 \end{eqnarray*}
 $W_v$ is the probability limit of the weighting matrix from Equation \ref{eq:betav}, $I_q$ is the $q\times q$ identity matrix, $\Xi_1$ is defined in Equation \ref{eq:xi12},  and $Q$ is defined in Assumption \ref{assump:chooseIV}.
 \end{thm}
-Using the preceding result, we construct the asymptotically unbiased estimator $\widehat{\tau}\widehat{\tau}' - \widehat{\Psi}\widehat{\Omega} \widehat{\Psi}'$ of $\tau\tau'$ from
+Using the preceding result, I construct the asymptotically unbiased estimator $\widehat{\tau}\widehat{\tau}' - \widehat{\Psi}\widehat{\Omega} \widehat{\Psi}'$ of $\tau\tau'$ from
 	$$\widehat{\Psi} = \left[ \begin{array}
 		{cc}
 		-n^{-1}Z_2'X \left(-\widehat{K}_v\right) & I_q
 	\end{array}\right], \quad -\widehat{K}_v = n\left(X'Z_1 \widetilde{W}_v Z_1' X\right)^{-1}X'Z_1 \widetilde{W}_v$$
 
-All that remains before we can substitute into Equation \ref{eq:fmsc} is to estimate $\Omega$. 
+All that remains before substituting values into Equation \ref{eq:fmsc} is to estimate $\Omega$. 
 There are many possible ways to proceed, depending on the problem at hand and the assumptions one is willing to make. 
-In the simulation and empirical examples discussed below we examine the 2SLS estimator, that is $\widetilde{W}_S = (\Xi_S Z'Z\Xi_S)^{-1}$, and estimate $\Omega$ as follows. 
-For all specifications \emph{except} the valid estimator $\widehat{\beta}_v$, we employ the centered, heteroscedasticity-consistent estimator
+In the simulation and empirical examples discussed below I examine the TSLS estimator, that is $\widetilde{W}_S = (\Xi_S Z'Z\Xi_S)^{-1}$, and estimate $\Omega$ as follows. 
+For all specifications \emph{except} the valid estimator $\widehat{\beta}_v$, I employ the centered, heteroscedasticity-consistent estimator
 \begin{equation}
 	\widehat{\Omega}_S = \frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_S)^2\mathbf{z}_{iS} \mathbf{z}_{iS}'  - \left(\frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_S)\mathbf{z}_{iS}   \right)\left(\frac{1}{n}\sum_{i=1}^n  u_i(\widehat{\beta}_S)\mathbf{z}_{iS}'  \right)
 \end{equation}
@@ -53,7 +53,7 @@ Centering allows moment functions to have non-zero means.
 While the local mis-specification framework implies that these means tend to zero in the limit, they are non-zero for any fixed sample size. 
 Centering accounts for this fact, and thus provides added robustness. 
 Since the valid estimator $\widehat{\beta}_v$ has no asymptotic bias, the AMSE of any target parameter based on this estimator equals its asymptotic variance. 
-Accordingly, we use 
+Accordingly, I use 
 \begin{equation}
 	\widetilde{\Omega}_{11}= n^{-1}\sum_{i=1}^n u_i(\widehat{\beta}_v)^2\mathbf{z}_{1i}\mathbf{z}_{1i}'
 \end{equation}
