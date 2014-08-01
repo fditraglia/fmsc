@@ -2,7 +2,7 @@
 \subsection{Example: Choosing Instrumental Variables}
 \label{sec:chooseIVlowlevel}
 The preceding example was quite specific, but it a sense it amounted to a problem of instrument selection: if $x$ is exogenous, it is clearly ``its own best instrument.'' 
-Viewed from this perspective, the FMSC amounted to trading off endogeneity against instrument strength. We now consider instrument selection \emph{in general} for linear GMM estimators in an iid setting. 
+Viewed from this perspective, the FMSC amounted to trading off endogeneity against instrument strength. I now consider instrument selection \emph{in general} for linear GMM estimators in an iid setting. 
 Consider the following model:
 \begin{eqnarray}
     y_i &=& \mathbf{x}_i' \beta +  \epsilon_i\\
@@ -51,7 +51,7 @@ The following low-level conditions are sufficient for the asymptotic normality o
 \end{assump}
 
 The preceding conditions are similar to although more general than those contained in Assumption \ref{assump:OLSvsIV}. 
-Although we no longer assume homoskedasticity, for simplicity we retain the assumption that the triangular array is iid in each row. 
+Although I no longer assume homoskedasticity, for simplicity I retain the assumption that the triangular array is iid in each row. 
 
 \begin{thm}[Choosing IVs Limit Distribution]
 \label{thm:chooseIV} Suppose that $\widetilde{W}_S \rightarrow_p W_S >0$. Then, under Assumption \ref{assump:chooseIV}

@@ -1,10 +1,10 @@
 %!TEX root = main.tex
-\subsection{Example: OLS versus 2SLS}
+\subsection{Example: OLS versus TSLS}
 \label{sec:OLSvsIVlowlevel}
-The simplest interesting application of the FMSC is choosing between ordinary least squares (OLS) and two-stage least squares (2SLS) estimators of the effect $\beta$ of a single endogenous regressor $x$ on an outcome of interest $y$. 
-To keep the presentation transparent, we will work within an iid, homoskedastic setting. 
+The simplest interesting application of the FMSC is choosing between ordinary least squares (OLS) and two-stage least squares (TSLS) estimators of the effect $\beta$ of a single endogenous regressor $x$ on an outcome of interest $y$. 
+To keep the presentation transparent, I work within an iid, homoskedastic setting. 
 Neither of these restrictions, however, is necessary. 
-Without loss of generality we may assume that there are no exogenous regressors, or equivalently that they have been ``projected out of the system'' so that the data generating process is given by
+Without loss of generality assume that there are no exogenous regressors, or equivalently that they have been ``projected out of the system'' so that the data generating process is given by
     \begin{eqnarray}
 			y_{i} &=& \beta x_{i}  + \epsilon_{i}\\
 	x_{i} &=& \mathbf{z}_{i}' \boldsymbol{\pi} + v_{i}
@@ -12,27 +12,27 @@ Without loss of generality we may assume that there are no exogenous regressors,
 where $\beta$ and $\boldsymbol{\pi}$ are unknown constants, $\mathbf{z}_i$ is a vector of exogenous and relevant instruments, $x_i$ is the endogenous regressor, $y_i$ is the outcome of interest, and $\epsilon_i, v_i$ are unobservable error terms. 
 All random variables in this system are mean zero, or equivalently all constant terms have been projected out. 
 Stacking observations in the usual way, let 
-$\mathbf{z}' = (z_{1}, \hdots, z_{n})$, $Z' = (\mathbf{z}_{1}, \hdots, \mathbf{z}_{n})$, $\mathbf{x}' = (x_{1}, \hdots, x_{n})$ and so on. The two estimators under consideration are the OLS estimator $\widehat{\beta}_{OLS}$ and the 2SLS estimator $\widetilde{\beta}_{2SLS}$
+$\mathbf{z}' = (z_{1}, \hdots, z_{n})$, $Z' = (\mathbf{z}_{1}, \hdots, \mathbf{z}_{n})$, $\mathbf{x}' = (x_{1}, \hdots, x_{n})$ and so on. The two estimators under consideration are $\widehat{\beta}_{OLS}$ and $\widetilde{\beta}_{TSLS}$, given by
   \begin{eqnarray} 
   \label{eq:OLS}
 		\widehat{\beta}_{OLS} &=& \left(\mathbf{x}'\mathbf{x}\right)^{-1}\mathbf{x}'\mathbf{y}\\
-	\label{eq:2SLS}
-		\widetilde{\beta}_{2SLS} &=& \left(\mathbf{x}'P_Z\mathbf{x}\right)^{-1}\mathbf{x}'P_Z\mathbf{y}
+	\label{eq:TSLS}
+		\widetilde{\beta}_{TSLS} &=& \left(\mathbf{x}'P_Z\mathbf{x}\right)^{-1}\mathbf{x}'P_Z\mathbf{y}
 	\end{eqnarray}
 where $P_Z = Z(Z'Z)^{-1}Z'$. 
-But why should we even \emph{consider} using OLS if $x$ is endogenous and we have valid instruments at our disposal? 
-The answer is simple: 2SLS is a high variance estimator. 
-Depending on the degree of endogeneity present in $x$ and the strength of the instruments, $\widehat{\beta}_{OLS}$ could easily have the lower mean-squared error of the two estimators.\footnote{Because the moments of the 2SLS estimator only exist up to the order of overidentificiation \citep{Phillips1980} this statement should be understood to refer to ``trimmed'' mean-squared error when the number of instruments is two or fewer.} 
-We can embed this intuition within the local mis-specification framework as follows
+But why should we ever \emph{consider} using OLS if $x$ is endogenous and we have valid instruments at our disposal? 
+The answer is simple: TSLS is a high variance estimator. 
+Depending on the degree of endogeneity present in $x$ and the strength of the instruments, $\widehat{\beta}_{OLS}$ could easily have the lower mean-squared error of the two estimators.\footnote{Because the moments of the TSLS estimator only exist up to the order of overidentificiation \citep{Phillips1980} this statement should be understood to refer to ``trimmed'' mean-squared error when the number of instruments is two or fewer. See, e.g.\ \cite{Hansen2013}.} 
+The appropriate version of the local mis-specification assumption for this example is as follows
   \begin{equation}
-     E \left[\begin{array}{c} \mathbf{z}_{ni} \epsilon_{ni} \\ x_{ni} \epsilon_{ni} \end{array}\right] = \left[\begin{array}{c} \mathbf{0} \\ \tau/\sqrt{n} \end{array}\right].
+     E \left[\begin{array}{c} \mathbf{z}_{ni} \epsilon_{ni} \\ x_{ni} \epsilon_{ni} \end{array}\right] = \left[\begin{array}{c} \mathbf{0} \\ \tau/\sqrt{n} \end{array}\right]
   \end{equation}
 where $\mathbf{0}$ is a vector of zeros, and $\tau$ is an unknown constant that encodes the endogeneity of $\tau$. 
-In this setting, there is only a single moment condition in the $h$--block: $E[x_{ni}\epsilon_{ni}] = \tau/\sqrt{n}$. 
-The question is not whether we should use this moment condition \emph{in addition} to the 2SLS moment conditions written above it, but rather whether we should use it \emph{instead} of them.
-The following simple low-level conditions are sufficient for the asymptotic normality of the OLS and 2SLS estimators in this example.
+In this setting, there is only a single moment condition in the $h$--block, namely $E[x_{ni}\epsilon_{ni}] = \tau/\sqrt{n}$. 
+The question is not whether we should use this moment condition \emph{in addition} to the TSLS moment conditions written above it, but rather whether we should use it \emph{instead} of them.
+The following simple low-level conditions are sufficient for the asymptotic normality of the OLS and TSLS estimators in this example.
 
-\begin{assump}[OLS versus 2SLS]
+\begin{assump}[OLS versus TSLS]
 \label{assump:OLSvsIV}
 	Let $\{(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})\colon 1\leq i \leq n, n = 1, 2, \hdots\}$ be a triangular array of random variables such that
 	\begin{enumerate}[(a)]
@@ -49,13 +49,13 @@ Parts (a), (b) and (d) correspond to the local mis-specification assumption, par
 Part (e) is the homoskedasticity assumption: an \emph{asymptotic} restriction on the joint distribution of $v_{ni}$, $\epsilon_{ni}$, and $\mathbf{z}_{ni}$. 
 This condition holds automatically, given the other asssumptions, if $(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})$ are jointly normal, as in our simulation experiment described below. 
 
-\begin{thm}[OLS and 2SLS Limit Distributions]
+\begin{thm}[OLS and TSLS Limit Distributions]
 	\label{thm:OLSvsIV} Under Assumption \ref{assump:OLSvsIV},
 	$$
 \left[
 \begin{array}{c}
   \sqrt{n}(\widehat{\beta}_{OLS} - \beta) \\
-  \sqrt{n}(\widetilde{\beta}_{2SLS} - \beta)
+  \sqrt{n}(\widetilde{\beta}_{TSLS} - \beta)
 \end{array}
 \right] \overset{d}{\rightarrow}
 N\left(
@@ -74,6 +74,6 @@ $$
 where $\sigma_x^2 = \gamma^2 + \sigma_v^2$, $\gamma^2 = \boldsymbol{\pi}'Q \boldsymbol{\pi}$, and $Q$, $ \sigma_\epsilon^2$, and $\sigma_v^2$ are defined in Assumption \ref{assump:OLSvsIV}.
 \end{thm}
 
-We see from the preceding result that the variance of the OLS estimator is always strictly lower than that of the 2SLS estimator since $\sigma^2_\epsilon/\sigma_x^2 = \sigma^2_\epsilon/(\gamma^2 + \sigma_v^2)$. 
+We see from the preceding result that the variance of the OLS estimator is always strictly lower than that of the TSLS estimator since $\sigma^2_\epsilon/\sigma_x^2 = \sigma^2_\epsilon/(\gamma^2 + \sigma_v^2)$. 
 Unless $\tau = 0$, however, OLS shows an asymptotic bias. 
-In contrast, the 2SLS estimator is asymptotically unbiased regardless of the value of $\tau$.  
+In contrast, the TSLS estimator is asymptotically unbiased regardless of the value of $\tau$.  

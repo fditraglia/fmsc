@@ -18,7 +18,7 @@ Let $\{Z_{ni}\colon 1\leq i \leq n, n =1, 2, \hdots\}$ be a triangular array of 
 \end{assump}
 For any fixed sample size $n$, the expectation of $h$ evaluated at the true parameter value value $\theta_0$ depends on the unknown constant vector $\tau$. 
 Unless all components of $\tau$ are zero, some of the moment conditions contained in $h$ are mis-specified. In the limit however, this mis-specification vanishes, as $\tau/\sqrt{n}$ converges to zero. 
-Uniform integrability combined with weak convergence implies convergence of expectations, so that $E[g(Z_i, \theta_0)]=0$ and $E[h(Z_i, \theta_0)]=0$. Because the limiting random vectors $Z_i$ are identically distributed, we suppress the $i$ subscript and simply write $Z$ to denote their common marginal law, e.g.\ $E[h(Z,\theta_0)]=0$. 
+Uniform integrability combined with weak convergence implies convergence of expectations, so that $E[g(Z_i, \theta_0)]=0$ and $E[h(Z_i, \theta_0)]=0$. Because the limiting random vectors $Z_i$ are identically distributed, I suppress the $i$ subscript and simply write $Z$ to denote their common marginal law, e.g.\ $E[h(Z,\theta_0)]=0$. 
 It is important to note that local mis-specification is \emph{not} intended as a literal description of real-world datasets: it is merely a device that gives asymptotic bias-variance trade-off that mimics the finite-sample intuition. 
 
 \subsection{Candidate GMM Estimators}
@@ -30,9 +30,10 @@ Let $|S|$ denote the number of moment conditions used and suppose that $|S|>r$ s
 Let $\Xi_S$ be the $|S| \times(p +q)$ \emph{moment selection matrix} corresponding to $S$. That is, $\Xi_S$ is a matrix of ones and zeros arranged such that $\Xi_S f_n(\theta)$ contains only the sample moment conditions used to estimate $\widehat{\theta}_S$. 
 Thus, the GMM estimator of $\theta$ based on moment set $S$ is given by 
 $$\widehat{\theta}_S = \underset{\theta \in \Theta}{\mbox{arg min}}\; \left[\Xi_S f_n(\theta)\right]' \widetilde{W}_S \; \left[ \Xi_S f_n(\theta)\right].$$
-where $\widetilde{W}_S$ is an $|S|\times |S|$, positive semi-definite weight matrix. Note that we place no restrictions on $S$ other than $|S| >r$ so that the GMM estimate is well-defined. 
+where $\widetilde{W}_S$ is an $|S|\times |S|$, positive semi-definite weight matrix.
+There are no restrictions placed on $S$ other than the requirement that $|S| >r$ so the GMM estimate is well-defined. 
 In particular, $S$ may \emph{exclude} some or all of the valid moment conditions contained in $g$.
-While this may seem strange, it allows us to accomodate a wider range of examples, including choosing between least squares and instrumental variables estimators.
+While this may seem strange, it accomodates a wider range of examples, including choosing between OLS and TSLS estimators.
 
 To consider the limit distribution of $\widehat{\theta}_S$, we require some further notation. 
 First define the derivative matrices
@@ -105,8 +106,8 @@ In the notation of the present paper this corresponds to having no moment condit
 When it does fail, the selected GMM estimator may no longer be consistent for $\theta_0$. 
 
 A different approach to identification is to assume that there is a minimal set of at least $r$ moment conditions \emph{known} to be correctly specified.
-This is the approach we follow here, as do \cite{Liao} and \cite{ChengLiao}. 
-With the exception of a short digression in Section \ref{subsec:digress}, we maintain the following assumption throughout.
+This is the approach I follow here, as do \cite{Liao} and \cite{ChengLiao}. 
+With the exception of a short digression in Section \ref{subsec:digress}, I maintain the following assumption throughout.
 
 \begin{assump}[FMSC Identification Condition] 
 \label{assump:Identification}
@@ -116,7 +117,6 @@ We call this the ``valid estimator'' and assume that it is identified, i.e.\ tha
 \end{assump}
 
 Assumption \ref{assump:Identification} and Theorem \ref{thm:normality} immediately imply that the valid estimator shows no asymptotic bias. 
-For convenience, we state its limit distribution in the following Corollary: 
 \begin{cor}[Limit Distribution of Valid Estimator]
 	\label{cor:valid}
 	Let $S_{v}$ include only the moment conditions contained in $g$. 
@@ -128,8 +128,8 @@ For convenience, we state its limit distribution in the following Corollary:
 Both Assumptions \ref{assump:Andrews} and \ref{assump:Identification} are strong, and neither fully nests the other. 
 Which should be preferred is both a matter of taste and of the particular application one has in mind.
 In the context of the present paper, Assumption \ref{assump:Identification} is meant to represent the following situation.
-The $g$--block of moment conditions contains the ``baseline'' assumptions that an empirical researcher would be prepared to defend in a seminar while the $h$--block contains a set of stronger, more controversial assumptions.
-These stronger assumptions are not wildly implausible -- otherwise there would be no reason to entertain them -- but they are at least somewhat dubious.
+The $g$--block of moment conditions contains the ``baseline'' assumptions that an empirical researcher would be prepared to defend in a seminar while the $h$--block contains a set of stronger, more controversial ``suspect'' assumptions.
+Thes suspect are not wildly implausible -- otherwise it would be strange to entertain them -- but they are at least somewhat dubious.
 More than likely, they are not exactly true.
 In the FMSC framework, moment selection is carried out \emph{conditional} on the baseline assumptions: we use the $g$--block to help us decide whether to include any of the moment conditions contained in the $h$--block. 
 But why would we ever consider using controversial assumptions? 
@@ -137,4 +137,4 @@ The FMSC is designed for settings in which the $h$--block is expected to contain
 The idea is that, if we knew the $h$--block was correctly specified, we would expect a large gain in efficiency by including it in estimation. 
 This motivates the idea of trading off the variance reduction from including $h$ against the potential increase in bias. 
 Not all applications have the structure, but many do.
-We now consider two simple, empirically relevant examples.
+I now consider two simple, empirically relevant examples.
