@@ -44,7 +44,7 @@ Using the preceding result, I construct the asymptotically unbiased estimator $\
 All that remains before substituting values into Equation \ref{eq:fmsc} is to estimate $\Omega$. 
 There are many possible ways to proceed, depending on the problem at hand and the assumptions one is willing to make. 
 In the simulation and empirical examples discussed below I examine the TSLS estimator, that is $\widetilde{W}_S = (\Xi_S Z'Z\Xi_S)^{-1}$, and estimate $\Omega$ as follows. 
-For all specifications \emph{except} the valid estimator $\widehat{\beta}_v$, I employ the centered, heteroscedasticity-consistent estimator
+For all specifications \emph{except} the valid estimator $\widehat{\beta}_v$, I employ the centered, heteroskedasticity-consistent estimator
 \begin{equation}
 	\widehat{\Omega}_S = \frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_S)^2\mathbf{z}_{iS} \mathbf{z}_{iS}'  - \left(\frac{1}{n}\sum_{i=1}^n u_i(\widehat{\beta}_S)\mathbf{z}_{iS}   \right)\left(\frac{1}{n}\sum_{i=1}^n  u_i(\widehat{\beta}_S)\mathbf{z}_{iS}'  \right)
 \end{equation}

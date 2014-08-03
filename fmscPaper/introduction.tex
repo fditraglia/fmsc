@@ -1,6 +1,6 @@
 %!TEX root = main.tex
 \section{Introduction}
-In finite samples, the addition of an slightly endogenous but highly relevant instrument can yield a substantial improvement, reducing estimator variance by far more than bias is increased. 
+In finite samples, the addition of a slightly endogenous but highly relevant instrument can yield a substantial improvement, reducing estimator variance by far more than bias is increased. 
 Building on this observation, I propose a novel moment selection criterion for generalized method of moments (GMM) estimation: the focused moment selection criterion (FMSC). 
 Rather than selecting only valid moment conditions, the FMSC chooses from a set of potentially mis-specified moment conditions to yield the minimum asymptotic mean squared error (AMSE) GMM estimator of a user-specified target parameter.
 To ensure a meaningful bias-variance tradeoff in the limit, I employ a drifting asymptotic framework in which mis-specification, while present for any fixed sample size, vanishes asymptotically.
@@ -32,7 +32,7 @@ Although developed independently of the FIC, \cite{Schorfheide2005} uses a simil
 Mine is by no means the first paper to consider GMM asymptotics under locally mis-specified moment conditions, an idea that dates at least as far back as \cite{Newey1985}.
 The idea of using this framework for AMSE-based moment selection, however, is new to the literature. 
 
-The FMSC differs substantially from existing criteria for moment selection under mis-specification whose primary aim is to consistently select all correctly specified moment conditions while eliminating all invalid ones.
+The FMSC differs substantially from existing criteria for moment selection under mis-specification whose primary aim is to select all correctly specified moment conditions while eliminating all invalid ones with probability approaching one in the limit.
 This idea begins with \cite{Andrews1999}, who proposes a family of consistent moment selection criteria for GMM by adding an appropriate penalty term to the $J$-statistic. 
 \cite{AndrewsLu} extend this work to allow simultaneous GMM moment and model selection, while \cite{HongPrestonShum} derive analogous results for generalized empirical likelihood.
 More recently, \cite{Liao} proposes a shrinkage procedure for simultaneous GMM moment selection and estimation. 
@@ -49,14 +49,14 @@ Consider, for example, a simple dynamic panel model. If your target parameter is
 The FMSC explicitly takes this difference of research goals into account, unlike other moment selection criteria from the literature.
 
 Like Akaike's Information Criterion (AIC), the FMSC is a conservative rather than consistent selection procedure.
-As such, unlike the consistent moment selection criteria mdescribed above, it is random \emph{even in the limit}.
+As such, unlike the consistent moment selection criteria described above, it is random \emph{even in the limit}.
 This may sound disconcerting.
 Although consistency is a crucial minimal property in many settings, the situation is more complex for model and moment selection.
 The problem is that consistent and conservative selection procedures have different strengths, but these strengths cannot be combined \cite{Yang2005}.
 Which should be preferred depends on the application one has in mind.
 If our goal is to evaulate the validity of an assumption from economic theory, consistent selection is the natural choice, as it will choose only correctly specified moment conditions with probability approaching one in the limit.
 The motivation behind the FMSC, however, is to minimize estimator risk.
-With this aim in mind, consistent selection criteria suffer from a serious defect: in general, unlike conservative criteria, they exhibit \emph{unbounded} minimax risk \cite{LeebPoetscher2008}.
+With this aim in mind, consistent selection criteria suffer from a serious defect: in general, unlike conservative criteria, they exhibit \emph{unbounded} minimax risk \citep{LeebPoetscher2008}.
 Moreover, as discussed in more detail below, the asymptotics of consistent selection paint a seriously misleading picture of the effects of moment selection on inference.
 For these reasons, the fact that the FMSC is conservative rather than consistent is a ``feature'' rather than a ``bug.''
 

@@ -22,7 +22,7 @@ $\mathbf{z}' = (z_{1}, \hdots, z_{n})$, $Z' = (\mathbf{z}_{1}, \hdots, \mathbf{z
 where $P_Z = Z(Z'Z)^{-1}Z'$. 
 But why should we ever \emph{consider} using OLS if $x$ is endogenous and we have valid instruments at our disposal? 
 The answer is simple: TSLS is a high variance estimator. 
-Depending on the degree of endogeneity present in $x$ and the strength of the instruments, $\widehat{\beta}_{OLS}$ could easily have the lower mean-squared error of the two estimators.\footnote{Because the moments of the TSLS estimator only exist up to the order of overidentificiation \citep{Phillips1980} this statement should be understood to refer to ``trimmed'' mean-squared error when the number of instruments is two or fewer. See, e.g.\ \cite{Hansen2013}.} 
+Depending on the degree of endogeneity present in $x$ and the strength of the instruments, $\widehat{\beta}_{OLS}$ could easily have the lower mean-squared error of the two estimators.\footnote{Because the moments of the TSLS estimator only exist up to the order of overidentificiation \citep{Phillips1980} this statement should be understood to refer to ``trimmed'' mean-squared error when the number of instruments is two or fewer. See, e.g., \cite{Hansen2013}.} 
 The appropriate version of the local mis-specification assumption for this example is as follows
   \begin{equation}
      E \left[\begin{array}{c} \mathbf{z}_{ni} \epsilon_{ni} \\ x_{ni} \epsilon_{ni} \end{array}\right] = \left[\begin{array}{c} \mathbf{0} \\ \tau/\sqrt{n} \end{array}\right]

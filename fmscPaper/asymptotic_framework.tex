@@ -16,7 +16,7 @@ Let $\{Z_{ni}\colon 1\leq i \leq n, n =1, 2, \hdots\}$ be a triangular array of 
 		\item $Z_{ni} \rightarrow_dZ_i$, where the $Z_i$ are identically distributed.
 	\end{enumerate}
 \end{assump}
-For any fixed sample size $n$, the expectation of $h$ evaluated at the true parameter value value $\theta_0$ depends on the unknown constant vector $\tau$. 
+For any fixed sample size $n$, the expectation of $h$ evaluated at the true parameter value $\theta_0$ depends on the unknown constant vector $\tau$. 
 Unless all components of $\tau$ are zero, some of the moment conditions contained in $h$ are mis-specified. In the limit however, this mis-specification vanishes, as $\tau/\sqrt{n}$ converges to zero. 
 Uniform integrability combined with weak convergence implies convergence of expectations, so that $E[g(Z_i, \theta_0)]=0$ and $E[h(Z_i, \theta_0)]=0$. Because the limiting random vectors $Z_i$ are identically distributed, I suppress the $i$ subscript and simply write $Z$ to denote their common marginal law, e.g.\ $E[h(Z,\theta_0)]=0$. 
 It is important to note that local mis-specification is \emph{not} intended as a literal description of real-world datasets: it is merely a device that gives asymptotic bias-variance trade-off that mimics the finite-sample intuition. 
@@ -33,7 +33,7 @@ $$\widehat{\theta}_S = \underset{\theta \in \Theta}{\mbox{arg min}}\; \left[\Xi_
 where $\widetilde{W}_S$ is an $|S|\times |S|$, positive semi-definite weight matrix.
 There are no restrictions placed on $S$ other than the requirement that $|S| >r$ so the GMM estimate is well-defined. 
 In particular, $S$ may \emph{exclude} some or all of the valid moment conditions contained in $g$.
-While this may seem strange, it accomodates a wider range of examples, including choosing between OLS and TSLS estimators.
+While this may seem strange, it accommodates a wider range of examples, including choosing between OLS and TSLS estimators.
 
 To consider the limit distribution of $\widehat{\theta}_S$, we require some further notation. 
 First define the derivative matrices

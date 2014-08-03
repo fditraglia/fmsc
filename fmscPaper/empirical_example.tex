@@ -47,7 +47,7 @@ Based on the arguments given by \cite{Acemoglu} and \cite{Sachs}, I proceed unde
 Rather than selecting over all 128 possible instrument sets, I consider eight specifications formed from the four instrument blocks defined by \cite{Carstensen2006}.
 The baseline block contains ln\emph{mort}, \emph{maleco} and a constant; the climate block contains \emph{frost}, \emph{humid}, and \emph{latitude}; the Europe block contains \emph{eurfrac} and \emph{engfrac}; and the openness block contains \emph{coast} and \emph{trade}. 
 Full descriptions of these variables appear in Table \ref{tab:desc}.
-Table \ref{tab:fullresults} lists the eight instrument sets considered here, along with TSLS estimates and traditional 95\% confidence intervals for each.\footnote{The results presented in Table \ref{tab:fullresults} are virtually identical to those of \cite{Carstensen2006}. The slight discrepancy in the results for the baseline instrument set, Panel 1, comes from the fact that \cite{Carstensen2006} include an additional observation for this specification: Vietnam. Because the climate, Europe and openness instruments are missing for this country, I exclude it in the interest of consistency.}
+Table \ref{tab:fullresults} lists the eight instrument sets considered here, along with TSLS estimates and traditional 95\% confidence intervals for each.\footnote{The results presented in Table \ref{tab:fullresults} are virtually identical to those of \cite{Carstensen2006}. The slight discrepancy in the results for the baseline instrument set, Panel 1, comes from the fact that \cite{Carstensen2006} include an additional observation for this specification: Vietnam. Because the Climate, Europe and Openness instrument blocks are missing for this country, I exclude it in the interest of consistency.}
 
 
 \begin{table}[h]
@@ -76,7 +76,7 @@ Thus the FMSC methodology shows that, while helpful for estimating the effect of
 		\label{tab:FMSC_values}
 \end{table}
 
-Table \ref{tab:postFMSC_CIs} presents three alternative post-selection confidence intervals for each of the instrument selection exercises from Table \ref{tab:FMSC_values}: Na\"{i}ve, 1-Step, and 2-step.
+Table \ref{tab:postFMSC_CIs} presents three alternative post-selection confidence intervals for each of the instrument selection exercises from Table \ref{tab:FMSC_values}: Na\"{i}ve, 1-Step, and 2-Step.
 The Na\"{i}ve intervals are standard, nominal 95\% confidence intervals that ignore the effects of instrument selection.
 These are constructed by identifying the selected instrument set from Table \ref{tab:FMSC_values} and simply reporting the corresponding nominal 95\% interval from Table \ref{tab:fullresults} unaltered.
 The 1-Step intervals are simulation-based nominal 95\% intervals constructed using a simplified, and less computationally intensive, version of the procedure given in Algorithm \ref{alg:conf}.

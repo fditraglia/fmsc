@@ -36,7 +36,7 @@ Thus, substituting $\widehat{\tau}$ for $\tau$ will give erroneous results by fa
 The solution is to use a two-stage procedure. 
 First construct a  $100(1-\delta)\%$ confidence region $\mathscr{T}(\widehat{\tau},\delta)$ for $\tau$ using Theorem \ref{thm:tau}. 
 Then, for each $\tau^* \in \mathscr{T}(\widehat{\tau},\delta)$ simulate from the distribution of $\Lambda(\tau^*)$, defined in Corollary \ref{cor:momentavg}, to obtain a \emph{collection} of $(1-\alpha)\times 100\%$ confidence intervals indexed by $\tau^*$. 
-Taking the lower and upper bounds of these yields a \emph{conservative} confidence interval for $\widehat{\mu}$, as defined in defined in Equation \ref{eq:avg}. 
+Taking the lower and upper bounds of these yields a \emph{conservative} confidence interval for $\widehat{\mu}$, as defined in Equation \ref{eq:avg}. 
 This interval has asymptotic coverage probability of \emph{at least} $(1-\alpha-\delta)\times 100\%$.
 The precise algorithm is as follows.
 \begin{alg}[Simulation-based Confidence Interval for $\widehat{\mu}$]
@@ -147,7 +147,7 @@ If anything, the minimum-AMSE intervals are a bit more conserative than the post
 	\caption{Coverage probabilities of simulation-based conservative $90\%$ CIs for the OLS versus TSLS simulation experiment from Section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
 \end{table}
 
-The worry, of course, is not conservatism as such but the attendent increase in confidence interval width.
+The worry, of course, is not conservatism as such but the attendant increase in confidence interval width.
 Accordingly, Tables \ref{tab:OLSvsIVsim_width_FMSC} and \ref{tab:OLSvsIVsim_width_AVG} compare the median width of the simulation-based, two-step post-FMSC and minimum-AMSE intervals to that of the TSLS estimator.
 A value of 25, for example indicates that the simulation-based interval is 25\% wider than the corresponding interval for the TSLS estimator.
 This comparison shows us the inferential cost of carrying out moment selection relative to simply using the correctly-specified TSLS estimator and calling it a day.

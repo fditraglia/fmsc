@@ -15,7 +15,7 @@ Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} gives the follo
 \end{cor}
 This corollary implies that the FMSC is a ``conservative'' rather than ``consistent'' selection procedure.
 While this lack of consistency may sound like serious defect, it is in fact a desirable feature of the FMSC for two reasons.
-First, as discussed above, the goal of the FMSC is not to consistently select the correct moment conditions: it is to choose an estimator with a low finite-sample MSE as approximated by AMSE.
+First, as discussed above, the goal of the FMSC is not to select only correctly specified moment conditions: it is to choose an estimator with a low finite-sample MSE as approximated by AMSE.
 In fact, the goal of consistent selection is very much at odds with that of controlling estimator risk.
 As explained by \cite{Yang2005} and \cite{LeebPoetscher2008}, the worst-case risk of a consistent selection procedure \emph{diverges} with sample size. 
 This fact is readily apparent from the results of the simulation study from Section \ref{sec:chooseIVsim}: the consistent criteria, GMM-BIC and HQ, have the highest worst-case RMSE, while the conservative criteria, FMSC and GMM-AIC, have the lowest.
@@ -25,7 +25,7 @@ For example, Lemma 1.1 of \citet[p.\ 168]{Poetscher1991}, which states that the 
 While it is indeed true for \emph{fixed} parameter values that consistent selection has a negligible effect on inference in large samples, small changes in parameter values can lead to large changes in coverage probabilities. 
 In constrast to those of consistent selection, the asymptotics of conservative selection under local mis-specification provide a far more accurate picture of the distribution of post-selection estimators.
 The point is not that conservative criteria -- such as the FMSC, GMM-AIC and $J$-test at a fixed significance level -- are immune to the effects of selection on inference.
-Rather, it is that conservative criteria can be studied in an asymptotic framework that more accurately represents the effects encountered in finite samples
+Rather, it is that conservative criteria can be studied in an asymptotic framework that more accurately represents the effects encountered in finite samples.
 
 So what exactly are these effects?
 The first is the addition of model selection uncertainty, a source of sampling variation that is not captured by traditional confidence intervals.
