@@ -49,7 +49,7 @@ The FMSC never performs substantially worse than the valid estimator, however, a
 Again, the gains are particularly large for small sample sizes.
 \begin{figure}
 \centering
-	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_baseline.tex}
+	\input{./SimulationChooseIVs/Results/RMSE_coarse_gamma_baseline.tex}
 	\caption{RMSE values for the valid estimator, including only $(z_1, z_2, z_3)$, the full estimator, including $(z_1, z_2, z_3, w)$, and the post-Focused Moment Selection Criterion (FMSC) estimator based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVlowlevel} and \ref{sec:chooseIVFMSC}.}
 	\label{fig:chooseIVsim_RMSEbaseline}
 \end{figure}
@@ -63,7 +63,7 @@ Unlike the FMSC, the downward $J$-test is very badly behaved for small sample si
 For larger sample sizes, the relative performance of the FMSC and the $J$-test is quite similar to what we saw in Figure \ref{fig:OLSvsIV_RMSEvsDHW} for the OLS versus TSLS example: the $J$-test performs best for the smallest values of $\rho$, the FMSC performs best for moderate values, and the two procedures perform similarly for large values.
 \begin{figure}
 \centering
-	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_J.tex}
+	\input{./SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_J.tex}
 	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator and the downward $J$-test estimator with $\alpha = 0.1$ (J90) and $\alpha = 0.05$ (J95) based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVlowlevel} and \ref{sec:chooseIVFMSC}.}
 	\label{fig:chooseIVsim_RMSErelJ}
 \end{figure}
@@ -81,7 +81,7 @@ The consistent criteria, however, have the highest worst-case RMSE.
 In this respect, GMM-BIC is the worst offender.
 \begin{figure}
 \centering
-	\input{../SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_MSC.tex}
+	\input{./SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_MSC.tex}
 	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator and the GMM-BIC, HQ, and AIC estimators based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVlowlevel} and \ref{sec:chooseIVFMSC}.}
 	\label{fig:chooseIVsim_RMSErelMSC}
 \end{figure}

@@ -88,13 +88,13 @@ This is precisely the lack of uniformity described by \cite{LeebPoetscher2005}, 
 \centering
 	\begin{subtable}{0.48\textwidth}
 		\caption{Two-Stage Least Squares}
-		\input{../SimulationOLSvsIV/Results/coverage_TSLS.tex}
+		\input{./SimulationOLSvsIV/Results/coverage_TSLS.tex}
 		\label{tab:OLSvsIVsim_cover_TSLS}
 	\end{subtable}	
 	~
 	\begin{subtable}{0.48\textwidth}
 		\caption{Na\"{i}ve post-FMSC}
-		\input{../SimulationOLSvsIV/Results/coverage_FMSC_naive.tex}
+		\input{./SimulationOLSvsIV/Results/coverage_FMSC_naive.tex}
 		\label{tab:OLSvsIVsim_cover_naiveFMSC}
 	\end{subtable}
 	\caption{Coverage probabilities of nominal 90\% CIs for the OLS versus TSLS simulation experiment from Section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}}
@@ -107,13 +107,13 @@ This is precisely the lack of uniformity described by \cite{LeebPoetscher2005}, 
 	\begin{subtable}{0.48\textwidth}
 		\caption{Valid Estimator}
 		\label{tab:chooseIVsim_cover_Valid}
-		\input{../SimulationChooseIVs/Results/coverage_Valid.tex}
+		\input{./SimulationChooseIVs/Results/coverage_Valid.tex}
 	\end{subtable}	
 	~
 	\begin{subtable}{0.48\textwidth}
 		\caption{Na\"{i}ve post-FMSC}
 		\label{tab:chooseIVsim_cover_naiveFMSC}
-		\input{../SimulationChooseIVs/Results/coverage_FMSC_naive.tex}
+		\input{./SimulationChooseIVs/Results/coverage_FMSC_naive.tex}
 	\end{subtable}
 	\caption{Coverage probabilities of nominal $90\%$ CIs for the choosing instrumental variables simulation experiment described in Section \ref{sec:chooseIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
 \end{table}
@@ -135,13 +135,13 @@ If anything, the minimum-AMSE intervals are a bit more conserative than the post
 \centering
 	\begin{subtable}{0.48\textwidth}
 		\caption{FMSC}
-		\input{../SimulationOLSvsIV/Results/coverage_FMSC_correct.tex}
+		\input{./SimulationOLSvsIV/Results/coverage_FMSC_correct.tex}
 		\label{tab:OLSvsIVsim_cover_FMSC}
 	\end{subtable}	
 	~
 	\begin{subtable}{0.48\textwidth}
 		\caption{AMSE-Averaging Estimator}
-		\input{../SimulationOLSvsIV/Results/coverage_AVG_correct.tex}
+		\input{./SimulationOLSvsIV/Results/coverage_AVG_correct.tex}
 		\label{tab:OLSvsIVsim_cover_AVG}
 	\end{subtable}
 	\caption{Coverage probabilities of simulation-based conservative $90\%$ CIs for the OLS versus TSLS simulation experiment from Section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
@@ -158,13 +158,13 @@ Intriguingly, although the minimum-AMSE intervals are generally more conservativ
 \centering
 	\begin{subtable}{0.48\textwidth}
 		\caption{post-FMSC Estimator}
-		\input{../SimulationOLSvsIV/Results/width_FMSC_correct.tex}
+		\input{./SimulationOLSvsIV/Results/width_FMSC_correct.tex}
 		\label{tab:OLSvsIVsim_width_FMSC}
 	\end{subtable}	
 	~
 	\begin{subtable}{0.48\textwidth}
 		\caption{AMSE-Averaging Estimator}
-		\input{../SimulationOLSvsIV/Results/width_AVG_correct.tex}
+		\input{./SimulationOLSvsIV/Results/width_AVG_correct.tex}
 		\label{tab:OLSvsIVsim_width_AVG}
 	\end{subtable}
 	\caption{Median width of two-step, simulation-based conservative $90\%$ CI relative to that of a traditional 90\% CI for the TSLS estimator in the OLS versus TSLS example from section \ref{sec:OLSvsIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
@@ -184,13 +184,13 @@ At the worst-case parameter values its median width is only 22\% greater than th
 	\begin{subtable}{0.48\textwidth}
 		\caption{Coverage Probability}
 		\label{tab:chooseIVsim_cover_FMSC}
-		\input{../SimulationChooseIVs/Results/coverage_FMSC_2step.tex}
+		\input{./SimulationChooseIVs/Results/coverage_FMSC_2step.tex}
 	\end{subtable}	
 	~
 	\begin{subtable}{0.48\textwidth}
 		\caption{Relative Median Width}
 		\label{tab:chooseIVsim_width_FMSC}
-		\input{../SimulationChooseIVs/Results/width_FMSC_2step.tex}
+		\input{./SimulationChooseIVs/Results/width_FMSC_2step.tex}
 	\end{subtable}
 \caption{Performance of the simulation-based, conservative 90\% post-FMSC confidence interval in the choosing instrumental variables simulation from Section \ref{sec:chooseIVsim}. The left panel gives coverage probabilities, and the right panel gives median widths relative to that of a traditional 90\% interval for the valid estimator. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
 \end{table}
