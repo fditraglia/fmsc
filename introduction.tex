@@ -54,7 +54,7 @@ This may sound disconcerting.
 Although consistency is a crucial minimal property in many settings, the situation is more complex for model and moment selection.
 The problem is that consistent and conservative selection procedures have different strengths, but these strengths cannot be combined \cite{Yang2005}.
 Which should be preferred depends on the application one has in mind.
-If our goal is to evaulate the validity of an assumption from economic theory, consistent selection is the natural choice, as it will choose only correctly specified moment conditions with probability approaching one in the limit.
+If our goal is to evaluate the validity of an assumption from economic theory, consistent selection is the natural choice, as it will choose only correctly specified moment conditions with probability approaching one in the limit.
 The motivation behind the FMSC, however, is to minimize estimator risk.
 With this aim in mind, consistent selection criteria suffer from a serious defect: in general, unlike conservative criteria, they exhibit \emph{unbounded} minimax risk \citep{LeebPoetscher2008}.
 Moreover, as discussed in more detail below, the asymptotics of consistent selection paint a seriously misleading picture of the effects of moment selection on inference.
@@ -64,11 +64,11 @@ Because it studies inference post-moment selection, this paper relates to a vast
 \citet{LeebPoetscher2005, LeebPoetscher2009} give a theoretical overview of the consequences of model selection for subsequent inference, while \cite{Demetrescu} illustrate them in a simulation study. 
 There are several proposals to construct valid confidence intervals post-model selection, including \cite{Kabaila1998}, \cite{HjortClaeskens} and \cite{KabailaLeeb2006}. 
 To my knowledge, however, this is the first paper to treat the problem in general for post-moment selection and moment average estimators in the presence of mis-specification.\footnote{Some related results appear in \cite{Berkowitz}, \cite{Guggenberger2010}, \cite{Guggenberger2012}, and \cite{GuggenbergerKumar}.}
-While I developed the simulation-based, two-stage confidence interval procedure described below by analogy to \cite{ClaeskensHjortbook}, \cite{Leeb} kindly pointed out that similar constructions have appear in \cite{Loh1985}, \cite{Berger1994}, and \cite{Silvapulle1996}. More recently, \cite{McCloskey} takes a similar approach to study a class of non-standard testing problems.
+While I developed the simulation-based, two-stage confidence interval procedure described below by analogy to \cite{ClaeskensHjortbook}, \cite{Leeb} kindly pointed out that similar constructions have appeared in \cite{Loh1985}, \cite{Berger1994}, and \cite{Silvapulle1996}. More recently, \cite{McCloskey} takes a similar approach to study a class of non-standard testing problems.
 
-The idea of treating post-moment selection estimators as a special case example of moment averaging, is adapted from the frequentist model average estimators of \cite{HjortClaeskens}.
+The idea of treating post-moment selection estimators as a special case example of moment averaging is adapted from the frequentist model average estimators of \cite{HjortClaeskens}.
 Two other papers that consider weighting estimators based on different moment conditions are \cite{Xiao} and \cite{ChenChavezLinton}.
-Whereas these papers combine estimators based on valid moment conditions to achieve a minimum variance estimator, however, I combine estimators based on potentially invalid conditions to minimize AMSE. 
+Whereas these papers combine estimators based on valid moment conditions to achieve a minimum variance estimator, I combine estimators based on potentially invalid conditions to minimize AMSE. 
 A similar idea underlies the combined moments (CM) estimator of \cite{Judge2007}, who emphasize that incorporating the information from an incorrect specification could lead to favorable bias-variance tradeoff. 
 Their proposal uses a Cressie-Read divergence measure to combine the information from competing moment specifications, for example OLS versus TSLS, yielding a data-driven compromise estimator. Unlike the FMSC, however, the CM estimator is not targeted to a particular research goal and does not explicitly aim to minimize AMSE.
 
