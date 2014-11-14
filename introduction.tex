@@ -70,6 +70,7 @@ Two other papers that consider weighting estimators based on different moment co
 Whereas these papers combine estimators based on valid moment conditions to achieve a minimum variance estimator, I combine estimators based on potentially invalid conditions to minimize AMSE. 
 A similar idea underlies the combined moments (CM) estimator of \cite{Judge2007}, who emphasize that incorporating the information from an incorrect specification could lead to favorable bias-variance tradeoff. 
 Their proposal uses a Cressie-Read divergence measure to combine the information from competing moment specifications, for example OLS versus TSLS, yielding a data-driven compromise estimator. Unlike the FMSC, however, the CM estimator is not targeted to a particular research goal and does not explicitly aim to minimize AMSE.
+For a different approach to combining OLS and TSLS estimators, similar in spirit to the Stein estimator and developed independently of the work presented here, see \cite{Hansen2014}.
 
 A limitation of the results presented here is that they are based upon the assumption of strong identification and a fixed number of moment conditions.
 To be clear: when I refer to a bias-variance tradeoff below, either in finite samples or asymptotically, I abstract from weak-- and many--instruments considerations.
