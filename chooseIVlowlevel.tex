@@ -22,7 +22,7 @@ In this setting, the FMSC attempts to trade off a small increase in bias from us
 
 To this end, consider a general linear GMM estimator of the form
 $$\widehat{\beta}_S = (X'Z_S \widetilde{W}_S Z_S' X)^{-1}X'Z_S \widetilde{W}_S  Z_S' \mathbf{y}$$
-where $S$ indexes the instruments used in estimation, $Z_S'  = \Xi_S Z'$ is the matrix containing only those instruments included in $S$, $|S|$ is the number of instruments used in estimation and $\widetilde{W}_S$ is an $|S|\times|S|$ positive semi-definite weighting matrix. In this example, the local mis-specification assumption is given by
+where $S$ indexes the instruments used in estimation, $Z_S'  = \Xi_S Z'$ is the matrix containing only those instruments included in $S$, $|S|$ is the number of instruments used in estimation and $\widetilde{W}_S$ is an $|S|\times|S|$ positive definite weighting matrix. In this example, the local mis-specification assumption is given by
 \begin{equation}
   E\left[\begin{array}
     {c}

@@ -99,7 +99,7 @@ A na\"{i}ve approach to this problem would be to substitute another consistent e
 Unfortunately, this approach fails. To understand why, consider the case in which all moment conditions are potentially invalid so that the $g$--block is empty. 
 Letting $\widehat{\theta}_f$ denote the estimator based on the full set of moment conditions in $h$,  $\sqrt{n}h_n(\widehat{\theta}_f) \rightarrow_d\Gamma  \mathcal{N}_q(\tau, \Omega)$ where $\Gamma = \mathbf{I}_q - H \left(H'WH\right)^{-1}H'W$, using an argument similar to that in the proof of Theorem \ref{thm:tau}. 
 The mean, $\Gamma \tau$, of the resulting limit distribution does not equal $\tau$, and because $\Gamma$ has rank $q-r$ we cannot pre-multiply by its inverse to extract an estimate of $\tau$.
-Intuitively, $q-r$ over-identifying restrictions are insufficient to estimate a $q$-vector: $\tau$ is not identified unless we have a minimum of $r$ valid moment conditions. 
+Intuitively, $q-r$ over-identifying restrictions are insufficient to estimate a $q$-vector: $\tau$ cannot be estimated without a minimum of $r$ valid moment conditions. 
 However, the limiting distribution of $\sqrt{n}h_n(\widehat{\theta}_f)$ partially identifies $\tau$ even when we have no valid moment conditions at our disposal. 
 A combination of this information with prior restrictions on the magnitude of the components of $\tau$ allows the use of the FMSC framework to carry out a sensitivity analysis when $r>p$. 
 For example, the worst-case estimate of AMSE over values of $\tau$ in the identified region could still allow certain moment sets to be ruled out.

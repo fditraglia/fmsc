@@ -30,7 +30,7 @@ Let $|S|$ denote the number of moment conditions used and suppose that $|S|>r$ s
 Let $\Xi_S$ be the $|S| \times(p +q)$ \emph{moment selection matrix} corresponding to $S$. That is, $\Xi_S$ is a matrix of ones and zeros arranged such that $\Xi_S f_n(\theta)$ contains only the sample moment conditions used to estimate $\widehat{\theta}_S$. 
 Thus, the GMM estimator of $\theta$ based on moment set $S$ is given by 
 $$\widehat{\theta}_S = \underset{\theta \in \Theta}{\mbox{arg min}}\; \left[\Xi_S f_n(\theta)\right]' \widetilde{W}_S \; \left[ \Xi_S f_n(\theta)\right].$$
-where $\widetilde{W}_S$ is an $|S|\times |S|$, positive semi-definite weight matrix.
+where $\widetilde{W}_S$ is an $|S|\times |S|$, positive definite weight matrix.
 There are no restrictions placed on $S$ other than the requirement that $|S| >r$ so the GMM estimate is well-defined. 
 In particular, $S$ may \emph{exclude} some or all of the valid moment conditions contained in $g$.
 While this may seem strange, it accommodates a wider range of examples, including choosing between OLS and TSLS estimators.
@@ -113,7 +113,7 @@ With the exception of a short digression in Section \ref{subsec:digress}, I main
 \label{assump:Identification}
 Let $\widehat{\theta}_v$ denote the GMM estimator based solely on the moment conditions contained in the $g$--block
 $$\widehat{\theta}_v = \underset{\theta \in \Theta}{\mbox{arg min}}\; g_n(\theta)' \widetilde{W}_{v} \; g_n(\theta)$$
-We call this the ``valid estimator'' and assume that it is identified, i.e.\ that $p\geq r$.
+We call this the ``valid estimator'' and assume that it satisfies all the conditions of Assumption \ref{assump:highlevel}. Note that this implies $p\geq r$.
 \end{assump}
 
 Assumption \ref{assump:Identification} and Theorem \ref{thm:normality} immediately imply that the valid estimator shows no asymptotic bias. 
