@@ -31,8 +31,8 @@ So what exactly are these effects?
 The first is the addition of model selection uncertainty, a source of sampling variation that is not captured by traditional confidence intervals.
 If the data had been slightly different, we would have chosen a different set of moment conditions.
 Accordingly, any confidence interval that \emph{conditions} on the selected moment conditions will be too short.
-The second effect comes from the fact that selection is carried out over \emph{potentially mis-specified} estimators.
-Indeed, the FMSC explicitly sets out to use mis-specified moment conditions when doing so yields a favorable bias-variance tradeoff.
+The second effect comes from the fact that selection is carried out over estimators based on \emph{potentially invalid} moment conditions.
+Indeed, the FMSC explicitly sets out to use such moment conditions when doing so yields a favorable bias-variance tradeoff.
 Even if our goal were to eliminate all mis-specified moment conditions, for example by using a consistent criterion such as the GMM-BIC of \cite{Andrews1999}, in finite-samples we would not always be successful.
 Whenever there is a chance of selecting a mis-specified estimator, either on purpose or by mistake, a standard confidence interval that assumes all moment conditions to be correctly specified will be incorrectly centered.
 

@@ -2,7 +2,7 @@
 \section{Introduction}
 In finite samples, the addition of a slightly endogenous but highly relevant instrument can yield a substantial improvement, reducing estimator variance by far more than bias is increased. 
 Building on this observation, I propose a novel moment selection criterion for generalized method of moments (GMM) estimation: the focused moment selection criterion (FMSC). 
-Rather than selecting only valid moment conditions, the FMSC chooses from a set of potentially mis-specified moment conditions to yield the minimum asymptotic mean squared error (AMSE) GMM estimator of a user-specified target parameter.
+Rather than selecting only valid moment conditions, the FMSC chooses from a set of potentially mis-specified moment conditions based on the asymptotic mean squared error (AMSE) of their associated GMM estimators of a user-specified target parameter.
 To ensure a meaningful bias-variance tradeoff in the limit, I employ a drifting asymptotic framework in which mis-specification, while present for any fixed sample size, vanishes asymptotically.
 In the presence of such \emph{locally mis-specified} moment conditions, GMM remains consistent although, centered and rescaled, its limiting distribution displays an asymptotic bias. Adding an additional mis-specified moment condition introduces a further source of bias while reducing asymptotic variance. 
 The idea behind the FMSC is to trade off these two effects in the limit as an approximation to finite sample behavior.\footnote{When finite-sample mean-squared error (MSE) is undefined or infinite, AMSE comparisons remain meaningful. In this case, one can view AMSE as the limit of a sequence of ``trimmed'' squared error loss functions, as in \cite{Hansen2013}. Trimmed MSE is always well-defined and the trimming fraction can be made asymptotically negligible.}
@@ -32,7 +32,7 @@ Although developed independently of the FIC, \cite{Schorfheide2005} uses a simil
 Mine is by no means the first paper to consider GMM asymptotics under locally mis-specified moment conditions, an idea that dates at least as far back as \cite{Newey1985}.
 The idea of using this framework for AMSE-based moment selection, however, is new to the literature. 
 
-The FMSC differs substantially from existing criteria for moment selection under mis-specification whose primary aim is to select all correctly specified moment conditions while eliminating all invalid ones with probability approaching one in the limit.
+The FMSC differs substantially from existing criteria for moment selection under mis-specification whose primary aim is to select all correctly specified moment conditions while eliminating all invalid ones with probability approaching one in the limit.\footnote{Under the local mis-specification asymptotics considered below, consistent moment selection criteria simply choose \emph{all} available moment conditions. For details, see Theorem \ref{pro:andrews}.}
 This idea begins with \cite{Andrews1999}, who proposes a family of consistent moment selection criteria for GMM by adding an appropriate penalty term to the $J$-statistic. 
 \cite{AndrewsLu} extend this work to allow simultaneous GMM moment and model selection, while \cite{HongPrestonShum} derive analogous results for generalized empirical likelihood.
 More recently, \cite{Liao} proposes a shrinkage procedure for simultaneous GMM moment selection and estimation. 
@@ -48,8 +48,7 @@ Indeed, rather than a single moment selection criterion, the FMSC is really a me
 Consider, for example, a simple dynamic panel model. If your target parameter is a long-run effect while mine is a contemporaneous effect, there is no reason to suppose \emph{a priori} that we should use the same moment conditions in estimation, even if we share the same model and dataset.
 The FMSC explicitly takes this difference of research goals into account, unlike other moment selection criteria from the literature.
 
-Like Akaike's Information Criterion (AIC), the FMSC is a conservative rather than consistent selection procedure.
-As such, unlike the consistent moment selection criteria described above, it is random \emph{even in the limit}.
+Like Akaike's Information Criterion (AIC), the FMSC is a \emph{conservative} rather than consistent selection procedure, which is to say that it remains random even in the limit.	
 This may sound disconcerting.
 Although consistency is a crucial minimal property in many settings, the situation is more complex for model and moment selection.
 The problem is that consistent and conservative selection procedures have different strengths, but these strengths cannot be combined \cite{Yang2005}.
@@ -72,8 +71,9 @@ Whereas these papers combine estimators based on valid moment conditions to achi
 A similar idea underlies the combined moments (CM) estimator of \cite{Judge2007}, who emphasize that incorporating the information from an incorrect specification could lead to favorable bias-variance tradeoff. 
 Their proposal uses a Cressie-Read divergence measure to combine the information from competing moment specifications, for example OLS versus TSLS, yielding a data-driven compromise estimator. Unlike the FMSC, however, the CM estimator is not targeted to a particular research goal and does not explicitly aim to minimize AMSE.
 
-An important limitation of the results presented here is that they are based upon the assumption of strong identification and a fixed number of moment conditions.
-I do not, for example, consider weak-- or many--instrument asymptotics.
+A limitation of the results presented here is that they are based upon the assumption of strong identification and a fixed number of moment conditions.
+To be clear: when I refer to a bias-variance tradeoff below, either in finite samples or asymptotically, I abstract from weak-- and many--instruments considerations.
+In particular, my asymptotics are based on a classical first-order approximation with the addition of locally invalid moment conditions.
 Extending the idea behind the FMSC to a more general framework that allows for weak identification and a growing number of moment conditions is a challenging and important topic that I leave for future research.
 
 The remainder of the paper is organized as follows.
