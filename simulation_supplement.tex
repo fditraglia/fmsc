@@ -1,0 +1,20 @@
+%!TEX root = main.tex
+\section{Supplementary Simulation Results}
+
+\subsection{Canonical Correlations Information Criterion}
+\label{sec:CCIC}
+Because the GMM moment selection criteria suggested by \cite{Andrews1999} consider only instrument exogeneity, not relevance, \cite{HallPeixe2003} suggest combining them with their canonical correlations information criterion (CCIC), which aims to detect and eliminate ``redundant instruments.''
+Including such instruments, which add no information beyond that already contained in the other instruments, can lead to poor finite-sample performance in spite of the fact that the first-order limit distribution is unchanged.
+For the choosing instrumental variables simulation example, presented in Section \ref{sec:chooseIVsim}, the CCIC takes the following simple form
+	\begin{equation}
+	\mbox{CCIC}(S) = n \log\left[1 - R_n^2(S) \right] + h(p + |S|)\kappa_n
+	\end{equation}
+where $R_n^2(S)$ is the first-stage $R^2$ based on instrument set $S$ and $h(p + |S|)\kappa_n$ is a penalty term \citep{Jana2005}. 
+Instruments are chosen to \emph{minimize} this criterion.
+If we define $h(p + |S|) = (p + |S| - r)$, setting $\kappa_n = \log{n}$ gives the CCIC-BIC, while $\kappa_n = 2.01 \log{\log{n}}$ gives the CCIC-HQ and $\kappa_n = 2$ gives the CCIC-AIC.
+By combining the CCIC with an Andrews-type criterion, \cite{HallPeixe2003} propose to first eliminate invalid instruments and then redundant ones.
+A combined GMM-BIC/CCIC-BIC criterion for the simulation example from section \ref{sec:chooseIVsim} uses the valid estimator unless both the GMM-BIC \emph{and} CCIC-BIC select the full estimator.
+Combined HQ and AIC-type procedures can be defined analogously.
+In the simulation design from this paper, however, \emph{each} of these combined criteria gives results that are practically identical to those of the valid estimator.
+This hold true across all parameter values and sample sizes.
+Full simulation results are available upon request.

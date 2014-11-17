@@ -78,24 +78,11 @@ This problem carries over to the GMM-BIC, HQ and AIC: when $N = 50$, the FMSC ha
 As the sample size becomes larger, the classic tradeoff between consistent and conservative selection emerges.
 For the smallest values of $\rho$ the consistent criteria outperform the conservative criteria; for moderate values the situation is reversed.
 The consistent criteria, however, have the highest worst-case RMSE.
-In this respect, GMM-BIC is the worst offender.
+In this respect, GMM-BIC performs worse than GMM-HQ.
+For a discussion of a combined strategy based on the GMM information criteria of \cite{Andrews1999} and the canonical correlations information criteria of \cite{HallPeixe2003}, see Appendix \ref{sec:CCIC}.
 \begin{figure}
 \centering
 	\input{./SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_MSC.tex}
 	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator and the GMM-BIC, HQ, and AIC estimators based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVlowlevel} and \ref{sec:chooseIVFMSC}.}
 	\label{fig:chooseIVsim_RMSErelMSC}
 \end{figure}
-
-Because the Andrews-type criteria consider only instrument exogeneity, not relevance, \cite{HallPeixe2003} suggest combining them with their canonical correlations information criterion (CCIC), which aims to detect and eliminate ``redundant instruments.''
-Including such instruments, which add no information beyond that already contained in the other instruments, can lead to poor finite-sample performance in spite of the fact that the first-order limit distribution is unchanged.
-For the present simulation example, with a single endogenous regressor and no constant term, the CCIC takes the following simple form
-	\begin{equation}
-	\mbox{CCIC}(S) = n \log\left[1 - R_n^2(S) \right] + h(p + |S|)\kappa_n
-	\end{equation}
-where $R_n^2(S)$ is the first-stage $R^2$ based on instrument set $S$ and $h(p + |S|)\kappa_n$ is a penalty term \citep{Jana2005}. 
-Instruments are chosen to \emph{minimize} this criterion.
-When $h(p + |S|) = (p + |S| - r)$, setting $\kappa_n = \log{n}$ gives the CCIC-BIC, while $\kappa_n = 2.01 \log{\log{n}}$ gives the CCIC-HQ and $\kappa_n = 2$ gives the CCIC-AIC.
-By combining the CCIC with an Andrews-type criterion, \cite{HallPeixe2003} propose to first eliminate invalid instruments and then redundant ones.
-A combined GMM-BIC/CCIC-BIC criterion for the present example is to use the valid estimator unless both the GMM-BIC \emph{and} CCIC-BIC select the full estimator.
-Combined HQ and AIC-type procedures can be defined analogously.
-Simulation results for these procedures are available upon request: they are practically identical to those of the valid estimator for all parameter values.
