@@ -102,7 +102,8 @@ There exists a subset $S_{max}$ of at least $r$ moment conditions satisfying:
 
 \cite{AndrewsLu} and \cite{HongPrestonShum} take the same basic approach to identification, with appropriate modifications to allow for simultaneous model and moment selection. 
 An advantage of Assumption \ref{assump:Andrews} is that, under fixed mis-specification, it allows consistent selection of $S_{max}$ without any prior knowledge of \emph{which} moment conditions are correct. 
-In the notation of the present paper this corresponds to having no moment conditions in the $g$ block. As \citet[p.\ 254]{Hallbook} points out, however, the second part of Assumption \ref{assump:Andrews} can fail even in simple settings such as linear instrumental variables estimation. 
+In the notation of the present paper this corresponds to having no moment conditions in the $g$ block. As \citet[p.\ 254]{Hallbook} points out, however, the second part of Assumption \ref{assump:Andrews} can fail even in very simple settings.
+
 When it does fail, the selected GMM estimator may no longer be consistent for $\theta_0$. 
 
 A different approach to identification is to assume that there is a minimal set of at least $r$ moment conditions \emph{known} to be correctly specified.
@@ -126,15 +127,11 @@ Assumption \ref{assump:Identification} and Theorem \ref{thm:normality} immediate
 \end{cor}
 
 Both Assumptions \ref{assump:Andrews} and \ref{assump:Identification} are strong, and neither fully nests the other. 
-Which should be preferred is both a matter of taste and of the particular application one has in mind.
-In the context of the present paper, Assumption \ref{assump:Identification} is meant to represent the following situation.
-The $g$--block of moment conditions contains the ``baseline'' assumptions that an empirical researcher would be prepared to defend in a seminar while the $h$--block contains a set of stronger, more controversial ``suspect'' assumptions.
-These suspect assumptions are not wildly implausible -- otherwise it would be strange to entertain them -- but they are at least somewhat dubious.
-More than likely, they are not exactly true.
-In the FMSC framework, moment selection is carried out \emph{conditional} on the baseline assumptions: we use the $g$--block to help us decide whether to include any of the moment conditions contained in the $h$--block. 
-But why would we ever consider using controversial assumptions? 
+In the context of the present paper, Assumption \ref{assump:Identification} is meant to represent a situation in which an applied research chooses between two groups of assumptions.
+The $g$--block contains the ``baseline'' assumptions while the $h$--block contains a set of stronger, more controversial ``suspect'' assumptions.
 The FMSC is designed for settings in which the $h$--block is expected to contain a substantial amount of information beyond that already contained in the $g$--block. 
 The idea is that, if we knew the $h$--block was correctly specified, we would expect a large gain in efficiency by including it in estimation. 
-This motivates the idea of trading off the variance reduction from including $h$ against the potential increase in bias. 
+This motivates the idea of trading off the variance reduction from including $h$ against the potential increase in bias.
+If the $h$--block assumptions are \emph{nearly correct} we may want to use them in estimation.
 Not all applications have the structure, but many do.
-I now consider two simple, empirically relevant examples.
+Below, I consider two simple but empirically relevant examples: choosing between OLS and TSLS estimators and choosing instrumental variables.
