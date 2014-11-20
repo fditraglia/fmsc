@@ -1,5 +1,6 @@
 %!TEX root = main.tex
-\subsection{Simulation Study: OLS versus TSLS Example}
+\section{Simulation Results}
+\subsection{OLS versus TSLS Example}
 \label{sec:OLSvsIVsim}
 I now examine the performance of the FMSC when used to choose between OLS and TSLS in a simple simulation experiment. 
 All calculations in this section are based on the formulas from Sections \ref{sec:OLSvsIVlowlevel} and \ref{sec:FMSCforOLSvsIV} and 10,000 simulation replications. 
@@ -68,9 +69,14 @@ As $\rho$ increases further, relative to sample size and $\pi$, the three proced
 There is nothing mysterious about this behavior: it is merely a consequence of the fact that DHW95 employs the largest critical value, followed by DHW90, while FMSC employs the smallest.
  
 
+
+Returning to the simulation experiment from Section \ref{sec:OLSvsIVsim}, Figure \ref{fig:OLSvsIV_AVG} compares the finite-sample RMSE of the minimum-AMSE moment average estimator presented in Equations \ref{eq:OLSvsIV_AVG1} and \ref{eq:OLSvsIV_AVG2} to those of the FMSC and DHW pre-test estimators from Figure \ref{fig:OLSvsIV_RMSEvsDHW}.
+The performance of the minimum-AMSE moment average estimator is strong: it provides the lowest worst-case RMSE and improves uniformly on the FMSC for all but the largest values of $\rho$.
+While a complete examination of minimum-AMSE moment averaging is beyond the scope of the present paper, these results suggest that it could prove extremely useful in practice.
+
 \begin{figure}
 \centering
-	\input{./SimulationOLSvsIV/Results/RMSE_coarse_pi_relative_DHW.tex}
-	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator and Durbin-Hausman-Wu pre-test estimators with $\alpha = 0.1$ (DWH90) and $\alpha = 0.05$ (DHW95) based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas described in Sections \ref{sec:OLSvsIVlowlevel} and \ref{sec:FMSCforOLSvsIV}.}
-	\label{fig:OLSvsIV_RMSEvsDHW}
+	\input{./SimulationOLSvsIV/Results/RMSE_coarse_pi_relative_all.tex}
+	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator, Durbin-Hausman-Wu pre-test estimators with $\alpha = 0.1$ (DWH90) and $\alpha = 0.05$ (DHW95), and the minmum-AMSE averaging estimator, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas described in Sections \ref{sec:OLSvsIVlowlevel}, \ref{sec:FMSCforOLSvsIV}, and \ref{sec:momentavgexample}.}
+	\label{fig:OLSvsIV_AVG}
 \end{figure}
