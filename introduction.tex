@@ -71,6 +71,7 @@ Whereas these papers combine estimators based on valid moment conditions to achi
 A similar idea underlies the combined moments (CM) estimator of \cite{Judge2007}, who emphasize that incorporating the information from an incorrect specification could lead to favorable bias-variance tradeoff. 
 Their proposal uses a Cressie-Read divergence measure to combine the information from competing moment specifications, for example OLS versus TSLS, yielding a data-driven compromise estimator. Unlike the FMSC, however, the CM estimator is not targeted to a particular research goal and does not explicitly aim to minimize AMSE.
 For a different approach to combining OLS and TSLS estimators, similar in spirit to the Stein estimator and developed independently of the work presented here, see \cite{Hansen2014}.
+\todo[inline]{Also cite Xu's paper and try to explain how what I'm doing is different! May also want to say something about MSE vs other risk functions and existence etc.}
 
 A limitation of the results presented here is that they are based upon the assumption of strong identification and a fixed number of moment conditions.
 To be clear: when I refer to a bias-variance tradeoff below, either in finite samples or asymptotically, I abstract from weak-- and many--instruments considerations.
@@ -78,7 +79,9 @@ In particular, my asymptotics are based on a classical first-order approximation
 Extending the idea behind the FMSC to a more general framework that allows for weak identification and a growing number of moment conditions is a challenging and important topic that I leave for future research.
 
 The remainder of the paper is organized as follows.
-Section \ref{sec:asymp} describes the local mis-specification framework, introduces the two running examples, OLS versus TSLS and choosing instruments, and gives the main limiting results used later in the paper. 
-Section \ref{sec:FMSC} derives FMSC as an asymptotically unbiased estimator of AMSE, presents specialized results for the two running examples, and examines their performance in a Monte Carlo experiment. 
-Section \ref{sec:avg} describes a simulation-based procedure to construct valid confidence intervals for moment average estimators and examines its performance in a Monte Carlo experiment. Section \ref{sec:application} presents the empirical application and Section \ref{sec:conclude} concludes.
-Proofs and computational details appear in the Appendix.
+Section \ref{sec:asymp} describes the local mis-specification framework and introduces the basic assumptions used later in the paper.
+Section \ref{sec:FMSC} derives FMSC as an asymptotically unbiased estimator of AMSE and presents specialized results for the two running examples: OLS versus TSLS and choosing instrumental variables.
+Section \ref{sec:avg} presents results for moment average estimators and shows how they can be used to construct valid confidence intervals post-moment selection.
+Section \ref{sec:simulations} examines the performance of the FMSC and related procedures in a simulation study, and Section \ref{sec:application} presents an empirical example.
+Section \ref{sec:conclude} concludes.
+Proofs and computational details appear in the Appendix along with some supplementary simulation results and discussion.
