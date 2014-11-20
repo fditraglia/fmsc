@@ -4,7 +4,7 @@
 Although it is a special case of moment averaging, moment selection is a somewhat crude procedure: it gives full weight to the estimator that minimizes the moment selection criterion no matter how close its nearest competitor lies. 
 Accordingly, when competing moment sets have similar criterion values in the population, sampling variation can be \emph{magnified} in the selected estimator. 
 Thus, it may be possible to achieve better performance by using smooth weights rather than discrete selection.
-In this section, I briefly explore this possibility.
+\todo[inline]{In some settings can construct averaging estimator that uniformly dominates ``conservative'' estimator (Xu and Bruce) but I'm working in a setting with a scalar target parameter.}
 
 They key question is: how should one construct the weights?
 One possibility is to adapt a proposal from \cite{Burnhametal}, who suggest averaging a collection of competing maximum likelihood estimator with weights of the form 
@@ -17,62 +17,28 @@ where MSC$(\cdot)$ is a moment selection criterion and the parameter $\kappa \ge
 As $\kappa \rightarrow 0$ the weights become more uniform; as $\kappa \rightarrow \infty$ they approach the moment selection procedure given by minimizing the corresponding criterion. 
 Setting $\kappa = 1$ gives the \cite{Burnhametal} weights.
 
-Some preliminary simulation results, reported in an earlier draft of this paper, suggest that exponential weighting can indeed provide MSE improvements, so long as we choose an appropriate value for $\kappa$.
-And there's the rub: while it is easy to experiment with different values of $\kappa$ in a simulation study, it is far from clear how to set about formulating a rule to choose $\kappa$ in practice. In at least some applications, however, there is a compelling alternative to the exponential weighting scheme: one can instead derive weights \emph{analytically} to minimize AMSE within the FMSC framework.\footnote{I thank Bruce Hansen for suggesting this idea.} 
+Some preliminary simulation results, reported in an earlier draft of this paper, suggest that exponential weighting can indeed provide MSE improvements.
+The difficulty, however, lies in choosing an appropriate value for $\kappa$.
+In at least some applications, however, there is a compelling alternative to the exponential weighting scheme: one can instead derive weights \emph{analytically} to minimize AMSE within the FMSC framework.\footnote{I thank Bruce Hansen for suggesting this idea.} 
 To illustrate this, I revisit the OLS versus TSLS example from Sections \ref{sec:OLSvsIVlowlevel} and \ref{sec:FMSCforOLSvsIV}. 
-
-To begin, define an arbitrary weighted average of the OLS and TSLS estimators from Equations \ref{eq:OLS} and \ref{eq:TSLS} by  
+Let $\widetilde{\beta}(\omega)$ be a convex combination of the OLS and TSLS estimators from Equations \ref{eq:OLS} and \ref{eq:TSLS}, namely  
 \begin{equation}
 	\widetilde{\beta}(\omega) = \omega \widehat{\beta}_{OLS} + (1 - \omega) \widetilde{\beta}_{TSLS}
 \end{equation}
 where $\omega \in [0,1]$ is the weight given to the OLS estimator.
-Since the weights sum to one, we have
-\begin{eqnarray*}
-	\sqrt{n}\left[\widehat{\beta}(\omega) - \beta \right] &=& \left[ \begin{array}
-	{cc} \omega & (1 - \omega)
-\end{array}\right] \left[
-\begin{array}{c}
-  \sqrt{n}(\widehat{\beta}_{OLS} - \beta) \\
-  \sqrt{n}(\widetilde{\beta}_{TSLS} - \beta)
-\end{array}
-\right]\\
-& \overset{d}{\rightarrow} & N\left(\mbox{Bias}\left[\widehat{\beta}(\omega)\right], Var\left[\widehat{\beta}(\omega)\right] \right)
-\end{eqnarray*}
-by Theorem \ref{thm:OLSvsIV}, where
-\begin{eqnarray*}
-	\mbox{Bias}\left[\widehat{\beta}(\omega)\right] &=& \omega \left( \frac{\tau}{\sigma_x^2} \right) \\
-	 Var\left[\widehat{\beta}(\omega)\right] &=&  \frac{\sigma_\epsilon^2}{\sigma_x^2} \left[(2\omega^2 - \omega)\left( \frac{\sigma_x^2}{\gamma^2} - 1\right)+\frac{\sigma_x^2}{\gamma^2} \right]
-\end{eqnarray*}
-and accordingly
-\begin{equation}
-	\mbox{AMSE}\left[\widehat{\beta}(\omega) \right] =  \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (\omega^2 - 2 \omega)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left( \frac{\sigma_x^2}{\gamma^2} - 1\right) + \frac{\sigma_\epsilon^2}{\gamma^2}.
-\end{equation}
-The preceding expression is a globally convex function of $\omega$. 
-Taking the first order condition and rearranging, we find that the unique global minimizer is
-\begin{equation}
-\label{eq:AMSEoptimal}
-	\omega^* = \underset{\omega \in [0,1]}{\mbox{arg min}}\; \mbox{AMSE}\left[\widehat{\beta}(\omega) \right] 
-	=\left[1 + \frac{\tau^2/\sigma_x^4}{\sigma_\epsilon^2(1/\gamma^2 - 1/\sigma_x^2)}\right]^{-1}
-\end{equation}
-In other words,
-$$\omega^* = \left[1 + \frac{\mbox{ABIAS(OLS)}^2}{\mbox{AVAR(TSLS)}-\mbox{AVAR(OLS)}} \right]^{-1}$$
+\begin{thm}
+	\label{thm:OLSvsIVavg} 
+	Under the conditions of Theorem \ref{thm:OLSvsIV}, the AMSE of the weighted-average estimator $\sqrt{n}\left[\widehat{\beta}(\omega) - \beta \right]$ is minimized over $\omega \in [0,1]$ by taking $\omega = \omega^*$ where
+	$$ \omega^* = \left[1 + \frac{\tau^2/\sigma_x^4}{\sigma_\epsilon^2(1/\gamma^2 - 1/\sigma_x^2)}\right]^{-1} = \left[1 + \frac{\mbox{ABIAS(OLS)}^2}{\mbox{AVAR(TSLS)}-\mbox{AVAR(OLS)}} \right]^{-1}.$$
+\end{thm}
 
-This expression has several important consequences. 
+The preceding result has several important consequences. 
 First, since the variance of the TSLS estimator is always strictly greater than that of the OLS estimator, the optimal value of $\omega$ \emph{cannot} be zero. 
 No matter how strong the endogeneity of $x$ as measured by $\tau$, we should always give some weight to the OLS estimator. 
 Second, when $\tau = 0$ the optimal value of $\omega$ is one. If $x$ is exogenous, OLS is strictly preferable to TSLS. 
-Third, the optimal weights depend on the strength of the instruments $\mathbf{z}$ as measured by $\gamma$. 
-For a given value of $\tau\neq 0$, the stronger the instruments, the less weight we should give to OLS.
-
-Equation \ref{eq:AMSEoptimal} gives the AMSE-optimal weighted average of the OLS and TSLS estimators. 
-To actually use the corresponding moment average estimator in practice, however, we need to estimate the unknowns.
-As discussed above in Section \ref{sec:FMSCforOLSvsIV} the usual estimators of $\sigma_x^2$ and $\gamma$ remain consistent under local mis-specification, and the residuals from the TSLS estimator provide a robust estimator of $\sigma_\epsilon^2$.
-As before, the problem is estimating $\tau^2$.
-A natural idea is to substitute the asymptotically unbiased estimator that arises from Theorem \ref{thm:tauOLSvsIV}, namely $\widehat{\tau}^2 - \widehat{V}$. 
-The problem with this approach is that, while $\tau^2$ is always greater than or equal to zero as is $\widehat{\tau}^2$, the difference $\widehat{\tau}^2 - \widehat{V}$ could be negative, yielding a \emph{negative} estimate of $\mbox{ABIAS(OLS)}^2$.
-To solve this problem, I borrow an idea from the literature on shrinkage estimation and use the \emph{positive part} instead, namely $\max\{0, \; \widehat{\tau}^2 - \widehat{V}\}$, as in the positive-part James-Stein estimator.
-This ensures that the estimator of $\omega^*$ lies inside the interval $[0,1]$.
-Accordingly, I define 
+Third, the optimal weights depend on the strength of the instruments $\mathbf{z}$ as measured by $\gamma$.
+All else equal, the stronger the instruments, the less weight we should give to OLS.
+To operationalize the AMSE-optimal averaging estimator suggested from Theorem \ref{thm:OLSvsIVavg}, I define the plug-in estimator 
 \begin{equation}
 	\widehat{\beta}^*_{AVG} = \widehat{\omega}^* \widehat{\beta}_{OLS} + (1 - \widehat{\omega}^*)\widetilde{\beta}_{TSLS}
 	\label{eq:OLSvsIV_AVG1}
@@ -82,14 +48,6 @@ where
 \widehat{\omega }^* = \left[1 + \frac{\max \left\{0, \; \left(\widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2  \left(\widehat{\sigma}_x^2/\widehat{\gamma}^2 - 1 \right) \right)/\;\widehat{\sigma}_x^4 \right\}}{\widehat{\sigma}_\epsilon^2 (1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2)}\right]^{-1}
 	\label{eq:OLSvsIV_AVG2}
 \end{equation}
-
-Returning to the simulation experiment from Section \ref{sec:OLSvsIVsim}, Figure \ref{fig:OLSvsIV_AVG} compares the finite-sample RMSE of the minimum-AMSE moment average estimator presented in Equations \ref{eq:OLSvsIV_AVG1} and \ref{eq:OLSvsIV_AVG2} to those of the FMSC and DHW pre-test estimators from Figure \ref{fig:OLSvsIV_RMSEvsDHW}.
-The performance of the minimum-AMSE moment average estimator is strong: it provides the lowest worst-case RMSE and improves uniformly on the FMSC for all but the largest values of $\rho$.
-While a complete examination of minimum-AMSE moment averaging is beyond the scope of the present paper, these results suggest that it could prove extremely useful in practice.
-In the following section I show how one can construct a valid confidence interval for this and related procedures.
-\begin{figure}
-\centering
-	\input{./SimulationOLSvsIV/Results/RMSE_coarse_pi_relative_all.tex}
-	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator, Durbin-Hausman-Wu pre-test estimators with $\alpha = 0.1$ (DWH90) and $\alpha = 0.05$ (DHW95), and the minmum-AMSE averaging estimator, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas described in Sections \ref{sec:OLSvsIVlowlevel}, \ref{sec:FMSCforOLSvsIV}, and \ref{sec:momentavgexample}.}
-	\label{fig:OLSvsIV_AVG}
-\end{figure}
+This expression employs the same consistent estimators of $\sigma_x^2, \gamma$ and $\sigma_{\epsilon}$ as the FMSC expressions from Section \ref{sec:FMSCforOLSvsIV}.
+To ensure that $\widehat{\omega}^*$ lies in the interval $[0,1]$, however, I use a \emph{positive part} estimator for $\tau^2$, namely $\max\{0, \; \widehat{\tau}^2 - \widehat{V}\}$ rather than $\widehat{\tau}^2 - \widehat{V}$.\footnote{While $\widehat{\tau}^2 - \widehat{V}$ is an asymptotically unbiased estimator of $\tau^2$ it \emph{can} negative.}
+In the following section I show how one can construct a valid confidence interval for $\widehat{\beta}^*$ and related estimators.

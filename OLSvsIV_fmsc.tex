@@ -29,30 +29,12 @@ The quantity $\widehat{T}_{FMSC}$ looks very much like a test statistic and inde
 By Theorem \ref{thm:tauOLSvsIV} and the continuous mapping theorem, $\widehat{T}_{FMSC} \rightarrow_d \chi^2(1)$. 
 Thus, the FMSC can be viewed as a test of the null hypothesis $H_0\colon \tau = 0$ against the two-sided alternative with a critical value of $2$. 
 This corresponds to a significance level of $\alpha \approx 0.16$. 
-
 But how does this novel ``test'' compare to something more familiar, say the Durbin-Hausman-Wu (DHW) test? 
 It turns out that in this particular example, although not in general, carrying out moment selection via the FMSC is \emph{numerically equivalent} to using OLS unless the DHW test rejects at the 16\% level. 
-In other words, $\widehat{T}_{FMSC} = \widehat{T}_{DHW}$. 
-To see why this is so first note that 
-$$ \sqrt{n}\left(\widehat{\beta}_{OLS} - \widetilde{\beta}_{TSLS}\right) =\left[\begin{array}{cc}
-    1 & -1
-    \end{array}\right] \sqrt{n} \left(\begin{array}{c}
-    \widehat{\beta}_{OLS} - \beta  \\ \widetilde{\beta}_{TSLS} - \beta
-    \end{array} \right) \rightarrow_d N\left(\tau/\sigma_x^2, \Sigma
-    \right)$$
-by Theorem \ref{thm:tauOLSvsIV}, where
-	$$\Sigma = \mbox{AVAR(TSLS)} - \mbox{AVAR(OLS)} = \sigma_\epsilon^2 \left(1/\gamma^2 - 1/\sigma_x^2 \right).$$
-Thus, under $H_0 \colon \tau = 0$, the DHW test statistic 
-$$\widehat{T}_{DHW} = n\, \widehat{\Sigma}^{-1}(\widehat{\beta}_{OLS} - \widetilde{\beta}_{TSLS})^2 = \frac{n(\widehat{\beta}_{OLS} - \widetilde{\beta}_{TSLS})^2}{ \widehat{\sigma}_\epsilon^2 \left(1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2 \right)}$$
-converges in distribution to a $\chi^2(1)$ random variable. 
-Now, rewriting $\widehat{V}$, we find that
-$$\widehat{V} = \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2\left(\frac{\widehat{\sigma}_v^2 }{\widehat{\gamma}^2}\right) = \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2\left(\frac{\widehat{\sigma}_x^2 - \widehat{\gamma}^2 }{\widehat{\gamma}^2}\right) = \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^4\left(\frac{1}{\widehat{\gamma}^2} - \frac{1}{\widehat{\sigma}_x^2}\right) = \widehat{\sigma}_x^4 \,\widehat{\Sigma}$$
-using the fact that $\widehat{\sigma}_v = \widehat{\sigma}_x^2 - \widehat{\gamma}^2$. 
-Thus, to show that $\widehat{T}_{FMSC} = \widehat{T}_{DHW}$, all that remains is to establish that $\widehat{\tau}^2 = n\widehat{\sigma}_x^4 (\widehat{\beta}_{OLS} - \widetilde{\beta}_{TSLS})^2$, which we obtain as follows:
-    $$\widehat{\tau}^2  =  \left[n^{-1/2} \textbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})\right]^2 = n^{-1}\left[\mathbf{x}'\mathbf{x} \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2 = n^{-1}\left[n \widehat{\sigma}_x^2 \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2.$$
-
+\begin{thm}
+    \label{thm:DHW} Under Assumption \ref{assump:OLSvsIV}, FMSC selection between the OLS and TSLS estimators is equivalent to a Durbin-Hausman-Wu pre-test with a critical value of $2$.
+\end{thm}
 The equivalence between FMSC selection and a DHW test in this example is helpful for two reasons. 
 First, it provides a novel justification for the use of the DHW test to select between OLS and TSLS. So long as it is carried out with $\alpha \approx 16\%$, the DHW test is equivalent to selecting the estimator that minimizes an asymptotically unbiased estimator of AMSE. 
 Note that this significance level differs from the more usual values of 5\% or 10\% in that it leads us to select TSLS \emph{more often}: OLS should indeed be given the benefit of the doubt, but not by so wide a margin as traditional practice suggests. 
-Second, this equivalence shows that the FMSC can be viewed as an \emph{extension} of the machinery behind the familiar DHW test to more general GMM environments. 
-Naturally each application of the FMSC should be evaluated on its own merits, but it is reassuring that the local mis-specification framework leads to a reasonable procedure in a simple setting where it can be compared to more familiar techniques.
+Second, this equivalence shows that the FMSC can be viewed as an \emph{extension} of the idea behind the familiar DHW test to more general GMM environments. 

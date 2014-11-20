@@ -28,6 +28,18 @@ By Theorem \ref{thm:tau} and the Continuous Mapping Theorem, we have $\widehat{\
 \end{proof}
 
 
+\begin{proof}[Proof of Theorem \ref{thm:DHW}] 
+By Theorem \ref{thm:tauOLSvsIV}, $\sqrt{n}(\widehat{\beta}_{OLS} - \widetilde{\beta}_{TSLS}) \rightarrow_d N\left(\tau/\sigma_x^2, \Sigma \right)$
+where $\Sigma =  \sigma_\epsilon^2 \left(1/\gamma^2 - 1/\sigma_x^2 \right)$.
+Thus, under $H_0 \colon \tau = 0$, the DHW test statistic 
+$$\widehat{T}_{DHW} = n\, \widehat{\Sigma}^{-1}(\widehat{\beta}_{OLS} - \widetilde{\beta}_{TSLS})^2 = \frac{n(\widehat{\beta}_{OLS} - \widetilde{\beta}_{TSLS})^2}{ \widehat{\sigma}_\epsilon^2 \left(1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2 \right)}$$
+converges in distribution to a $\chi^2(1)$ random variable. 
+Now, rewriting $\widehat{V}$, we find that
+$$\widehat{V} = \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2\left(\frac{\widehat{\sigma}_v^2 }{\widehat{\gamma}^2}\right) = \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^2\left(\frac{\widehat{\sigma}_x^2 - \widehat{\gamma}^2 }{\widehat{\gamma}^2}\right) = \widehat{\sigma}_\epsilon^2 \widehat{\sigma}_x^4\left(\frac{1}{\widehat{\gamma}^2} - \frac{1}{\widehat{\sigma}_x^2}\right) = \widehat{\sigma}_x^4 \,\widehat{\Sigma}$$
+using the fact that $\widehat{\sigma}_v = \widehat{\sigma}_x^2 - \widehat{\gamma}^2$. 
+Thus, to show that $\widehat{T}_{FMSC} = \widehat{T}_{DHW}$, all that remains is to establish that $\widehat{\tau}^2 = n\widehat{\sigma}_x^4 (\widehat{\beta}_{OLS} - \widetilde{\beta}_{TSLS})^2$, which we obtain as follows:
+    $$\widehat{\tau}^2  =  \left[n^{-1/2} \textbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta})\right]^2 = n^{-1}\left[\mathbf{x}'\mathbf{x} \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2 = n^{-1}\left[n \widehat{\sigma}_x^2 \left( \widehat{\beta} - \widetilde{\beta}\right) \right]^2.$$
+\end{proof}
 
 \begin{proof}[Proof of Corollary \ref{cor:momentavg}]
 Because the weights sum to one
@@ -40,6 +52,22 @@ and by the assumptions of this Corollary we find that $\widehat{\omega}_S \right
 Hence $\widehat{\omega}_S$ and $\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)$ converge jointly in distribution to their respective functions of $M$, for all $S \in \mathscr{S}$. 
 The result follows by application of the Continuous Mapping Theorem.
 \end{proof}
+
+\begin{proof}[Proof of Theorem \ref{thm:OLSvsIVavg}]
+	Since the weights sum to one, by Theorem \ref{thm:OLSvsIV}
+$$\sqrt{n}\left[\widehat{\beta}(\omega) - \beta \right]  \overset{d}{\rightarrow}  N\left(\mbox{Bias}\left[\widehat{\beta}(\omega)\right], Var\left[\widehat{\beta}(\omega)\right] \right)$$
+where
+\begin{eqnarray*}
+	\mbox{Bias}\left[\widehat{\beta}(\omega)\right] &=& \omega \left( \frac{\tau}{\sigma_x^2} \right) \\
+	 Var\left[\widehat{\beta}(\omega)\right] &=&  \frac{\sigma_\epsilon^2}{\sigma_x^2} \left[(2\omega^2 - \omega)\left( \frac{\sigma_x^2}{\gamma^2} - 1\right)+\frac{\sigma_x^2}{\gamma^2} \right]
+\end{eqnarray*}
+and accordingly
+	$$\mbox{AMSE}\left[\widehat{\beta}(\omega) \right] =  \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (\omega^2 - 2 \omega)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left( \frac{\sigma_x^2}{\gamma^2} - 1\right) + \frac{\sigma_\epsilon^2}{\gamma^2}.$$
+The preceding expression is a globally convex function of $\omega$. 
+Taking the first order condition and rearranging, we find that the unique global minimizer is
+$$\omega^* = \left[1 + \frac{\tau^2/\sigma_x^4}{\sigma_\epsilon^2(1/\gamma^2 - 1/\sigma_x^2)}\right]^{-1} = \left[1 + \frac{\mbox{ABIAS(OLS)}^2}{\mbox{AVAR(TSLS)}-\mbox{AVAR(OLS)}} \right]^{-1}.$$
+\end{proof}
+
 
 \begin{proof}[Proof of Theorem \ref{pro:jstat}]
 By a mean-value expansion,
