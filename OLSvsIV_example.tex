@@ -3,44 +3,23 @@
 \label{sec:OLSvsIVExample}
 The simplest interesting application of the FMSC is choosing between ordinary least squares (OLS) and two-stage least squares (TSLS) estimators of the effect $\beta$ of a single endogenous regressor $x$ on an outcome of interest $y$.
 The intuition here is straightforward: because TSLS is a high-variance estimator, OLS will have a lower mean-squared error provided that the regressor of interest isn't \emph{too} endogenous.\footnote{Because the moments of the TSLS estimator only exist up to the order of overidentificiation \citep{Phillips1980} mean-squared error should be understood to refer to ``trimmed'' mean-squared error when the number of instruments is two or fewer. See, e.g., \cite{Hansen2013}.}
-To keep the presentation transparent, I work within an iid, homoskedastic setting for this example and assume, without loss of generality, that there are no exogenous regressors.\footnote{Equivalently, we may suppose that any exogenous regressors have already been ``projected out of the system.''}
-The data generating process is
+To keep the presentation transparent, I work within an iid, homoskedastic setting for this example and assume, without loss of generality, that there are no exogenous regressors.\footnote{The homoskedasticity assumption concerns the \emph{limit} random variables: under local mis-specification there will be heteroskedasticity for fixed $n$. See Assumption \ref{assump:OLSvsIV} in Appendix \ref{sec:sufficient_conditions} for details.}
+Equivalently we may suppose that any exogenous regressors, including a constant, have been ``projected out.''
+Low-level sufficient conditions for all of the results in this section appear in Assumption \ref{assump:OLSvsIV} of Appendix \ref{sec:sufficient_conditions}.
+
+The data generating process for this example is given by
     \begin{eqnarray}
-			y_{i} &=& \beta x_{i}  + \epsilon_{i}\\
-	x_{i} &=& \mathbf{z}_{i}' \boldsymbol{\pi} + v_{i}
+			y_{ni} &=& \beta x_{ni}  + \epsilon_{ni}\\
+	x_{ni} &=& \mathbf{z}_{ni}' \boldsymbol{\pi} + v_{ni}
 	\end{eqnarray}
-where $\beta$ and $\boldsymbol{\pi}$ are unknown constants, $\mathbf{z}_i$ is a vector of exogenous and relevant instruments, $x_i$ is the endogenous regressor, $y_i$ is the outcome of interest, and $\epsilon_i, v_i$ are unobservable error terms. 
+where $\beta$ and $\boldsymbol{\pi}$ are unknown constants, $\mathbf{z}_{ni}$ is a vector of exogenous and relevant instruments, $x_{ni}$ is the endogenous regressor, $y_{ni}$ is the outcome of interest, and $\epsilon_{ni}, v_{ni}$ are unobservable error terms.
 All random variables in this system are mean zero, or equivalently all constant terms have been projected out. 
-Stacking observations in the usual way, let 
-$\mathbf{z}' = (z_{1}, \hdots, z_{n})$, $Z' = (\mathbf{z}_{1}, \hdots, \mathbf{z}_{n})$, $\mathbf{x}' = (x_{1}, \hdots, x_{n})$ and so on. The two estimators under consideration are $\widehat{\beta}_{OLS}$ and $\widetilde{\beta}_{TSLS}$, given by
-  \begin{eqnarray} 
-  \label{eq:OLS}
-		\widehat{\beta}_{OLS} &=& \left(\mathbf{x}'\mathbf{x}\right)^{-1}\mathbf{x}'\mathbf{y}\\
-	\label{eq:TSLS}
-		\widetilde{\beta}_{TSLS} &=& \left(\mathbf{x}'P_Z\mathbf{x}\right)^{-1}\mathbf{x}'P_Z\mathbf{y}
-	\end{eqnarray}
-where $P_Z = Z(Z'Z)^{-1}Z'$. 
-The following low-level conditions are sufficient for the asymptotic normality of the OLS and TSLS estimators.
-
-\begin{assump}[OLS versus TSLS]
-\label{assump:OLSvsIV}
-	Let $\{(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})\colon 1\leq i \leq n, n = 1, 2, \hdots\}$ be a triangular array of random variables such that
-	\begin{enumerate}[(a)]
-		\item $(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni}) \sim$ iid and mean zero within each row of the array (i.e.\ for fixed $n$)
-		\item $E[\mathbf{z}_{ni} \epsilon_{ni}]=\mathbf{0}$, $E[\mathbf{z}_{ni} v_{ni}]=\mathbf{0}$, and $E[\epsilon_{ni}v_{ni}] = \tau/\sqrt{n}$ for all $n$
-		\item $E[\left|\mathbf{z}_{ni}\right|^{4+\eta}] <C$, $E[\left|\epsilon_{ni}\right|^{4+\eta}] <C$, and $E[\left|v_{ni}\right|^{4+\eta}] <C$ for some $\eta >0$, $C <\infty$
-		\item $E[\mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow Q>0$, $E[v_{ni}^2]\rightarrow \sigma_v^2 >0$, and $E[\epsilon_{ni}^2] \rightarrow \sigma_\epsilon^2 >0$ as $n\rightarrow \infty$
-		\item As $n\rightarrow \infty$, $E[\epsilon_{ni}^2 \mathbf{z}_{ni} \mathbf{z}_{ni}']- E[\epsilon_{ni}^2]E[ \mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow 0$, $E[\epsilon_i^2 v_{ni} \mathbf{z}_{ni}'] - E[\epsilon_{ni}^2]E[v_{ni} \mathbf{z}_{ni}'] \rightarrow 0$, and $E[\epsilon_{ni}^2 v_{ni}^2] - E[\epsilon_{ni}^2]E[v_{ni}^2] \rightarrow 0$
-		\item $x_{ni} = \mathbf{z}_{ni}'\boldsymbol{\pi} + v_i$ where $\boldsymbol{\pi} \neq \mathbf{0}$, and $y_{ni} = \beta x_{ni} + \epsilon_{ni}$
-	\end{enumerate}
-\end{assump}
-
-Parts (a), (b) and (d) correspond to the local mis-specification assumption, part (c) is a set of moment restrictions, and (f) is simply the DGP.
-Part (e) is the homoskedasticity assumption: an \emph{asymptotic} restriction on the joint distribution of $v_{ni}$, $\epsilon_{ni}$, and $\mathbf{z}_{ni}$. 
-This condition holds automatically, given the other asssumptions, if $(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})$ are jointly normal, as in the simulation experiment described below. 
+Stacking observations in the usual way, the estimators under consideration are $\widehat{\beta}_{OLS} = \left(\mathbf{x}'\mathbf{x}\right)^{-1}\mathbf{x}'\mathbf{y}$ and
+$\widetilde{\beta}_{TSLS} = \left(\mathbf{x}'P_Z\mathbf{x}\right)^{-1}\mathbf{x}'P_Z\mathbf{y}$ where we define $P_Z = Z(Z'Z)^{-1}Z'$. 
 
 \begin{thm}[OLS and TSLS Limit Distributions]
-	\label{thm:OLSvsIV} Under Assumption \ref{assump:OLSvsIV},
+	\label{thm:OLSvsIV} 
+		Let $(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})$ be a triangular array of random variables such that $E[\mathbf{z}_{ni} \epsilon_{ni}]=\mathbf{0}$, $E[\mathbf{z}_{ni} v_{ni}]=\mathbf{0}$, and $E[\epsilon_{ni}v_{ni}] = \tau/\sqrt{n}$ for all $n$. Then, under standard regularity conditions, e.g. Assumption \ref{assump:OLSvsIV}, 
 	$$
 \left[
 \begin{array}{c}
@@ -61,10 +40,9 @@ N\left(
   \end{array}\right]
   \right)
 $$
-where $\sigma_x^2 = \gamma^2 + \sigma_v^2$, $\gamma^2 = \boldsymbol{\pi}'Q \boldsymbol{\pi}$, and $Q$, $ \sigma_\epsilon^2$, and $\sigma_v^2$ are defined in Assumption \ref{assump:OLSvsIV}.
+where $\sigma_x^2 = \gamma^2 + \sigma_v^2$, $\gamma^2 = \boldsymbol{\pi}'Q \boldsymbol{\pi}$, $E[\mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow Q$, $E[v_{ni}^2]\rightarrow \sigma_v^2$, and $E[\epsilon_{ni}^2] \rightarrow \sigma_\epsilon^2$ as $n\rightarrow \infty$.
 \end{thm}
-
-We see from the preceding result that the variance of the OLS estimator is always strictly lower than that of the TSLS estimator since $\sigma^2_\epsilon/\sigma_x^2 = \sigma^2_\epsilon/(\gamma^2 + \sigma_v^2)$. 
+We see immediately that, as expected, the variance of the OLS estimator is always strictly lower than that of the TSLS estimator since $\sigma^2_\epsilon/\sigma_x^2 = \sigma^2_\epsilon/(\gamma^2 + \sigma_v^2)$. 
 Unless $\tau = 0$, however, OLS shows an asymptotic bias. 
 In contrast, the TSLS estimator is asymptotically unbiased regardless of the value of $\tau$.  
 Thus,
@@ -75,11 +53,11 @@ To estimate the unknowns required to turn this inequality into a moment selectio
   $$\widehat{\sigma}_x^2 = n^{-1}\mathbf{x}'\mathbf{x}, \quad \widehat{\gamma}^2 = n^{-1}\mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x}, \quad \widehat{\sigma}_v^2 =  \widehat{\sigma}_x^2 - \widehat{\gamma}^2$$
 and define
 $$\widehat{\sigma}_\epsilon^2 = n^{-1}\left(\textbf{y} - \textbf{x}\widetilde{\beta}_{TSLS} \right)'\left(\textbf{y} - \textbf{x}\widetilde{\beta}_{TSLS} \right)$$
-Under Assumption \ref{assump:OLSvsIV}, each of these estimators is consistent for its population counterpart.\footnote{While using the OLS residuals to estimate $\sigma_\epsilon^2$ \emph{also} provides a consistent estimate under local mis-specification, the estimator based on the TSLS residuals should be more robust unless the instruments are quite weak.}
+Under local mis-specification each of these estimators is consistent for its population counterpart.\footnote{While using the OLS residuals to estimate $\sigma_\epsilon^2$ \emph{also} provides a consistent estimate under local mis-specification, the estimator based on the TSLS residuals should be more robust unless the instruments are quite weak.}
 All that remains is to estimate $\tau^2$. Specializing Theorem \ref{thm:tau} and Corollary \ref{cor:tautau} to the present example gives the following result.
 \begin{thm}
 	\label{thm:tauOLSvsIV}
-	Let $\widehat{\tau} =  n^{-1/2} \mathbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta}_{TSLS})$. Under Assumption \ref{assump:OLSvsIV} we have 
+	Let $\widehat{\tau} =  n^{-1/2} \mathbf{x}'(\mathbf{y} - \mathbf{x}\widetilde{\beta}_{TSLS})$. Then, under the conditions of Theorem \ref{thm:OLSvsIV},
 	$$\widehat{\tau}\rightarrow_d N(\tau,V), \quad V = \sigma_\epsilon^2 \sigma_x^2(\sigma_v^2/\gamma^2).$$ 
 \end{thm}
 It follows that $\widehat{\tau}^2 -  \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2 \left(\widehat{\sigma}_v^2/\widehat{\gamma}^2\right)$ is an asymptotically unbiased estimator of $\tau^2$ and hence, substituting into the AMSE inequality from above and rearranging, the FMSC instructs us to choose OLS whenever $\widehat{T}_{FMSC} = \widehat{\tau}^2/\widehat{V} < 2$
@@ -89,10 +67,11 @@ By Theorem \ref{thm:tauOLSvsIV} and the continuous mapping theorem, $\widehat{T}
 Thus, the FMSC can be viewed as a test of the null hypothesis $H_0\colon \tau = 0$ against the two-sided alternative with a critical value of $2$. 
 This corresponds to a significance level of $\alpha \approx 0.16$. 
 But how does this novel ``test'' compare to something more familiar, say the Durbin-Hausman-Wu (DHW) test? 
-It turns out that in this particular example, although not in general, carrying out moment selection via the FMSC is \emph{numerically equivalent} to using OLS unless the DHW test rejects at the 16\% level. 
+It turns out that in this particular example, although not in general, the FMSC is \emph{numerically equivalent} to using OLS unless the DHW test rejects at the 16\% level. 
 \begin{thm}
-    \label{thm:DHW} Under Assumption \ref{assump:OLSvsIV}, FMSC selection between the OLS and TSLS estimators is equivalent to a Durbin-Hausman-Wu pre-test with a critical value of $2$.
+    \label{thm:DHW} Under the conditions of Theorem \ref{thm:OLSvsIV} FMSC selection between the OLS and TSLS estimators is equivalent to a Durbin-Hausman-Wu pre-test with a critical value of $2$.
 \end{thm}
+Again, for low-level sufficient conditions, see 
 The equivalence between FMSC selection and a DHW test in this example is helpful for two reasons. 
 First, it provides a novel justification for the use of the DHW test to select between OLS and TSLS. So long as it is carried out with $\alpha \approx 16\%$, the DHW test is equivalent to selecting the estimator that minimizes an asymptotically unbiased estimator of AMSE. 
 Note that this significance level differs from the more usual values of 5\% or 10\% in that it leads us to select TSLS \emph{more often}: OLS should indeed be given the benefit of the doubt, but not by so wide a margin as traditional practice suggests. 
