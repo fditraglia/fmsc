@@ -7,10 +7,10 @@ A number of well-known studies find little or no direct effect of geographic end
 \begin{equation}
 	\mbox{ln\emph{gdpc}}_i = \beta_1 + \beta_2 \cdot \mbox{\emph{institutions}}_i + \beta_3 \cdot \mbox{\emph{malaria}}_i + \epsilon_i
 \end{equation}
-Treating both institutions and malaria transmission as endogenous, they consider a variety of measures of each and a number of instrument sets. 
-In each case, they find large negative effects of malaria transmission, lending support to Sach's conclusion.
+This model extends the baseline specification of \cite{Acemoglu} to include a direct effect of malaria transmission which, like institutions, is treated as endogenous.\footnote{Due to a lack of data for certain instruments, \cite{Carstensen2006} work with a smaller sample of countries than \cite{Acemoglu}.} 
+Considering a variety of measures of both institutions and malaria transmission, and a number of instrument sets, \cite{Carstensen2006} find large negative effects of malaria transmission, lending support to Sach's conclusion.
 
-In this section, I revisit the instrument selection exercise given in Table 2 of \cite{Carstensen2006} using the FMSC and corrected confidence intervals described above. I consider two questions. 
+In this section, I revisit and expand upon the instrument selection exercise given in Table 2 of \cite{Carstensen2006} using the FMSC and corrected confidence intervals described above. I consider two questions. 
 First, based on the FMSC methodology, which instruments should we choose if our target parameter is $\beta_3$, the effect of malaria transmission on per capita income?
 Does the selected instrument set change if our target parameter is $\beta_2$, the effect of institutions?
 Second, are the results robust to the effects of instrument selection on inference?
@@ -47,7 +47,8 @@ Based on the arguments given by \cite{Acemoglu} and \cite{Sachs}, I proceed unde
 Rather than selecting over all 128 possible instrument sets, I consider eight specifications formed from the four instrument blocks defined by \cite{Carstensen2006}.
 The baseline block contains ln\emph{mort}, \emph{maleco} and a constant; the climate block contains \emph{frost}, \emph{humid}, and \emph{latitude}; the Europe block contains \emph{eurfrac} and \emph{engfrac}; and the openness block contains \emph{coast} and \emph{trade}. 
 Full descriptions of these variables appear in Table \ref{tab:desc}.
-Table \ref{tab:fullresults} lists the eight instrument sets considered here, along with TSLS estimates and traditional 95\% confidence intervals for each.\footnote{The results presented in Table \ref{tab:fullresults} are virtually identical to those of \cite{Carstensen2006}. The slight discrepancy in the results for the baseline instrument set, Panel 1, comes from the fact that \cite{Carstensen2006} include an additional observation for this specification: Vietnam. Because the Climate, Europe and Openness instrument blocks are missing for this country, I exclude it in the interest of consistency.}
+Table \ref{tab:fullresults} lists the eight instrument sets considered here, along with TSLS estimates and traditional 95\% confidence intervals for each.\footnote{The results for the baseline instrument presented in panel 1 of Table \ref{tab:fullresults} are slightly different from those in \cite{Carstensen2006} as I exclude Vietnam to keep the sample fixed across instrument sets.} 
+
 
 
 \begin{table}[h]
@@ -58,12 +59,9 @@ Table \ref{tab:fullresults} lists the eight instrument sets considered here, alo
 
 \end{table}
 
-Table \ref{tab:FMSC_values} presents FMSC and positive-part FMSC results for instrument sets 1--8  as defined in Table \ref{tab:fullresults}.
-The positive-part FMSC sets a negative squared asymptotic bias estimate to zero when estimating AMSE.
-When the squared bias estimate is positive, FMSC and positive-part FMSC coincide; when the squared bias estimate is negative, positive-part FMSC is strictly greater than FMSC. 
-Additional simulation results for the choosing instrumental variables experiment from Section \ref{sec:chooseIVsim}, available upon request, reveal that the positive-part FMSC never performs worse than the ordinary FMSC and sometimes performs better, suggesting that it should be preferred in real-world applications. 
-For each criterion Table \ref{tab:FMSC_values} presents two cases: the first takes the effect of \emph{malfal}, a measure of malaria transmission, as the target parameter while the second uses the effect of \emph{rule}, a measure of institutions. 
-In each case the two best instrument sets are numbers 5 (baseline, climate and Europe) and 8 (all instruments).\footnote{In Table 2 of their paper, \cite{Carstensen2006} report results for selection over instrument sets 2--4 and 8 using the GMM-BIC and HQ of \cite{Andrews1999}. Both favor instrument set 8. They do not consider instrument sets 5--7.}
+Table \ref{tab:FMSC_values} presents FMSC and positive-part FMSC results for instrument sets 1--8.\footnote{For a discussion of the positive-part FMSC and its performance in simulations, see \ref{sec:chooseIVsim}.}
+For each criterion the table presents two cases: the first takes the effect of \emph{malfal}, a measure of malaria transmission, as the target parameter while the second uses the effect of \emph{rule}, a measure of institutions. 
+In each case the two best instrument sets are numbers 5 (baseline, climate and Europe) and 8 (all instruments).
 When the target parameter is the coefficient on \emph{malfal}, 8 is the clear winner under both the plain-vanilla and positive-part FMSC, leading to an estimate of $-1.08$ for the effect of malaria transmission on per-capita income.
 When the target parameter is the coefficient on \emph{rule}, however, instrument sets 5 and 8 are virtually indistinguishable.
 Indeed, while the plain-vanilla FMSC selects instrument set 8, leading to an estimate of $0.84$ for the effect of instutitions on per-capita income, the positive-part FMSC selects instrument set 5, leading to an estimate of $0.93$. 
@@ -94,19 +92,9 @@ There is no evidence that accounting for the effects of instrument selection cha
 	\label{tab:postFMSC_CIs}
 \end{table}
 
-Given the simplicity of the second-stage regression and the relatively small sample size, one might reasonably wonder whether this empirical example represents a realistic proof of concept for FMSC instrument selection and post-selection inference.
-The answer is yes: this example was selected precisely because it is as simple as possible in those respects that matter least for the FMSC and confidence interval calculations yet fully realistic in those respects that matter most.
-The computational complexity of the procedures described above is determined almost entirely by the dimension, $q$, of $\tau$, in this case the number of suspect instruments in the full instrument set.
-This is because the 2-Step confidence interval procedure requires us to carry out two $q$-dimensional constrained optimization problems with a stochastic objective function: one for the lower confidence limit and another for the upper confidence limit.
-Next most important is $J$, the number of simulation draws used, as this quantity determines the computational cost of a single evaluation of the objective function.
-In contrast, the number of instrument sets under consideration is considerably less important because we can pre-compute all associated quantities: they do not vary with $\tau^*$.
-Least important of all are the number of first-stage regressors and the sample size. For all practical purposes these are irrelevant.
-To put this another way, carrying out FMSC or positive-part FMSC selection is trivial; constructing valid confidence intervals, however, is challenging. 
-With seven suspect instruments, $10000$ simulation draws, and eight instrument sets under consideration, this example presents the kind of computational challenge that one would reasonably expect to encounter in practice.
-Using a more complicated second-stage, more observations, or even double as many instrument sets would make practically no difference.
-In spite of the difficulties involved, problems of this magnitude are well within the ability of a standard desktop computer using off-the-shelf optimization routines. 
-Running on a single core, it took just under eleven minutes to generate all of the empirical results in this paper. 
-Note that this involves constructing \emph{four} 2-Step confidence intervals.
+Although this example uses a simple model and a relatively small number of observations, it nevertheless provides a realistic proof of concept for FMSC instrument selection and post-selection inference because the computational complexity of the procedures described above is determined almost \emph{entirely} by the dimension, $q$, of $\tau$. 
+This is because the 2-Step confidence interval procedure requires us to carry out two $q$-dimensional constrained optimization problems with a stochastic objective function: one for each confidence limit.
+Fixing $q$, the number of instrument sets under consideration is far less important because we can pre-compute any quantities that do not depend on $\tau^*$.
+With $q = 7$, this example presents the kind of computational challenge that one would reasonably expect to encounter in practice yet is well within the ability of a standard desktop computer using off-the-shelf optimization routines.
+Running on a single core it took just over ten minutes to generate all of the results for the empirical example in this paper.
 For more computational details, including a description of the packages used, see Appendix \ref{append:comp}. 
- 
-
