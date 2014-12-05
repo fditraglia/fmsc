@@ -11,17 +11,19 @@ I consider a setting in which two blocks of moment conditions are available: one
 This is intended to mimic the situation faced by an applied researcher who begins with a ``baseline'' set of relatively weak maintained assumptions and must decide whether to impose any of a collection of stronger but also more controversial ``suspect'' assumptions.
 When the (correctly specified) baseline moment conditions identify the model, the FMSC provides an asymptotically unbiased estimator of AMSE, allowing us to carry out risk-based selection over the suspect moment conditions.
 When this is not the case, it remains possible to use the AMSE framework to carry out a sensitivity analysis.\footnote{See Appendix \ref{sec:digress}.}
-\todo[inline]{Mention the uniformity stuff: because I study a scalar target parameter, can't get uniform improvements but can do better in large region of the parameter space. Particularly concerned with settting where you think extra assumptions may be nearly correct}
 
 I go on to study a general class estimators formed by combining estimators based on different moment sets with data-dependent weights.
 Such ``moment average'' estimators are interesting in their own right and can be used to study the important problem of inference post-selection.
 By deriving the limiting distribution of the class of moment average estimators, I devise a simple, simulation-based procedure for constructing valid confidence intervals that can be applied to a variety of formal moment averaging and post-selection estimators.
-Using off-the-shelf optimization routines, this procedure is well within the ability of the average desktop computer for problems of realistic scale.
+Using an applied example from development economics, I show that this procedure is well within the ability of a standard desktop computer for problems of a realistic scale.
 
 While the methods described here apply to general GMM models, I focus on two simple but empirically relevant examples: choosing between ordinary least squares (OLS) and two-stage least squares (TSLS) estimators, and selecting instruments in linear instrumental variables (IV) models. 
 In the OLS versus TSLS example the FMSC takes a particularly transparent form, providing a risk-based justification for the DHW test, and leading to a novel ``minimum-AMSE'' estimator that combines the information contained in the OLS and TSLS estimators.
-In simulation studies for both examples, the FMSC and confidence interval procedures perform well.
-I conclude with an empirical application from development economics, exploring the effect of instrument selection on the estimated relationship between malaria transmission and per capita income.
+It is important to note that both the FMSC and related minimum-AMSE averaging estimator considered here are derived for a \emph{scalar} parameter of interest, as this is the most common situation encountered in applied work.
+As a consequence, Stein-type results do \emph{not} apply: it is impossible to construct an estimator -- post-selection, averaging or otherwise -- with uniformly lower risk than the ``valid'' estimator that uses only the baseline moment conditions in estimation.
+Nevertheless, it remains possible to achieve substantially lower risk than the valid estimator over large regions of the parameter space, particularly in settings where the additional moment conditions are \emph{nearly} correct.
+This is precisely the situation for which the FMSC is designed.
+Selection and averaging are not a panacea, but in settings where the suspect moment conditions are expected to be at least \emph{approximately} correct a priori, the methods presented in this paper can provide substantial gains, as demonstrated in the simulation results presented below.
 
 My approach to moment selection is inspired by the focused information criterion of \citet{ClaeskensHjort2003}, a model selection criterion for maximum likelihood estimation. 
 Like \citet{ClaeskensHjort2003}, I study AMSE-based selection under mis-specification in a drifting asymptotic framework. 
@@ -53,7 +55,7 @@ For these reasons, the fact that the FMSC is conservative rather than consistent
 Because it studies inference post-moment selection, this paper relates to a vast literature on ``pre-test'' estimators.
 For an overview, see \citet{LeebPoetscher2005, LeebPoetscher2009}.
 There are several proposals to construct valid confidence intervals post-model selection, including \cite{Kabaila1998}, \cite{HjortClaeskens} and \cite{KabailaLeeb2006}. 
-To my knowledge, however, this is the first paper to treat the problem in general for post-moment selection and moment average estimators in the presence of mis-specification.\footnote{Some related results appear in \cite{Berkowitz}, \cite{Guggenberger2010}, \cite{Guggenberger2012}, and \cite{GuggenbergerKumar}.}
+To my knowledge, however, this is the first paper to treat the problem in general for post-moment selection and moment average estimators in the presence of mis-specification.\footnote{Related results appear in \cite{Berkowitz}, \cite{Guggenberger2010}, \cite{Guggenberger2012}, and \cite{GuggenbergerKumar}.}
 While I developed the simulation-based, two-stage confidence interval procedure described below by analogy to a suggestion in \cite{ClaeskensHjortbook}, \cite{Leeb} kindly pointed out that similar constructions have appeared in \cite{Loh1985}, \cite{Berger1994}, and \cite{Silvapulle1996}. More recently, \cite{McCloskey} takes a similar approach to study a class of non-standard testing problems.
 
 The framework within which I study moment averaging is related to the frequentist model average estimators of \cite{HjortClaeskens}.
@@ -62,16 +64,16 @@ Whereas these papers combine estimators based on valid moment conditions to achi
 An idea similar to that which motivates the FMSC underlies the combined moments (CM) estimator of \cite{Judge2007}, who emphasize that incorporating the information from an incorrect specification could lead to favorable bias-variance tradeoff. 
 Unlike the FMSC, however, the CM estimator is not targeted to a particular research goal and does not explicitly aim to minimize AMSE.
 For a different approach to combining OLS and TSLS estimators, similar in spirit to the Stein estimator and developed independently of the work presented here, see \cite{Hansen2014}.
-\todo[inline]{Also cite Xu's paper and try to explain how what I'm doing is different! May also want to say something about MSE vs other risk functions and existence etc.}
+\todo[inline]{cite Xu!}
 
 A limitation of the results presented here is that they are based upon the assumption of strong identification and a fixed number of moment conditions.
 When I refer to a bias-variance tradeoff below, either in finite samples or asymptotically, I abstract from weak-- and many--instruments considerations.
 In particular, my asymptotics are based on a classical first-order approximation with the addition of locally invalid moment conditions.
-Extending the idea behind the FMSC to a more general framework that allows for weak identification or a growing number of moment conditions is a challenging topic that I leave for future research.
+Extending the idea behind the FMSC to allow for weak identification or a large number of moment conditions is a challenging topic that I leave for future research.
 
 The remainder of the paper is organized as follows.
 Section \ref{sec:asymp} describes the local mis-specification framework and introduces the basic assumptions used later in the paper.
 Section \ref{sec:FMSC} derives the FMSC and presents specialized results for the two running examples: OLS versus TSLS and choosing instrumental variables.
 Section \ref{sec:avg} presents results for moment average estimators and shows how they can be used to construct valid confidence intervals post-moment selection.
-Section \ref{sec:simulations} presents simulation results and Section \ref{sec:application} considers an empirical example from development economics.
+Section \ref{sec:simulations} presents simulation results and Section \ref{sec:application} considers an empirical example from development economics, exploring the effect of instrument selection on the estimated relationship between malaria transmission and per capita income.
 Proofs and computational details appear in the Appendix along with supplementary material.
