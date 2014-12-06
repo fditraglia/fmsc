@@ -3,10 +3,11 @@
 \label{sec:momentavgexample}
 Although it is a special case of moment averaging, moment selection is a somewhat crude procedure: it gives full weight to the estimator that minimizes the moment selection criterion no matter how close its nearest competitor lies. 
 Accordingly, when competing moment sets have similar criterion values in the population, sampling variation can be \emph{magnified} in the selected estimator. 
-Thus, it may be possible to achieve better performance by using smooth weights rather than discrete selection.
-\todo[inline]{In some settings can construct averaging estimator that uniformly dominates ``conservative'' estimator (Xu and Bruce) but I'm working in a setting with a scalar target parameter.}
+In some settings it is possible to derive Stein-type results for moment averaging estimators (e.g.\ \cite{Hansen2014} and \cite{ChengLiaoShi}).
+Such results lead to average schemes with uniformly lower risk than the ``valid'' estimator.
+Stein-type results are unavailable, however, in the case of a scalar target parameter and hence cannot be used to guide the construction of moment averaging weights for the setting considered in this paper.
 
-They key question is: how should one construct the weights?
+So how should one construct weights for this case?
 One possibility is to adapt a proposal from \cite{Burnhametal}, who suggest averaging a collection of competing maximum likelihood estimator with weights of the form 
 \[w_k =\left. \exp(-I_k/2)\right/\sum_{i=1}^K \exp(-I_i/2)\] 
 where $I_k$ is an information criterion evaluated for model $k$, and $i$ indexes the set of $K$ candidate models. 
@@ -19,9 +20,10 @@ Setting $\kappa = 1$ gives the \cite{Burnhametal} weights.
 
 Some preliminary simulation results, reported in an earlier draft of this paper, suggest that exponential weighting can indeed provide MSE improvements.
 The difficulty, however, lies in choosing an appropriate value for $\kappa$.
-In at least some applications, however, there is a compelling alternative to the exponential weighting scheme: one can instead derive weights \emph{analytically} to minimize AMSE within the FMSC framework.\footnote{I thank Bruce Hansen for suggesting this idea.} 
-To illustrate this, I revisit the OLS versus TSLS example from Sections \ref{sec:OLSvsIVlowlevel} and \ref{sec:FMSCforOLSvsIV}. 
-Let $\widetilde{\beta}(\omega)$ be a convex combination of the OLS and TSLS estimators from Equations \ref{eq:OLS} and \ref{eq:TSLS}, namely  
+In at least some applications, however, there is a compelling alternative to the exponential weighting scheme: one can instead derive weights \emph{analytically} to minimize AMSE within the FMSC framework.
+This immediately suggests a plug-in estimator of the optimal weights along the lines of the FMSC estimate of AMSE.
+To illustrate this idea, I revisit the OLS versus TSLS example from Section \ref{sec:OLSvsIVExample}.
+Let $\widetilde{\beta}(\omega)$ be a convex combination of the OLS and TSLS estimators, namely  
 \begin{equation}
 	\widetilde{\beta}(\omega) = \omega \widehat{\beta}_{OLS} + (1 - \omega) \widetilde{\beta}_{TSLS}
 \end{equation}
@@ -48,6 +50,6 @@ where
 \widehat{\omega }^* = \left[1 + \frac{\max \left\{0, \; \left(\widehat{\tau}^2 - \widehat{\sigma}_\epsilon^2\widehat{\sigma}_x^2  \left(\widehat{\sigma}_x^2/\widehat{\gamma}^2 - 1 \right) \right)/\;\widehat{\sigma}_x^4 \right\}}{\widehat{\sigma}_\epsilon^2 (1/\widehat{\gamma}^2 - 1/\widehat{\sigma}_x^2)}\right]^{-1}
 	\label{eq:OLSvsIV_AVG2}
 \end{equation}
-This expression employs the same consistent estimators of $\sigma_x^2, \gamma$ and $\sigma_{\epsilon}$ as the FMSC expressions from Section \ref{sec:FMSCforOLSvsIV}.
+This expression employs the same consistent estimators of $\sigma_x^2, \gamma$ and $\sigma_{\epsilon}$ as the FMSC expressions from Section \ref{sec:OLSvsIVExample}.
 To ensure that $\widehat{\omega}^*$ lies in the interval $[0,1]$, however, I use a \emph{positive part} estimator for $\tau^2$, namely $\max\{0, \; \widehat{\tau}^2 - \widehat{V}\}$ rather than $\widehat{\tau}^2 - \widehat{V}$.\footnote{While $\widehat{\tau}^2 - \widehat{V}$ is an asymptotically unbiased estimator of $\tau^2$ it \emph{can} negative.}
 In the following section I show how one can construct a valid confidence interval for $\widehat{\beta}^*$ and related estimators.
