@@ -36,3 +36,22 @@ Combined HQ and AIC-type procedures can be defined analogously.
 In the simulation design from this paper, however, \emph{each} of these combined criteria gives results that are practically identical to those of the valid estimator.
 This hold true across all parameter values and sample sizes.
 Full details are available upon request.
+
+\subsection{Additional Confidence Interval Simulations}
+\label{sec:CIsupplement}
+\begin{table}[h]
+\footnotesize
+\centering
+	\begin{subtable}{0.48\textwidth}
+		\caption{Valid Estimator}
+		\label{tab:chooseIVsim_cover_Valid}
+		\input{./SimulationChooseIVs/Results/coverage_Valid.tex}
+	\end{subtable}	
+	~
+	\begin{subtable}{0.48\textwidth}
+		\caption{Na\"{i}ve post-FMSC}
+		\label{tab:chooseIVsim_cover_naiveFMSC}
+		\input{./SimulationChooseIVs/Results/coverage_FMSC_naive.tex}
+	\end{subtable}
+	\caption{Coverage probabilities of nominal $90\%$ CIs for the choosing instrumental variables simulation experiment described in Section \ref{sec:chooseIVsim}. All values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
+\end{table}
