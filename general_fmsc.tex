@@ -63,7 +63,7 @@ It follows that
 \end{equation}
 provides an asymptotically unbiased estimator of AMSE.
 Given a set $\mathscr{S}$ of candidate specifications, the FMSC selects the candidate $S^*$ that \emph{minimizes} the expression given in Equation \ref{eq:fmsc}, that is $S^*_{FMSC} =  \arg \min_{S\in \mathscr{S}} \;\mbox{FMSC}_n(S)$.
-\todo[inline]{Try to shorten the following discussion.}
+
 At this point, it is worth taking a brief pause to survey the ground covered thus far.
 We began with a target parameter, $\mu$, a risk function, mean-squared error, and a collection of candidate estimators, $\widehat{\mu}_S$ for $S\in\mathscr{S}$. 
 Our goal was to choose the estimator with the lowest risk.
@@ -80,13 +80,12 @@ The answer to the first question is a straightforward yes.
 The idea of using asymptotic risk as a stand-in for finite sample risk requires only that we can characterize the limit distribution of each $\widehat{\mu}_S$ and use it to evaluate the chosen risk function.
 \cite{Claeskens2006} and \cite{ClaeskensHjort2008}, for example, show how the FIC for model selection in maximum likelihood models can be extended from squared error to $L_p$ and linex loss, respectively, in precisely this way.
 One could easily do the same for the FMSC although I do not consider this possibility further here.
-
 Answering the second question is more difficult.
 Under local mis-specification it is impossible to consistently estimate AMSE.\footnote{This is not a defect of the FMSC: there is a fundamental trade-off between consistency and desirable risk properties. See Section \ref{sec:avg} for a discussion of this point.}
 If we merely use the plug-in estimator of the squared asymptotic bias based on $\widehat{\tau}$, the resulting AMSE estimate will ``overshoot'' asymptotically.
 Accordingly, it seems natural to correct this bias as explained in Corollary \ref{cor:tautau}.
 This is the same heuristic that underlies the classical AIC and TIC model selection criteria as well as more recent procedures such as those described in \cite{ClaeskensHjort2003} and \cite{Schorfheide2005}.
-A heuristic, however, is not a rigorous justification: there could certainly be situations in which it makes sense to use a risk estimator other than the asymptotically unbiased one suggested here.
+Nevertheless, there could certainly be situations in which it makes sense to use a risk estimator other than the asymptotically unbiased one suggested here.
 If one wished to consider risk functions other than MSE, to take a simple example, it may not be possible to derive an asymptotically unbiased risk estimator.
 The plug-in estimator, however, is always available.
-Although I do not consider them further below, alternative risk estimators in the FMSC framework could be an interesting topic for future research.
+Although I do not consider them further below, alternative risk estimators could be an interesting topic for future research.
