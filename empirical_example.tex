@@ -59,7 +59,10 @@ Table \ref{tab:fullresults} lists the eight instrument sets considered here, alo
 
 \end{table}
 
-Table \ref{tab:FMSC_values} presents FMSC and positive-part FMSC results for instrument sets 1--8.\footnote{For a discussion of the positive-part FMSC and its performance in simulations, see \ref{sec:chooseIVsim}.}
+Table \ref{tab:FMSC_values} presents FMSC and ``positive-part'' FMSC results for instrument sets 1--8.
+The positive-part FMSC sets a negative squared asymptotic bias estimate to zero when estimating AMSE.\footnote{I use a similar construction to ensure that the estimated weight is between zero and one in Section \ref{sec:momentavgexample}.}
+If the squared bias estimate is positive, FMSC and positive-part FMSC coincide; if the squared bias estimate is negative, positive-part FMSC is strictly greater than FMSC. 
+Additional simulation results for the choosing instrumental variables experiment from Section \ref{sec:chooseIVsim}, available upon request, reveal that the positive-part FMSC never performs worse than the ordinary FMSC and sometimes performs slightly better, suggesting that it may be preferable in real-world applications.
 For each criterion the table presents two cases: the first takes the effect of \emph{malfal}, a measure of malaria transmission, as the target parameter while the second uses the effect of \emph{rule}, a measure of institutions. 
 In each case the two best instrument sets are numbers 5 (baseline, climate and Europe) and 8 (all instruments).
 When the target parameter is the coefficient on \emph{malfal}, 8 is the clear winner under both the plain-vanilla and positive-part FMSC, leading to an estimate of $-1.08$ for the effect of malaria transmission on per-capita income.
