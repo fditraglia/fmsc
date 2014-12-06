@@ -1,5 +1,23 @@
 %!TEX root = main.tex
 \section{Supplementary Simulation Results}
+\label{sec:simsupplement}
+This section discusses additional simulation results for the choosing instrumental variables example, as a supplement to those given in Section \ref{sec:chooseIVsim}.
+
+\subsection{Downward J-Test}
+\label{sec:downwardJ}
+The downward $J$-test is an informal but fairly common procedure for moment selection in practice.
+In the context of the simulation example from Section \ref{sec:chooseIVsim} it amounts to simply using the full estimator unless it is rejected by a $J$-test.
+Table \ref{fig:chooseIVsim_RMSErelJ} compares the RMSE of the post-FMSC estimator to that of the downward $J$-test with $\alpha = 0.1$ (J90), and $\alpha = 0.05$ (J95).
+For robustness, I calculate the $J$-test statistic using a centered covariance matrix estimator, as in the FMSC formulas from section \ref{sec:chooseIVexample}.
+Unlike the FMSC, the downward $J$-test is very badly behaved for small sample sizes, particularly for the smaller values of $\gamma$.
+For larger sample sizes, the relative performance of the FMSC and the $J$-test is quite similar to what we saw in Figure \ref{fig:OLSvsIV_RMSEbaseline} for the OLS versus TSLS example: the $J$-test performs best for the smallest values of $\rho$, the FMSC performs best for moderate values, and the two procedures perform similarly for large values.
+\begin{figure}
+\centering
+	\input{./SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_J.tex}
+	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator and the downward $J$-test estimator with $\alpha = 0.1$ (J90) and $\alpha = 0.05$ (J95) based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVexample}.}
+	\label{fig:chooseIVsim_RMSErelJ}
+\end{figure}
+These results are broadly similar to those for the GMM moment selection criteria of \cite{Andrews1999} considered in Section \ref{sec:chooseIVsim}, which should not come as a surprise since the J-test statistic is an ingredient in the construction of the GMM-AIC, BIC and HQ. 
 
 \subsection{Canonical Correlations Information Criterion}
 \label{sec:CCIC}
@@ -17,4 +35,4 @@ A combined GMM-BIC/CCIC-BIC criterion for the simulation example from section \r
 Combined HQ and AIC-type procedures can be defined analogously.
 In the simulation design from this paper, however, \emph{each} of these combined criteria gives results that are practically identical to those of the valid estimator.
 This hold true across all parameter values and sample sizes.
-Full simulation results are available upon request.
+Full details are available upon request.
