@@ -1,20 +1,17 @@
 %!TEX root = main.tex
 \subsection{Choosing Instrumental Variables Example}
 \label{sec:chooseIVexample}
-\todo[inline]{Finish moving these assumptions to the appendix!}
 The OLS versus TSLS example is really a special case of instrument selection: if $x$ is exogenous, it is clearly ``its own best instrument.'' 
 Viewed from this perspective, the FMSC amounted to trading off endogeneity against instrument strength. I now consider instrument selection \emph{in general} for linear GMM estimators in an iid setting. 
 Consider the following model:
 \begin{eqnarray}
-    y_i &=& \mathbf{x}_i' \beta +  \epsilon_i\\
-    \mathbf{x}_i &=&  \Pi_1' \mathbf{z}_{i}^{(1)} + \Pi_2'\mathbf{z}_{i}^{(2)} + \mathbf{v}_i
+    y_{ni} &=& \mathbf{x}_i' \beta +  \epsilon_i\\
+    \mathbf{x}_{ni} &=&  \Pi_1' \mathbf{z}_{ni}^{(1)} + \Pi_2'\mathbf{z}_{ni}^{(2)} + \mathbf{v}_{ni}
 \end{eqnarray}
 where $y$ is an outcome of interest, $\mathbf{x}$ is an $r$-vector of regressors, some of which are endogenous, $\mathbf{z}^{(1)}$ is a $p$-vector of instruments known to be exogenous, and $\mathbf{z}^{(2)}$ is a $q$-vector  of \emph{potentially endogenous} instruments. 
-The $r$-vector $\beta$, $p\times r$ matrix $\Pi_1$, and $q\times r$ matrix $\Pi_2$ contain unknown constants. Stacking observations in the usual way, let $\mathbf{y}' = (y_1, \hdots, y_n)$, $X' = (\mathbf{x}_1, \hdots, \mathbf{x}_n)$, $\boldsymbol{\epsilon} = (\epsilon_1, \hdots, \epsilon_n)$, 
-$Z_1' = (\mathbf{z}_{1}^{(1)}, \hdots, \mathbf{z}_{n}^{(1)})$, $Z_2' = (\mathbf{z}_{1}^{(2)}, \hdots, \mathbf{z}_{n}^{(2)})$, and $V' = (\mathbf{v}_1, \hdots, \mathbf{v}_n)$ where $n$ is the sample size.
-Using this notation, $\mathbf{y} = X\beta +\boldsymbol{\epsilon}$ and $X =  Z \Pi + V$, where $Z = (Z_1, Z_2)$ and $\Pi = (\Pi_1', \Pi_2')'$. 
+The $r$-vector $\beta$, $p\times r$ matrix $\Pi_1$, and $q\times r$ matrix $\Pi_2$ contain unknown constants. Stacking observations in the usual way, we can write the system in matrix form as $\mathbf{y} = X\beta +\boldsymbol{\epsilon}$ and $X =  Z \Pi + V$, where $Z = (Z_1, Z_2)$ and $\Pi = (\Pi_1', \Pi_2')'$. 
 
-The idea behind this setup is that the instruments contained in $Z_2$ are expected to be strong. 
+In this example, the idea is that the instruments contained in $Z_2$ are expected to be strong.
 If we were confident that they were exogenous, we would certainly use them in estimation. 
 Yet the very fact that we expect them to be strongly correlated with $\mathbf{x}$ gives us reason to fear that they may be endogenous. 
 The exact opposite is true of $Z_1$: these are the instruments that we are prepared to assume are exogenous. 
@@ -23,20 +20,18 @@ Accordingly, the FMSC attempts to trade off a small increase in bias from using 
 To this end, consider a general linear GMM estimator of the form
 $$\widehat{\beta}_S = (X'Z_S \widetilde{W}_S Z_S' X)^{-1}X'Z_S \widetilde{W}_S  Z_S' \mathbf{y}$$
 where $S$ indexes the instruments used in estimation, $Z_S'  = \Xi_S Z'$ is the matrix containing only those instruments included in $S$, $|S|$ is the number of instruments used in estimation and $\widetilde{W}_S$ is an $|S|\times|S|$ positive definite weighting matrix. 
-The following low-level conditions are sufficient for the asymptotic normality of $\widehat{\beta}_S$.
-
-\todo[inline]{low-level assumptions used to be here, now they're in the appendix.}
-
 
 
 \begin{thm}[Choosing IVs Limit Distribution]
-\label{thm:chooseIV} Suppose that $\widetilde{W}_S \rightarrow_p W_S >0$. Then, under Assumption \ref{assump:chooseIV}
+\label{thm:chooseIV} 
+Let $(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})$ be a triangular array of random variables such that $E[\mathbf{z}_{ni} \epsilon_{ni}]=\mathbf{0}$, $E[\mathbf{z}_{ni} v_{ni}]=\mathbf{0}$, and $E[\epsilon_{ni}v_{ni}] = \tau/\sqrt{n}$ for all $n$. Suppose further that $\widetilde{W}_S \rightarrow_p W_S >0$. 
+Then, under standard regularity conditions, e.g.\ Assumption \ref{assump:chooseIV}, 
 $$\sqrt{n}\left(\widehat{\beta}_S - \beta \right) \overset{d}{\rightarrow} -K_S \Xi_S \left(\left[\begin{array}
            {c} \mathbf{0} \\ \boldsymbol{\tau}
          \end{array}\right] + M \right)$$
 where
          $$-K_S = \left(\Pi' Q_S W_S Q_S'\Pi\right)^{-1} \Pi'Q_SW_S$$
-$M \sim N(\mathbf{0}, \Omega)$, $Q_S = Q \Xi_S'$, and $Q$ and $\Omega$ are defined in Assumption \ref{assump:chooseIV}.
+$M \sim N(\mathbf{0}, \Omega)$, $Q_S = Q \Xi_S'$, $E[\mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow Q$ and $E[\epsilon_{ni}^2 \mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow \Omega$ as $n\rightarrow \infty$
 \end{thm}
 To implement the FMSC for this example, we simply need to specialize Equation \ref{eq:fmsc}.
 To simplify the notation, let
@@ -61,14 +56,14 @@ is the natural consistent estimator of $-K_S$ in this setting.\footnote{The nega
 Since $\Xi_S$ is known, the only remaining quantities from Equation \ref{eq:fmsc} are $\widehat{\boldsymbol{\tau}}$, $\widehat{\Psi}$ and $\widehat{\Omega}$. 
 The following result specializes Theorem \ref{thm:tau} to the present example.
 \begin{thm}
-Let $\widehat{\boldsymbol{\tau}} = n^{-1/2} Z_2' ( \mathbf{y} - X\widehat{\beta}_v)$ where $\widehat{\beta}_v$ is as defined in Equation \ref{eq:betav}. Under Assumption \ref{assump:chooseIV} we have
+Let $\widehat{\boldsymbol{\tau}} = n^{-1/2} Z_2' ( \mathbf{y} - X\widehat{\beta}_v)$ where $\widehat{\beta}_v$ is as defined in Equation \ref{eq:betav}. Under the conditions of Theorem \ref{thm:chooseIV} we have
 $\widehat{\boldsymbol{\tau}} \rightarrow_d \boldsymbol{\tau} + \Psi M$
 where $M$ is defined in Theorem \ref{thm:chooseIV},
 \begin{eqnarray*}
 	\Psi &=&\left[ \begin{array}{cc}-\Xi_2Q \Pi K_v  & I_{q} \end{array}\right] \\
 	-K_v &=& \left(\Pi' Q \Xi'_1 W_v \Xi_1 Q'\Pi\right)^{-1} \Pi'Q \Xi_1' W_v
 \end{eqnarray*}
-$W_v$ is the probability limit of the weighting matrix from Equation \ref{eq:betav}, $I_q$ is the $q\times q$ identity matrix, $\Xi_1$ is defined in Equation \ref{eq:xi12},  and $Q$ is defined in Assumption \ref{assump:chooseIV}.
+$W_v$ is the probability limit of the weighting matrix from Equation \ref{eq:betav}, $I_q$ is the $q\times q$ identity matrix, $\Xi_1$ is defined in Equation \ref{eq:xi12}, and $E[\mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow Q$. 
 \end{thm}
 Using this result, I construct the asymptotically unbiased estimator $\widehat{\tau}\widehat{\tau}' - \widehat{\Psi}\widehat{\Omega} \widehat{\Psi}'$ of $\tau\tau'$ from
 	$$\widehat{\Psi} = \left[ \begin{array}

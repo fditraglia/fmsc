@@ -1,10 +1,8 @@
 %!TEX root = main.tex
-\section{Sufficient Conditions for the Running Examples}
+\section{Low-Level Sufficient Conditions}
 \label{sec:sufficient_conditions}
 
-\subsection{Choosing Instrumental Variables}
-The following low-level conditions are sufficient for Theorem \ref{thm:OLSvsIV}.
-\begin{assump}[OLS versus TSLS]
+\begin{assump}[Sufficient Conditions for Theorem \ref{thm:OLSvsIV}]
 \label{assump:OLSvsIV}
 	Let $\{(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})\colon 1\leq i \leq n, n = 1, 2, \hdots\}$ be a triangular array of random variables such that
 	\begin{enumerate}[(a)]
@@ -20,9 +18,7 @@ Parts (a), (b) and (d) correspond to the local mis-specification assumption, par
 Part (e) is the homoskedasticity assumption: an \emph{asymptotic} restriction on the joint distribution of $v_{ni}$, $\epsilon_{ni}$, and $\mathbf{z}_{ni}$. 
 This condition holds automatically, given the other asssumptions, if $(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})$ are jointly normal, as in the simulation experiment described in the paper.
 
-\subsection{Choosing Instrumental Variables}
-The following high-level conditions are sufficient for Theorem \ref{thm:chooseIV}.
-\begin{assump}[Choosing IVs]
+\begin{assump}[Sufficient Conditions for Theorem \ref{thm:chooseIV}.]
 \label{assump:chooseIV} 
 	Let $\{(\mathbf{z}_{ni}, \mathbf{v}_{ni}, \epsilon_{ni})\colon 1\leq i \leq n, n = 1, 2, \hdots\}$ be a triangular array of random variables with $\mathbf{z}_{ni} = (\mathbf{z}_{ni}^{(1)}$, $\mathbf{z}_{ni}^{(1)})$ such that
 	\begin{enumerate}[(a)]
@@ -32,6 +28,5 @@ The following high-level conditions are sufficient for Theorem \ref{thm:chooseIV
 		\item $E[\mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow Q>0$ and $E[\epsilon_{ni}^2 \mathbf{z}_{ni} \mathbf{z}_{ni}'] \rightarrow \Omega >0$ as $n\rightarrow \infty$
 		\item $\mathbf{x}_{ni} =  \Pi_1' \mathbf{z}_{ni}^{(1)} + \Pi_2'\mathbf{z}_{ni}^{(2)} + \mathbf{v}_{ni}$ where $\Pi_1 \neq \mathbf{0}$, $\Pi_2 \neq \mathbf{0}$, and $y_i = \mathbf{x}_{ni}' \beta +  \epsilon_{ni}$
 	\end{enumerate}
-
-These conditions are similar to although more general than those contained in Assumption \ref{assump:OLSvsIV} as they do not impose homoskedasticity.
 \end{assump}
+These conditions are similar to although more general than those contained in Assumption \ref{assump:OLSvsIV} as they do not impose homoskedasticity.
