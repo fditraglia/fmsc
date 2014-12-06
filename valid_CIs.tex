@@ -59,10 +59,9 @@ The precise algorithm is as follows.
 \begin{thm}[Simulation-based Confidence Interval for $\widehat{\mu}$]
 \label{thm:sim}
 Let $\widehat{\Psi}$, $\widehat{\Omega}$, $\widehat{\theta}$, $\widehat{K}_S$, $\widehat{\varphi}_S$ be consistent estimators of $\Psi$, $\Omega$, $\theta_0$, $K_S$, $\varphi_S$ and define 
-\begin{eqnarray*}
-	\Delta_n(\widehat{\tau},\tau^*) &=& \left(\widehat{\tau} - \tau^*\right)' \left(\widehat{\Psi}\widehat{\Omega}\widehat{\Psi}'\right)^{-1} \left(\widehat{\tau} - \tau^*\right)\\
-	\mathscr{T}(\widehat{\tau},\delta) &=& \left\{\tau^* \colon  \Delta_n(\widehat{\tau},\tau^*) \leq \chi^2_q(\delta)\right\}
-\end{eqnarray*}
+$\Delta_n(\widehat{\tau},\tau^*) = \left(\widehat{\tau} - \tau^*\right)' (\widehat{\Psi}\widehat{\Omega}\widehat{\Psi}')^{-1} \left(\widehat{\tau} - \tau^*\right)$ 
+and 
+$\mathscr{T}(\widehat{\tau},\delta) = \left\{\tau^* \colon  \Delta_n(\widehat{\tau},\tau^*) \leq \chi^2_q(\delta)\right\}$
 where $\chi^2_q(\delta)$ denotes the $1-\delta$ quantile of a $\chi^2$ distribution with $q$ degrees of freedom.
 Then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asymptotic coverage probability no less than $1-(\alpha + \delta)$ as $J,n\rightarrow \infty$.
 \end{thm}
