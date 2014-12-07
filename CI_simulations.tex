@@ -32,14 +32,15 @@ A similar pattern emerges in the choosing instrumental variables simulation: see
 
 
 Table \ref{tab:OLSvsIVsim_cover_FMSC} gives the actual coverage probability of the conservative, 90\% post-FMSC confidence interval, constructed according to Algorithm \ref{alg:conf}, for the OLS versus TSLS example.
-These intervals achieve their nominal minimum coverage probability uniformly over the parameter space for all sample sizes but can be quite conservative, particularly for smaller values of $\pi, \rho$ and $N$. 
-In particular, coverage never falls below 94\% but occasionally exceeds $99.5\%$.\footnote{Recall that coverage probabilities are given in percentage points, rounded to the nearest whole percent. Thus a value of 100, for example, in fact means $\geq 99.5$.}
+These intervals achieve their nominal minimum coverage for all parameter values but can be quite conservative, particularly for smaller values of $\pi, \rho$ and $N$. 
+In particular, coverage never falls below 94\% but occasionally exceeds $99.5\%$.
+% \footnote{Recall that coverage probabilities are given in percentage points, rounded to the nearest whole percent. Thus a value of 100, for example, in fact means $\geq 99.5$.}
 Some conservatism is inevitable given the procedure, which takes which takes \emph{worst-case} bounds over a collection of intervals.
 The real culprit in this example, however, is the TSLS estimator, as we see from Table \ref{tab:OLSvsIVsim_cover_TSLS}.
 Although this estimator is correctly specified and is not subject to model selection uncertainty, its textbook 90\% confidence interval dramatically overcovers for smaller values of $\pi$ even if $N$ is fairly large.
 This is a manifestation of the weak instruments problem.
 This additional source of conservatism is inherited by the two-step post-FMSC intervals.
-Results for the minimum-AMSE moment average estimator, given in Table \ref{tab:OLSvsIVsim_cover_AVG}, are  similar although the the minimum-AMSE intervals are a somewhat more conserative than the post-FMSC intervals.
+Results for the minimum-AMSE moment average estimator, given in Table \ref{tab:OLSvsIVsim_cover_AVG}, are similar.
 
 \begin{table}[h]
 \footnotesize
@@ -106,13 +107,12 @@ Nevertheless, the simulation-based interval works well in this example: in the w
 \caption{Performance of the simulation-based, conservative 90\% post-FMSC confidence interval in the choosing instrumental variables simulation from Section \ref{sec:chooseIVsim}. The left panel gives coverage probabilities, and the right panel gives median widths relative to that of a traditional 90\% interval for the valid estimator. Values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
 \end{table}
 
-On the whole, the simulation-based intervals constructed using Algorithm \ref{alg:conf} work well.
-Nevertheless, two caveats are in order.
+Although the simulation-based intervals work fairly well, two caveats are in order.
 First, when the usual first-order asymptotic theory begins to break down, such as a weak instruments example, the simulation-based intervals can inherit an under-- or over--coverage problem from the valid estimator.
-Second, moment selection comes with a cost: the simulation-based intervals are on average wider than a textbook confidence interval for the valid estimator as we would expect given the impossibility results for post-selection inference, outlined in \cite{LeebPoetscher2005}.\footnote{Although some conservatism is inevitable, the intervals presented here could potentially be shortened by optimizing width over $\alpha$ and $\delta$ while holding their sum fixed. For more discussion of this possibility, see \cite{ClaeskensHjortbook} and \cite{McCloskey}.}
+Second, moment selection comes with a cost: the simulation-based intervals are on average wider than a textbook confidence interval for the valid estimator, as we would expect given the impossibility results for post-selection inference outlined in \cite{LeebPoetscher2005}.\footnote{The intervals presented here could potentially be shortened by optimizing width over $\alpha$ while holding $\alpha + \delta$ fixed at 0.1. For more discussion of this idea, see \cite{ClaeskensHjortbook} and \cite{McCloskey}.}
 As described above, the primary goal of the the FMSC is \emph{estimation} rather than inference.
 Once the decision to carry out moment selection has been taken, however, one cannot simply ignore this fact and report the usual confidence intervals.
-Algorithm \ref{alg:conf} provides a way to carry out honest inference post-selection and construct confidence intervals for non-standard estimators such as the minimum-AMSE averaging estimator from Section \ref{sec:momentavgexample}.
+Algorithm \ref{alg:conf} provides a way to carry out honest inference post-selection and construct confidence intervals for complicated objects such the minimum-AMSE averaging estimator from Section \ref{sec:momentavgexample}.
 More to the point, although formal moment selection is relatively rare, \emph{informal} moment selection is extremely common in applied work.
 Downward $J$-tests, DHW tests and the like are a standard part of the applied econometrician's toolkit.
 Because it can be employed to construct confidence intervals that account for the effects of specification searches, Algorithm \ref{alg:conf} can provide a valuable robustness check, as I explore in the empirical example that follows.

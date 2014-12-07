@@ -42,12 +42,11 @@ For any combination $(\gamma,N)$ there is a positive value of $\rho$ below which
 As the sample size increases, this cutoff becomes smaller; as $\gamma$ increases, it becomes larger.
 As in the OLS versus TSLS example, the post-FMSC estimator represents a compromise between the two estimators over which the FMSC selects.
 Unlike in the previous example, however, when $N$ is sufficiently small there is a range of values for $\rho$ within which the FMSC yields a lower RMSE than \emph{both} the valid and full estimators.
-This comes from the fact that the valid estimator is quite erratic for small sample sizes: even with 20,000 simulation replications it exhibits a noticable degree of simulation error for $N=50$.
+This comes from the fact that the valid estimator is quite erratic for small sample sizes.
 Such behavior is unsurprising given that its first stage is not especially strong, $\mbox{R-squared}\approx 11\%$, and it has only two moments.
 In contrast, the full estimator has three moments and a stronger first stage.
 As in the OLS versus TSLS example, the post-FMSC estimator does not uniformly outperform the valid estimator for all parameter values, although it does for smaller sample sizes.
-The FMSC never performs substantially worse than the valid estimator, however, and often performs dramatically better.
-Again, the gains are particularly large for small sample sizes.
+The FMSC never performs much worse than the valid estimator, however, and often performs substantially better, particularly for small sample sizes.
 \begin{figure}
 \centering
 	\input{./SimulationChooseIVs/Results/RMSE_coarse_gamma_baseline.tex}
@@ -55,12 +54,10 @@ Again, the gains are particularly large for small sample sizes.
 	\label{fig:chooseIVsim_RMSEbaseline}
 \end{figure}
 
-I now compare the FMSC to several alternative moment selection procedures from the literature.
-For additional comparisons and discussion, see Appendix \ref{sec:simsupplement}.
-\cite{Andrews1999} considers a moment selection procedure based on criteria of the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $J_n(S)$ is the $J$-test statistic under moment set $S$, $-h(|S|)\kappa_n$ is a ``bonus term'' that rewards the inclusion of more moment conditions.
+I now compare the FMSC to the GMM moment selection criteria of \cite{Andrews1999}, who considers a moment selection criteria of the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $J_n(S)$ is the $J$-test statistic under moment set $S$, $-h(|S|)\kappa_n$ is a ``bonus term'' that rewards the inclusion of more moment conditions.
 For each member of this family we choose the moment set that \emph{minimizes} $MSC(S)$. 
 If we take $h(|S|) = (p + |S| - r)$, then $\kappa_n = \log{n}$ gives a GMM analogue of Schwarz's Bayesian Information Criterion (GMM-BIC) while $\kappa_n = 2.01 \log{\log{n}}$ gives an analogue of the Hannan-Quinn Information Criterion (GMM-HQ), and $\kappa_n = 2$ gives an analogue of Akaike's Information Criterion (GMM-AIC). 
-Like the maximum likelihood model selection criteria upon which they are based, the GMM-BIC and GMM-HQ are consistent provided that Assumption \ref{assump:Andrews} holds, while the GMM-AIC, like the FMSC, is conservative.\footnote{I discuss this further in Section \ref{sec:avg} above.} 
+Like the maximum likelihood model selection criteria upon which they are based, the GMM-BIC and GMM-HQ are consistent provided that Assumption \ref{assump:Andrews} holds, while the GMM-AIC, like the FMSC, is conservative.
 Figure \ref{fig:chooseIVsim_RMSErelMSC} gives the RMSE values for the post-FMSC estimator alongside those of the post-GMM-BIC, HQ and AIC estimators.
 I calculate the $J$-test statistic using a centered covariance matrix estimator, following the recommendation of \cite{Andrews1999}.
 For small sample sizes, the GMM-BIC, AIC and HQ are quite erratic: indded for $N = 50$ the FMSC has a uniformly smaller RMSE.

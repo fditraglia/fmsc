@@ -15,11 +15,11 @@ The data generating process is given by
 with $(\epsilon_i, v_i, z_{1i}, z_{2i}, z_{3i}) \sim \mbox{ iid } N(0, \mathcal{S})$
 \begin{equation}
 	\mathcal{S} = \left[ \begin{array}
-		{cc} \mathcal{S}_{\epsilon v} & 0 \\ 0 & \mathcal{S}_z
+		{cc} \mathcal{S}_1 & 0 \\ 0 & \mathcal{S}_2
 	\end{array} \right], \quad 
-	\mathcal{S}_{\epsilon v} = \left[ \begin{array}
+	\mathcal{S}_1 = \left[ \begin{array}
 		{cc} 1 & \rho \\ \rho & 1 - \pi^2 
-	\end{array} \right], \quad \mathcal{S}_z = I_3 / 3
+	\end{array} \right], \quad \mathcal{S}_2 = I_3 / 3
 	\label{eq:OLSvsIVDGP3}
 \end{equation}
 for $i= 1, \hdots, N$ where $N$, $\rho$ and $\pi$ vary over a grid.
