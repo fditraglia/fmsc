@@ -1,7 +1,7 @@
 %!TEX root = main.tex
 \subsection{Choosing Instrumental Variables Example}
 \label{sec:chooseIVsim}
-I now evaluate the performance of FMSC in the Instrument Selection Example described in Section \ref{sec:chooseIVexample} using the following simulation design:
+I now evaluate the performance of FMSC in the instrument selection example described in Section \ref{sec:chooseIVexample} using the following simulation design:
 \begin{eqnarray}
 		y_i &=& 0.5 x_i + \epsilon_i\\ 
 		\label{eq:chooseIVDGP1}
@@ -28,7 +28,8 @@ The additional instrument $w$ is only relevant if $\gamma \neq 0$ and is only ex
 Since $x$ has unit variance, the first-stage R-squared for this simulation design is simply $1 - \sigma_v^2 = 1/9 + \gamma^2$.
 Hence, when  $\gamma = 0$, so that $w$ is irrelevant, the first-stage R-squared is just over 0.11.
 Increasing $\gamma$ increases the R-squared of the first-stage.
-When $\gamma = 0$, this simulation design is a special case of the DGP used in the Section \ref{sec:OLSvsIVsim}.
+This design satisfies the sufficient conditions for Theorem \ref{thm:chooseIV} given in Assumption \ref{assump:chooseIV}.
+When $\gamma = 0$, it is a special case of the DGP from Section \ref{sec:OLSvsIVsim}.
 
 As in Section \ref{sec:OLSvsIVsim}, the goal of moment selection in this exercise is to estimate the effect of $x$ on $y$, as before 0.5, with minimum MSE.
 In this case, however, the choice is between two TSLS estimators rather than OLS and TSLS: the \emph{valid} estimator uses only $z_1, z_2,$ and $z_3$ as instruments, while the \emph{full} estimator uses $z_1, z_2, z_3,$ and $w$.
@@ -54,7 +55,7 @@ The FMSC never performs much worse than the valid estimator, however, and often 
 	\label{fig:chooseIVsim_RMSEbaseline}
 \end{figure}
 
-I now compare the FMSC to the GMM moment selection criteria of \cite{Andrews1999}, who considers a moment selection criteria of the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $J_n(S)$ is the $J$-test statistic under moment set $S$, $-h(|S|)\kappa_n$ is a ``bonus term'' that rewards the inclusion of more moment conditions.
+I now compare the FMSC to the GMM moment selection criteria of \cite{Andrews1999}, which take the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $J_n(S)$ is the $J$-test statistic under moment set $S$ and $-h(|S|)\kappa_n$ is a ``bonus term'' that rewards the inclusion of more moment conditions.
 For each member of this family we choose the moment set that \emph{minimizes} $MSC(S)$. 
 If we take $h(|S|) = (p + |S| - r)$, then $\kappa_n = \log{n}$ gives a GMM analogue of Schwarz's Bayesian Information Criterion (GMM-BIC) while $\kappa_n = 2.01 \log{\log{n}}$ gives an analogue of the Hannan-Quinn Information Criterion (GMM-HQ), and $\kappa_n = 2$ gives an analogue of Akaike's Information Criterion (GMM-AIC). 
 Like the maximum likelihood model selection criteria upon which they are based, the GMM-BIC and GMM-HQ are consistent provided that Assumption \ref{assump:Andrews} holds, while the GMM-AIC, like the FMSC, is conservative.
@@ -65,7 +66,6 @@ This problem comes from the fact that the $J$-test statistic can be very badly b
 As the sample size becomes larger, the classic tradeoff between consistent and conservative selection emerges.
 For the smallest values of $\rho$ the consistent criteria outperform the conservative criteria; for moderate values the situation is reversed.
 The consistent criteria, however, have the highest worst-case RMSE.
-In this respect, GMM-BIC performs worse than GMM-HQ.
 For a discussion of a combined strategy based on the GMM information criteria of \cite{Andrews1999} and the canonical correlations information criteria of \cite{HallPeixe2003}, see Appendix \ref{sec:CCIC}.
 For a comparison with the downward $J$-test, see Appendix \ref{sec:downwardJ}.
 \begin{figure}

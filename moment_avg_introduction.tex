@@ -32,7 +32,7 @@ Even if our goal were to eliminate all mis-specified moment conditions, for exam
 Because of this, our intervals will be incorrectly centered.
 
 To account for these two effects, we need a way to represent a \emph{non-normal} sampling distribution in our limit theory, and this rules out consistent selection.
-The key point is that the post-selection estimator is a \emph{randomly-weighted average} of the individual candiate estimators, some of which are centered away from $\theta_0$.
+The key point is that the post-selection estimator is a \emph{randomly-weighted average} of the individual candidate estimators, some of which are centered away from $\theta_0$.
 Thus, although the candidate estimators are asymptotically normal, the post-selection estimator follows a \emph{mixture distribution}.
 Because they choose a single candidate with probability approaching one in the limit, consistent selection procedures make it impossible to represent this phenomenon.
 In contrast, conservative selection procedures remain random even as the sample size goes to infinity, allowing us to derive a non-normal limit distribution and, ultimately, to carry out valid inference post-moment selection.
@@ -80,7 +80,7 @@ $M_S = \Xi_S M$, $\tau_S' = (0', \tau')\Xi_S'$, and $P_S$ is the projection matr
 \end{thm}
 Hence, normalized weights constructed from almost-surely continuous functions of either the FMSC or the $J$-test statistic satisfy Assumption \ref{assump:weights}. 
 
-Post-selection estimators are merely a special cases of moment average estimators.
+Post-selection estimators are merely a special case of moment average estimators.
 To see why, consider the weight function
 $$\widehat{\omega}_S^{MSC} = \mathbf{1}\left\{\mbox{MSC}_n(S) = \min_{S'\in \mathscr{S}} \mbox{MSC}_n(S')\right\}$$where $\mbox{MSC}_n(S)$ is the value of some moment selection criterion evaluated at the sample observations $Z_{n1}\hdots, Z_{nn}$. 
 Now suppose $\mbox{MSC}_n(S) \rightarrow_d\mbox{MSC}_S(\tau,M)$, a function of $\tau$, $M$ and consistently estimable constants only. 

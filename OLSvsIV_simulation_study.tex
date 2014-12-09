@@ -23,7 +23,7 @@ with $(\epsilon_i, v_i, z_{1i}, z_{2i}, z_{3i}) \sim \mbox{ iid } N(0, \mathcal{
 	\label{eq:OLSvsIVDGP3}
 \end{equation}
 for $i= 1, \hdots, N$ where $N$, $\rho$ and $\pi$ vary over a grid.
-The goal is to estimate the effect of $x$ on $y$, in this case 0.5, with minimum MSE: either by choosing between OLS and TSLS estimators or by averaging them.
+The goal is to estimate the effect of $x$ on $y$, in this case 0.5, with minimum MSE either by choosing between OLS and TSLS estimators or by averaging them.
 To ensure that the finite-sample MSE of the TSLS estimator exists, this DGP includes three instruments leading to two overidentifying restrictions \citep{Phillips1980}.\footnote{Alternatively, one could use fewer instruments in the DGP and use work with trimmed MSE.}
 This design satisfies regularity conditions that are sufficient for Theorem \ref{thm:OLSvsIV} -- in particular it satisfies Assumption \ref{assump:OLSvsIV} -- and keeps the variance of $x$ fixed at one so that $\pi = Corr(x_i, z_{1i} + z_{2i} + z_{3i})$ and $\rho = Corr(x_i,\epsilon_i)$.
 The first-stage R-squared is simply $1 - \sigma_v^2/\sigma_x^2 = \pi^2$ so that larger values of $|\pi|$ \emph{reduce} the variance of the TSLS estimator.
