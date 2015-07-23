@@ -1,8 +1,8 @@
 set.seed(8372)
 n_cores <- parallel::detectCores()
 
-tau_seq <- seq(0, 10, 0.25)
-pi_sq_seq <- seq(0.1, 0.5, 0.01)
+tau_seq <- seq(0, 8)
+pi_sq_seq <- seq(0.05, 0.4, 0.05)
 params <- expand.grid(tau = tau_seq, pi_sq = pi_sq_seq)
 
 #=================== OLS, TSLS and "Naive" CIs
