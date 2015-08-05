@@ -1,7 +1,10 @@
+set.seed(8372)
+n_cores <- parallel::detectCores()
+
 #======================= OLS vs IV Example
 pi_sq_seq <- seq(0.1, 0.4, 0.05)
 tau_seq <- 0:8
-alpha_seq <- c(0.05, 0.1)
+alpha_seq <- c(0.2, 0.1, 0.05)
 params <- expand.grid(tau = tau_seq, pi_sq = pi_sq_seq, alpha = alpha_seq)
 
 #-------- Size Distortion of Naive Intervals
@@ -18,7 +21,7 @@ xtabs(I(100 * round(coverprob, 2)) ~ pi_sq + tau + alpha, cover_naive_OLSvsIV)
 params <- expand.grid(tau = tau_seq, pi_sq = pi_sq_seq)
 
 relwidth_naive_OLSvsIV <- unlist(Map(function(pi_sq, tau)
-  expect_rel_width(tau, bias_coef = 1,
+  fmscr::expect_rel_width(tau, bias_coef = 1,
                    tau_sd = sqrt((1 - pi_sq)/pi_sq),
                    efficient_sd = 1),
   params$pi_sq, params$tau))
@@ -26,12 +29,22 @@ relwidth_naive_OLSvsIV <- unlist(Map(function(pi_sq, tau)
 relwidth_naive_OLSvsIV <- data.frame(params, erelwidth = relwidth_naive_OLSvsIV)
 xtabs(I(100 * round(erelwidth, 2)) ~ pi_sq + tau, relwidth_naive_OLSvsIV)
 
+#-------- Relative Width of Infeasible post-FMSC CI
+params <- expand.grid(tau = tau_seq, pi_sq = pi_sq_seq, alpha = alpha_seq)
+relwidth_infeas_OLSvsIV <- unlist(parallel::mcMap(function(alpha, tau, pi_sq)
+  fmscr::rel_width_FMSCinfeas(alpha, tau, bias_coef = 1,
+                              tau_sd = sqrt((1 - pi_sq)/pi_sq),
+                              efficient_sd = 1, equal.tailed = FALSE),
+  params$alpha, params$tau, params$pi_sq, mc.cores = n_cores))
+
+relwidth_infeas_OLSvsIV <- data.frame(params, relwidth = relwidth_infeas_OLSvsIV)
+xtabs(I(100 * round(relwidth, 2)) ~ pi_sq + tau + alpha, relwidth_infeas_OLSvsIV)
 
 
 #======================= Choosing IVs Example
 g_sq_seq <- seq(0.05, 0.35, 0.05)
 tau_seq <- 0:8
-alpha_seq <- c(0.05, 0.1)
+alpha_seq <- c(0.2, 0.1, 0.05)
 params <- expand.grid(tau = tau_seq, g_sq = g_sq_seq, alpha = alpha_seq)
 
 #-------- Size Distortion of Naive Intervals
@@ -49,12 +62,26 @@ xtabs(I(100 * round(coverprob, 2)) ~ g_sq + tau + alpha, cover_naive_chooseIV)
 params <- expand.grid(tau = tau_seq, g_sq = g_sq_seq)
 
 relwidth_naive_chooseIV <- unlist(Map(function(g_sq, tau)
-  expect_rel_width(tau, bias_coef = sqrt(g_sq)/(g_sq + 1/9),
+  fmscr::expect_rel_width(tau, bias_coef = sqrt(g_sq)/(g_sq + 1/9),
                    tau_sd = sqrt(1 + 9 * g_sq),
                    efficient_sd = sqrt(1 / (g_sq + 1/9))),
   params$g_sq, params$tau))
 
 relwidth_naive_chooseIV <- data.frame(params, erelwidth=relwidth_naive_chooseIV)
 xtabs(I(100 * round(erelwidth, 2)) ~ g_sq + tau, relwidth_naive_chooseIV)
+
+
+#-------- Relative Width of Infeasible post-FMSC CI
+params <- expand.grid(tau = tau_seq, g_sq = g_sq_seq, alpha = alpha_seq)
+relwidth_infeas_chooseIV <- unlist(parallel::mcMap(function(alpha, tau, g_sq)
+  fmscr::rel_width_FMSCinfeas(alpha, tau,
+                              bias_coef = sqrt(g_sq)/(g_sq + 1/9),
+                              tau_sd = sqrt(1 + 9 * g_sq),
+                              efficient_sd = sqrt(1 / (g_sq + 1/9)),
+                              equal.tailed = FALSE),
+  params$alpha, params$tau, params$g_sq, mc.cores = n_cores))
+
+relwidth_infeas_chooseIV <- data.frame(params, relwidth = relwidth_infeas_chooseIV)
+xtabs(I(100 * round(relwidth, 2)) ~ g_sq + tau + alpha, relwidth_infeas_chooseIV)
 
 
