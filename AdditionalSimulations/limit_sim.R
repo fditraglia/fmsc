@@ -3,8 +3,8 @@ n_cores <- parallel::detectCores()
 
 #======================= OLS vs IV Example
 pi_sq_seq <- seq(0.1, 0.4, 0.05)
-tau_seq <- 0:8
-alpha_seq <- c(0.2, 0.1, 0.05)
+tau_seq <- seq(0, 4, 0.5)
+alpha_seq <- c(0.32, 0.1, 0.05)
 params <- expand.grid(tau = tau_seq, pi_sq = pi_sq_seq, alpha = alpha_seq)
 
 #-------- Size Distortion of Naive Intervals
@@ -44,7 +44,7 @@ xtabs(I(100 * round(relwidth, 2)) ~ pi_sq + tau + alpha, relwidth_infeas_OLSvsIV
 #======================= Choosing IVs Example
 g_sq_seq <- seq(0.05, 0.35, 0.05)
 tau_seq <- 0:8
-alpha_seq <- c(0.2, 0.1, 0.05)
+alpha_seq <- c(0.32, 0.1, 0.05)
 params <- expand.grid(tau = tau_seq, g_sq = g_sq_seq, alpha = alpha_seq)
 
 #-------- Size Distortion of Naive Intervals
