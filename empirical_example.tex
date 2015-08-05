@@ -83,8 +83,8 @@ These are constructed by identifying the selected instrument set from Table \ref
 The 1-Step intervals are simulation-based nominal 95\% intervals constructed using a simplified, and less computationally intensive, version of the procedure given in Algorithm \ref{alg:conf}.
 Rather than taking the minimum lower confidence limit and maximum upper confidence limit over all values in a given confidence region for $\tau$, this procedure simply assumes that the estimated value $\widehat{\tau}$ is exactly correct, and generates simulations for $\Lambda$ under this assumption.
 Neither the Na\"{i}ve nor the 1-Step procedures yield valid 95\% confidence intervals.
-They are provided merely for comparison with the 2-Step procedure, which fully implements Algorithm \ref{alg:conf} with $\alpha = \delta = 0.05$ and $J=10,000$. 
-As explained above, the 2-Step interval is guaranteed to have asymptotic coverage probability of at least $1 - \alpha - \delta$, in this case 90\%.
+They are provided merely for comparison with the 2-Step procedure, which fully implements Algorithm \ref{alg:conf} with $\alpha = \delta = 0.025$ and $J=10,000$. 
+As explained above, the 2-Step interval is guaranteed to have asymptotic coverage probability of at least $1 - \alpha - \delta$, in this case 95\%.
 From the 2-Step intervals, we see that the results of \cite{Carstensen2006} are extremely robust. 
 There is no evidence that accounting for the effects of instrument selection changes our conclusions about the sign or significance of \emph{malfal} or \emph{rule}.
 
