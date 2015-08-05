@@ -4,22 +4,23 @@
 
 \subsection{Local Mis-Specification}
 Let $f(\cdot,\cdot)$ be a $(p+q)$-vector of moment functions of a random vector $Z$ and an $r$-dimensional parameter vector $\theta$, partitioned according to $f(\cdot,\cdot) = \left(g(\cdot,\cdot)', h(\cdot,\cdot)'  \right)'$ where $g(\cdot,\cdot)$ and $h(\cdot,\cdot)$ are $p$- and $q$-vectors of moment functions. 
-The moment condition associated with $g(\cdot,\cdot)$ is assumed to be correct whereas that associated with $h(\cdot,\cdot)$ is locally mis-specified.
+The moment condition associated with $g$ is assumed to be correct whereas that associated with $h$ is locally mis-specified.
 More precisely, 
 \begin{assump}[Local Mis-Specification]
 \label{assump:drift}
-Let $\{Z_{ni}\colon 1\leq i \leq n, n =1, 2, \hdots\}$ be a triangular array of random vectors defined on a probability space $(\Upsilon, \mathcal{F}, \mathbb{P})$ satisfying
+Let $\{Z_{ni}\colon 1\leq i \leq n, n =1, 2, \hdots\}$ be an iid triangular array of random vectors defined on a probability space $(\Upsilon, \mathcal{F}, \mathbb{P})$ satisfying
 	\begin{enumerate}[(a)]
 		\item $E[g(Z_{ni},\theta_0)] = 0$,
 		\item $E[h(Z_{ni},\theta_0)] = n^{-1/2}\tau$, where $\tau$ is an unknown constant vector, 
 		\item $\{f(Z_{ni},\theta_0)\colon 1\leq i \leq n, n = 1, 2, \hdots\}$ is uniformly integrable, and
-		\item $Z_{ni} \rightarrow_dZ_i$, where the $Z_i$ are identically distributed.
+		\item $Z_{ni} \rightarrow_d Z_i$.
 	\end{enumerate}
 \end{assump}
 For any fixed sample size $n$, the expectation of $h$ evaluated at the true parameter value $\theta_0$ depends on the unknown constant vector $\tau$. 
 Unless all components of $\tau$ are zero, some of the moment conditions contained in $h$ are mis-specified. In the limit however, this mis-specification vanishes, as $\tau/\sqrt{n}$ converges to zero. 
 Uniform integrability combined with weak convergence implies convergence of expectations, so that $E[g(Z_i, \theta_0)]=0$ and $E[h(Z_i, \theta_0)]=0$. Because the limiting random vectors $Z_i$ are identically distributed, I suppress the $i$ subscript and simply write $Z$ to denote their common marginal law, e.g.\ $E[h(Z,\theta_0)]=0$. 
-It is important to note that local mis-specification is \emph{not} intended as a literal description of real-world datasets: it is merely a device that gives asymptotic bias-variance trade-off that mimics the finite-sample intuition. 
+It is important to note that local mis-specification is \emph{not} intended as a literal description of real-world datasets: it is merely a device that gives asymptotic bias-variance trade-off that mimics the finite-sample intuition.
+Moreover, while I work with an iid triangular array for simplicity, the results presented here can be adapted to handle dependent random variables.
 
 \subsection{Candidate GMM Estimators}
 Define the sample analogue of the expectations in Assumption \ref{assump:drift} as follows:
