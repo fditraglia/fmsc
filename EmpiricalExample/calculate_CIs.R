@@ -1,6 +1,6 @@
 # Coverage probabilities
-alpha <- 0.05
-delta <- 0.05
+alpha <- 0.025
+delta <- 0.025
 
 #------------------------------------------------------------
 # Constraint Function - only consider values of tau.star
@@ -28,8 +28,8 @@ tau.lower <- tau.hat - sqrt(diag(tau.var)) * norm.crit
 #Sanity Checks
 stopifnot(tau.hat < tau.upper)
 stopifnot(tau.hat > tau.lower)
-stopifnot(constraint(tau.hat) == -chisq.crit)
-stopifnot(constraint(tau.lower) == constraint(tau.upper))
+stopifnot(all.equal(constraint(tau.hat), -chisq.crit))
+stopifnot(all.equal(constraint(tau.lower), constraint(tau.upper)))
 
 # Use closure to construct ``function factories'' for
 # different criteria and target parameters
