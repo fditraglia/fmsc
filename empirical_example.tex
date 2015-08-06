@@ -1,20 +1,26 @@
 %!TEX root = main.tex
 \section{Empirical Example: Geography or Institutions?}
 \label{sec:application}
-\cite{Carstensen2006} address a controversial question from the development literature: does geography directly effect income after controlling for institutions? 
-A number of well-known studies find little or no direct effect of geographic endowments \citep{Acemoglu,Rodrik,Easterly}. \cite{Sachs}, on the other hand, shows that malaria transmission, a variable largely driven by ecological conditions, directly influences the level of per capita income, even after controlling for institutions. Because malaria transmission is very likely endogenous, Sachs uses a measure of ``malaria ecology,'' constructed to be exogenous both to present economic conditions and public health interventions, as an instrument. 
-\cite{Carstensen2006} address the robustness of Sachs's results using the following baseline regression for a sample of 44 countries:
+\cite{Carstensen2006} address a controversial question from the development literature: what is the causal effect of geography on income per capita after controlling for the quality of institutions?
+This is a question of great interest to policymakers as it likely to be much easier for an NGO to design an effective intervention to redress a difference in geographic endowments than to influence the quality of a nation's governance from outside.
+A number of well-known studies find little or no direct effect of geographic endowments \citep{Acemoglu,Rodrik,Easterly}. \cite{Sachs}, on the other hand, shows that malaria transmission, a variable largely driven by ecological conditions, directly influences the level of per capita income, even after controlling for institutions.
+Because malaria transmission is very likely endogenous, Sachs uses a measure of ``malaria ecology,'' constructed to be exogenous both to present economic conditions and public health interventions, as an instrument. 
+\cite{Carstensen2006} extend Sachs's work using the following baseline regression for a sample of 44 countries:
 \begin{equation}
 	\mbox{ln\emph{gdpc}}_i = \beta_1 + \beta_2 \cdot \mbox{\emph{institutions}}_i + \beta_3 \cdot \mbox{\emph{malaria}}_i + \epsilon_i
 \end{equation}
-This model extends the baseline specification of \cite{Acemoglu} to include a direct effect of malaria transmission which, like institutions, is treated as endogenous.\footnote{Due to a lack of data for certain instruments, \cite{Carstensen2006} work with a smaller sample of countries than \cite{Acemoglu}.} 
+This model augments the baseline specification of \cite{Acemoglu} to include a direct effect of malaria transmission which, like institutions, is treated as endogenous.\footnote{Due to a lack of data for certain instruments, \cite{Carstensen2006} work with a smaller sample of countries than \cite{Acemoglu}.} 
 Considering a variety of measures of both institutions and malaria transmission, and a number of instrument sets, \cite{Carstensen2006} find large negative effects of malaria transmission, lending support to Sach's conclusion.
 
-In this section, I revisit and expand upon the instrument selection exercise given in Table 2 of \cite{Carstensen2006} using the FMSC and corrected confidence intervals described above. I consider two questions. 
-First, based on the FMSC methodology, which instruments should we choose if our target parameter is $\beta_3$, the effect of malaria transmission on per capita income?
-Does the selected instrument set change if our target parameter is $\beta_2$, the effect of institutions?
-Second, are the results robust to the effects of instrument selection on inference?
-All results are calculated by TSLS using the formulas from Section \ref{sec:chooseIVexample} and the variables described in Table \ref{tab:desc}, with ln\emph{gdpc} as the outcome  variable and \emph{rule} and \emph{malfal} as measures of institutions and malaria transmission.
+In this section, I revisit and expand upon the instrument selection exercise given in Table 2 of \cite{Carstensen2006} using the FMSC and corrected confidence intervals described above. 
+All results in this section are calculated by TSLS using the formulas from Section \ref{sec:chooseIVexample} and the variables described in Table \ref{tab:desc}, with ln\emph{gdpc} as the outcome  variable and \emph{rule} and \emph{malfal} as measures of institutions and malaria transmission.
+I this exercise I imagine two hypothetical econometricians.
+The first, like \cite{Sachs} and \cite{Carstensen2006}, seeks the best possible estimate of the causal effect of malaria transmission, $\beta_3$, after controlling for institutions by selecting over a number of possible instruments.
+The second, in contrast, seeks the best possible estimate of the causal effect of \emph{institutions}, $\beta_2$, after controlling for malaria transmission by selecting over the same collection of instruments.
+After estimating their desired target parameters, both econometricians also wish to report valid confidence intervals that account for the additional uncertainty introduced by instrument selection.
+For the purposes of this example, to illustrate the results relevant to each of my hypothetical researchers, I take each of $\beta_2$ and $\beta_3$ \emph{in turn} as the target parameter. 
+A researcher interested in \emph{both} $\beta_2$ and $\beta_3$, however, should not proceed in this fashion, as it could lead to contradictory inferences. 
+Instead, she should define a target parameter that includes both $\beta_2$ and $\beta_3$, for example $\mu = w \beta_2 + (1-w)\beta_3$. For more details on the case of a vector target parameter, see Appendix \ref{append:mult}.
 
 
 \begin{table}[!tbp]
@@ -85,8 +91,7 @@ Rather than taking the minimum lower confidence limit and maximum upper confiden
 Neither the Na\"{i}ve nor the 1-Step procedures yield valid 95\% confidence intervals.
 They are provided merely for comparison with the 2-Step procedure, which fully implements Algorithm \ref{alg:conf} with $\alpha = \delta = 0.025$ and $J=10,000$. 
 As explained above, the 2-Step interval is guaranteed to have asymptotic coverage probability of at least $1 - \alpha - \delta$, in this case 95\%.
-From the 2-Step intervals, we see that the results of \cite{Carstensen2006} are extremely robust. 
-There is no evidence that accounting for the effects of instrument selection changes our conclusions about the sign or significance of \emph{malfal} or \emph{rule}.
+From the 2-Step intervals, we see that both of our two hypothetical econometricians would report a statistically significant result even after accounting for the effects of instrument selection on inference.
 
 \begin{table}[htbp]
 	\centering

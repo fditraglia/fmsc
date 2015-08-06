@@ -19,7 +19,7 @@ Using an applied example from development economics, I show that this procedure 
 
 While the methods described here apply to general GMM models, I focus on two simple but empirically relevant examples: choosing between ordinary least squares (OLS) and two-stage least squares (TSLS) estimators, and selecting instruments in linear instrumental variables (IV) models. 
 In the OLS versus TSLS example the FMSC takes a particularly transparent form, providing a risk-based justification for the Durbin-Hausman-Wu test, and leading to a novel ``minimum-AMSE'' averaging estimator that combines OLS and TSLS.
-It is important to note that both the FMSC and related minimum-AMSE averaging estimator considered here are derived for a \emph{scalar} parameter of interest, as this is the most common situation encountered in applied work.
+It is important to note that both the FMSC and related minimum-AMSE averaging estimator considered here are derived for a \emph{scalar} parameter of interest, as this is the most common situation encountered in applied work.\footnote{The idea behind the FMSC is readily extended to case of a vector parameter of interest. For details see Appendix \ref{append:mult}.}
 As a consequence, Stein-type results do \emph{not} apply: it is impossible to construct an estimator -- post-selection, averaging or otherwise -- with uniformly lower risk than the ``valid'' estimator that uses only the baseline moment conditions in estimation.
 Nevertheless, it remains possible to achieve substantially lower risk than the valid estimator over large regions of the parameter space, particularly in settings where the additional moment conditions are highly informative and \emph{nearly} correct.
 This is precisely the situation for which the FMSC is designed.

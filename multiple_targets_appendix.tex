@@ -2,24 +2,25 @@
 \section{The Case of Multiple Target Parameters}
 \label{append:mult}
   The fundamental idea behind the FMSC is to approximate finite-sample risk with asymptotic risk under local mis-specification.
-  We can use the same idea when there are multiple target parameters: all we need to do is specify an appropriate risk function.
+  Although the discussion given above is restricted to a scalar target parameter, the same basic idea is easily extended to accomodate a vector of target parameters.
+  All that is required is to specify an appropriate risk function.
   Consider a generic weighted quadratic risk function of the form
   \[
     R(\widehat{\theta}_S,W) = E\left[ \left( \widehat{\theta}_S - \theta_0 \right)' W \left( \widehat{\theta} - \theta_0 \right)\right]
   \]
   where $W$ is a positive semi-definite matrix.
-  The finite-sample distribution of $\widehat{\theta}$ is, in general, unknown, but by Theorem 2.2 of the paper
+  The finite-sample distribution of $\widehat{\theta}$ is, in general, unknown, but by Theorem \ref{thm:normality} $\sqrt{n} \left( \widehat{\theta}_S - \theta_0\right) \rightarrow_d U_S$ where
   \[
-    \sqrt{n} \left( \widehat{\theta}_S - \theta_0\right) \rightarrow_d -K_S \Xi_S \left( M + \left[
+    U_S = -K_S \Xi_S \left( M + \left[
     \begin{array}{c}
       0 \\ \tau
     \end{array}
-  \right]\right) \equiv U_S
+  \right]\right)
   \]
-  where $M\sim N(0,\Omega)$ so we instead consider the \emph{asymptotic risk}
-  \begin{align*}
-    AR(\widehat{\theta}_S, W) &= E\left[ U_S' W U_S \right] = \mbox{trace}\left\{ E\left[ U_S U_S' \right]W \right\} \mbox{trace}\left\{W^{1/2} E\left[ U_S U_S' \right]W^{1/2} \right\}\\
-    &= \mbox{trace}\left\{ W^{1/2}K_S \Xi_S 
+  and $M\sim N(0,\Omega)$ so we instead consider the \emph{asymptotic risk}
+  \begin{equation*}
+    AR(\widehat{\theta}_S, W) = E\left[ U_S' W U_S \right] =
+     \mbox{trace}\left\{ W^{1/2}K_S \Xi_S 
       \left( \left[
       \begin{array}{cc}
         0 & 0 \\
@@ -27,9 +28,9 @@
       \end{array}
     \right] + \Omega\right)
     \Xi_S' K_S'W^{1/2} \right\}
-  \end{align*}
-  where $W^{1/2}$ is the (unique), symmetric, positive definite square root of $W$.
-  To construct an asymptotically unbiased estimator of $AR(\widehat{\theta}_S, W)$ we substitute consistent estimators of $\Omega$ and $K_S$ and the asymptotically unbiased estimator of $\widehat{\tau}\widehat{\tau}'$ from Corollary 3.2 yielding
+  \end{equation*}
+  where $W^{1/2}$ is the symmetric, positive semi-definite square root of $W$.
+  To construct an asymptotically unbiased estimator of $AR(\widehat{\theta}_S, W)$ we substitute consistent estimators of $\Omega$ and $K_S$ and the asymptotically unbiased estimator of $\widehat{\tau}\widehat{\tau}'$ from Corollary \ref{cor:tautau} yielding
   \[
     \widehat{AR}\left( \widehat{\theta}_S, W \right) = 
     \mbox{trace}\left\{ W^{1/2}\widehat{K}_S \Xi_S 
@@ -41,13 +42,7 @@
     \right] + \Omega\right)
     \Xi_S' \widehat{K}_S'W^{1/2} \right\}
   \]
-  which is nearly identical to the expression for the FMSC given in Equation 1 of the paper.
+  which is nearly identical to the expression for the FMSC given in Equation \ref{eq:fmsc}.
   The only difference is the presence of the weighting matrix $W$ and the trace operator in place of the vector of derivatives $\nabla_\theta\mu(\widehat{\theta})$.
-  By minimizing $\widehat{AR}(\widehat{\theta}_S,W)$ over $S$ one can apply the same reasoning that underlies the FMSC to a more general class of quadratic risk functions.
-  \todo[inline]{I think that when $W$ is diagonal, this is even simpler in that for any diagonal $W$ there's a corresponding ``target parameter'' $\mu$ that we can work in terms of without even changing the notation.
-  Still need to think a bit more about the question of inference.
-I think the solution is something like this.
-If you are interested in two parameters, choose a $W$ that gives weight to them and only them.
-Then there's no inconsistency in the inference since we're choosing a single specification. 
-Could even get joint inference for the two using my simulation-based procedure I think.}
-
+  When $W$ is a diagonal matrix this difference disappears completely as this effectively amounts to defining a target parameter that is a weighted average of some subset of the elements of $\theta$.
+  In this case the FMSC can be used without modification simply by defining the function $\mu$ appropriately.

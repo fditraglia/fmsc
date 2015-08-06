@@ -3,7 +3,7 @@
 \label{sec:FMSC}
 
 \subsection{The General Case}
-The FMSC chooses among the potentially invalid moment conditions contained in $h$ based on the estimator AMSE of a user-specified scalar target parameter.
+The FMSC chooses among the potentially invalid moment conditions contained in $h$ based on the estimator AMSE of a user-specified scalar target parameter.\footnote{Although I focus on the case of a scalar target parameter in the body of the paper, the same idea can be applied to a vector of target parameters. For details see Appendix \ref{append:mult}.}
 Denote this target parameter by $\mu$, a real-valued, $Z$-almost continuous function of the parameter vector $\theta$ that is differentiable in a neighborhood of $\theta_0$. 
 Further, define the GMM estimator of $\mu$ based on $\widehat{\theta}_S$ by $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ and the true value of $\mu$ by $\mu_0 = \mu(\theta_0)$. 
 Applying the Delta Method to Theorem \ref{thm:normality} gives the AMSE of $\widehat{\mu}_S$.
