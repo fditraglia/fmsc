@@ -1,4 +1,4 @@
-rm(list = ls())
+setwd("~/fmsc/AdditionalSimulations/")
 source("limit_sim_OLSvsIV.R")
 rm(list = ls())
 source("limit_sim_chooseIVs.R")

@@ -50,7 +50,7 @@ onestep_equal <- parallel::mcMap(function(alpha, tau, g_sq)
                    bias_coef = sqrt(g_sq)/(g_sq + 1/9),
                    tau_sd = sqrt(1 + 9 * g_sq),
                    efficient_sd = sqrt(1 / (g_sq + 1/9)),
-                   equal.tailed = TRUE, ndraws = 5),
+                   equal.tailed = TRUE, ndraws = 500),
   params$alpha, params$tau, params$g_sq, mc.cores = n_cores)
 
 onestep_equal <- data.frame(params, do.call(rbind, onestep_equal))
@@ -62,7 +62,7 @@ onestep_short <- parallel::mcMap(function(alpha, tau, g_sq)
                    bias_coef = sqrt(g_sq)/(g_sq + 1/9),
                    tau_sd = sqrt(1 + 9 * g_sq),
                    efficient_sd = sqrt(1 / (g_sq + 1/9)),
-                   equal.tailed = FALSE, ndraws = 5),
+                   equal.tailed = FALSE, ndraws = 500),
   params$alpha, params$tau, params$g_sq, mc.cores = n_cores)
 
 onestep_short <- data.frame(params, do.call(rbind, onestep_short))
@@ -76,7 +76,7 @@ twostep_equal <- parallel::mcMap(function(alpha, tau, g_sq)
                    bias_coef = sqrt(g_sq)/(g_sq + 1/9),
                    tau_sd = sqrt(1 + 9 * g_sq),
                    efficient_sd = sqrt(1 / (g_sq + 1/9)),
-                   a1 = 0.5 * alpha, ndraws = 5),
+                   a1 = 0.5 * alpha, ndraws = 500),
   params$alpha, params$tau, params$g_sq, mc.cores = n_cores)
 
 twostep_equal <- data.frame(params, do.call(rbind, twostep_equal))
@@ -91,7 +91,7 @@ twostep_widetau <- parallel::mcMap(function(alpha, tau, g_sq)
                    bias_coef = sqrt(g_sq)/(g_sq + 1/9),
                    tau_sd = sqrt(1 + 9 * g_sq),
                    efficient_sd = sqrt(1 / (g_sq + 1/9)),
-                   a1 = 0.25 * alpha, ndraws = 5),
+                   a1 = 0.25 * alpha, ndraws = 500),
   params$alpha, params$tau, params$g_sq, mc.cores = n_cores)
 
 twostep_widetau <- data.frame(params, do.call(rbind, twostep_widetau))
@@ -105,19 +105,18 @@ twostep_narrowtau <- parallel::mcMap(function(alpha, tau, g_sq)
                    bias_coef = sqrt(g_sq)/(g_sq + 1/9),
                    tau_sd = sqrt(1 + 9 * g_sq),
                    efficient_sd = sqrt(1 / (g_sq + 1/9)),
-                   a1 = 0.75 * alpha, ndraws = 5),
+                   a1 = 0.75 * alpha, ndraws = 500),
   params$alpha, params$tau, params$g_sq, mc.cores = n_cores)
 
 twostep_narrowtau <- data.frame(params, do.call(rbind, twostep_narrowtau))
 
 #========================== Store Results
 chooseIVs <- list(cover_naive, relwidth_naive, relwidth_infeas,
-                  onestep_equal, onestep_short, twostep_equal, twostep_widetau,
-                  twostep_narrowtau)
+                  onestep_equal, onestep_short, twostep_equal,
+                  twostep_widetau, twostep_narrowtau)
 names(chooseIVs) <- c('cover_naive', 'relwidth_naive', 'relwidth_infeas',
                   'onestep_equal', 'onestep_short', 'twostep_equal',
                   'twostep_widetau', 'twostep_narrowtau')
-
 save(chooseIVs, file = "chooseIVs_limit_sim.Rd")
 
 #========================== Tables of Results

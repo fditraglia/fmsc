@@ -43,7 +43,7 @@ params <- expand.grid(tau = tau_seq, pi_sq = pi_sq_seq, alpha = alpha_seq)
 onestep_equal <- parallel::mcMap(function(alpha, tau, pi_sq)
   fmscr::onestepCI(alpha, tau, bias_coef = 1,
                    tau_sd = sqrt((1 - pi_sq) / pi_sq),
-                   efficient_sd = 1, equal.tailed = TRUE, ndraws = 5),
+                   efficient_sd = 1, equal.tailed = TRUE, ndraws = 500),
   params$alpha, params$tau, params$pi_sq, mc.cores = n_cores)
 
 onestep_equal <- data.frame(params, do.call(rbind, onestep_equal))
@@ -53,7 +53,7 @@ params <- expand.grid(tau = tau_seq, pi_sq = pi_sq_seq, alpha = alpha_seq)
 onestep_short <- parallel::mcMap(function(alpha, tau, pi_sq)
   fmscr::onestepCI(alpha, tau, bias_coef = 1,
                    tau_sd = sqrt((1 - pi_sq) / pi_sq),
-                   efficient_sd = 1, equal.tailed = FALSE, ndraws = 5),
+                   efficient_sd = 1, equal.tailed = FALSE, ndraws = 500),
   params$alpha, params$tau, params$pi_sq, mc.cores = n_cores)
 
 onestep_short <- data.frame(params, do.call(rbind, onestep_short))
@@ -65,7 +65,7 @@ params <- expand.grid(tau = tau_seq, pi_sq = pi_sq_seq, alpha = alpha_seq)
 twostep_equal <- parallel::mcMap(function(alpha, tau, pi_sq)
   fmscr::twostepCI(alpha, tau, bias_coef = 1,
                    tau_sd = sqrt((1 - pi_sq) / pi_sq),
-                   efficient_sd = 1, a1 = 0.5 * alpha, ndraws = 5),
+                   efficient_sd = 1, a1 = 0.5 * alpha, ndraws = 500),
   params$alpha, params$tau, params$pi_sq, mc.cores = n_cores)
 
 twostep_equal <- data.frame(params, do.call(rbind, twostep_equal))
@@ -78,7 +78,7 @@ params <- expand.grid(tau = tau_seq, pi_sq = pi_sq_seq, alpha = alpha_seq)
 twostep_widetau <- parallel::mcMap(function(alpha, tau, pi_sq)
   fmscr::twostepCI(alpha, tau, bias_coef = 1,
                    tau_sd = sqrt((1 - pi_sq) / pi_sq),
-                   efficient_sd = 1, a1 = 0.25 * alpha, ndraws = 5),
+                   efficient_sd = 1, a1 = 0.25 * alpha, ndraws = 500),
   params$alpha, params$tau, params$pi_sq, mc.cores = n_cores)
 
 twostep_widetau <- data.frame(params, do.call(rbind, twostep_widetau))
@@ -90,7 +90,7 @@ params <- expand.grid(tau = tau_seq, pi_sq = pi_sq_seq, alpha = alpha_seq)
 twostep_narrowtau <- parallel::mcMap(function(alpha, tau, pi_sq)
   fmscr::twostepCI(alpha, tau, bias_coef = 1,
                    tau_sd = sqrt((1 - pi_sq) / pi_sq),
-                   efficient_sd = 1, a1 = 0.75 * alpha, ndraws = 5),
+                   efficient_sd = 1, a1 = 0.75 * alpha, ndraws = 500),
   params$alpha, params$tau, params$pi_sq, mc.cores = n_cores)
 
 twostep_narrowtau <- data.frame(params, do.call(rbind, twostep_narrowtau))
@@ -99,11 +99,11 @@ twostep_narrowtau <- data.frame(params, do.call(rbind, twostep_narrowtau))
 OLSvsIV <- list(cover_naive, relwidth_naive, relwidth_infeas,
                 onestep_equal, onestep_short, twostep_equal, twostep_widetau,
                 twostep_narrowtau)
-names(chooseIVs) <- c('cover_naive', 'relwidth_naive', 'relwidth_infeas',
+names(OLSvsIV) <- c('cover_naive', 'relwidth_naive', 'relwidth_infeas',
                   'onestep_equal', 'onestep_short', 'twostep_equal',
                   'twostep_widetau', 'twostep_narrowtau')
 
-save(chooseIVs, file = "OLSvsIV")
+save(OLSvsIV, file = "OLSvsIV_limit_sim.Rd")
 
 #========================== Tables of Results
 #xtabs(I(100 * round(coverprob, 2)) ~ pi_sq + tau + alpha, cover_naive)
