@@ -2,16 +2,16 @@
 \section{Trimmed MSE}
 \label{append:trim}
     Even in situations where finite sample MSE does not exist, it is still meaningful to consider comparisons of asymptotic MSE.
-    To make the connection between the finite-sample and limit experiment a bit tidier in this case we can work in terms of \emph{trimmed} MSE,  following Hansen \cite{HansenShrink}. 
+    To make the connection between the finite-sample and limit experiment a bit tidier in this case we can work in terms of \emph{trimmed} MSE,  following \cite{HansenShrink}. 
     To this end, define
     \begin{align*}
       MSE_n(\widehat{\mu}_S, \zeta) &= E\left[ \min\left\{ n(\widehat{\mu} - \mu_0)^2, \zeta  \right\} \right]\\
       AMSE(\widehat{\mu}_S) &= \lim_{\zeta \rightarrow \infty} \liminf_{n\rightarrow \infty} MSE_n(\widehat{\mu}_S, \zeta)
     \end{align*}
     where $\zeta$ is a positive constant that bounds the expectation for finite $n$.
-    By Corollary 3.1 of my paper, $\sqrt{n}(\widehat{\mu}_S-\mu_0) \rightarrow_d \Lambda$ where $\Lambda$ is a normally distributed random variable.
+    By Corollary \ref{cor:target} $\sqrt{n}(\widehat{\mu}_S-\mu_0) \rightarrow_d \Lambda$ where $\Lambda$ is a normally distributed random variable.
     Thus, by Lemma 1 of \cite{HansenShrink}, we have $AMSE(\widehat{\mu}_S) = E[\Lambda^2]$.
-    Thus, working with a sequence of trimmed MSE functions leaves AMSE unchanged while ensuring that finite-sample risk is bounded.
+    In other words, working with a sequence of trimmed MSE functions leaves AMSE unchanged while ensuring that finite-sample risk is bounded.
     This justifies the approximation $MSE_n(\widehat{\mu}_S, \zeta) \approx E[\Lambda^2]$ for large $n$ and $\zeta$.
     In a simulation exercise in which ordinary MSE does not exist, for example instrumental variables with a single instrument, one could remove the largest 1\% of simulation draws in absolute value and evaluate the performance of the FMSC against the empirical MSE calculated for the remaining draws.
 
