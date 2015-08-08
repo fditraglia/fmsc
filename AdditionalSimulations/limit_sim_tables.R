@@ -1,4 +1,6 @@
 setwd("~/fmsc/AdditionalSimulations/")
+rm(list = ls())
+
 load("OLSvsIV_limit_sim.Rd")
 load("chooseIVs_limit_sim.Rd")
 
@@ -64,8 +66,10 @@ chooseIVs$twostep_narrowtau$relwidth <- with(OLSvsIV$twostep_narrowtau,
 #=========================== Helper Function
 make_TeXtables <- function(xtab_list, row_lab, col_lab){
   names_list <- paste0("\\", names(xtab_list))
-  Map(function(xtab, tab_name)
+  out <- Map(function(xtab, tab_name)
     fmscr::TeXtable(xtab, tab_name, row_lab, col_lab), xtab_list, names_list)
+  out <- paste(unlist(out), collapse = "\n \n \\vspace{2em} \n \n")
+  return(out)
 }
 
 #=========================== Coverage of Naive Intervals
@@ -191,3 +195,18 @@ w_2narrowtau_chooseIVs <- fmscr::rtables(
   I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$twostep_narrowtau)
 w_2narrowtau_chooseIVs <- make_TeXtables(w_2narrowtau_chooseIVs, "\\gamma^2", "\\tau")
 
+#=========================== Clean Up
+rm(OLSvsIV, chooseIVs)
+rm(make_TeXtables)
+
+#=========================== Output Tables as TeX
+setwd("~/fmsc/AdditionalSimulations/LimitSimResults/")
+tables_list <- ls()
+
+for(i in 1:length(tables_list)){
+  temp_file <- paste0(tables_list[i], ".tex")
+  out_table <- get(tables_list[i])
+  cat(out_table, file = paste0("./", temp_file))
+}  
+
+rm(list = ls())
