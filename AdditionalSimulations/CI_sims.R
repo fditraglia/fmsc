@@ -13,7 +13,7 @@ params <- expand.grid(rho = rho_seq, pi_sq = pi_sq_seq, alpha = alpha_seq,
 
 OLSvsIV_CIs <- parallel::mcMap(function(alpha, rho, pi_sq, N)
   fmscr::CIsim_OLSvsIV(alpha, rho, pi_sq, N, n_reps),
-  params$alpha, params$rho, params$pi_sq, params$N)
+  params$alpha, params$rho, params$pi_sq, params$N, mc.cores = n_cores)
 
 OLSvsIV_CIs <- do.call(rbind, OLSvsIV_CIs)
 OLSvsIV_CIs <- cbind(params, OLSvsIV_CIs)
@@ -26,7 +26,7 @@ params <- expand.grid(rho = rho_seq, g_sq = g_sq_seq, alpha = alpha_seq,
 
 chooseIVs_CIs <- parallel::mcMap(function(alpha, rho, g_sq, N)
   fmscr::CIsim_chooseIVs(alpha, rho, g_sq, N, n_reps),
-  params$alpha, params$rho, params$g_sq, params$N)
+  params$alpha, params$rho, params$g_sq, params$N, mc.cores = n_cores)
 
 chooseIVs_CIs <- do.call(rbind, chooseIVs_CIs)
 chooseIVs_CIs <- cbind(params, chooseIVs_CIs)
