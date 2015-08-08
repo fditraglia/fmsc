@@ -12,6 +12,8 @@
 \maketitle
 
 \section{The Limit Experiment}
+Here we go!
+Once again!
 
 \begin{table}[h]
   \centering
@@ -24,8 +26,192 @@
     \caption{Choosing IVs}
     \input{./LimitSimResults/c_naive_chooseIV.tex}
   \end{subtable}
-  \label{tab:LimitNaive}
+  \label{tab:LimitNaiveCover}
   \caption{Coverage probabilities, Naive CIs, limit sim.}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{OLS versus TSLS}
+    \input{./LimitSimResults/w_naive_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Choosing IVs}
+    \input{./LimitSimResults/w_naive_chooseIVs.tex}
+  \end{subtable}
+  \label{tab:LimitNaiveWidth}
+  \caption{Width of naive relative to valid. Does not depend on $\alpha$.}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{OLS versus TSLS}
+    \input{./LimitSimResults/w_infeas_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Choosing IVs}
+    \input{./LimitSimResults/w_infeas_chooseIVs.tex}
+  \end{subtable}
+  \label{tab:WidthInfeasible}
+  \caption{Width relative to valid estimator (\%) of infeasible post-FMSC CI for which nominal coverage is \emph{exact} since it relies on knowledge of $\tau$. Value of $100$ means same width as valid estimator: greater means longer, less means shorter.}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./LimitSimResults/c_1equal_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./LimitSimResults/w_1equal_OLSvsIV.tex}
+  \end{subtable}
+  \label{tab:Limit1StepEqualOLSvsIV}
+  \caption{OLS vs TSLS Example: 1-step equal-tailed CI, limit sim.}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./LimitSimResults/c_1equal_chooseIVs.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./LimitSimResults/w_1equal_chooseIVs.tex}
+  \end{subtable}
+  \label{tab:Limit1StepEqualChooseIVs}
+  \caption{Choose IVs Example: 1-step equal-tailed CI, limit sim.}
+\end{table}
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./LimitSimResults/c_1short_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./LimitSimResults/w_1short_OLSvsIV.tex}
+  \end{subtable}
+  \label{tab:Limit1StepShortOLSvsIV}
+  \caption{OLS vs TSLS Example: 1-step shortest CI, limit sim.}
+\end{table}
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./LimitSimResults/c_1short_chooseIVs.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./LimitSimResults/w_1short_chooseIVs.tex}
+  \end{subtable}
+  \label{tab:Limit1StepShortChooseIVs}
+  \caption{Choose IVs Example: 1-step shortest CI, limit sim.}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./LimitSimResults/c_2equal_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./LimitSimResults/w_2equal_OLSvsIV.tex}
+  \end{subtable}
+  \label{tab:Limit2StepEqualOLSvsIV}
+  \caption{OLS vs TSLS Example: 2-step $\alpha_1 = \alpha_2 = \alpha/2$ CI, limit sim.}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./LimitSimResults/c_2equal_chooseIVs.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./LimitSimResults/w_2equal_chooseIVs.tex}
+  \end{subtable}
+  \label{tab:Limit2StepEqualChooseIVs}
+  \caption{Choose IVs Example: 2-step $\alpha_1 = \alpha_2 = \alpha/2$ CI, limit sim.}
+\end{table}
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./LimitSimResults/c_2widetau_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./LimitSimResults/w_2widetau_OLSvsIV.tex}
+  \end{subtable}
+  \label{tab:Limit2StepWideTauOLSvsIV}
+  \caption{OLS vs TSLS Example: 2-step $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$ CI, limit sim.}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./LimitSimResults/c_2widetau_chooseIVs.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./LimitSimResults/w_2widetau_chooseIVs.tex}
+  \end{subtable}
+  \label{tab:Limit2StepWideTauChooseIVs}
+  \caption{Choose IVs Example: 2-step $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$ CI, limit sim.}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./LimitSimResults/c_2narrowtau_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./LimitSimResults/w_2narrowtau_OLSvsIV.tex}
+  \end{subtable}
+  \label{tab:Limit2StepNarrowTauOLSvsIV}
+  \caption{OLS vs TSLS Example: 2-step $\alpha_1 = 3\alpha/4,  \alpha_2 = \alpha/4$ CI, limit sim.}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./LimitSimResults/c_2narrowtau_chooseIVs.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./LimitSimResults/w_2narrowtau_chooseIVs.tex}
+  \end{subtable}
+  \label{tab:Limit2StepNarrowTauChooseIVs}
+  \caption{Choose IVs Example: 2-step $\alpha_1 = 3\alpha/4,  \alpha_2 = \alpha/4$ CI, limit sim.}
 \end{table}
 
 \section{Finite-Sample Simulations}

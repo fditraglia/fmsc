@@ -39,29 +39,29 @@ OLSvsIV$twostep_narrowtau$relwidth <- with(OLSvsIV$twostep_narrowtau,
 #--------------------------- Choose IVs
 # For the choosing IVs example, the width of the "valid" estimator
 # is 2 * qnorm(1 - alpha/2) * 3
-chooseIVs$onestep_equal$widthvalid <- with(OLSvsIV$onestep_equal,
+chooseIVs$onestep_equal$widthvalid <- with(chooseIVs$onestep_equal,
                                          2 * qnorm(1 - alpha/2) * 3)
-chooseIVs$onestep_equal$relwidth <- with(OLSvsIV$onestep_equal,
+chooseIVs$onestep_equal$relwidth <- with(chooseIVs$onestep_equal,
                                        avgwidth / widthvalid)
 
-chooseIVs$onestep_short$widthvalid <- with(OLSvsIV$onestep_short,
+chooseIVs$onestep_short$widthvalid <- with(chooseIVs$onestep_short,
                                          2 * qnorm(1 - alpha/2) * 3)
-chooseIVs$onestep_short$relwidth <- with(OLSvsIV$onestep_short,
+chooseIVs$onestep_short$relwidth <- with(chooseIVs$onestep_short,
                                        avgwidth / widthvalid)
 
-chooseIVs$twostep_equal$widthvalid <- with(OLSvsIV$twostep_equal,
+chooseIVs$twostep_equal$widthvalid <- with(chooseIVs$twostep_equal,
                                          2 * qnorm(1 - alpha/2) * 3)
-chooseIVs$twostep_equal$relwidth <- with(OLSvsIV$twostep_equal,
+chooseIVs$twostep_equal$relwidth <- with(chooseIVs$twostep_equal,
                                          avgwidth / widthvalid)
 
-chooseIVs$twostep_widetau$widthvalid <- with(OLSvsIV$twostep_widetau,
+chooseIVs$twostep_widetau$widthvalid <- with(chooseIVs$twostep_widetau,
                                            2 * qnorm(1 - alpha/2) * 3)
-chooseIVs$twostep_widetau$relwidth <- with(OLSvsIV$twostep_widetau,
+chooseIVs$twostep_widetau$relwidth <- with(chooseIVs$twostep_widetau,
                                          avgwidth / widthvalid)
 
-chooseIVs$twostep_narrowtau$widthvalid <- with(OLSvsIV$twostep_narrowtau,
+chooseIVs$twostep_narrowtau$widthvalid <- with(chooseIVs$twostep_narrowtau,
                                              2 * qnorm(1 - alpha/2) * 3)
-chooseIVs$twostep_narrowtau$relwidth <- with(OLSvsIV$twostep_narrowtau,
+chooseIVs$twostep_narrowtau$relwidth <- with(chooseIVs$twostep_narrowtau,
                                          avgwidth / widthvalid)
 #=========================== Helper Function
 make_TeXtables <- function(xtab_list, row_lab, col_lab){
@@ -95,7 +95,7 @@ w_infeas_OLSvsIV <- make_TeXtables(w_infeas_OLSvsIV, "\\pi^2", "\\tau")
 
 w_naive_chooseIVs <- xtabs(
   I(100 * round(erelwidth,2)) ~ g_sq + tau, chooseIVs$relwidth_naive)
-w_naive_chooseIVs <- fmscr::TeXtable(w_naive_chooseIVs, row_lab = "\\pi^2", 
+w_naive_chooseIVs <- fmscr::TeXtable(w_naive_chooseIVs, row_lab = "\\gamma^2", 
                                    col_lab = "\\tau") 
 
 w_infeas_chooseIVs <- fmscr::rtables(I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$relwidth_infeas)
