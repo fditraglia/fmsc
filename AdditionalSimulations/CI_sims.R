@@ -1,7 +1,7 @@
 set.seed(8372)
 n_cores <- parallel::detectCores()
 
-n_reps <- 1
+n_reps <- 1000
 alpha_seq <- c(0.2, 0.1, 0.05)
 pi_sq_seq <- seq(0.1, 0.4, 0.1)
 N_seq <- c(50, 100, 500)
