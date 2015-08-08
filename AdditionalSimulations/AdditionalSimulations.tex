@@ -1,0 +1,33 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\title{Additional Simulations for JOE Revision}
+\author{Francis J.\ DiTraglia}
+
+\begin{document}
+\maketitle
+
+\section{The Limit Experiment}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{OLS versus TSLS}
+    \input{./LimitSimResults/c_naive_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Choosing IVs}
+    \input{./LimitSimResults/c_naive_chooseIV.tex}
+  \end{subtable}
+  \label{tab:LimitNaive}
+  \caption{Coverage probabilities, Naive CIs, limit sim.}
+\end{table}
+
+\section{Finite-Sample Simulations}
+
+\end{document}
