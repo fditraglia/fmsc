@@ -61,46 +61,133 @@ chooseIVs$twostep_narrowtau$widthvalid <- with(OLSvsIV$twostep_narrowtau,
                                              2 * qnorm(1 - alpha/2) * 3)
 chooseIVs$twostep_narrowtau$relwidth <- with(OLSvsIV$twostep_narrowtau,
                                          avgwidth / widthvalid)
-
+#=========================== Helper Function
+make_TeXtables <- function(xtab_list, row_lab, col_lab){
+  names_list <- paste0("\\", names(xtab_list))
+  Map(function(xtab, tab_name)
+    fmscr::TeXtable(xtab, tab_name, row_lab, col_lab), xtab_list, names_list)
+}
 
 #=========================== Coverage of Naive Intervals
-xtabs(I(100 * round(coverprob,2)) ~ pi_sq + tau + alpha, OLSvsIV$cover_naive)
-xtabs(I(100 * round(coverprob,2)) ~ g_sq + tau + alpha, chooseIVs$cover_naive)
+c_naive_OLSvsIV <- fmscr::rtables(
+  I(100 * round(coverprob,2)) ~ pi_sq + tau + alpha, OLSvsIV$cover_naive)
+c_naive_OLSvsIV <- make_TeXtables(c_naive_OLSvsIV, "\\pi^2", "\\tau")
+
+c_naive_chooseIV <- fmscr::rtables(
+  I(100 * round(coverprob,2)) ~ g_sq + tau + alpha, chooseIVs$cover_naive)
+c_naive_chooseIV <- make_TeXtables(c_naive_chooseIV, "\\gamma^2", "\\tau")
+
 
 #=========================== CI widths: naive and infeasible FMSC
-xtabs(I(100 * round(erelwidth,2)) ~ pi_sq + tau, OLSvsIV$relwidth_naive)
-xtabs(I(100 * round(relwidth,2)) ~ pi_sq + tau + alpha, OLSvsIV$relwidth_infeas)
-xtabs(I(100 * round(erelwidth,2)) ~ g_sq + tau, chooseIVs$relwidth_naive)
-xtabs(I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$relwidth_infeas)
+w_naive_OLSvsIV <- xtabs(
+  I(100 * round(erelwidth,2)) ~ pi_sq + tau, OLSvsIV$relwidth_naive)
+w_naive_OLSvsIV <- fmscr::TeXtable(w_naive_OLSvsIV, row_lab = "\\pi^2", 
+                                   col_lab = "\\tau")
+
+w_infeas_OLSvsIV <- fmscr::rtables(
+  I(100 * round(relwidth,2)) ~ pi_sq + tau + alpha, OLSvsIV$relwidth_infeas)
+w_infeas_OLSvsIV <- make_TeXtables(w_infeas_OLSvsIV, "\\pi^2", "\\tau")
+
+
+w_naive_chooseIVs <- xtabs(
+  I(100 * round(erelwidth,2)) ~ g_sq + tau, chooseIVs$relwidth_naive)
+w_naive_chooseIVs <- fmscr::TeXtable(w_naive_chooseIVs, row_lab = "\\pi^2", 
+                                   col_lab = "\\tau") 
+
+w_infeas_chooseIVs <- fmscr::rtables(I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$relwidth_infeas)
+w_infeas_chooseIVs <- make_TeXtables(w_infeas_chooseIVs, "\\gamma^2", "\\tau")
+
 
 #=========================== Coverage of One-step Equal-Tailed Intervals
-xtabs(I(100 * round(coverage,2)) ~ pi_sq + tau + alpha, OLSvsIV$onestep_equal)
-xtabs(I(100 * round(coverage,2)) ~ g_sq + tau + alpha, chooseIVs$onestep_equal)
+c_1equal_OLSvsIV <- fmscr::rtables(
+  I(100 * round(coverage,2)) ~ pi_sq + tau + alpha, OLSvsIV$onestep_equal)
+c_1equal_OLSvsIV <- make_TeXtables(c_1equal_OLSvsIV, "\\pi^2", "\\tau")
+
+c_1equal_chooseIVs <- fmscr::rtables(
+  I(100 * round(coverage,2)) ~ g_sq + tau + alpha, chooseIVs$onestep_equal)
+c_1equal_chooseIVs <- make_TeXtables(c_1equal_chooseIVs, "\\gamma^2", "\\tau")
 
 #============================ Relative Width of One-step Equal-Tailed Intervals
-xtabs(I(100 * round(relwidth,2)) ~ pi_sq + tau + alpha, OLSvsIV$onestep_equal)
-xtabs(I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$onestep_equal)
+w_1equal_OLSvsIV <- fmscr::rtables(
+  I(100 * round(relwidth,2)) ~ pi_sq + tau + alpha, OLSvsIV$onestep_equal)
+w_1equal_OLSvsIV <- make_TeXtables(w_1equal_OLSvsIV, "\\pi^2", "\\tau")
+
+w_1equal_chooseIVs <- fmscr::rtables(
+  I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$onestep_equal)
+w_1equal_chooseIVs <- make_TeXtables(w_1equal_chooseIVs, "\\gamma^2", "\\tau")
+
 
 #=========================== Coverage of One-step Shortest Intervals
-xtabs(I(100 * round(coverage,2)) ~ pi_sq + tau + alpha, OLSvsIV$onestep_short)
-xtabs(I(100 * round(coverage,2)) ~ g_sq + tau + alpha, chooseIVs$onestep_short)
+c_1short_OLSvsIV <- fmscr::rtables(
+  I(100 * round(coverage,2)) ~ pi_sq + tau + alpha, OLSvsIV$onestep_short)
+c_1short_OLSvsIV <- make_TeXtables(c_1short_OLSvsIV, "\\pi^2", "\\tau")
+
+c_1short_chooseIVs <- fmscr::rtables(
+  I(100 * round(coverage,2)) ~ g_sq + tau + alpha, chooseIVs$onestep_short)
+c_1short_chooseIVs <- make_TeXtables(c_1short_chooseIVs, "\\gamma^2", "\\tau")
 
 #============================ Relative Width of One-step Shortest Intervals
-xtabs(I(100 * round(relwidth,2)) ~ pi_sq + tau + alpha, OLSvsIV$onestep_short)
-xtabs(I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$onestep_short)
+w_1short_OLSvsIV <- fmscr::rtables(
+  I(100 * round(relwidth,2)) ~ pi_sq + tau + alpha, OLSvsIV$onestep_short)
+w_1short_OLSvsIV <- make_TeXtables(w_1short_OLSvsIV, "\\pi^2", "\\tau")
+
+w_1short_chooseIVs <- fmscr::rtables(
+  I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$onestep_short)
+w_1short_chooseIVs <- make_TeXtables(w_1short_chooseIVs, "\\gamma^2", "\\tau")
+
 
 #=========================== Coverage of Two-step Intervals a1 = a2
-xtabs(I(100 * round(coverage,2)) ~ pi_sq + tau + alpha, OLSvsIV$twostep_equal)
-xtabs(I(100 * round(coverage,2)) ~ g_sq + tau + alpha, chooseIVs$twostep_equal)
+c_2equal_OLSvsIV <- fmscr::rtables(
+  I(100 * round(coverage,2)) ~ pi_sq + tau + alpha, OLSvsIV$twostep_equal)
+c_2equal_OLSvsIV <- make_TeXtables(c_2equal_OLSvsIV, "\\pi^2", "\\tau")
+
+c_2equal_chooseIVs <- fmscr::rtables(
+  I(100 * round(coverage,2)) ~ g_sq + tau + alpha, chooseIVs$twostep_equal)
+c_2equal_chooseIVs <- make_TeXtables(c_2equal_chooseIVs, "\\gamma^2", "\\tau")
 
 #============================ Relative Width of Two-step Intervals a1 = a2
-xtabs(I(100 * round(relwidth,2)) ~ pi_sq + tau + alpha, OLSvsIV$twostep_equal)
-xtabs(I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$twostep_equal)
+w_2equal_OLSvsIV <- fmscr::rtables(
+  I(100 * round(relwidth,2)) ~ pi_sq + tau + alpha, OLSvsIV$twostep_equal)
+w_2equal_OLSvsIV <- make_TeXtables(w_2equal_OLSvsIV, "\\pi^2", "\\tau")
+
+w_2equal_chooseIVs <- fmscr::rtables(
+  I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$twostep_equal)
+w_2equal_chooseIVs <- make_TeXtables(w_2equal_chooseIVs, "\\gamma^2", "\\tau")
+
 
 #=========================== Coverage of Two-step Intervals a1 < a2
-xtabs(I(100 * round(coverage,2)) ~ pi_sq + tau + alpha, OLSvsIV$twostep_widetau)
-xtabs(I(100 * round(coverage,2)) ~ g_sq + tau + alpha, chooseIVs$twostep_widetau)
+c_2widetau_OLSvsIV <- fmscr::rtables(
+  I(100 * round(coverage,2)) ~ pi_sq + tau + alpha, OLSvsIV$twostep_widetau)
+c_2widetau_OLSvsIV <- make_TeXtables(c_2widetau_OLSvsIV, "\\pi^2", "\\tau")
+
+c_2widetau_chooseIVs <- fmscr::rtables(
+  I(100 * round(coverage,2)) ~ g_sq + tau + alpha, chooseIVs$twostep_widetau)
+c_2widetau_chooseIVs <- make_TeXtables(c_2widetau_chooseIVs, "\\gamma^2", "\\tau")
 
 #============================ Relative Width of Two-step Intervals a1 < a2
-xtabs(I(100 * round(relwidth,2)) ~ pi_sq + tau + alpha, OLSvsIV$twostep_widetau)
-xtabs(I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$twostep_widetau)
+w_2widetau_OLSvsIV <- fmscr::rtables(
+  I(100 * round(relwidth,2)) ~ pi_sq + tau + alpha, OLSvsIV$twostep_widetau)
+w_2widetau_OLSvsIV <- make_TeXtables(w_2widetau_OLSvsIV, "\\pi^2", "\\tau")
+
+w_2widetau_chooseIVs <- fmscr::rtables(
+  I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$twostep_widetau)
+w_2widetau_chooseIVs <- make_TeXtables(w_2widetau_chooseIVs, "\\gamma^2", "\\tau")
+
+#=========================== Coverage of Two-step Intervals a1 > a2
+c_2narrowtau_OLSvsIV <- fmscr::rtables(
+  I(100 * round(coverage,2)) ~ pi_sq + tau + alpha, OLSvsIV$twostep_narrowtau)
+c_2narrowtau_OLSvsIV <- make_TeXtables(c_2narrowtau_OLSvsIV, "\\pi^2", "\\tau")
+
+c_2narrowtau_chooseIVs <- fmscr::rtables(
+  I(100 * round(coverage,2)) ~ g_sq + tau + alpha, chooseIVs$twostep_narrowtau)
+c_2narrowtau_chooseIVs <- make_TeXtables(c_2narrowtau_chooseIVs, "\\gamma^2", "\\tau")
+
+#============================ Relative Width of Two-step Intervals a1 > a2
+w_2narrowtau_OLSvsIV <- fmscr::rtables(
+  I(100 * round(relwidth,2)) ~ pi_sq + tau + alpha, OLSvsIV$twostep_narrowtau)
+w_2narrowtau_OLSvsIV <- make_TeXtables(w_2narrowtau_OLSvsIV, "\\pi^2", "\\tau")
+
+w_2narrowtau_chooseIVs <- fmscr::rtables(
+  I(100 * round(relwidth,2)) ~ g_sq + tau + alpha, chooseIVs$twostep_narrowtau)
+w_2narrowtau_chooseIVs <- make_TeXtables(w_2narrowtau_chooseIVs, "\\gamma^2", "\\tau")
+
