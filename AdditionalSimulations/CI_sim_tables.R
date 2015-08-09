@@ -27,7 +27,7 @@ c_tsls_OLSvsIV_100 <- fmscr::rtables(
 c_tsls_OLSvsIV_100 <- make_TeXtables(c_tsls_OLSvsIV_100, "\\pi^2", "\\rho")
 
 c_tsls_OLSvsIV_500 <- fmscr::rtables(
-  I(100 * round(c_tsls,2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_50)
+  I(100 * round(c_tsls,2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_500)
 c_tsls_OLSvsIV_500 <- make_TeXtables(c_tsls_OLSvsIV_500, "\\pi^2", "\\rho")
 
 
@@ -42,7 +42,7 @@ c_naive_OLSvsIV_100 <- fmscr::rtables(
 c_naive_OLSvsIV_100 <- make_TeXtables(c_naive_OLSvsIV_100, "\\pi^2", "\\rho")
 
 c_naive_OLSvsIV_500 <- fmscr::rtables(
-  I(100 * round(c_naive,2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_50)
+  I(100 * round(c_naive,2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_500)
 c_naive_OLSvsIV_500 <- make_TeXtables(c_naive_OLSvsIV_500, "\\pi^2", "\\rho")
 
 #--------------------- Relative Width of Naive CI
@@ -70,7 +70,7 @@ c_1equal_OLSvsIV_100 <- fmscr::rtables(
 c_1equal_OLSvsIV_100 <- make_TeXtables(c_1equal_OLSvsIV_100, "\\pi^2", "\\rho")
 
 c_1equal_OLSvsIV_500 <- fmscr::rtables(
-  I(100 * round(c_1equal,2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_50)
+  I(100 * round(c_1equal,2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_500)
 c_1equal_OLSvsIV_500 <- make_TeXtables(c_1equal_OLSvsIV_500, "\\pi^2", "\\rho")
 
 #--------------------- Relative Width of 1-Step Equal-Tailed CI
@@ -103,7 +103,7 @@ c_1short_OLSvsIV_500 <- make_TeXtables(c_1short_OLSvsIV_500, "\\pi^2", "\\rho")
 
 #--------------------- Relative Width of 1-Step Shortest CI
 w_1short_OLSvsIV_50 <- fmscr::rtables(
-  I(100 * round(w_1short / w_tsls, 2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_50)
+  I(100 * round(w_1short / w_tsls, 2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_500)
 w_1short_OLSvsIV_50 <- make_TeXtables(w_1short_OLSvsIV_50, "\\pi^2", "\\rho")
 
 w_1short_OLSvsIV_100 <- fmscr::rtables(
@@ -126,7 +126,7 @@ c_2equal_OLSvsIV_100 <- fmscr::rtables(
 c_2equal_OLSvsIV_100 <- make_TeXtables(c_2equal_OLSvsIV_100, "\\pi^2", "\\rho")
 
 c_2equal_OLSvsIV_500 <- fmscr::rtables(
-  I(100 * round(c_2equal,2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_50)
+  I(100 * round(c_2equal,2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_500)
 c_2equal_OLSvsIV_500 <- make_TeXtables(c_2equal_OLSvsIV_500, "\\pi^2", "\\rho")
 
 #--------------------- Relative Width of 2-Step CI a1 = a2
@@ -154,7 +154,7 @@ c_2tauwide_OLSvsIV_100 <- fmscr::rtables(
 c_2tauwide_OLSvsIV_100 <- make_TeXtables(c_2tauwide_OLSvsIV_100, "\\pi^2", "\\rho")
 
 c_2tauwide_OLSvsIV_500 <- fmscr::rtables(
-  I(100 * round(c_2tauwide,2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_50)
+  I(100 * round(c_2tauwide,2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_500)
 c_2tauwide_OLSvsIV_500 <- make_TeXtables(c_2tauwide_OLSvsIV_500, "\\pi^2", "\\rho")
 
 #--------------------- Relative Width of 2-Step CI a1 < a2
@@ -182,7 +182,7 @@ c_2taunarrow_OLSvsIV_100 <- fmscr::rtables(
 c_2taunarrow_OLSvsIV_100 <- make_TeXtables(c_2taunarrow_OLSvsIV_100, "\\pi^2", "\\rho")
 
 c_2taunarrow_OLSvsIV_500 <- fmscr::rtables(
-  I(100 * round(c_2taunarrow,2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_50)
+  I(100 * round(c_2taunarrow,2)) ~ pi_sq + rho + alpha, OLSvsIV_CIs_500)
 c_2taunarrow_OLSvsIV_500 <- make_TeXtables(c_2taunarrow_OLSvsIV_500, "\\pi^2", "\\rho")
 
 #--------------------- Relative Width of 2-Step CI a1 > a2
@@ -238,7 +238,7 @@ c_naive_chooseIVs_100 <- fmscr::rtables(
 c_naive_chooseIVs_100 <- make_TeXtables(c_naive_chooseIVs_100, "\\gamma^2", "\\rho")
 
 c_naive_chooseIVs_500 <- fmscr::rtables(
-  I(100 * round(c_naive,2)) ~ g_sq + rho + alpha, chooseIVs_CIs_50)
+  I(100 * round(c_naive,2)) ~ g_sq + rho + alpha, chooseIVs_CIs_500)
 c_naive_chooseIVs_500 <- make_TeXtables(c_naive_chooseIVs_500, "\\gamma^2", "\\rho")
 
 #--------------------- Relative Width of Naive CI
@@ -266,7 +266,7 @@ c_1equal_chooseIVs_100 <- fmscr::rtables(
 c_1equal_chooseIVs_100 <- make_TeXtables(c_1equal_chooseIVs_100, "\\gamma^2", "\\rho")
 
 c_1equal_chooseIVs_500 <- fmscr::rtables(
-  I(100 * round(c_1equal,2)) ~ g_sq + rho + alpha, chooseIVs_CIs_50)
+  I(100 * round(c_1equal,2)) ~ g_sq + rho + alpha, chooseIVs_CIs_500)
 c_1equal_chooseIVs_500 <- make_TeXtables(c_1equal_chooseIVs_500, "\\gamma^2", "\\rho")
 
 #--------------------- Relative Width of 1-Step Equal-Tailed CI
@@ -294,7 +294,7 @@ c_1short_chooseIVs_100 <- fmscr::rtables(
 c_1short_chooseIVs_100 <- make_TeXtables(c_1short_chooseIVs_100, "\\gamma^2", "\\rho")
 
 c_1short_chooseIVs_500 <- fmscr::rtables(
-  I(100 * round(c_1short,2)) ~ g_sq + rho + alpha, chooseIVs_CIs_50)
+  I(100 * round(c_1short,2)) ~ g_sq + rho + alpha, chooseIVs_CIs_500)
 c_1short_chooseIVs_500 <- make_TeXtables(c_1short_chooseIVs_500, "\\gamma^2", "\\rho")
 
 #--------------------- Relative Width of 1-Step Shortest CI
@@ -322,7 +322,7 @@ c_2equal_chooseIVs_100 <- fmscr::rtables(
 c_2equal_chooseIVs_100 <- make_TeXtables(c_2equal_chooseIVs_100, "\\gamma^2", "\\rho")
 
 c_2equal_chooseIVs_500 <- fmscr::rtables(
-  I(100 * round(c_2equal,2)) ~ g_sq + rho + alpha, chooseIVs_CIs_50)
+  I(100 * round(c_2equal,2)) ~ g_sq + rho + alpha, chooseIVs_CIs_500)
 c_2equal_chooseIVs_500 <- make_TeXtables(c_2equal_chooseIVs_500, "\\gamma^2", "\\rho")
 
 #--------------------- Relative Width of 2-Step CI a1 = a2
@@ -350,7 +350,7 @@ c_2tauwide_chooseIVs_100 <- fmscr::rtables(
 c_2tauwide_chooseIVs_100 <- make_TeXtables(c_2tauwide_chooseIVs_100, "\\gamma^2", "\\rho")
 
 c_2tauwide_chooseIVs_500 <- fmscr::rtables(
-  I(100 * round(c_2tauwide,2)) ~ g_sq + rho + alpha, chooseIVs_CIs_50)
+  I(100 * round(c_2tauwide,2)) ~ g_sq + rho + alpha, chooseIVs_CIs_500)
 c_2tauwide_chooseIVs_500 <- make_TeXtables(c_2tauwide_chooseIVs_500, "\\gamma^2", "\\rho")
 
 #--------------------- Relative Width of 2-Step CI a1 < a2
@@ -378,7 +378,7 @@ c_2taunarrow_chooseIVs_100 <- fmscr::rtables(
 c_2taunarrow_chooseIVs_100 <- make_TeXtables(c_2taunarrow_chooseIVs_100, "\\gamma^2", "\\rho")
 
 c_2taunarrow_chooseIVs_500 <- fmscr::rtables(
-  I(100 * round(c_2taunarrow,2)) ~ g_sq + rho + alpha, chooseIVs_CIs_50)
+  I(100 * round(c_2taunarrow,2)) ~ g_sq + rho + alpha, chooseIVs_CIs_500)
 c_2taunarrow_chooseIVs_500 <- make_TeXtables(c_2taunarrow_chooseIVs_500, "\\gamma^2", "\\rho")
 
 #--------------------- Relative Width of 2-Step CI a1 > a2
