@@ -12,6 +12,96 @@
 \begin{document}
 \maketitle
 
+\section{New Section on Confidence Intervals}
+Corollary 4.2 is sufficiently general to cover a wide range of moment selection and averaging procedures, but this same generality makes the confidence interval procedure given in Algorithm 4.1 somewhat less than intuitive.
+In this section I specialize the results on moment average estimators from above to the two examples of FMSC selection that appear in the simulation studies described below: OLS versus TSLS and choosing instrumental variables.
+The structure of these examples allows us to bypass Algorithm 4.1 and characterize the asymptotic distribution of various proposals for post-FMSC inference \emph{directly}.
+
+
+Accordingly, in this section I will treat any consistently estimable parameters that appear in a limit distribution as \emph{known}.
+Recall that $\tau$ remains unknown \emph{even in the limit}.
+This is the main complication of post-FMSC inference and the focus of this section.
+
+First consider the OLS versus TSLS example from Secion 3.2.
+The joint limit distribution for this case is as follows
+\begin{equation*}
+  \left[ 
+  \begin{array}{c}
+    \sqrt{n} \left( \widehat{\beta}_{OLS} - \beta \right)\\
+    \sqrt{n} \left( \widetilde{\beta}_{TSLS} - \beta \right)\\
+    \widehat{\tau}
+\end{array}
+\right] \overset{d}{\rightarrow} N\left( \left[
+\begin{array}{c}
+  \tau/\sigma_x^2 \\ 0 \\ \tau
+\end{array}
+\right], \sigma_{\epsilon}^2 
+\left[
+\begin{array}{ccc}
+  1/\sigma_x^2 & 1/\sigma_x^2 & 0\\
+  1/\sigma_x^2 & 1/\gamma^2 & -\sigma_v^2/\gamma^2\\
+  0 & -\sigma_v^2/\gamma^2 & \sigma_x^2 \sigma_v^2/\gamma^2
+\end{array}
+\right]\right).
+\end{equation*}
+Second, consider a slightly simplified version of the choosing instrumental variables example from Section 3.3, namely
+\begin{eqnarray*}
+  y_{ni} &=& \beta x_{ni} + \epsilon_{ni}\\
+  x_{ni} &=& \gamma w_{ni} + \mathbf{z}_{ni}' \boldsymbol{\pi} + v_{ni}
+\end{eqnarray*}
+where $x$ is the endogenous regressor of interest, $z$ is a vector of exogenous instruments, and $w$ is a single potentially endogenous instrument.
+Without loss of generality I assume that $w$ and $\mathbf{z}$ are uncorrelated and that all random variables are mean zero.
+For simplicity, I further assume that the errors satisfy the same kind of asymptotic homoskedasticity condition used in the OLS versus TSLS example so that TSLS is the efficient GMM estimator.
+Let the ``Full'' estimator denote the TSLS estimator using $w$ and $\mathbf{z}$ and the ``Valid'' estimator denote the TSLS estimator using only $\mathbf{z}$.
+Then we have,
+\begin{equation*}
+  \left[ 
+  \begin{array}{c}
+    \sqrt{n} \left( \widehat{\beta}_{Full} - \beta \right)\\
+    \sqrt{n} \left( \widetilde{\beta}_{Valid} - \beta \right)\\
+    \widehat{\tau}
+\end{array}
+\right] \overset{d}{\rightarrow} N\left( \left[
+\begin{array}{c}
+  \tau\gamma/q^2_{F} \\ 0 \\ \tau
+\end{array}
+\right], \sigma_{\epsilon}^2 
+\left[
+\begin{array}{ccc}
+  1/q_{F}^2 & 1/q_{F}^2 & 0\\
+  1/q_{F}^2 & 1/q_{V}^2 & -\gamma\sigma_w^2/q^2_{V}\\ 
+  0 & -\gamma\sigma_w^2/q^2_{V} & \sigma_w^2 q^2_{F}/q^2_{V}
+\end{array}
+\right]\right)
+\end{equation*}
+where $q^2_{F} = \gamma^2 \sigma_w^2 + q^2_{V}$, $q^2_{V} = \boldsymbol{\pi}'\Sigma_{zz}\boldsymbol{\pi}$, $\Sigma_{zz}$ is the covariance matrix of the valid instruments $\mathbf{z}$, and $\sigma_w^2$ is the variance of the ``suspect'' instrument $w$.
+After some simple algebra we see that \emph{both} of these examples share the same structure, namely
+\begin{equation*}
+  \left[ 
+  \begin{array}{c}
+    \sqrt{n} \left( \widehat{\beta} - \beta \right)\\
+    \sqrt{n} \left( \widetilde{\beta} - \beta \right)\\
+    \widehat{\tau}
+\end{array}
+\right] \overset{d}{\rightarrow} N\left( \left[
+\begin{array}{c}
+  c\tau\\ 0 \\ \tau
+\end{array}
+\right], 
+\left[
+\begin{array}{ccc}
+  \eta^2 & \eta^2 & 0\\
+  \eta^2 & \eta^2 + c^2 \sigma^2 & -c\sigma^2\\ 
+  0 & -c\sigma^2 & \sigma^2 
+\end{array}
+\right]\right)
+\end{equation*}
+where $\widehat{\beta}$ denotes the low variance but possibly biased estimator, $\widetilde{\beta}$ denotes the higher variance but unbiased estimator.
+For any example with a limit distribution that takes this form, simple algebra shows that FMSC selection amounts to choosing $\widehat{\beta}$ whenever $|\widehat{\tau}|<\sqrt{2}\sigma$, and choosing $\widetilde{\beta}$ otherwise, in other words
+\begin{eqnarray*}
+  \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) = \sqrt{n}(\widehat{\beta} - \beta) \mathbf{1}\left\{ |\widehat{\tau}|<\sigma \sqrt{2} \right\} + \sqrt{n}(\widetilde{\beta} - \beta) \mathbf{1}\left\{ |\widehat{\tau}|\geq\sigma \sqrt{2} \right\}
+\end{eqnarray*}
+
 \section{The Limit Experiment}
 
 \begin{table}[h]
