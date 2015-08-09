@@ -5,6 +5,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{morefloats}
+\usepackage{todonotes}
 
 \title{Additional Simulations for JOE Revision}
 \author{Francis J.\ DiTraglia}
@@ -107,9 +108,10 @@ For any example with a limit distribution that takes this form, simple algebra s
   \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) = \mathbf{1}\left\{ |\widehat{\tau}|<\sigma \sqrt{2} \right\} \sqrt{n}(\widehat{\beta} - \beta) +  \mathbf{1}\left\{ |\widehat{\tau}|\geq\sigma \sqrt{2} \right\}\sqrt{n}(\widetilde{\beta} - \beta)
 \end{eqnarray*}
 and so by the Continuous Mapping Theorem,
-\begin{eqnarray*}
+\begin{equation}
   \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) \overset{d}{\rightarrow}  \mathbf{1}\left\{ |T|<\sigma \sqrt{2} \right\} U +  \mathbf{1}\left\{ |T|\geq\sigma \sqrt{2} \right\} V.
-\end{eqnarray*}
+  \label{eq:FMSCLimitExperiment}
+\end{equation}
 To better understand the implications of this expression, it is helpful to re-express the limit distribution from Equation \ref{eq:LimitExperiment} in terms of the \emph{marginal} distribution of $T$ and the \emph{conditional} distribution of $(U,V)'$ given $T$. 
 We have $T \sim N(\tau, \sigma^2)$ and by direct calculation
 \begin{equation}
@@ -133,13 +135,23 @@ We have $T \sim N(\tau, \sigma^2)$ and by direct calculation
 \end{equation}
 which is a \emph{singular distribution}.
 Crucially, $U$ is independent of $T$ but conditional on $T$, $U$ and $V$ are perfectly correlated and have the same variance.
-Using this result, we can express the distribution of $(U,V,T)'$ from Equation \ref{eq:LimitExperiment} as follows:
+Using this result, we can express the distribution of $(U,V,T)'$ from Equation \ref{eq:LimitExperiment} as
 \begin{eqnarray*}
-  Z_1, Z_2 &\overset{iid}{\sim}& N(0,1)\\
   T &=& \sigma Z_1 + \tau\\
   U &=& \eta Z_2 + c\tau\\
   V &=& \eta Z_2 - c\sigma Z_1
 \end{eqnarray*}
+where $Z_1, Z_2$ are iid standard normal random variables.
+Combined with Equation \ref{eq:FMSCLimitExperiment} this representation allows us to tabulate the asymptotic distribution, $F_{FMSC}$, of the post-FMSC estimator \emph{directly} for any example that takes the form of Equation \ref{eq:LimitExperiment} rather than approximating it by simulation as in Algorithm 4.1.
+We have:
+\begin{eqnarray*}
+  F_{FMSC}(x) &=& G(x) + H_1(x) + H_2(x) \\
+  G(x) &=& \Phi\left( \frac{x - c\tau}{\eta} \right)\left[ \Phi( \sqrt{2} - \tau/\sigma) -  \Phi( -\sqrt{2} - \tau/\sigma )\right]\\
+  H_1(x) &=& \frac{1}{\sigma}\int_{-\infty}^{-\sigma\sqrt{2} - \tau} \Phi\left( \frac{x + ct}{\eta}\right)\varphi(t/\sigma)\; dt\\
+  H_2(x) &=& \frac{1}{\sigma}\int^{\infty}_{\sigma\sqrt{2} - \tau} \Phi\left( \frac{x + ct}{\eta}\right)\varphi(t/\sigma)\; dt\\
+\end{eqnarray*}
+where $\Phi$ is the CDF and $\varphi$ the pdf of a standard normal random variable.
+While these expressions lack a closed form, there are various fast and extremely accurate numerical routines for evaluating integrals of the form taken by $H_1$ and $H_2$, for example those provided in the \texttt{mvtnorm} package in R.\todo{Cite!}
 
 \section{The Limit Experiment}
 
