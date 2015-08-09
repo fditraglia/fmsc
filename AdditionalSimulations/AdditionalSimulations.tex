@@ -112,7 +112,8 @@ and so by the Continuous Mapping Theorem,
   \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) \overset{d}{\rightarrow}  \mathbf{1}\left\{ |T|<\sigma \sqrt{2} \right\} U +  \mathbf{1}\left\{ |T|\geq\sigma \sqrt{2} \right\} V.
   \label{eq:FMSCLimitExperiment}
 \end{equation}
-To better understand the implications of this expression, it is helpful to re-express the limit distribution from Equation \ref{eq:LimitExperiment} in terms of the \emph{marginal} distribution of $T$ and the \emph{conditional} distribution of $(U,V)'$ given $T$. 
+
+To better understand the implications of Equation \ref{eq:FMSCLimitExperiment}, it is helpful to re-express the limit distribution from Equation \ref{eq:LimitExperiment} in terms of the marginal distribution of $T$ and the conditional distribution of $U$ and $V$ given $T$. 
 We have $T \sim N(\tau, \sigma^2)$ and by direct calculation
 \begin{equation}
   \left.\left[
@@ -134,8 +135,10 @@ We have $T \sim N(\tau, \sigma^2)$ and by direct calculation
 \label{eq:LimitExperimentConditional}
 \end{equation}
 which is a \emph{singular distribution}.
-Crucially, $U$ is independent of $T$ but conditional on $T$, $U$ and $V$ are perfectly correlated and have the same variance.
-Using this result, we can express the distribution of $(U,V,T)'$ from Equation \ref{eq:LimitExperiment} as
+Crucially, $U$ is independent of $T$ but conditional on $T$, the random variables $U$ and $V$ are perfectly correlated and have the same variance.
+Given $T$ the only difference between $U$ and $V$ is that the mean of $V$ is shifted by a distance that depends on the realization $t$ of $T$.
+Thus, the conditional distribution of $V$ shows a \emph{random bias}: on average $V$ has mean zero because the mean of $T$ is $\tau$ but any particular realization $t$ of $T$ will not in general equal $\tau$.
+Using the form of the conditional distributions we can express the distribution of $(U,V,T)'$ from Equation \ref{eq:LimitExperiment} in a more transparent form as
 \begin{eqnarray*}
   T &=& \sigma Z_1 + \tau\\
   U &=& \eta Z_2 + c\tau\\
@@ -144,14 +147,37 @@ Using this result, we can express the distribution of $(U,V,T)'$ from Equation \
 where $Z_1, Z_2$ are iid standard normal random variables.
 Combined with Equation \ref{eq:FMSCLimitExperiment} this representation allows us to tabulate the asymptotic distribution, $F_{FMSC}$, of the post-FMSC estimator \emph{directly} for any example that takes the form of Equation \ref{eq:LimitExperiment} rather than approximating it by simulation as in Algorithm 4.1.
 We have:
-\begin{eqnarray*}
+\begin{eqnarray}
   F_{FMSC}(x) &=& G(x) + H_1(x) + H_2(x) \\
+  \label{eq:FFMSC}
   G(x) &=& \Phi\left( \frac{x - c\tau}{\eta} \right)\left[ \Phi( \sqrt{2} - \tau/\sigma) -  \Phi( -\sqrt{2} - \tau/\sigma )\right]\\
+  \label{eq:GFMSC}
   H_1(x) &=& \frac{1}{\sigma}\int_{-\infty}^{-\sigma\sqrt{2} - \tau} \Phi\left( \frac{x + ct}{\eta}\right)\varphi(t/\sigma)\; dt\\
-  H_2(x) &=& \frac{1}{\sigma}\int^{\infty}_{\sigma\sqrt{2} - \tau} \Phi\left( \frac{x + ct}{\eta}\right)\varphi(t/\sigma)\; dt\\
-\end{eqnarray*}
+  \label{eq:H1FMSC}
+  H_2(x) &=& \frac{1}{\sigma}\int^{+\infty}_{\sigma\sqrt{2} - \tau} \Phi\left( \frac{x + ct}{\eta}\right)\varphi(t/\sigma)\; dt
+  \label{eq:H2FMSC}
+\end{eqnarray}
 where $\Phi$ is the CDF and $\varphi$ the pdf of a standard normal random variable.
-While these expressions lack a closed form, there are various fast and extremely accurate numerical routines for evaluating integrals of the form taken by $H_1$ and $H_2$, for example those provided in the \texttt{mvtnorm} package in R.\todo{Cite!}
+Note that the limit distribution of the post-FMSC distribution depends on $\tau$ in addition to the consistently estimable quantities $\sigma, \eta, c$ although I supress this dependence to simplify the notation.
+While these expressions lack a closed form, there are various fast and extremely accurate numerical routines for evaluating integrals of the form taken by $H_1$ and $H_2$, for example those provided in the \texttt{mvtnorm} package in R. \todo{Cite!}
+Armed with a numerical routine to evaluate $F_{FMSC}$ it is straightforward to evaluate the corresponding quantile function $Q_{FMSC}$ using a root-finder by analytically bounding $G$, $H_1$ and $H_2$.
+I provide numerical routines to evaluate both $F_{FMSC}$ and $Q_{FMSC}$ along with various related quantities in my R package \texttt{fmscr}. \todo{Cite!}
+
+The ability to compute $F_{FMSC}$ and $Q_{FMSC}$ allows us to answer a number of important questions about post-FMSC inference for any example of the form given in Equation \ref{eq:LimitExperiment}.
+First, suppose that we were to carry out FMSC selection and then construct a $(1 - \alpha) \times 100\%$ confidence interval \emph{conditional} in the selected estimator, completely ignoring the effects of the moment selection step.
+What would be the resulting asymptotic coverage probability and width of such a ``naive'' confidence interval procedure?
+Using calculations similar to those used above in the expression for $F_{FMSC}$, we find that the coverage probability of this naive interval is given by
+\begin{eqnarray*}
+  \mbox{CP}_{Naive}(\alpha) &=& G(u_\alpha) - G(-u_\alpha) +  H_1(\ell_\alpha) - H_2(-\ell_\alpha) +  H_2(\ell_\alpha) - H_2(-\ell_\alpha) \\
+  u_\alpha &=& z_{1-\alpha/2}\; \eta\\
+  \ell_{\alpha} &=& z_{1-\alpha/2} \sqrt{\eta^2 + c^2\sigma^2}
+\end{eqnarray*}
+where $z_{1-\alpha/2} = \Phi^{-1}(1 -\alpha/2)$ and $G$, $H_1$, $H_2$ are as defined in Equations \ref{eq:GFMSC}--\ref{eq:H2FMSC}.
+And since the width of this naive CI equals that of the textbook interval for $\widehat{\beta}$ when $|\widehat{\tau}|<\sigma\sqrt{2}$ and that of the textbook interval for $\widetilde{\beta}$ otherwise, we have
+\begin{equation*}
+  \frac{E\left[ \mbox{Width}_{Naive}(\alpha) \right]}{\mbox{Width}_{Valid}(\alpha)} = 1 + \left[ \Phi( \sqrt{2} - \tau/\sigma) -  \Phi( -\sqrt{2} - \tau/\sigma )\right]\left( \sqrt{\frac{\eta^2}{\eta^2 + c^2 \sigma^2}} - 1 \right)
+\end{equation*}
+where $\mbox{Width}_{Valid}(\alpha)$ is the width of a standard, textbook confidence interval for $\widetilde{\beta}$.
 
 \section{The Limit Experiment}
 
