@@ -4,6 +4,7 @@
 \usepackage{setspace}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{morefloats}
 
 \title{Additional Simulations for JOE Revision}
 \author{Francis J.\ DiTraglia}
@@ -12,8 +13,6 @@
 \maketitle
 
 \section{The Limit Experiment}
-Here we go!
-Once again!
 
 \begin{table}[h]
   \centering
@@ -233,12 +232,447 @@ Once again!
   \caption{Coverage prob of TSLS Estimator, OLS vs IV Example, $N=100$}
 \end{table}
 
-
 \begin{table}[h]
   \centering
   \input{./CISimResults/c_tsls_OLSvsIV_500.tex}
   \label{tab:CISim500TSLS_OLSvsIV}
   \caption{Coverage prob of TSLS Estimator, OLS vs IV Example, $N=500$}
 \end{table}
+
+
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_naive_OLSvsIV_50.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_naive_OLSvsIV_50.tex}
+  \end{subtable}
+  \label{tab:CISim50Naive_OLSvsIV}
+  \caption{Naive CI, OLS vs IV Example, $N=50$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_naive_OLSvsIV_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_naive_OLSvsIV_100.tex}
+  \end{subtable}
+  \label{tab:CISim100Naive_OLSvsIV}
+  \caption{Naive CI, OLS vs IV Example, $N=100$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_naive_OLSvsIV_500.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_naive_OLSvsIV_500.tex}
+  \end{subtable}
+  \label{tab:CISim500Naive_OLSvsIV}
+  \caption{Naive CI, OLS vs IV Example, $N=500$}
+\end{table}
+
+
+
+
+
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_1equal_OLSvsIV_50.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_1equal_OLSvsIV_50.tex}
+  \end{subtable}
+  \label{tab:CISim50_1stepEqual_OLSvsIV}
+  \caption{1-step Equal-tailed CI, OLS vs IV Example, $N=50$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_1equal_OLSvsIV_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_1equal_OLSvsIV_100.tex}
+  \end{subtable}
+  \label{tab:CISim100_1stepEqual_OLSvsIV}
+  \caption{1-step Equal-tailed, OLS vs IV Example, $N=100$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_1equal_OLSvsIV_500.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_1equal_OLSvsIV_500.tex}
+  \end{subtable}
+  \label{tab:CISim500_1stepEqual_OLSvsIV}
+  \caption{1-step Equal-tailed CI, OLS vs IV Example, $N=500$}
+\end{table}
+
+
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_1short_OLSvsIV_50.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_1short_OLSvsIV_50.tex}
+  \end{subtable}
+  \label{tab:CISim50_1stepShort_OLSvsIV}
+  \caption{1-step Shortest CI, OLS vs IV Example, $N=50$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_1short_OLSvsIV_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_1short_OLSvsIV_100.tex}
+  \end{subtable}
+  \label{tab:CISim100_1stepShort_OLSvsIV}
+  \caption{1-step Shortest, OLS vs IV Example, $N=100$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_1short_OLSvsIV_500.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_1short_OLSvsIV_500.tex}
+  \end{subtable}
+  \label{tab:CISim500_1stepShort_OLSvsIV}
+  \caption{1-step Shortest CI, OLS vs IV Example, $N=500$}
+\end{table}
+
+
+
+
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_2equal_OLSvsIV_50.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_2equal_OLSvsIV_50.tex}
+  \end{subtable}
+  \label{tab:CISim50_2stepEqual_OLSvsIV}
+  \caption{2-step CI, $\alpha_1 = \alpha_2 = \alpha/2$ OLS vs IV Example, $N=50$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_2equal_OLSvsIV_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_2equal_OLSvsIV_100.tex}
+  \end{subtable}
+  \label{tab:CISim100_2stepEqual_OLSvsIV}
+  \caption{2-step CI, $\alpha_1 = \alpha_2 = \alpha/2$, OLS vs IV Example, $N=100$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_2equal_OLSvsIV_500.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_2equal_OLSvsIV_500.tex}
+  \end{subtable}
+  \label{tab:CISim500_2stepEqual_OLSvsIV}
+  \caption{2-step CI, $\alpha_1 = \alpha_2 = \alpha/2$, OLS vs IV Example, $N=500$}
+\end{table}
+
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_2tauwide_OLSvsIV_50.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_2tauwide_OLSvsIV_50.tex}
+  \end{subtable}
+  \label{tab:CISim50_2stepWideTau_OLSvsIV}
+  \caption{2-step CI, $\alpha_1 = \alpha/4, \alpha_2 = 3\alpha/4$ OLS vs IV Example, $N=50$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_2tauwide_OLSvsIV_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_2tauwide_OLSvsIV_100.tex}
+  \end{subtable}
+  \label{tab:CISim100_2stepWideTau_OLSvsIV}
+  \caption{2-step CI, $\alpha_1 = \alpha/4,\alpha_2 = 3\alpha/4$, OLS vs IV Example, $N=100$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_2tauwide_OLSvsIV_500.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_2tauwide_OLSvsIV_500.tex}
+  \end{subtable}
+  \label{tab:CISim500_2stepWideTau_OLSvsIV}
+  \caption{2-step CI, $\alpha_1 = \alpha/4,\alpha_2 = 3\alpha/4$, OLS vs IV Example, $N=500$}
+\end{table}
+
+
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_2taunarrow_OLSvsIV_50.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_2taunarrow_OLSvsIV_50.tex}
+  \end{subtable}
+  \label{tab:CISim50_2stepNarrowTau_OLSvsIV}
+  \caption{2-step CI, $\alpha_1 = 3\alpha/4, \alpha_2 = \alpha/4$ OLS vs IV Example, $N=50$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_2taunarrow_OLSvsIV_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_2taunarrow_OLSvsIV_100.tex}
+  \end{subtable}
+  \label{tab:CISim100_2stepNarrowTau_OLSvsIV}
+  \caption{2-step CI, $\alpha_1 = 3\alpha/4,\alpha_2 = \alpha/4$, OLS vs IV Example, $N=100$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_2taunarrow_OLSvsIV_500.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_2taunarrow_OLSvsIV_500.tex}
+  \end{subtable}
+  \label{tab:CISim500_2stepNarrowTau_OLSvsIV}
+  \caption{2-step CI, $\alpha_1 = 3\alpha/4,\alpha_2 = \alpha/4$, OLS vs IV Example, $N=500$}
+\end{table}
+
+
+
+
+
+
+\clearpage
+
+
+
+
+\begin{table}[h]
+  \centering
+  \input{./CISimResults/c_valid_chooseIVs_50.tex}
+  \label{tab:CISim50Valid_ChooseIVs}
+  \caption{Coverage prob of Valid Estimator, Choosing IVs Example, $N=50$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \input{./CISimResults/c_valid_chooseIVs_100.tex}
+  \label{tab:CISim100Valid_ChooseIVs}
+  \caption{Coverage prob of Valid Estimator, Choosing IVs Example, $N=100$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \input{./CISimResults/c_valid_chooseIVs_500.tex}
+  \label{tab:CISim500Valid_ChooseIVs}
+  \caption{Coverage prob of Valid Estimator, Choosing IVs Example, $N=500$}
+\end{table}
+
+
+
+
+
+
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_naive_chooseIVs_50.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_naive_chooseIVs_50.tex}
+  \end{subtable}
+  \label{tab:CISim50Naive_ChooseIVs}
+  \caption{Naive CI, Choosing IVs Example, $N=50$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_naive_chooseIVs_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_naive_chooseIVs_100.tex}
+  \end{subtable}
+  \label{tab:CISim100Naive_ChooseIVs}
+  \caption{Naive CI, Choosing IVs Example, $N=100$}
+\end{table}
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_naive_chooseIVs_500.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_naive_chooseIVs_500.tex}
+  \end{subtable}
+  \label{tab:CISim500Naive_ChooseIVs}
+  \caption{Naive CI, Choosing IVs Example, $N=500$}
+\end{table}
+
+
+
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_1equal_chooseIVs_50.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_1equal_chooseIVs_50.tex}
+  \end{subtable}
+  \label{tab:CISim50_1StepEqual_ChooseIVs}
+  \caption{1-step Equal-tailed CI, Choosing IVs Example, $N=50$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_1equal_chooseIVs_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_1equal_chooseIVs_100.tex}
+  \end{subtable}
+  \label{tab:CISim100_1StepEqual_ChooseIVs}
+  \caption{1-step Equal-tailed CI, Choosing IVs Example, $N=100$}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./CISimResults/c_1equal_chooseIVs_500.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./CISimResults/w_1equal_chooseIVs_500.tex}
+  \end{subtable}
+  \label{tab:CISim500_1StepEqual_ChooseIVs}
+  \caption{1-step Equal-tailed CI, Choosing IVs Example, $N=500$}
+\end{table}
+
+
+
 
 \end{document}
