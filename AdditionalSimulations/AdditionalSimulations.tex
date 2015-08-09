@@ -15,14 +15,12 @@
 \section{New Section on Confidence Intervals}
 Corollary 4.2 is sufficiently general to cover a wide range of moment selection and averaging procedures, but this same generality makes the confidence interval procedure given in Algorithm 4.1 somewhat less than intuitive.
 In this section I specialize the results on moment average estimators from above to the two examples of FMSC selection that appear in the simulation studies described below: OLS versus TSLS and choosing instrumental variables.
-The structure of these examples allows us to bypass Algorithm 4.1 and characterize the asymptotic distribution of various proposals for post-FMSC inference \emph{directly}.
-
-
-Accordingly, in this section I will treat any consistently estimable parameters that appear in a limit distribution as \emph{known}.
-Recall that $\tau$ remains unknown \emph{even in the limit}.
+The structure of these examples allows us to bypass Algorithm 4.1 and characterize the asymptotic properties of various proposals for post-FMSC inference \emph{directly}.
+Because this section presents asymptotic results only, I treat any consistently estimable quantity that appears in a limit distribution as known.
+Recall that the bias parameter $\tau$ remains unknown \emph{even in the limit}.
 This is the main complication of post-FMSC inference and the focus of this section.
 
-First consider the OLS versus TSLS example from Secion 3.2.
+First recall the OLS versus TSLS example from Secion 3.2.
 The joint limit distribution for this case is as follows
 \begin{equation*}
   \left[ 
@@ -76,14 +74,20 @@ Then we have,
 \end{equation*}
 where $q^2_{F} = \gamma^2 \sigma_w^2 + q^2_{V}$, $q^2_{V} = \boldsymbol{\pi}'\Sigma_{zz}\boldsymbol{\pi}$, $\Sigma_{zz}$ is the covariance matrix of the valid instruments $\mathbf{z}$, and $\sigma_w^2$ is the variance of the ``suspect'' instrument $w$.
 After some simple algebra we see that \emph{both} of these examples share the same structure, namely
-\begin{equation*}
+\begin{equation}
   \left[ 
   \begin{array}{c}
     \sqrt{n} \left( \widehat{\beta} - \beta \right)\\
     \sqrt{n} \left( \widetilde{\beta} - \beta \right)\\
     \widehat{\tau}
 \end{array}
-\right] \overset{d}{\rightarrow} N\left( \left[
+\right] \overset{d}{\rightarrow} 
+\left[
+\begin{array}{c}
+  U \\ V \\ T
+\end{array}
+\right] \sim
+N\left( \left[
 \begin{array}{c}
   c\tau\\ 0 \\ \tau
 \end{array}
@@ -95,11 +99,46 @@ After some simple algebra we see that \emph{both} of these examples share the sa
   0 & -c\sigma^2 & \sigma^2 
 \end{array}
 \right]\right)
-\end{equation*}
-where $\widehat{\beta}$ denotes the low variance but possibly biased estimator, $\widetilde{\beta}$ denotes the higher variance but unbiased estimator.
+\label{eq:LimitExperiment}
+\end{equation}
+where $\widehat{\beta}$ denotes the low variance but possibly biased estimator, and $\widetilde{\beta}$ denotes the higher variance but unbiased estimator.
 For any example with a limit distribution that takes this form, simple algebra shows that FMSC selection amounts to choosing $\widehat{\beta}$ whenever $|\widehat{\tau}|<\sqrt{2}\sigma$, and choosing $\widetilde{\beta}$ otherwise, in other words
 \begin{eqnarray*}
-  \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) = \sqrt{n}(\widehat{\beta} - \beta) \mathbf{1}\left\{ |\widehat{\tau}|<\sigma \sqrt{2} \right\} + \sqrt{n}(\widetilde{\beta} - \beta) \mathbf{1}\left\{ |\widehat{\tau}|\geq\sigma \sqrt{2} \right\}
+  \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) = \mathbf{1}\left\{ |\widehat{\tau}|<\sigma \sqrt{2} \right\} \sqrt{n}(\widehat{\beta} - \beta) +  \mathbf{1}\left\{ |\widehat{\tau}|\geq\sigma \sqrt{2} \right\}\sqrt{n}(\widetilde{\beta} - \beta)
+\end{eqnarray*}
+and so by the Continuous Mapping Theorem,
+\begin{eqnarray*}
+  \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) \overset{d}{\rightarrow}  \mathbf{1}\left\{ |T|<\sigma \sqrt{2} \right\} U +  \mathbf{1}\left\{ |T|\geq\sigma \sqrt{2} \right\} V.
+\end{eqnarray*}
+To better understand the implications of this expression, it is helpful to re-express the limit distribution from Equation \ref{eq:LimitExperiment} in terms of the \emph{marginal} distribution of $T$ and the \emph{conditional} distribution of $(U,V)'$ given $T$. 
+We have $T \sim N(\tau, \sigma^2)$ and by direct calculation
+\begin{equation}
+  \left.\left[
+  \begin{array}{c}
+   U \\ V 
+  \end{array}
+\right]\right| (T = t) \sim N\left(
+\left[
+\begin{array}{c}
+  c \tau \\ c\tau - ct
+\end{array}
+\right], \eta^2
+\left[
+\begin{array}{cc}
+  1 & 1 \\ 1 & 1
+\end{array}
+\right]
+\right)
+\label{eq:LimitExperimentConditional}
+\end{equation}
+which is a \emph{singular distribution}.
+Crucially, $U$ is independent of $T$ but conditional on $T$, $U$ and $V$ are perfectly correlated and have the same variance.
+Using this result, we can express the distribution of $(U,V,T)'$ from Equation \ref{eq:LimitExperiment} as follows:
+\begin{eqnarray*}
+  Z_1, Z_2 &\overset{iid}{\sim}& N(0,1)\\
+  T &=& \sigma Z_1 + \tau\\
+  U &=& \eta Z_2 + c\tau\\
+  V &=& \eta Z_2 - c\sigma Z_1
 \end{eqnarray*}
 
 \section{The Limit Experiment}
