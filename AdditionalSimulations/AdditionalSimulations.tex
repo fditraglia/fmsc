@@ -21,7 +21,7 @@ Because this section presents asymptotic results only, I treat any consistently 
 Recall that the bias parameter $\tau$ remains unknown \emph{even in the limit}.
 This is the main complication of post-FMSC inference and the focus of this section.
 
-First recall the OLS versus TSLS example from Secion 3.2.
+First recall the OLS versus TSLS example from Section 3.2.
 The joint limit distribution for this case is as follows
 \begin{equation*}
   \left[ 
@@ -74,7 +74,7 @@ Then we have,
 \right]\right)
 \end{equation*}
 where $q^2_{F} = \gamma^2 \sigma_w^2 + q^2_{V}$, $q^2_{V} = \boldsymbol{\pi}'\Sigma_{zz}\boldsymbol{\pi}$, $\Sigma_{zz}$ is the covariance matrix of the valid instruments $\mathbf{z}$, and $\sigma_w^2$ is the variance of the ``suspect'' instrument $w$.
-After some simple algebra we see that \emph{both} of these examples share the same structure, namely
+After some algebraic manipulations we see that \emph{both} of these examples share the same structure, namely
 \begin{equation}
   \left[ 
   \begin{array}{c}
@@ -135,8 +135,8 @@ We have $T \sim N(\tau, \sigma^2)$ and by direct calculation
 \label{eq:LimitExperimentConditional}
 \end{equation}
 which is a \emph{singular distribution}.
-Crucially, $U$ is independent of $T$ but conditional on $T$, the random variables $U$ and $V$ are perfectly correlated and have the same variance.
-Given $T$ the only difference between $U$ and $V$ is that the mean of $V$ is shifted by a distance that depends on the realization $t$ of $T$.
+Crucially $U$ is independent of $T$, but conditional on $T$ the random variables $U$ and $V$ are perfectly correlated with the same variance.
+Given $T$, the only difference between $U$ and $V$ is that the mean of $V$ is shifted by a distance that depends on the realization $t$ of $T$.
 Thus, the conditional distribution of $V$ shows a \emph{random bias}: on average $V$ has mean zero because the mean of $T$ is $\tau$ but any particular realization $t$ of $T$ will not in general equal $\tau$.
 Using the form of the conditional distributions we can express the distribution of $(U,V,T)'$ from Equation \ref{eq:LimitExperiment} in a more transparent form as
 \begin{eqnarray*}
@@ -145,7 +145,7 @@ Using the form of the conditional distributions we can express the distribution 
   V &=& \eta Z_2 - c\sigma Z_1
 \end{eqnarray*}
 where $Z_1, Z_2$ are iid standard normal random variables.
-Combined with Equation \ref{eq:FMSCLimitExperiment} this representation allows us to tabulate the asymptotic distribution, $F_{FMSC}$, of the post-FMSC estimator \emph{directly} for any example that takes the form of Equation \ref{eq:LimitExperiment} rather than approximating it by simulation as in Algorithm 4.1.
+Combined with Equation \ref{eq:FMSCLimitExperiment}, this representation allows us to tabulate the asymptotic distribution, $F_{FMSC}$, of the post-FMSC estimator \emph{directly} for any example that takes the form of Equation \ref{eq:LimitExperiment} rather than approximating it by simulation as in Algorithm 4.1.
 We have:
 \begin{eqnarray}
   F_{FMSC}(x) &=& G(x) + H_1(x) + H_2(x) \\
