@@ -1,0 +1,327 @@
+%!TEX root = main.tex
+\subsection{A Special Case of Post-FMSC Inference}
+\label{sec:limitexperiment}
+Corollary \ref{cor:momentavg} is sufficiently general to cover a wide range of moment selection and averaging procedures, but this same generality makes the confidence interval procedure given in Algorithm \ref{alg:conf} somewhat less than intuitive.
+In this section I specialize the results on moment average estimators from above to the two examples of FMSC selection that appear in the simulation studies described below in Section \ref{sec:simulations}: OLS versus TSLS and choosing instrumental variables.
+The structure of these examples allows us to bypass Algorithm 4.1 and characterize the asymptotic properties of various proposals for post-FMSC inference \emph{directly}, clearly illustrating the relevant trade-offs between coverage and width.
+Because this section presents asymptotic results only, I treat any consistently estimable quantity that appears in a limit distribution as known.
+Unfortunately the bias parameter $\tau$ remains unknown \emph{even in the limit}.
+This is the main complication of post-FMSC inference and the focus of this section.
+
+First recall the OLS versus TSLS example from Section 3.2.
+The joint limit distribution for this case is as follows
+\begin{equation*}
+  \left[ 
+  \begin{array}{c}
+    \sqrt{n} \left( \widehat{\beta}_{OLS} - \beta \right)\\
+    \sqrt{n} \left( \widetilde{\beta}_{TSLS} - \beta \right)\\
+    \widehat{\tau}
+\end{array}
+\right] \overset{d}{\rightarrow} N\left( \left[
+\begin{array}{c}
+  \tau/\sigma_x^2 \\ 0 \\ \tau
+\end{array}
+\right], \sigma_{\epsilon}^2 
+\left[
+\begin{array}{ccc}
+  1/\sigma_x^2 & 1/\sigma_x^2 & 0\\
+  1/\sigma_x^2 & 1/\gamma^2 & -\sigma_v^2/\gamma^2\\
+  0 & -\sigma_v^2/\gamma^2 & \sigma_x^2 \sigma_v^2/\gamma^2
+\end{array}
+\right]\right).
+\end{equation*}
+Second, consider a slightly simplified version of the choosing instrumental variables example from Section 3.3, namely
+\begin{eqnarray*}
+  y_{ni} &=& \beta x_{ni} + \epsilon_{ni}\\
+  x_{ni} &=& \gamma w_{ni} + \mathbf{z}_{ni}' \boldsymbol{\pi} + v_{ni}
+\end{eqnarray*}
+where $x$ is the endogenous regressor of interest, $z$ is a vector of exogenous instruments, and $w$ is a single potentially endogenous instrument.
+Without loss of generality I assume that $w$ and $\mathbf{z}$ are uncorrelated and that all random variables are mean zero.
+For simplicity, I further assume that the errors satisfy the same kind of asymptotic homoskedasticity condition used in the OLS versus TSLS example so that TSLS is the efficient GMM estimator.
+Let the ``Full'' estimator denote the TSLS estimator using $w$ and $\mathbf{z}$ and the ``Valid'' estimator denote the TSLS estimator using only $\mathbf{z}$.
+Then we have,
+\begin{equation*}
+  \left[ 
+  \begin{array}{c}
+    \sqrt{n} \left( \widehat{\beta}_{Full} - \beta \right)\\
+    \sqrt{n} \left( \widetilde{\beta}_{Valid} - \beta \right)\\
+    \widehat{\tau}
+\end{array}
+\right] \overset{d}{\rightarrow} N\left( \left[
+\begin{array}{c}
+  \tau\gamma/q^2_{F} \\ 0 \\ \tau
+\end{array}
+\right], \sigma_{\epsilon}^2 
+\left[
+\begin{array}{ccc}
+  1/q_{F}^2 & 1/q_{F}^2 & 0\\
+  1/q_{F}^2 & 1/q_{V}^2 & -\gamma\sigma_w^2/q^2_{V}\\ 
+  0 & -\gamma\sigma_w^2/q^2_{V} & \sigma_w^2 q^2_{F}/q^2_{V}
+\end{array}
+\right]\right)
+\end{equation*}
+where $q^2_{F} = \gamma^2 \sigma_w^2 + q^2_{V}$, $q^2_{V} = \boldsymbol{\pi}'\Sigma_{zz}\boldsymbol{\pi}$, $\Sigma_{zz}$ is the covariance matrix of the valid instruments $\mathbf{z}$, and $\sigma_w^2$ is the variance of the ``suspect'' instrument $w$.
+After some algebraic manipulations we see that \emph{both} of these examples share the same structure, namely
+\begin{equation}
+  \left[ 
+  \begin{array}{c}
+    \sqrt{n} \left( \widehat{\beta} - \beta \right)\\
+    \sqrt{n} \left( \widetilde{\beta} - \beta \right)\\
+    \widehat{\tau}
+\end{array}
+\right] \overset{d}{\rightarrow} 
+\left[
+\begin{array}{c}
+  U \\ V \\ T
+\end{array}
+\right] \sim
+N\left( \left[
+\begin{array}{c}
+  c\tau\\ 0 \\ \tau
+\end{array}
+\right], 
+\left[
+\begin{array}{ccc}
+  \eta^2 & \eta^2 & 0\\
+  \eta^2 & \eta^2 + c^2 \sigma^2 & -c\sigma^2\\ 
+  0 & -c\sigma^2 & \sigma^2 
+\end{array}
+\right]\right)
+\label{eq:LimitExperiment}
+\end{equation}
+where $\widehat{\beta}$ denotes the low variance but possibly biased estimator, and $\widetilde{\beta}$ denotes the higher variance but unbiased estimator.
+For any example with a limit distribution that takes this form, simple algebra shows that FMSC selection amounts to choosing $\widehat{\beta}$ whenever $|\widehat{\tau}|<\sqrt{2}\sigma$, and choosing $\widetilde{\beta}$ otherwise, in other words
+\begin{eqnarray*}
+  \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) = \mathbf{1}\left\{ |\widehat{\tau}|<\sigma \sqrt{2} \right\} \sqrt{n}(\widehat{\beta} - \beta) +  \mathbf{1}\left\{ |\widehat{\tau}|\geq\sigma \sqrt{2} \right\}\sqrt{n}(\widetilde{\beta} - \beta)
+\end{eqnarray*}
+and so by the Continuous Mapping Theorem,
+\begin{equation}
+  \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) \overset{d}{\rightarrow}  \mathbf{1}\left\{ |T|<\sigma \sqrt{2} \right\} U +  \mathbf{1}\left\{ |T|\geq\sigma \sqrt{2} \right\} V.
+  \label{eq:FMSCLimitExperiment}
+\end{equation}
+
+To better understand the implications of Equation \ref{eq:FMSCLimitExperiment}, it is helpful to re-express the limit distribution from Equation \ref{eq:LimitExperiment} in terms of the marginal distribution of $T$ and the conditional distribution of $U$ and $V$ given $T$. 
+We have $T \sim N(\tau, \sigma^2)$ and by direct calculation
+\begin{equation}
+  \left.\left[
+  \begin{array}{c}
+   U \\ V 
+  \end{array}
+\right]\right| (T = t) \sim N\left(
+\left[
+\begin{array}{c}
+  c \tau \\ c\tau - ct
+\end{array}
+\right], \eta^2
+\left[
+\begin{array}{cc}
+  1 & 1 \\ 1 & 1
+\end{array}
+\right]
+\right)
+\label{eq:LimitExperimentConditional}
+\end{equation}
+which is a \emph{singular distribution}.
+Crucially $U$ is independent of $T$, but conditional on $T$ the random variables $U$ and $V$ are perfectly correlated with the same variance.
+Given $T$, the only difference between $U$ and $V$ is that the mean of $V$ is shifted by a distance that depends on the realization $t$ of $T$.
+Thus, the conditional distribution of $V$ shows a \emph{random bias}: on average $V$ has mean zero because the mean of $T$ is $\tau$ but any particular realization $t$ of $T$ will not in general equal $\tau$.
+Using the form of the conditional distributions we can express the distribution of $(U,V,T)'$ from Equation \ref{eq:LimitExperiment} in a more transparent form as
+\begin{eqnarray*}
+  T &=& \sigma Z_1 + \tau\\
+  U &=& \eta Z_2 + c\tau\\
+  V &=& \eta Z_2 - c\sigma Z_1
+\end{eqnarray*}
+where $Z_1, Z_2$ are iid standard normal random variables.
+Combined with Equation \ref{eq:FMSCLimitExperiment}, this representation allows us to tabulate the asymptotic distribution, $F_{FMSC}$, of the post-FMSC estimator \emph{directly} for any example that takes the form of Equation \ref{eq:LimitExperiment} rather than approximating it by simulation as in Algorithm 4.1.
+We have:
+\begin{eqnarray}
+  F_{FMSC}(x) &=& G(x) + H_1(x) + H_2(x) \\
+  \label{eq:FFMSC}
+  G(x) &=& \Phi\left( \frac{x - c\tau}{\eta} \right)\left[ \Phi( \sqrt{2} - \tau/\sigma) -  \Phi( -\sqrt{2} - \tau/\sigma )\right]\\
+  \label{eq:GFMSC}
+  H_1(x) &=& \frac{1}{\sigma}\int_{-\infty}^{-\sigma\sqrt{2} - \tau} \Phi\left( \frac{x + ct}{\eta}\right)\varphi(t/\sigma)\; dt\\
+  \label{eq:H1FMSC}
+  H_2(x) &=& \frac{1}{\sigma}\int^{+\infty}_{\sigma\sqrt{2} - \tau} \Phi\left( \frac{x + ct}{\eta}\right)\varphi(t/\sigma)\; dt
+  \label{eq:H2FMSC}
+\end{eqnarray}
+where $\Phi$ is the CDF and $\varphi$ the pdf of a standard normal random variable.
+Note that the limit distribution of the post-FMSC distribution depends on $\tau$ in addition to the consistently estimable quantities $\sigma, \eta, c$ although I supress this dependence to simplify the notation.
+While these expressions lack a closed form, there are various fast and extremely accurate numerical routines for evaluating integrals of the form taken by $H_1$ and $H_2$, for example those provided in the \texttt{mvtnorm} package in R. \todo{Cite!}
+Armed with a numerical routine to evaluate $F_{FMSC}$ it is straightforward to evaluate the corresponding quantile function $Q_{FMSC}$ using a root-finder by analytically bounding $G$, $H_1$ and $H_2$.
+I provide numerical routines to evaluate both $F_{FMSC}$ and $Q_{FMSC}$ along with various related quantities in my R package \texttt{fmscr}. \todo{Cite!}
+
+The ability to compute $F_{FMSC}$ and $Q_{FMSC}$ allows us to answer a number of important questions about post-FMSC inference for any example of the form given in Equation \ref{eq:LimitExperiment}.
+To begin, suppose that we were to carry out FMSC selection and then construct a $(1 - \alpha) \times 100\%$ confidence interval \emph{conditional} in the selected estimator, completely ignoring the effects of the moment selection step.
+What would be the resulting asymptotic coverage probability and width of such a ``naive'' confidence interval procedure?
+Using calculations similar to those used above in the expression for $F_{FMSC}$, we find that the coverage probability of this naive interval is given by
+\begin{eqnarray*}
+  \mbox{CP}_{Naive}(\alpha) &=& G(u_\alpha) - G(-u_\alpha) +  H_1(\ell_\alpha) - H_2(-\ell_\alpha) +  H_2(\ell_\alpha) - H_2(-\ell_\alpha) \\
+  u_\alpha &=& z_{1-\alpha/2}\; \eta\\
+  \ell_{\alpha} &=& z_{1-\alpha/2} \sqrt{\eta^2 + c^2\sigma^2}
+\end{eqnarray*}
+where $z_{1-\alpha/2} = \Phi^{-1}(1 -\alpha/2)$ and $G$, $H_1$, $H_2$ are as defined in Equations \ref{eq:GFMSC}--\ref{eq:H2FMSC}.
+And since the width of this naive CI equals that of the textbook interval for $\widehat{\beta}$ when $|\widehat{\tau}|<\sigma\sqrt{2}$ and that of the textbook interval for $\widetilde{\beta}$ otherwise, we have
+\begin{equation*}
+  \frac{E\left[ \mbox{Width}_{Naive}(\alpha) \right]}{\mbox{Width}_{Valid}(\alpha)} = 1 + \left[ \Phi( \sqrt{2} - \tau/\sigma) -  \Phi( -\sqrt{2} - \tau/\sigma )\right]\left( \sqrt{\frac{\eta^2}{\eta^2 + c^2 \sigma^2}} - 1 \right)
+\end{equation*}
+where $\mbox{Width}_{Valid}(\alpha)$ is the width of a standard, textbook confidence interval for $\widetilde{\beta}$.
+
+To evaluate these expressions we need values for $c, \eta^2, \sigma^2$ and $\tau$.
+For the remainder of this section I will consider the parameter values that correspond to the simulation experiments presented below in Section 5.3.
+For the OLS versus TSLS simulation experiment we have $c=1$, $\eta^2=1$ and $\sigma^2 = (1-\pi^2)/\pi^2$ where $\pi^2$ denotes the population first-stage R-squared for the TSLS estimator. 
+For the choosing IVs simulation experiment we have $c =\gamma/(\gamma^2 +1/9)$, $\eta^2 = 1/(\gamma^2 + 1/9)$ and $\sigma^2 = 1 + 9\gamma^2$ where $\gamma^2$ is the increase in the population first-stage R-squared of the TSLS estimator from \emph{adding} $w$ to the instrument set.
+The population first-stage R-squared without $w$ in this example is $1/9$.
+
+Table \ref{tab:LimitNaiveCover} presents the asymptotic coverage probability and Table \ref{tab:LimitNaiveWidth} the expected relative width of the naive confidence interval procedure for a variety of values of $\tau$ and $\alpha$ for each of the two examples.
+For the OLS versus TSLS example, I allow $\pi^2$ to vary while for the choosing IV example I allow $\gamma^2$ to vary.
+Note that the relative expected width does not depend on $\alpha$.
+In terms of coverage probability, the naive interval performs very poorly: in some regions of the parameter space the actual coverage is very close to the nominal level, while in others it is far lower.
+These striking size distortions, which echo the findings of Guggenberger \todo{Cite!!!} provide a strong argument against the use of the naive interval.
+Its attraction, of course, is width: the naive interval can be dramatically shorter than the corresponding ``textbook'' confidence interval for the valid estimator.
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{OLS versus TSLS}
+    \input{./AdditionalSimulations/LimitSimResults/c_naive_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Choosing IVs}
+    \input{./AdditionalSimulations/LimitSimResults/c_naive_chooseIV.tex}
+  \end{subtable}
+  \caption{Asymptotic coverage probability of Naive $(1-\alpha)\times 100\%$ confidence interval.}
+  \label{tab:LimitNaiveCover}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{OLS versus TSLS}
+    \input{./AdditionalSimulations/LimitSimResults/w_naive_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Choosing IVs}
+    \input{./AdditionalSimulations/LimitSimResults/w_naive_chooseIVs.tex}
+  \end{subtable}
+  \caption{Asymptotic expected width of naive confidence interval relative to that of the valid estimator. Values are given in percentage points.}
+  \label{tab:LimitNaiveWidth}
+\end{table}
+
+Is there any way to construct a post-FMSC confidence interval that does not suffer from the egregious size distortions of the naive interval but is still shorter than the textbook interval for the valid estimator?
+As a first step towards answering this question, Table \ref{tab:WidthInfeasible} presents the relative width of the shortest possible \emph{infeasible} post-FMSC confidence interval constructed directly from $Q_{FMSC}$.
+This interval has asymptotic coverage probability \emph{exactly} equal to its nominal level as it correctly accounts for the effect of moment selection on the asymptotic distribution of the estimators.
+Unfortunately it cannot be used in practice because it requires knowledge of $\tau$, for which no consistent estimator exists.
+As such, this interval serves as a benchmark against which to judge various feasible procedures that do not require knowledge of $\tau$.
+For certain parameter values this interval is indeed shorter than the valid interval but the improvement is not uniform.
+Just as the FMSC itself cannot provide a uniform reduction in AMSE relative to the valid estimator, the infeasible post-FMSC cannot provide a corresponding reduction in width.
+In both cases, however, improvements are possible when $\tau$ is expected to be small, the setting in which this paper assumes that an applied researcher finds herself. 
+The potential reductions in width can be particularly dramatic for larger values of $\alpha$.
+The question remains: is there any way to capture these gains using a \emph{feasible} procedure?
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{OLS versus TSLS}
+    \input{./AdditionalSimulations/LimitSimResults/w_infeas_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Choosing IVs}
+    \input{./AdditionalSimulations/LimitSimResults/w_infeas_chooseIVs.tex}
+  \end{subtable}
+  \caption{Width of shortest possible $(1-\alpha)\times 100\%$ post-FMSC confidence interval constructed directly from $Q_{FMSC}$ using knowledge of $\tau$. This interval is infeasible as no consistent estimator of $\tau$ exists. Values are given in percentage points.}
+  \label{tab:WidthInfeasible}
+\end{table}
+
+Although no consistent estimator of $\tau$ exists, $\widehat{\tau}$ provides an asymptotically unbiased estimator.
+I now consider two different ways to use $\widehat{\tau}$ to construct a post-FMSC confidence interval.
+The first is equivalent to the two-step procedure given in Algorithm 4.1 but uses exact calculations rather than simulations to calculate $Q_{FMSC}$, following the derivations given above.
+This procedure first constructs a $(1-\alpha_1)\times 100\%$ confidence interval for $\widehat{\tau}$.
+For each $\tau^*$ in this interval it then constructs a $(1-\alpha_2)\times 100\%$ based on $Q_{FMSC}$ and then takes the upper and lower bounds over all of the resulting intervals.
+This interval is guaranteed to have asymptotic coverage probability of at least $1 - (\alpha_1 + \alpha_2)$ by Theorem 4.4.
+As we are free to choose any $\alpha_1, \alpha_2$ such that $\alpha_1 + \alpha_2 = \alpha$ when using this method, I experimented with three possibilities: $\alpha_1 = \alpha_2 = \alpha/2$, followed by $\alpha_1 = \alpha/4, \alpha_2 = 3\alpha/4$ and $\alpha_1 = 3\alpha/4, \alpha_2 = \alpha/4$.
+As setting $\alpha_1 = \alpha/4$ produced the shortest intervals I report only results for the middle configuration here.
+Additional results are available on request.
+As we see from Table \ref{tab:Limit2StepWideTauOLSvsIV} for the OLS versus TSLS example and Table \ref{tab:Limit2StepWideTauChooseIVs} for the choosing IVs example, this procedure delivers on its promise that asymptotic coverage will never fall below $1-\alpha$.
+Protection against under-coverage, however, comes at the expense of extreme conservatism, particularly for larger values of $\alpha$.
+The two-step procedure yields asymptotic coverage that is systematically \emph{too large} and hence \emph{cannot} produce an interval shorter than the textbook CI for the valid estimator.
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/LimitSimResults/c_2widetau_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./AdditionalSimulations/LimitSimResults/w_2widetau_OLSvsIV.tex}
+  \end{subtable}
+  \caption{OLS versus TSLS Example: Asymptotic coverage and expected relative width of two-step confidence interval with $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$.}
+  \label{tab:Limit2StepWideTauOLSvsIV}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/LimitSimResults/c_2widetau_chooseIVs.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./AdditionalSimulations/LimitSimResults/w_2widetau_chooseIVs.tex}
+  \end{subtable}
+  \caption{Choosing IVs Example: Asymptotic coverage and expected relative width of two-step confidence interval with $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$.}
+  \label{tab:Limit2StepWideTauChooseIVs}
+\end{table}
+
+To address this problem, I now consider an alternative one-step procedure.
+Rather than first constructing a confidence region for $\tau$ and then taking upper and lower bounds, this method simply assumes that $\widehat{\tau}$ is exactly equal to $\tau$ and then constructs a confidence interval from $Q_{FMSC}$ exactly as in the infeasible interval described above.\footnote{As in the construction of the naive interval, I take the shortest possible interval based on $Q_{FMSC}$ rather than an equal-tailed interval. Additional results for an equal-tailed version of this one-step procedure are available upon request. Their performance is similar.}
+Note that Theorem 4.4 does \emph{not} apply to this one-step interval: it comes with no generic guarantee of uniform coverage performance.
+However for any example that take the form of Equation \ref{eq:LimitExperiment} we can directly calculate the asymptotic coverage and expected relative width of this procedure to determine precisely how it performs over relevant regions of the parameter space.
+Tables \ref{tab:Limit1StepShortOLSvsIV} and \ref{tab:Limit1StepShortChooseIVs} do exactly this.
+We see that the one-step interval effectively ``splits the difference'' between the two-step interval and the naive procedure. 
+While it can under-cover, the size distortions are fairly small, particularly for $\alpha=0.1$ and $0.05$.
+At the same time, when $\tau$ is relatively small this procedure can yield shorter intervals.
+While a full investigation of this phenomenon is beyond the scope of the present paper, these calculations suggest a plausible way forward for post-FMSC inference that is less conservative than the two-step procedure from Algorithm 4.1 by directly calculating the relevant quantities from the limit distribution of interest.
+One could imagine specifying a maximum allowable size distortion over some relevant region of the parameter space and then designing a confidence interval to minimize width.
+This could be a one-step interval or possibly a two-step interval in which one allows the sum $\alpha_1 + \alpha_2$ to be \emph{less than} $\alpha$.
+Just as the FMSC aims to achieve a favorable trade-off between bias and variance, such a confidence interval procedure could aim to achieve a favorable trade-off between width and coverage.
+It would also be interesting to pursue analogous calculations for the minimum AMSE averaging estimator from Section 4.2.
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/LimitSimResults/c_1short_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./AdditionalSimulations/LimitSimResults/w_1short_OLSvsIV.tex}
+  \end{subtable}
+  \caption{OLS vs TSLS Example: asymptotic coverage probability and expected relative width of 1-step confidence interval constructed by substituting $\tau =\widehat{\tau}$ into $Q_{FMSC}$. Results are for the shortest possible interval, as in the infeasible procedure.}
+  \label{tab:Limit1StepShortOLSvsIV}
+\end{table}
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/LimitSimResults/c_1short_chooseIVs.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./AdditionalSimulations/LimitSimResults/w_1short_chooseIVs.tex}
+  \end{subtable}
+  \caption{Choose IVs Example: 1-step shortest CI, limit sim.}
+  \label{tab:Limit1StepShortChooseIVs}
+\end{table}
+
