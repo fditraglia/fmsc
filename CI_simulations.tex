@@ -1,7 +1,7 @@
 %!TEX root = main.tex
 \subsection{Confidence Interval Simulations}
 \label{sec:CIsim}
-I now revisit the simulation experiments introduced above in Sections \ref{sec:OLSvsIVsim} and \ref{sec:chooseIVsim} to evaluate the finite-sample performance the of confidence intervals whose asymptotic performance was studied in Section \ref{sec:limitexperiment} above.
+I now revisit the simulation experiments introduced above in Sections \ref{sec:OLSvsIVsim} and \ref{sec:chooseIVsim} to evaluate the finite-sample performance of the confidence intervals whose asymptotic performance was studied in Section \ref{sec:limitexperiment} above.
 All results in this section are based on 1000 simulation replications from the relevant DGP.
 Coverage probabilities and relative widths are all given in percentage points, rounded to the nearest whole percent.
 In the interest of brevity I present only results for $N=100$.
@@ -11,9 +11,16 @@ Taking $N=100$ has the advantage of making the tables in this section directly c
 Because I set $\sigma_x^2 = \sigma_\epsilon^2 = 1$ in both simulation experiments, this implies that $\sqrt{N}\rho = Cor(x_i,\epsilon_i) = \tau$ in the OLS versus TSLS example and $\sqrt{N}\rho = Cor(w_i, \epsilon_i) = \tau$ in the choosing IVs example. 
 Thus when $N = 100$, taking $\rho \in \{0, 0.1, \dots, 0.5\}$ is the finite-sample analogue of $\tau \in \{0, 1, \dots, 5\}$.
 
-
-
-
+To begin, Tables \ref{tab:CISim100Naive_OLSvsIV} and \ref{tab:CISim100Naive_ChooseIVs} present the coverage probability and average relative width of a naive confidence interval that ignores the effects of moment selection on inference.
+These are the finite-sample analogues of Tables \ref{tab:LimitNaiveCover} and \ref{tab:LimitNaiveWidth}.
+For the OLS versus IV example, expected relative width is calculated relative to a textbook confidence interval for the TSLS estimator while for the choosing IVs example it is calculated relative to a textbook confidence interval for the valid estimator that excludes $w$ from the instrument set. 
+As in the asymptotic calculations presented above, we find that the naive procedure suffers from severe size distortions but results in much shorter intervals.
+Tables \ref{tab:CISim100_2stepWideTau_OLSvsIV} and \ref{tab:CISim100_2stepWideTau_ChooseIVs} 
+present coverage probabilities and average relative width of the two-step confidence interval procedure with $\alpha_1 = \alpha/4$ and $\alpha_2 = 3\alpha/4$, the finite sample analogues to Tables \ref{tab:Limit2StepWideTauOLSvsIV} and \ref{tab:Limit2StepWideTauChooseIVs}. 
+With a small allowance for sampling variability, we see that the 2-step intervals indeed provide uniform coverage no lower than their nominal level but result in wider intervals than simply using TSLS or the valid estimator, respectively.
+Results for other configurations of $\alpha_1, \alpha_2$, available upon request, result in even wider intervals.
+Finally, Tables \ref{tab:CISim100_1stepShort_OLSvsIV} and \ref{tab:CISim100_1stepShort_OLSvsIV}, the finite-sample analogues of Tables \ref{tab:Limit1StepShortOLSvsIV} and \ref{tab:Limit1StepShortChooseIVs} present results for the one-step confidence interval that assumes $\widehat{\tau} = \tau$.
+As in the asymptotic results, this interval presents a good tradeoff between the naive and 2-step CIs: it can yield shorter intervals with far smaller size distortions.
 
 \begin{table}[h]
   \centering
@@ -23,7 +30,7 @@ Thus when $N = 100$, taking $\rho \in \{0, 0.1, \dots, 0.5\}$ is the finite-samp
   \end{subtable}
   ~
   \begin{subtable}{0.48\textwidth}
-    \caption{Relative Width}
+    \caption{Average Relative Width}
     \input{./AdditionalSimulations/CISimResults/w_naive_OLSvsIV_100.tex}
   \end{subtable}
   \caption{Naive CI, OLS vs IV Example, $N=100$}
@@ -32,6 +39,51 @@ Thus when $N = 100$, taking $\rho \in \{0, 0.1, \dots, 0.5\}$ is the finite-samp
 
 
 
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/CISimResults/c_naive_chooseIVs_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Average Relative Width}
+    \input{./AdditionalSimulations/CISimResults/w_naive_chooseIVs_100.tex}
+  \end{subtable}
+  \caption{Naive CI, Choosing IVs Example, $N=100$}
+  \label{tab:CISim100Naive_ChooseIVs}
+\end{table}
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/CISimResults/c_2tauwide_OLSvsIV_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Average Relative Width}
+    \input{./AdditionalSimulations/CISimResults/w_2tauwide_OLSvsIV_100.tex}
+  \end{subtable}
+  \caption{2-step CI, $\alpha_1 = \alpha/4,\alpha_2 = 3\alpha/4$, OLS vs IV Example, $N=100$}
+  \label{tab:CISim100_2stepWideTau_OLSvsIV}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/CISimResults/c_2tauwide_chooseIVs_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Average Relative Width}
+    \input{./AdditionalSimulations/CISimResults/w_2tauwide_chooseIVs_100.tex}
+  \end{subtable}
+  \caption{2-step CI, $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$, Choosing IVs Example, $N=100$}
+  \label{tab:CISim100_2stepWideTau_ChooseIVs}
+\end{table}
 
 
 
@@ -44,57 +96,12 @@ Thus when $N = 100$, taking $\rho \in \{0, 0.1, \dots, 0.5\}$ is the finite-samp
   \end{subtable}
   ~
   \begin{subtable}{0.48\textwidth}
-    \caption{Relative Width}
+    \caption{Average Relative Width}
     \input{./AdditionalSimulations/CISimResults/w_1short_OLSvsIV_100.tex}
   \end{subtable}
   \caption{1-step Shortest CI, OLS vs IV Example, $N=100$}
   \label{tab:CISim100_1stepShort_OLSvsIV}
 \end{table}
-
-
-
-
-
-
-
-\begin{table}[h]
-  \centering
-  \begin{subtable}{0.48\textwidth}
-    \caption{Coverage Probability}
-    \input{./AdditionalSimulations/CISimResults/c_2tauwide_OLSvsIV_100.tex}
-  \end{subtable}
-  ~
-  \begin{subtable}{0.48\textwidth}
-    \caption{Relative Width}
-    \input{./AdditionalSimulations/CISimResults/w_2tauwide_OLSvsIV_100.tex}
-  \end{subtable}
-  \caption{2-step CI, $\alpha_1 = \alpha/4,\alpha_2 = 3\alpha/4$, OLS vs IV Example, $N=100$}
-  \label{tab:CISim100_2stepWideTau_OLSvsIV}
-\end{table}
-
-
-
-
-
-
-
-
-\begin{table}[h]
-  \centering
-  \begin{subtable}{0.48\textwidth}
-    \caption{Coverage Probability}
-    \input{./AdditionalSimulations/CISimResults/c_naive_chooseIVs_100.tex}
-  \end{subtable}
-  ~
-  \begin{subtable}{0.48\textwidth}
-    \caption{Relative Width}
-    \input{./AdditionalSimulations/CISimResults/w_naive_chooseIVs_100.tex}
-  \end{subtable}
-  \caption{Naive CI, Choosing IVs Example, $N=100$}
-  \label{tab:CISim100Naive_ChooseIVs}
-\end{table}
-
-
 
 
 \begin{table}[h]
@@ -105,50 +112,10 @@ Thus when $N = 100$, taking $\rho \in \{0, 0.1, \dots, 0.5\}$ is the finite-samp
   \end{subtable}
   ~
   \begin{subtable}{0.48\textwidth}
-    \caption{Relative Width}
+    \caption{Average Relative Width}
     \input{./AdditionalSimulations/CISimResults/w_1short_chooseIVs_100.tex}
   \end{subtable}
   \caption{1-step Shortest CI, Choosing IVs Example, $N=100$}
   \label{tab:CISim100_1StepShort_ChooseIVs}
 \end{table}
-
-
-
-
-
-
-
-\begin{table}[h]
-  \centering
-  \begin{subtable}{0.48\textwidth}
-    \caption{Coverage Probability}
-    \input{./AdditionalSimulations/CISimResults/c_2tauwide_chooseIVs_100.tex}
-  \end{subtable}
-  ~
-  \begin{subtable}{0.48\textwidth}
-    \caption{Relative Width}
-    \input{./AdditionalSimulations/CISimResults/w_2tauwide_chooseIVs_100.tex}
-  \end{subtable}
-  \caption{2-step CI, $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$, Choosing IVs Example, $N=100$}
-  \label{tab:CISim100_2StepWideTau_ChooseIVs}
-\end{table}
-
-
-
-\begin{table}[h]
-  \centering
-  \begin{subtable}{0.48\textwidth}
-    \caption{TSLS Estimator -- OLS vs TSLS}
-    \input{./AdditionalSimulations/CISimResults/c_tsls_OLSvsIV_100.tex}
-  \end{subtable}
-  ~
-  \begin{subtable}{0.48\textwidth}
-    \caption{Valid Estimator -- Choosing IVs}
-    \input{./AdditionalSimulations/CISimResults/c_valid_chooseIVs_100.tex}
-  \end{subtable}
-  \caption{Coverage Probabilities $N=100$}
-  \label{tab:CISim100Valid}
-\end{table}
-
-
 
