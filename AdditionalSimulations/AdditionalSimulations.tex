@@ -185,10 +185,10 @@ For the OLS versus TSLS simulation experiment we have $c=1$, $\eta^2=1$ and $\si
 For the choosing IVs simulation experiment we have $c =\gamma/(\gamma^2 +1/9)$, $\eta^2 = 1/(\gamma^2 + 1/9)$ and $\sigma^2 = 1 + 9\gamma^2$ where $\gamma^2$ is the increase in the population first-stage R-squared of the TSLS estimator from \emph{adding} $w$ to the instrument set.
 The population first-stage R-squared without $w$ in this example is $1/9$.
 
-Table \ref{tab:LimitNaiveCover} presents the coverage probability and \ref{tab:LimitNaiveWidth} the expected relative width of the naive confidence interval procedure for a variety of values of $\tau$ and $\alpha$ for each of the two examples.
+Table \ref{tab:LimitNaiveCover} presents the asymptotic coverage probability and Table \ref{tab:LimitNaiveWidth} the expected relative width of the naive confidence interval procedure for a variety of values of $\tau$ and $\alpha$ for each of the two examples.
 For the OLS versus TSLS example, I allow $\pi^2$ to vary while for the choosing IV example I allow $\gamma^2$ to vary.
-Note that the relative expected width does not depends on $\alpha$.
-In terms of coverage probability, the naive interval performs very badly: in some regions of the parameter space the actual coverage is very close to the nominal level, while in others it is far lower.
+Note that the relative expected width does not depend on $\alpha$.
+In terms of coverage probability, the naive interval performs very poorly: in some regions of the parameter space the actual coverage is very close to the nominal level, while in others it is far lower.
 These striking size distortions, which echo the findings of Guggenberger \todo{Cite!!!} provide a strong argument against the use of the naive interval.
 Its attraction, of course, is width: the naive interval can be dramatically shorter than the corresponding ``textbook'' confidence interval for the valid estimator.
 
@@ -258,7 +258,7 @@ This interval is guaranteed to have asymptotic coverage probability of at least 
 As we are free to choose any $\alpha_1, \alpha_2$ such that $\alpha_1 + \alpha_2 = \alpha$ when using this method, I experimented with three possibilities: $\alpha_1 = \alpha_2 = \alpha/2$, followed by $\alpha_1 = \alpha/4, \alpha_2 = 3\alpha/4$ and $\alpha_1 = 3\alpha/4, \alpha_2 = \alpha/4$.
 As setting $\alpha_1 = \alpha/4$ produced the shortest intervals I report only results for the middle configuration here.
 Additional results are available on request.
-As we see from Table \ref{tab:Limit2StepWideTauOLSvsIV} for the OLS versus TSLS example and Table \ref{tab:Limit2StepWideTauOLSvsIV} for the choosing IVs example, this procedure delivers on its promise that asymptotic coverage will never fall below $1-\alpha$.
+As we see from Table \ref{tab:Limit2StepWideTauOLSvsIV} for the OLS versus TSLS example and Table \ref{tab:Limit2StepWideTauChooseIVs} for the choosing IVs example, this procedure delivers on its promise that asymptotic coverage will never fall below $1-\alpha$.
 Protection against under-coverage, however, comes at the expense of extreme conservatism, particularly for larger values of $\alpha$.
 The two-step procedure yields asymptotic coverage that is systematically \emph{too large} and hence \emph{cannot} produce an interval shorter than the textbook CI for the valid estimator.
 
@@ -289,14 +289,23 @@ The two-step procedure yields asymptotic coverage that is systematically \emph{t
     \caption{Relative Width}
     \input{./LimitSimResults/w_2widetau_chooseIVs.tex}
   \end{subtable}
-  \caption{Choose IVs Example: 2-step $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$ CI, limit sim.}
+  \caption{Choosing IVs Example: Asymptotic coverage and expected relative width of two-step confidence interval with $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$.}
   \label{tab:Limit2StepWideTauChooseIVs}
 \end{table}
 
 To address this problem, I now consider an alternative one-step procedure.
-Rather than first constructing a confidence region for $\tau$ and then taking upper and lower bounds, this method simply assumes that $\widehat{\tau}$ is exactly equal to $\tau$ and then constructs a confidence interval from $Q_{FMSC}$ exactly as in the infeasible interval described above.\footnote{As in the construction of the naive interval, I take the shortest possible interval based on $Q_{FMSC}$ rather than an equal-tailed interval. Additional results for an equal-tailed version of this one-step procedure are available upon request. Their performance is comparable.}
+Rather than first constructing a confidence region for $\tau$ and then taking upper and lower bounds, this method simply assumes that $\widehat{\tau}$ is exactly equal to $\tau$ and then constructs a confidence interval from $Q_{FMSC}$ exactly as in the infeasible interval described above.\footnote{As in the construction of the naive interval, I take the shortest possible interval based on $Q_{FMSC}$ rather than an equal-tailed interval. Additional results for an equal-tailed version of this one-step procedure are available upon request. Their performance is similar.}
 Note that Theorem 4.4 does \emph{not} apply to this one-step interval: it comes with no generic guarantee of uniform coverage performance.
 However for any example that take the form of Equation \ref{eq:LimitExperiment} we can directly calculate the asymptotic coverage and expected relative width of this procedure to determine precisely how it performs over relevant regions of the parameter space.
+Tables \ref{tab:Limit1StepShortOLSvsIV} and \ref{tab:Limit1StepShortChooseIVs} do exactly this.
+We see that the one-step interval effectively ``splits the difference'' between the two-step interval and the naive procedure. 
+While it can under-cover, the size distortions are fairly small, particularly for $\alpha=0.1$ and $0.05$.
+At the same time, when $\tau$ is relatively small this procedure can yield shorter intervals.
+While a full investigation of this phenomenon is beyond the scope of the present paper, these calculations suggest a plausible way forward for post-FMSC inference that is less conservative than the two-step procedure from Algorithm 4.1 by directly calculating the relevant quantities from the limit distribution of interest.
+One could imagine specifying a maximum allowable size distortion over some relevant region of the parameter space and then designing a confidence interval to minimize width.
+This could be a one-step interval or possibly a two-step interval in which one allows the sum $\alpha_1 + \alpha_2$ to be \emph{less than} $\alpha$.
+Just as the FMSC aims to achieve a favorable trade-off between bias and variance, such a confidence interval procedure could aim to achieve a favorable trade-off between width and coverage.
+It would also be interesting to pursue analogous calculations for the minimum AMSE averaging estimator from Section 4.2.
 
 \begin{table}[h]
   \centering
@@ -309,8 +318,8 @@ However for any example that take the form of Equation \ref{eq:LimitExperiment} 
     \caption{Relative Width}
     \input{./LimitSimResults/w_1short_OLSvsIV.tex}
   \end{subtable}
+  \caption{OLS vs TSLS Example: asymptotic coverage probability and expected relative width of 1-step confidence interval constructed by substituting $\tau =\widehat{\tau}$ into $Q_{FMSC}$. Results are for the shortest possible interval, as in the infeasible procedure.}
   \label{tab:Limit1StepShortOLSvsIV}
-  \caption{OLS vs TSLS Example: 1-step shortest CI, limit sim.}
 \end{table}
 
 
@@ -325,10 +334,9 @@ However for any example that take the form of Equation \ref{eq:LimitExperiment} 
     \caption{Relative Width}
     \input{./LimitSimResults/w_1short_chooseIVs.tex}
   \end{subtable}
-  \label{tab:Limit1StepShortChooseIVs}
   \caption{Choose IVs Example: 1-step shortest CI, limit sim.}
+  \label{tab:Limit1StepShortChooseIVs}
 \end{table}
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
