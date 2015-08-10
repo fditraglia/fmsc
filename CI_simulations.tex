@@ -1,118 +1,152 @@
 %!TEX root = main.tex
-\subsection{Valid Confidence Intervals}
+\subsection{Confidence Interval Simulations}
 \label{sec:CIsim}
-I now revisit the simulation experiments introduced above in Sections \ref{sec:OLSvsIVsim} and \ref{sec:chooseIVsim} to evaluate the finite-sample performance of confidence intervals contructed according to Algorithm \ref{alg:conf}.
-All results are based on 10,000 simulation replications from the appropriate DGP with $\alpha = \delta = 0.05$.
-For more computational details, see Appendix \ref{append:comp}.
+I now revisit the simulation experiments introduced above in Sections \ref{sec:OLSvsIVsim} and \ref{sec:chooseIVsim} to evaluate the finite-sample performance the of confidence intervals whose asymptotic performance was studied in Section \ref{sec:limitexperiment} above.
+All results in this section are based on 1000 simulation replications from the relevant DGP.
 Coverage probabilities and relative widths are all given in percentage points, rounded to the nearest whole percent.
+In the interest of brevity I present only results for $N=100$.
+Likewise, for the two-step confidence intervals I present results only for $\alpha_1 = \alpha/4, \alpha_2 = 3\alpha/4$.
+Simulation results for $N=50$ and $500$ and other configurations of $\alpha_1,\alpha_2$ are available upon request.
+Taking $N=100$ has the advantage of making the tables in this section directly comparable to those of \ref{sec:limitexperiment}.
+Because I set $\sigma_x^2 = \sigma_\epsilon^2 = 1$ in both simulation experiments, this implies that $\sqrt{N}\rho = Cor(x_i,\epsilon_i) = \tau$ in the OLS versus TSLS example and $\sqrt{N}\rho = Cor(w_i, \epsilon_i) = \tau$ in the choosing IVs example. Thus when $N = 100$, taking $\rho \in \{0, 0.1, \dots, 0.5\}$ is the finite-sample analogue of $\tau \in \{0, 1, \dots, 5\}$
 
-Table \ref{tab:OLSvsIVsim_cover_naiveFMSC} shows the problem of ignoring moment selection by presenting the the actual coverage probability of a na\"{i}ve 90\%, post-FMSC confidence interval for the OLS versus TSLS simulation experiment.
-The na\"{i}ve procedure simply constructs a textbook 90\% interval around the FMSC-selected estimator.
-Unsurprisingly, it performs poorly: coverage probabilities can be made \emph{arbitrarily} close to zero by choosing appropriate parameter values, a problem that persists even for large $N$.
-At other parameter values, however, the intervals are close to their nominal level.
-This is precisely the lack of uniformity described by \cite{LeebPoetscher2005}.
-A similar pattern emerges in the choosing instrumental variables simulation: see Table \ref{tab:chooseIVsim_cover_naiveFMSC} in Appendix \ref{sec:CIsupplement}.
+
 
 \begin{table}[h]
-\footnotesize
-\centering
-	\begin{subtable}{0.48\textwidth}
-		\caption{Two-Stage Least Squares}
-		\input{./SimulationOLSvsIV/Results/coverage_TSLS.tex}
-		\label{tab:OLSvsIVsim_cover_TSLS}
-	\end{subtable}	
-	~
-	\begin{subtable}{0.48\textwidth}
-		\caption{Na\"{i}ve post-FMSC}
-		\input{./SimulationOLSvsIV/Results/coverage_FMSC_naive.tex}
-		\label{tab:OLSvsIVsim_cover_naiveFMSC}
-	\end{subtable}
-	\caption{Coverage probabilities of nominal 90\% CIs for the OLS versus TSLS simulation experiment from Section \ref{sec:OLSvsIVsim}. Values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
+  \centering
+  \input{./AdditionalSimulations/CISimResults/c_tsls_OLSvsIV_100.tex}
+  \caption{Coverage prob of TSLS Estimator, OLS vs IV Example, $N=100$}
+  \label{tab:CISim100TSLS_OLSvsIV}
 \end{table}
 
 
-Table \ref{tab:OLSvsIVsim_cover_FMSC} gives the actual coverage probability of the conservative, 90\% post-FMSC confidence interval, constructed according to Algorithm \ref{alg:conf}, for the OLS versus TSLS example.
-These intervals achieve their nominal minimum coverage for all parameter values but can be quite conservative, particularly for smaller values of $\pi, \rho$ and $N$. 
-In particular, coverage never falls below 94\% but occasionally exceeds $99.5\%$.
-% \footnote{Recall that coverage probabilities are given in percentage points, rounded to the nearest whole percent. Thus a value of 100, for example, in fact means $\geq 99.5$.}
-Some conservatism is inevitable given the procedure, which takes which takes \emph{worst-case} bounds over a collection of intervals.
-The real culprit in this example, however, is the TSLS estimator, as we see from Table \ref{tab:OLSvsIVsim_cover_TSLS}.
-Although this estimator is correctly specified and is not subject to model selection uncertainty, its textbook 90\% confidence interval dramatically overcovers for smaller values of $\pi$ even if $N$ is fairly large.
-This is a manifestation of the weak instruments problem.
-This additional source of conservatism is inherited by the two-step post-FMSC intervals.
-Results for the minimum-AMSE moment average estimator, given in Table \ref{tab:OLSvsIVsim_cover_AVG}, are similar.
 
 \begin{table}[h]
-\footnotesize
-\centering
-	\begin{subtable}{0.48\textwidth}
-		\caption{FMSC}
-		\input{./SimulationOLSvsIV/Results/coverage_FMSC_correct.tex}
-		\label{tab:OLSvsIVsim_cover_FMSC}
-	\end{subtable}	
-	~
-	\begin{subtable}{0.48\textwidth}
-		\caption{AMSE-Averaging Estimator}
-		\input{./SimulationOLSvsIV/Results/coverage_AVG_correct.tex}
-		\label{tab:OLSvsIVsim_cover_AVG}
-	\end{subtable}
-	\caption{Coverage probabilities of simulation-based conservative $90\%$ CIs for the OLS versus TSLS simulation experiment from Section \ref{sec:OLSvsIVsim}. Values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/CISimResults/c_naive_OLSvsIV_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./AdditionalSimulations/CISimResults/w_naive_OLSvsIV_100.tex}
+  \end{subtable}
+  \caption{Naive CI, OLS vs IV Example, $N=100$}
+  \label{tab:CISim100Naive_OLSvsIV}
 \end{table}
 
-The worry, of course, is not conservatism as such but the attendant increase in confidence interval width.
-Accordingly, Tables \ref{tab:OLSvsIVsim_width_FMSC} and \ref{tab:OLSvsIVsim_width_AVG} compare the median width of the simulation-based post-FMSC and minimum-AMSE intervals to that of the TSLS estimator.
-A value of 25, for example indicates that the simulation-based interval is 25\% wider than the corresponding interval for the TSLS estimator.
-This comparison shows us the inferential cost of carrying out moment selection relative to simply using the correctly-specified TSLS estimator and calling it a day.
-Moment selection is not a free lunch: the averaging and post-selection intervals are wider than those of the TSLS estimator, sometimes considerably so.
-Intriguingly, the minimum-AMSE intervals are generally much shorter than the post-FMSC intervals in spite of being somewhat more conservative.
+
+
+
+
+
 
 \begin{table}[h]
-\footnotesize
-\centering
-	\begin{subtable}{0.48\textwidth}
-		\caption{post-FMSC Estimator}
-		\input{./SimulationOLSvsIV/Results/width_FMSC_correct.tex}
-		\label{tab:OLSvsIVsim_width_FMSC}
-	\end{subtable}	
-	~
-	\begin{subtable}{0.48\textwidth}
-		\caption{AMSE-Averaging Estimator}
-		\input{./SimulationOLSvsIV/Results/width_AVG_correct.tex}
-		\label{tab:OLSvsIVsim_width_AVG}
-	\end{subtable}
-	\caption{Median width of two-step, simulation-based conservative $90\%$ CI relative to that of a traditional 90\% CI for the TSLS estimator in the OLS versus TSLS example from Section \ref{sec:OLSvsIVsim}. Values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3}.}
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/CISimResults/c_1short_OLSvsIV_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./AdditionalSimulations/CISimResults/w_1short_OLSvsIV_100.tex}
+  \end{subtable}
+  \caption{1-step Shortest CI, OLS vs IV Example, $N=100$}
+  \label{tab:CISim100_1stepShort_OLSvsIV}
 \end{table}
 
-Turning our attention now to the choosing instrumental variables simulation experiment from Section \ref{sec:chooseIVsim}, Table \ref{tab:chooseIVsim_cover_FMSC} gives the coverage probability and Table \ref{tab:chooseIVsim_width_FMSC} the median relative width of the conservative, 90\%, simulation-based, post-FMSC confidence interval.
-In this case, the width calculation is relative to the valid estimator, the TSLS estimator that includes the exogenous instruments $z_1, z_2, z_3$ but excludes the potentially endogenous instrument $w$.
-Here  the simulation-based intervals are far less conservative and occasionally undercover slightly.
-The worst case, 81\% actual coverage compared to 90\% nominal coverage, occurs when $N=50, \gamma = 0.6, \rho = 0.5$.
-This problem stems from the fact that traditional interval for the valid estimator systematically under-covers when $N = 50$ or 100.\footnote{For details, see Table \ref{tab:chooseIVsim_cover_Valid} in Appendix \ref{sec:CIsupplement}.}
-Nevertheless, the simulation-based interval works well in this example: in the worst case, its median width is only 22\% greater than that of the valid estimator.
+
+
+
+
+
 
 \begin{table}[h]
-\footnotesize
-\centering
-	\begin{subtable}{0.48\textwidth}
-		\caption{Coverage Probability}
-		\label{tab:chooseIVsim_cover_FMSC}
-		\input{./SimulationChooseIVs/Results/coverage_FMSC_2step.tex}
-	\end{subtable}	
-	~
-	\begin{subtable}{0.48\textwidth}
-		\caption{Relative Median Width}
-		\label{tab:chooseIVsim_width_FMSC}
-		\input{./SimulationChooseIVs/Results/width_FMSC_2step.tex}
-	\end{subtable}
-\caption{Performance of the simulation-based, conservative 90\% post-FMSC confidence interval in the choosing instrumental variables simulation from Section \ref{sec:chooseIVsim}. The left panel gives coverage probabilities, and the right panel gives median widths relative to that of a traditional 90\% interval for the valid estimator. Values are given in percentage points, rounded to the nearest whole percent, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3}.}
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/CISimResults/c_2tauwide_OLSvsIV_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./AdditionalSimulations/CISimResults/w_2tauwide_OLSvsIV_100.tex}
+  \end{subtable}
+  \caption{2-step CI, $\alpha_1 = \alpha/4,\alpha_2 = 3\alpha/4$, OLS vs IV Example, $N=100$}
+  \label{tab:CISim100_2stepWideTau_OLSvsIV}
 \end{table}
 
-Although the simulation-based intervals work fairly well, two caveats are in order.
-First, when the usual first-order asymptotic theory begins to break down, such as a weak instruments example, the simulation-based intervals can inherit an under-- or over--coverage problem from the valid estimator.
-Second, moment selection comes with a cost: the simulation-based intervals are on average wider than a textbook confidence interval for the valid estimator, as we would expect given the impossibility results for post-selection inference outlined in \cite{LeebPoetscher2005}.\footnote{The intervals presented here could potentially be shortened by optimizing width over $\alpha$ while holding $\alpha + \delta$ fixed at 0.1. For more discussion of this idea, see \cite{ClaeskensHjortbook} and \cite{McCloskey}.}
-As described above, the primary goal of the the FMSC is \emph{estimation} rather than inference.
-Once the decision to carry out moment selection has been taken, however, one cannot simply ignore this fact and report the usual confidence intervals.
-Algorithm \ref{alg:conf} provides a way to carry out honest inference post-selection and construct confidence intervals for complicated objects such as the minimum-AMSE averaging estimator from Section \ref{sec:momentavgexample}.
-More to the point, although formal moment selection is relatively rare, \emph{informal} moment selection is extremely common in applied work.
-Downward $J$-tests, DHW tests and the like are a standard part of the applied econometrician's toolkit.
-Because it can be employed to construct confidence intervals that account for the effects of specification searches, Algorithm \ref{alg:conf} can provide a valuable robustness check, as I explore in the empirical example that follows.
+
+
+
+
+
+\begin{table}[h]
+  \centering
+  \input{./AdditionalSimulations/CISimResults/c_valid_chooseIVs_100.tex}
+  \caption{Coverage prob of Valid Estimator, Choosing IVs Example, $N=100$}
+  \label{tab:CISim100Valid_ChooseIVs}
+\end{table}
+
+
+
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/CISimResults/c_naive_chooseIVs_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./AdditionalSimulations/CISimResults/w_naive_chooseIVs_100.tex}
+  \end{subtable}
+  \caption{Naive CI, Choosing IVs Example, $N=100$}
+  \label{tab:CISim100Naive_ChooseIVs}
+\end{table}
+
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/CISimResults/c_1short_chooseIVs_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./AdditionalSimulations/CISimResults/w_1short_chooseIVs_100.tex}
+  \end{subtable}
+  \caption{1-step Shortest CI, Choosing IVs Example, $N=100$}
+  \label{tab:CISim100_1StepShort_ChooseIVs}
+\end{table}
+
+
+
+
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/CISimResults/c_2tauwide_chooseIVs_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./AdditionalSimulations/CISimResults/w_2tauwide_chooseIVs_100.tex}
+  \end{subtable}
+  \caption{2-step CI, $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$, Choosing IVs Example, $N=100$}
+  \label{tab:CISim100_2StepWideTau_ChooseIVs}
+\end{table}
+
+
