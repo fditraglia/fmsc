@@ -7,17 +7,11 @@ Coverage probabilities and relative widths are all given in percentage points, r
 In the interest of brevity I present only results for $N=100$.
 Likewise, for the two-step confidence intervals I present results only for $\alpha_1 = \alpha/4, \alpha_2 = 3\alpha/4$.
 Simulation results for $N=50$ and $500$ and other configurations of $\alpha_1,\alpha_2$ are available upon request.
-Taking $N=100$ has the advantage of making the tables in this section directly comparable to those of \ref{sec:limitexperiment}.
-Because I set $\sigma_x^2 = \sigma_\epsilon^2 = 1$ in both simulation experiments, this implies that $\sqrt{N}\rho = Cor(x_i,\epsilon_i) = \tau$ in the OLS versus TSLS example and $\sqrt{N}\rho = Cor(w_i, \epsilon_i) = \tau$ in the choosing IVs example. Thus when $N = 100$, taking $\rho \in \{0, 0.1, \dots, 0.5\}$ is the finite-sample analogue of $\tau \in \{0, 1, \dots, 5\}$
+Taking $N=100$ has the advantage of making the tables in this section directly comparable to those of Section \ref{sec:limitexperiment}.
+Because I set $\sigma_x^2 = \sigma_\epsilon^2 = 1$ in both simulation experiments, this implies that $\sqrt{N}\rho = Cor(x_i,\epsilon_i) = \tau$ in the OLS versus TSLS example and $\sqrt{N}\rho = Cor(w_i, \epsilon_i) = \tau$ in the choosing IVs example. 
+Thus when $N = 100$, taking $\rho \in \{0, 0.1, \dots, 0.5\}$ is the finite-sample analogue of $\tau \in \{0, 1, \dots, 5\}$.
 
 
-
-\begin{table}[h]
-  \centering
-  \input{./AdditionalSimulations/CISimResults/c_tsls_OLSvsIV_100.tex}
-  \caption{Coverage prob of TSLS Estimator, OLS vs IV Example, $N=100$}
-  \label{tab:CISim100TSLS_OLSvsIV}
-\end{table}
 
 
 
@@ -83,16 +77,6 @@ Because I set $\sigma_x^2 = \sigma_\epsilon^2 = 1$ in both simulation experiment
 
 
 
-\begin{table}[h]
-  \centering
-  \input{./AdditionalSimulations/CISimResults/c_valid_chooseIVs_100.tex}
-  \caption{Coverage prob of Valid Estimator, Choosing IVs Example, $N=100$}
-  \label{tab:CISim100Valid_ChooseIVs}
-\end{table}
-
-
-
-
 
 
 \begin{table}[h]
@@ -148,5 +132,23 @@ Because I set $\sigma_x^2 = \sigma_\epsilon^2 = 1$ in both simulation experiment
   \caption{2-step CI, $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$, Choosing IVs Example, $N=100$}
   \label{tab:CISim100_2StepWideTau_ChooseIVs}
 \end{table}
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{TSLS Estimator -- OLS vs TSLS}
+    \input{./AdditionalSimulations/CISimResults/c_tsls_OLSvsIV_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Valid Estimator -- Choosing IVs}
+    \input{./AdditionalSimulations/CISimResults/c_valid_chooseIVs_100.tex}
+  \end{subtable}
+  \caption{Coverage Probabilities $N=100$}
+  \label{tab:CISim100Valid}
+\end{table}
+
 
 
