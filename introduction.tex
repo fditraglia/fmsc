@@ -35,6 +35,7 @@ The idea of using this framework for AMSE-based moment selection, however, is no
 The existing literature on moment selection under mis-specification is primarily concerned with consistent selection: the goal is to select all correctly specified moment conditions while eliminating all invalid ones with probability approaching one in the limit.\footnote{Under the local mis-specification asymptotics considered below, consistent moment selection criteria simply choose \emph{all} available moment conditions. For details, see Theorem \ref{pro:andrews}.}
 This idea begins with \cite{Andrews1999} and is extended by  \cite{AndrewsLu} and \cite{HongPrestonShum}.
 More recently, \cite{Liao} proposes a shrinkage procedure for consistent GMM moment selection and estimation. 
+In a similar vein, \cite{CanerHanLee} extend and generalize earlier work by \cite{Caner2009} on LASSO-type model selection for GMM to carry out simultaneous model and moment selection via an adaptive elastic net penalty. 
 In contrast to these proposals, which examine only the validity of the moment conditions under consideration, the FMSC balances validity against relevance to minimize AMSE.
 Although \cite{HallPeixe2003} and \cite{ChengLiao} do consider relevance, their aim is to avoid including redundant moment conditions after consistently eliminating invalid ones.
 Some other papers that propose choosing, or combining, instruments to minimize MSE include \cite{DonaldNewey2001}, \cite{DonaldImbensNewey2009}, and \cite{KuersteinerOkui2010}.

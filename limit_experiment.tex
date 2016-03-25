@@ -152,17 +152,17 @@ I provide numerical routines to evaluate both $F_{FMSC}$ and $Q_{FMSC}$ along wi
 
 The ability to compute $F_{FMSC}$ and $Q_{FMSC}$ allows us to answer a number of important questions about post-FMSC inference for any example of the form given in Equation \ref{eq:LimitExperiment}.
 To begin, suppose that we were to carry out FMSC selection and then construct a $(1 - \alpha) \times 100\%$ confidence interval \emph{conditional} in the selected estimator, completely ignoring the effects of the moment selection step.
-What would be the resulting asymptotic coverage probability and width of such a ``naive'' confidence interval procedure?
-Using calculations similar to those used above in the expression for $F_{FMSC}$, we find that the coverage probability of this naive interval is given by
+What would be the resulting asymptotic coverage probability and width of such a ``na\"{i}ve'' confidence interval procedure?
+Using calculations similar to those used above in the expression for $F_{FMSC}$, we find that the coverage probability of this na\"{i}ve interval is given by
 \begin{eqnarray*}
-  \mbox{CP}_{Naive}(\alpha) &=& G(u_\alpha) - G(-u_\alpha) +  H_1(\ell_\alpha) - H_2(-\ell_\alpha) +  H_2(\ell_\alpha) - H_2(-\ell_\alpha) \\
+  \mbox{CP}_{\mbox{Na\"{i}ve}}(\alpha) &=& G(u_\alpha) - G(-u_\alpha) +  H_1(\ell_\alpha) - H_2(-\ell_\alpha) +  H_2(\ell_\alpha) - H_2(-\ell_\alpha) \\
   u_\alpha &=& z_{1-\alpha/2}\; \eta\\
   \ell_{\alpha} &=& z_{1-\alpha/2} \sqrt{\eta^2 + c^2\sigma^2}
 \end{eqnarray*}
 where $z_{1-\alpha/2} = \Phi^{-1}(1 -\alpha/2)$ and $G$, $H_1$, $H_2$ are as defined in Equations \ref{eq:GFMSC}--\ref{eq:H2FMSC}.
-And since the width of this naive CI equals that of the textbook interval for $\widehat{\beta}$ when $|\widehat{\tau}|<\sigma\sqrt{2}$ and that of the textbook interval for $\widetilde{\beta}$ otherwise, we have
+And since the width of this na\"{i}ve CI equals that of the textbook interval for $\widehat{\beta}$ when $|\widehat{\tau}|<\sigma\sqrt{2}$ and that of the textbook interval for $\widetilde{\beta}$ otherwise, we have
 \begin{equation*}
-  \frac{E\left[ \mbox{Width}_{Naive}(\alpha) \right]}{\mbox{Width}_{Valid}(\alpha)} = 1 + \left[ \Phi( \sqrt{2} - \tau/\sigma) -  \Phi( -\sqrt{2} - \tau/\sigma )\right]\left( \sqrt{\frac{\eta^2}{\eta^2 + c^2 \sigma^2}} - 1 \right)
+  \frac{E\left[ \mbox{Width}_{\mbox{Na\"{i}ve}}(\alpha) \right]}{\mbox{Width}_{Valid}(\alpha)} = 1 + \left[ \Phi( \sqrt{2} - \tau/\sigma) -  \Phi( -\sqrt{2} - \tau/\sigma )\right]\left( \sqrt{\frac{\eta^2}{\eta^2 + c^2 \sigma^2}} - 1 \right)
 \end{equation*}
 where $\mbox{Width}_{Valid}(\alpha)$ is the width of a standard, textbook confidence interval for $\widetilde{\beta}$.
 
@@ -171,12 +171,12 @@ For the remainder of this section I will consider the parameter values that corr
 For the OLS versus TSLS example we have $c=1$, $\eta^2=1$ and $\sigma^2 = (1-\pi^2)/\pi^2$ where $\pi^2$ denotes the population first-stage R-squared for the TSLS estimator. 
 For the choosing IVs example we have $c =\gamma/(\gamma^2 +1/9)$, $\eta^2 = 1/(\gamma^2 + 1/9)$ and $\sigma^2 = 1 + 9\gamma^2$ where $\gamma^2$ is the increase in the population first-stage R-squared of the TSLS estimator from \emph{adding} $w$ to the instrument set.\footnote{The population first-stage R-squared with only $\mathbf{z}$ in the instument set $1/9$.}
 
-Table \ref{tab:LimitNaiveCover} presents the asymptotic coverage probability and Table \ref{tab:LimitNaiveWidth} the expected relative width of the naive confidence interval procedure for a variety of values of $\tau$ and $\alpha$ for each of the two examples.
+Table \ref{tab:LimitNaiveCover} presents the asymptotic coverage probability and Table \ref{tab:LimitNaiveWidth} the expected relative width of the na\"{i}ve confidence interval procedure for a variety of values of $\tau$ and $\alpha$ for each of the two examples.
 For the OLS versus TSLS example, I allow $\pi^2$ to vary while for the choosing IVs example I allow $\gamma^2$ to vary.
 Note that the relative expected width does not depend on $\alpha$.
-In terms of coverage probability, the naive interval performs very poorly: in some regions of the parameter space the actual coverage is very close to the nominal level, while in others it is far lower.
-These striking size distortions, which echo the findings of \cite{Guggenberger2010} and \cite{Guggenberger2012}, provide a strong argument against the use of the naive interval.
-Its attraction, of course, is width: the naive interval can be dramatically shorter than the corresponding ``textbook'' confidence interval for the valid estimator.
+In terms of coverage probability, the na\"{i}ve interval performs very poorly: in some regions of the parameter space the actual coverage is very close to the nominal level, while in others it is far lower.
+These striking size distortions, which echo the findings of \cite{Guggenberger2010} and \cite{Guggenberger2012}, provide a strong argument against the use of the na\"{i}ve interval.
+Its attraction, of course, is width: the na\"{i}ve interval can be dramatically shorter than the corresponding ``textbook'' confidence interval for the valid estimator.
 
 \begin{table}[h]
   \centering
@@ -189,7 +189,7 @@ Its attraction, of course, is width: the naive interval can be dramatically shor
     \caption{Choosing IVs}
     \input{./AdditionalSimulations/LimitSimResults/c_naive_chooseIV.tex}
   \end{subtable}
-  \caption{Asymptotic coverage probability of Naive $(1-\alpha)\times 100\%$ confidence interval.}
+  \caption{Asymptotic coverage probability of Na\"{i}ve $(1-\alpha)\times 100\%$ confidence interval.}
   \label{tab:LimitNaiveCover}
 \end{table}
 
@@ -204,11 +204,11 @@ Its attraction, of course, is width: the naive interval can be dramatically shor
     \caption{Choosing IVs}
     \input{./AdditionalSimulations/LimitSimResults/w_naive_chooseIVs.tex}
   \end{subtable}
-  \caption{Asymptotic expected width of naive confidence interval relative to that of the valid estimator. Values are given in percentage points.}
+  \caption{Asymptotic expected width of na\"{i}ve confidence interval relative to that of the valid estimator. Values are given in percentage points.}
   \label{tab:LimitNaiveWidth}
 \end{table}
 
-Is there any way to construct a post-FMSC confidence interval that does not suffer from the egregious size distortions of the naive interval but is still shorter than the textbook interval for the valid estimator?
+Is there any way to construct a post-FMSC confidence interval that does not suffer from the egregious size distortions of the na\"{i}ve interval but is still shorter than the textbook interval for the valid estimator?
 As a first step towards answering this question, Table \ref{tab:WidthInfeasible} presents the relative width of the shortest possible \emph{infeasible} post-FMSC confidence interval constructed directly from $Q_{FMSC}$.
 This interval has asymptotic coverage probability \emph{exactly} equal to its nominal level as it correctly accounts for the effect of moment selection on the asymptotic distribution of the estimators.
 Unfortunately it cannot be used in practice because it requires knowledge of $\tau$, for which no consistent estimator exists.
@@ -280,11 +280,11 @@ The two-step procedure yields asymptotic coverage that is systematically \emph{t
 \end{table}
 
 To address this problem, I now consider an alternative one-step procedure.
-Rather than first constructing a confidence region for $\tau$ and then taking upper and lower bounds, this method simply assumes that $\widehat{\tau}$ is exactly equal to $\tau$ and then constructs a confidence interval from $Q_{FMSC}$ exactly as in the infeasible interval described above.\footnote{As in the construction of the naive interval, I take the shortest possible interval based on $Q_{FMSC}$ rather than an equal-tailed interval. Additional results for an equal-tailed version of this one-step procedure are available upon request. Their performance is similar.}
+Rather than first constructing a confidence region for $\tau$ and then taking upper and lower bounds, this method simply assumes that $\widehat{\tau}$ is exactly equal to $\tau$ and then constructs a confidence interval from $Q_{FMSC}$ exactly as in the infeasible interval described above.\footnote{As in the construction of the na\"{i}ve interval, I take the shortest possible interval based on $Q_{FMSC}$ rather than an equal-tailed interval. Additional results for an equal-tailed version of this one-step procedure are available upon request. Their performance is similar.}
 Note that Theorem \ref{thm:sim} does \emph{not} apply to this one-step interval: it comes with no generic guarantee of uniform coverage performance.
 For any example that take the form of Equation \ref{eq:LimitExperiment}, however, we can directly calculate the asymptotic coverage and expected relative width of this procedure to determine precisely how it performs over relevant regions of the parameter space.
 Tables \ref{tab:Limit1StepShortOLSvsIV} and \ref{tab:Limit1StepShortChooseIVs} do exactly this.
-We see that the one-step interval effectively ``splits the difference'' between the two-step interval and the naive procedure. 
+We see that the one-step interval effectively ``splits the difference'' between the two-step interval and the na\"{i}ve procedure. 
 While it can under-cover, the size distortions are fairly small, particularly for $\alpha=0.1$ and $0.05$.
 At the same time, when $\tau$ is relatively small this procedure can yield shorter intervals.
 While a full investigation of this phenomenon is beyond the scope of the present paper, these calculations suggest a plausible way forward for post-FMSC inference that is less conservative than the two-step procedure from Algorithm \ref{alg:conf} by directly calculating the relevant quantities from the limit distribution of interest.
