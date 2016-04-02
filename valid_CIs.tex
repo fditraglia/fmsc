@@ -1,38 +1,51 @@
 %!TEX root = main.tex
-
-\subsection{Valid Confidence Intervals}
-While Corollary \ref{cor:momentavg} characterizes the limiting behavior of moment-average, and hence post-selection estimators, the limiting random variable $\Lambda(\tau)$ is a complicated function of the normal random vector $M$. 
-Because this distribution is analytically intractable, I adapt a suggestion from \cite{ClaeskensHjortbook} and approximate it by simulation.
-The result is a conservative procedure that provides asymptotically valid confidence intervals for moment average and hence post-conservative selection estimators.\footnote{Although I originally developed this procedure by analogy to \cite{ClaeskensHjortbook}, \cite{Leeb} kindly pointed out that constructions of the kind given here have appeared elsewhere in the statistics literature, notably in \cite{Loh1985}, \cite{Berger1994}, and \cite{Silvapulle1996}. 
-More recently, \cite{McCloskey} uses a similar approach to study non-standard testing problems.}
- 
-First, suppose that $K_S$, $\varphi_S$, $\theta_0$, $\Omega$ and $\tau$ were known. 
+\subsection{Inference for Moment-Average Estimators}
+Suppose that $K_S$, $\varphi_S$, $\theta_0$, $\Omega$ and $\tau$ were all known. 
 Then, by simulating from $M$, as defined in Theorem \ref{thm:normality}, the distribution of $\Lambda(\tau)$, defined in Corollary \ref{cor:momentavg}, could be approximated to arbitrary precision. 
-To operationalize this procedure one can substitute consistent estimators of $K_S$, $\theta_0$, and $\Omega$, e.g.\ those used to calculate FMSC. 
+This is the basic intuition that I use to devise inference procedures for moment-average and post-selection estimators.
+
+To operationalize this idea, first consider how we would proceed if we knew \emph{only} the value of $\tau$.  
+While $K_S$, $\theta_0$, and $\Omega$ are of unknown this presents only a minor difficulty: in their place we can simply substitute the consistent estimators that appeared in the expression for the FMSC above.
 To estimate $\varphi_S$, we first need to derive the limit distribution of $\widehat{\omega}_S$, the data-based weights specified by the user. 
 As an example, consider the case of moment selection based on the FMSC. Here $\widehat{\omega}_S$ is simply the indicator function
 \begin{equation}
 	\label{eq:FMSCindicate}
 	\widehat{\omega}_S = \mathbf{1}\left\{\mbox{FMSC}_n(S) = \min_{S'\in \mathscr{S}} \mbox{FMSC}_n(S')\right\}
 \end{equation}
-To estimate $\varphi_S$, first substitute consistent estimators of $\Omega$, $K_S$ and $\theta_0$ into $\mbox{FMSC}_S(\tau,M)$, defined in Corollary \ref{cor:FMSClimit}, yielding,
-\begin{equation}
+Substituting estimators of $\Omega$, $K_S$ and $\theta_0$ into $\mbox{FMSC}_S(\tau,M)$, defined in Corollary \ref{cor:FMSClimit}, gives
+\begin{equation*}
 	\widehat{\mbox{FMSC}}_S(\tau,M) = \nabla_\theta\mu(\widehat{\theta})'\widehat{K}_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0&\widehat{\mathcal{B}}(\tau,M) \end{array}\right] + \widehat{\Omega}\right\}\Xi_S'\widehat{K}_S'\nabla_\theta\mu(\widehat{\theta})
-\end{equation}
-where
-\begin{equation}
-	\widehat{\mathcal{B}}(\tau,M) = (\widehat{\Psi} M + \tau)(\widehat{\Psi} M + \tau)' - \widehat{\Psi} \widehat{\Omega} \widehat{\Psi}
-\end{equation}
+\end{equation*}
+where $\widehat{\mathcal{B}}(\tau,M) = (\widehat{\Psi} M + \tau)(\widehat{\Psi} M + \tau)' - \widehat{\Psi} \widehat{\Omega} \widehat{\Psi}$.
 Combining this with Equation \ref{eq:FMSCindicate},
-\begin{equation}
-\label{eq:omegahat}
+\begin{equation*}
 	\widehat{\varphi}_S(\tau,M) = \mathbf{1}\left\{\widehat{\mbox{FMSC}}_S(\tau,M) = \min_{S'\in \mathscr{S}} \widehat{\mbox{FMSC}}_{S'}(\tau,M)\right\}.
-\end{equation}
+\end{equation*}
 For GMM-AIC moment selection or selection based on a downward $J$-test, $\varphi_S(\cdot,\cdot)$ may be estimated analogously, following  Theorem \ref{pro:jstat}. 
+Continuing to assume for the moment that $\tau$ is known, consider the following algorithm:
+\begin{alg}[Simulation-based Confidence Interval for $\widehat{\mu}$ given $\tau$.]
+\mbox{}
+		\begin{enumerate}
+\label{alg:conf_tau_known}
+			\item Generate $J$ independent draws $M_j \sim N_{p+q}( 0, \widehat{\Omega} )$
+			\item Set $\Lambda_j(\tau) = -\nabla_\theta\mu(\widehat{\theta})'\left[\sum_{S \in \mathscr{S}} \widehat{\varphi}_S(\tau,M_j) \widehat{K}_S\Xi_S\right] (M_j + \tau)$
+			\item Using the draws $\{\Lambda_j(\tau)\}_{j=1}^J$, calculate $\widehat{a}(\tau)$, $\widehat{b}(\tau)$ such that
+		$$P\left\{ \widehat{a}(\tau) \leq\Lambda(\tau)\leq \widehat{b}(\tau) \right\} = 1 - \alpha$$
+  \item Define the interval 
+    $ \mbox{CI}_{sim}=\left[ \widehat{\mu} - \widehat{b}(\tau)/\sqrt{n}, \quad \widehat{\mu} - \widehat{a}(\tau)/\sqrt{n} \right]$
+		\end{enumerate}
+\end{alg}
 
-Although simulating draws from $M$, defined in Theorem \ref{thm:normality}, requires only an estimate of $\Omega$, the limit $\varphi_S$ of the weight function also depends on $\tau$. 
-As discussed above, no consistent estimator of $\tau$ is available under local mis-specification: the estimator $\widehat{\tau}$ has a non-degenerate limit distribution (see Theorem \ref{thm:tau}). 
-Thus, substituting $\widehat{\tau}$ for $\tau$ will give erroneous results by failing to account for the uncertainty that enters through $\widehat{\tau}$. 
+Clearly, given knowledge of $\tau$ the preceding steps would lead to valid inference for $\mu$.
+The problem of course is that $\tau$ is unknown and cannot even be consistently estimated.
+One idea would be to substitute the asymptotically unbiased estimator $\widehat{\tau}$ from \ref{thm:tau} in place of the unknown $\tau$ this gives rise to a procedure that I call the ``1-Step'' confidence interval:
+\begin{alg}[1-Step Confidence Interval for $\widehat{\mu}$.] 
+Carry out of Algorithm \ref{alg:conf_tau_known} with $\tau = \widehat{\tau}$, defined in \ref{thm:tau}, leading to the interval
+$ \widehat{\mbox{CI}}_{1}=\left[ \widehat{\mu} - \widehat{b}_{max}(\widehat{\tau})/\sqrt{n}, \quad \widehat{\mu} - \widehat{a}_{min}(\widehat{\tau})/\sqrt{n} \right]$.
+\end{alg}
+
+
+Thus, substituting $\widehat{\tau}$ for $\tau$ could give erroneous results by failing to account for the uncertainty that enters through $\widehat{\tau}$. 
 The solution is to use a two-stage procedure. 
 First construct a  $100(1-\delta)\%$ confidence region $\mathscr{T}(\widehat{\tau},\delta)$ for $\tau$ using Theorem \ref{thm:tau}. 
 Then, for each $\tau^* \in \mathscr{T}(\widehat{\tau},\delta)$ simulate from the distribution of $\Lambda(\tau^*)$, defined in Corollary \ref{cor:momentavg}, to obtain a \emph{collection} of $(1-\alpha)\times 100\%$ confidence intervals indexed by $\tau^*$. 
@@ -52,7 +65,7 @@ The precise algorithm is as follows.
 		\end{enumerate}
 	\item Set $\displaystyle \widehat{a}_{min}(\widehat{\tau})=\min_{\tau^* \in \mathscr{T}(\widehat{\tau},\delta)} \widehat{a}(\tau^*)$ and $\displaystyle \widehat{b}_{max}(\widehat{\tau})= \max_{\tau^* \in \mathscr{T}(\widehat{\tau},\delta)} \widehat{b}(\tau^*)$ \vspace{0.5em}
 	\item The confidence interval for $\mu$ is
-				$\displaystyle \mbox{CI}_{sim}=\left[ \widehat{\mu} - \frac{\widehat{b}_{max}(\widehat{\tau})}{\sqrt{n}}, \;\;\; \widehat{\mu} - \frac{\widehat{a}_{min}(\widehat{\tau})}{\sqrt{n}} \right]$
+				$ \mbox{CI}_{sim}=\left[ \widehat{\mu} - \widehat{b}_{max}(\widehat{\tau})/\sqrt{n}, \quad \widehat{\mu} - \widehat{a}_{min}(\widehat{\tau})/\sqrt{n} \right]$
 \end{enumerate}
 \end{alg}
 
