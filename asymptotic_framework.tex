@@ -17,9 +17,10 @@ Let $\{Z_{ni}\colon 1\leq i \leq n, n =1, 2, \hdots\}$ be an iid triangular arra
 	\end{enumerate}
 \end{assump}
 For any fixed sample size $n$, the expectation of $h$ evaluated at the true parameter value $\theta_0$ depends on the unknown constant vector $\tau$. 
-Unless all components of $\tau$ are zero, some of the moment conditions contained in $h$ are mis-specified. In the limit however, this mis-specification vanishes, as $\tau/\sqrt{n}$ converges to zero. 
+Unless all components of $\tau$ are zero, some of the moment conditions contained in $h$ are mis-specified. 
+In the limit however, this mis-specification vanishes, as $\tau/\sqrt{n}$ converges to zero. 
 Uniform integrability combined with weak convergence implies convergence of expectations, so that $E[g(Z_i, \theta_0)]=0$ and $E[h(Z_i, \theta_0)]=0$. Because the limiting random vectors $Z_i$ are identically distributed, I suppress the $i$ subscript and simply write $Z$ to denote their common marginal law, e.g.\ $E[h(Z,\theta_0)]=0$. 
-It is important to note that local mis-specification is \emph{not} intended as a literal description of real-world datasets: it is merely a device that gives asymptotic bias-variance trade-off that mimics the finite-sample intuition.
+Local mis-specification is \emph{not} intended as a literal description of real-world datasets: it is merely a device that gives asymptotic bias-variance trade-off that mimics the finite-sample intuition.
 Moreover, while I work with an iid triangular array for simplicity, the results presented here can be adapted to handle dependent random variables.
 
 \subsection{Candidate GMM Estimators}
@@ -34,7 +35,7 @@ $$\widehat{\theta}_S = \underset{\theta \in \Theta}{\mbox{arg min}}\; \left[\Xi_
 where $\widetilde{W}_S$ is an $|S|\times |S|$, positive definite weight matrix.
 There are no restrictions placed on $S$ other than the requirement that $|S| >r$ so the GMM estimate is well-defined. 
 In particular, $S$ may \emph{exclude} some or all of the valid moment conditions contained in $g$.
-While this may seem strange, it accommodates a wider range of examples, including choosing between OLS and TSLS estimators.
+This notation accommodates a wider range of examples, including choosing between OLS and TSLS estimators.
 
 To consider the limit distribution of $\widehat{\theta}_S$, we require some further notation. 
 First define the derivative matrices
@@ -130,6 +131,3 @@ The $g$--block contains the ``baseline'' assumptions while the $h$--block contai
 The FMSC is designed for settings in which the $h$--block is expected to contain a substantial amount of information beyond that already contained in the $g$--block. 
 The idea is that, if we knew the $h$--block was correctly specified, we would expect a large gain in efficiency by including it in estimation. 
 This motivates the idea of trading off the variance reduction from including $h$ against the potential increase in bias.
-If the $h$--block assumptions are \emph{nearly correct} we may want to use them in estimation.
-Not all applications have the structure, but many do.
-Below, I consider two simple but empirically relevant examples: choosing between OLS and TSLS estimators and choosing instrumental variables.
