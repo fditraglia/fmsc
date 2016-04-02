@@ -17,25 +17,18 @@ First, as discussed above, the goal of the FMSC is not to select only correctly 
 In fact, the goal of consistent selection is very much at odds with that of controlling estimator risk.
 As explained by \cite{Yang2005} and \cite{LeebPoetscher2008}, the worst-case risk of a consistent selection procedure \emph{diverges} with sample size.\footnote{This fact is readily apparent from the results of the simulation study from Section \ref{sec:chooseIVsim}: the consistent criteria, GMM-BIC and HQ, have the highest worst-case RMSE, while the conservative criteria, FMSC and GMM-AIC, have the lowest.}
 Second, while we know from both simulation studies \citep{Demetrescu} and analytical examples \citep{LeebPoetscher2005} that selection can dramatically change the sampling distribution of our estimators, invalidating traditional confidence intervals, the asymptotics of consistent selection give the misleading impression that this problem can be ignored.
-% For example, Lemma 1.1 of \citet[p.\ 168]{Poetscher1991}, which states that the limit distributions of an estimator pre- and post-consistent selection are identical, has been interpreted by some as evidence that consistent selection is innocuous. 
-% \citet[pp.\ 179--180]{Poetscher1991} makes it very clear, however, this result does not hold uniformly in the parameter space and hence ``only creates an illusion of conducting valid inference'' \citep[p.\ 22]{LeebPoetscher2005}.
-% While it is indeed true for \emph{fixed} parameter values that consistent selection has a negligible effect on inference in large samples, small changes in parameter values can lead to large changes in coverage probabilities. 
-% In constrast to those of consistent selection, the asymptotics of conservative selection under local mis-specification provide a far more accurate picture of the distribution of post-selection estimators.
-The point is not that conservative criteria are immune to the effects of selection on inference: it is that conservative criteria can be studied using asymptotics that more accurately represent the phenomena encountered in finite samples.
 
-There are two main problems with traditional confidence intervals na\"{i}vely applied post-moment selection.
-First, they ignore model selection uncertainty.
+
+There are two main problems with applying traditional confidence intervals post-moment selection.
+The first is model selection uncertainty.
 If the data had been slightly different, we would have chosen a different set of moment conditions.
-Accordingly, because traditional intervals condition on the selected model, they are too short.
+Any confidence interval that \emph{conditions} on the selected model must be too short.
 Second, traditional confidence intervals ignore the fact that selection is carried out over potentially invalid moment conditions.
 Even if our goal were to eliminate all mis-specified moment conditions, for example by using a consistent criterion such as the GMM-BIC of \cite{Andrews1999}, in finite-samples we would not always be successful.
 Because of this, our intervals will be incorrectly centered.
-
-To account for these two effects, we need a way to represent a \emph{non-normal} sampling distribution in our limit theory, and this rules out consistent selection.
-The key point is that the post-selection estimator is a \emph{randomly-weighted average} of the individual candidate estimators, some of which are centered away from $\theta_0$.
-Thus, although the candidate estimators are asymptotically normal, the post-selection estimator follows a \emph{mixture distribution}.
+To account for these two effects, we need a way to represent a \emph{mixture} distribution in our limit theory: post-selection estimators are randomly-weighted averages of the individual candidate estimators.
 Because they choose a single candidate with probability approaching one in the limit, consistent selection procedures make it impossible to represent this phenomenon.
-In contrast, conservative selection procedures remain random even as the sample size goes to infinity, allowing us to derive a non-normal limit distribution and, ultimately, to carry out valid inference post-moment selection.
+In contrast, conservative selection procedures remain random even as the sample size goes to infinity, allowing us to derive a mixture-of-normals limit distribution and, ultimately, to carry out valid inference post-moment selection.
 In the remainder of this section, I derive the asymptotic distribution of generic ``moment average'' estimators and use them to propose a two-step, simulation-based procedure for constructing valid confidence intervals post-moment selection.
 For certain examples it is possible to analytically characterize the limit distribution of a post-FMSC estimator without resorting to simulation-based methods.
 I explore this possibility in detail for my two running examples: OLS versus TSLS and choosing instrumental variables.
