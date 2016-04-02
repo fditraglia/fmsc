@@ -8,15 +8,14 @@ Essentially identical to the proofs of \cite{NeweyMcFadden1994} Theorems 2.6 and
 \begin{proof}[Proof of Theorems \ref{thm:OLSvsIV}, \ref{thm:chooseIV}]
 The proofs of both results are similar and standard, so I provide only a sketch of the argument for Theorem \ref{thm:chooseIV}. 
 First substitute the DGP into the expression for $\widehat{\beta}_S$ and rearrange so that the left-hand side becomes $\sqrt{n}(\beta_S - \beta)$. 
-The right-hand side has two factors: the first converges in probability to $-K_S$ by an $L_2$ argument and the second converges in distribution to $M + (0', \tau')'$ by the Lindeberg-Feller Central Limit Theorem. 
+The right-hand side has two factors: the first converges in probability to $-K_S$ by an $L_2$ argument and the second converges in distribution to $M + (0', \tau')'$ by the Lindeberg-Feller CLT. 
 \end{proof}
 
 \begin{proof}[Proof of Theorem \ref{thm:tau}]
 By a mean-value expansion:
 	\begin{eqnarray*}
 	\widehat{\tau} &=& \sqrt{n} h_n\left(\widehat{\theta}_{v}\right) = \sqrt{n}h_n(\theta_0) + H \sqrt{n}\left(\widehat{\theta}_{v} - \theta_0\right) + o_p(1)\\
-		&=&-HK_{v} \sqrt{n}g_n(\theta_0) + \mathbf{I}_q\sqrt{n}h_n(\theta_0) +o_p(1)\\
-		&=& \Psi \sqrt{n}f_n(\theta_0) + o_p(1) 
+		&=&-HK_{v} \sqrt{n}g_n(\theta_0) + \mathbf{I}_q\sqrt{n}h_n(\theta_0) +o_p(1) = \Psi \sqrt{n}f_n(\theta_0) + o_p(1) 
 \end{eqnarray*}
 The result follows since $\sqrt{n}f_n(\theta_0) \rightarrow_d M + (0', \tau')'$ under Assumption \ref{assump:highlevel} (h).
 \end{proof}
@@ -42,9 +41,10 @@ Thus, to show that $\widehat{T}_{FMSC} = \widehat{T}_{DHW}$, all that remains is
 \end{proof}
 
 \begin{proof}[Proof of Corollary \ref{cor:momentavg}]
-Because the weights sum to one
-		$$\sqrt{n}\left(\widehat{\mu} - \mu_0\right) = \sqrt{n} \left[\left(\sum_{S \in \mathscr{S}} \widehat{\omega}_S \widehat{\mu}_S\right) - \mu_0\right]= \sum_{S \in \mathscr{S}}\left[ \widehat{\omega}_S \sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\right].$$
-By Corollary \ref{cor:target}, we have
+We have
+		$\sqrt{n}\left(\widehat{\mu} - \mu_0\right) = \sum_{S \in \mathscr{S}}\left[ \widehat{\omega}_S \sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\right]$
+because the weights sum to one.
+By Corollary \ref{cor:target}, 
 $$\sqrt{n}\left(\widehat{\mu}_S - \mu_0\right)\rightarrow_d-\nabla_\theta\mu(\theta_0)'K_S \Xi_S \left(M +  \left[\begin{array}
 	{c} 0 \\ \tau
 \end{array} \right]\right)$$
@@ -54,18 +54,17 @@ The result follows by application of the Continuous Mapping Theorem.
 \end{proof}
 
 \begin{proof}[Proof of Theorem \ref{thm:OLSvsIVavg}]
-	Since the weights sum to one, by Theorem \ref{thm:OLSvsIV}
-$$\sqrt{n}\left[\widehat{\beta}(\omega) - \beta \right]  \overset{d}{\rightarrow}  N\left(\mbox{Bias}\left[\widehat{\beta}(\omega)\right], Var\left[\widehat{\beta}(\omega)\right] \right)$$
-where
-\begin{eqnarray*}
-	\mbox{Bias}\left[\widehat{\beta}(\omega)\right] &=& \omega \left( \frac{\tau}{\sigma_x^2} \right) \\
-	 Var\left[\widehat{\beta}(\omega)\right] &=&  \frac{\sigma_\epsilon^2}{\sigma_x^2} \left[(2\omega^2 - \omega)\left( \frac{\sigma_x^2}{\gamma^2} - 1\right)+\frac{\sigma_x^2}{\gamma^2} \right]
-\end{eqnarray*}
+By Theorem \ref{thm:OLSvsIV}
+$\sqrt{n}\left(\widehat{\beta}(\omega) - \beta \right)  \overset{d}{\rightarrow}  N\left(B(\omega), V(\omega)\right)$ 
+since the weights sum to one, where
+\begin{equation*}
+	B(\omega) = \omega \left( \frac{\tau}{\sigma_x^2} \right), \quad 
+	 V(\omega) =  \frac{\sigma_\epsilon^2}{\sigma_x^2} \left[(2\omega^2 - \omega)\left( \frac{\sigma_x^2}{\gamma^2} - 1\right)+\frac{\sigma_x^2}{\gamma^2} \right]
+\end{equation*}
 and accordingly
 	$$\mbox{AMSE}\left[\widehat{\beta}(\omega) \right] =  \omega^2 \left(\frac{\tau^2}{\sigma_x^4} \right) + (\omega^2 - 2 \omega)\left(\frac{\sigma_\epsilon^2}{\sigma_x^2}\right)\left( \frac{\sigma_x^2}{\gamma^2} - 1\right) + \frac{\sigma_\epsilon^2}{\gamma^2}.$$
 The preceding expression is a globally convex function of $\omega$. 
-Taking the first order condition and rearranging, we find that the unique global minimizer is
-$$\omega^* = \left[1 + \frac{\tau^2/\sigma_x^4}{\sigma_\epsilon^2(1/\gamma^2 - 1/\sigma_x^2)}\right]^{-1} = \left[1 + \frac{\mbox{ABIAS(OLS)}^2}{\mbox{AVAR(TSLS)}-\mbox{AVAR(OLS)}} \right]^{-1}.$$
+Taking the first order condition and rearranging gives the desired result.
 \end{proof}
 
 
