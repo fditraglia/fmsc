@@ -5,51 +5,56 @@ Building on this observation, I propose a novel moment selection criterion for g
 Rather than selecting only valid moment conditions, the FMSC chooses from a set of potentially mis-specified moment conditions based on the asymptotic mean squared error (AMSE) of their associated GMM estimators of a user-specified scalar target parameter.
 To ensure a meaningful bias-variance tradeoff in the limit, I employ a drifting asymptotic framework in which mis-specification, while present for any fixed sample size, vanishes asymptotically.
 In the presence of such \emph{locally mis-specified} moment conditions, GMM remains consistent although, centered and rescaled, its limiting distribution displays an asymptotic bias. Adding an additional mis-specified moment condition introduces a further source of bias while reducing asymptotic variance. 
-The idea behind the FMSC is to trade off these two effects in the limit as an approximation to finite sample behavior.\footnote{When finite-sample mean-squared error (MSE) is undefined or infinite, AMSE comparisons remain meaningful. In this case, one can view AMSE as the limit of a sequence of ``trimmed'' squared error loss functions, as in \cite{HansenShrink}. Trimmed MSE is always well-defined and the trimming fraction can be made asymptotically negligible. For details, see Appendix \ref{append:trim}.}
+The idea behind the FMSC is to trade off these two effects in the limit as an approximation to finite sample behavior.\footnote{When finite-sample MSE is undefined, AMSE comparisons remain meaningful: see Appendix \ref{append:trim}.}
+
  
-I consider a setting in which two blocks of moment conditions are available: one that is assumed correctly specified, and another that may not be.
-This is intended to mimic the situation faced by an applied researcher who begins with a ``baseline'' set of relatively weak maintained assumptions and must decide whether to impose any of a collection of stronger but also more controversial ``suspect'' assumptions.
-When the (correctly specified) baseline moment conditions identify the model, the FMSC provides an asymptotically unbiased estimator of AMSE, allowing us to carry out risk-based selection over the suspect moment conditions.
-When this is not the case, it remains possible to use the AMSE framework to carry out a sensitivity analysis.\footnote{For discussion of this point, see Appendix \ref{sec:digress}.}
+I suppose that two blocks of moment conditions are available: one that is assumed correctly specified, and another that may not be.
+This mimics the situation faced by an applied researcher who begins with a ``baseline'' set of relatively weak maintained assumptions and must decide whether to impose any of a collection of stronger but also more controversial ``suspect'' assumptions.
+When the (correctly specified) baseline moment conditions identify the model, the FMSC provides an asymptotically unbiased estimator of AMSE, allowing us select over the suspect moment conditions.\footnote{When this is not the case, it remains possible to use the AMSE framework to carry out a sensitivity analysis: see Appendix \ref{sec:digress}.}
 
 Continuing under the local mis-specification framework, I go on to derive the limit distribution of ``moment average estimators,'' data-dependent weighted averages of estimators based on different moment conditions.
 These estimators are interesting in their own right and can be used to study the important problem of inference post-selection.
-I propose a simple, simulation-based procedure for constructing valid confidence intervals that can be applied to a variety of formal moment averaging and post-selection estimators including the FMSC.
-Using an applied example from development economics, I show that this procedure is well within the ability of a standard desktop computer for problems of a realistic scale.
+I propose a two simulation-based procedures for constructing confidence intervals for moment average and post-selection estimators including the FMSC: a one-step confidence interval and a two-step confidence interval.
+The ``two-step interval'' guarantees asymptotically valid inference in exchange for conservatism and a greater computational burden.
+The ``one-step interval'' can be subject to small size distortions but is less conservative and easier to compute.
 
-While the methods described here apply to general GMM models, I focus on two simple but empirically relevant examples: choosing between ordinary least squares (OLS) and two-stage least squares (TSLS) estimators, and selecting instruments in linear instrumental variables (IV) models. 
+While my methods apply to general GMM models, I focus on two simple but empirically relevant examples: choosing between ordinary least squares (OLS) and two-stage least squares (TSLS) estimators, and selecting instruments in linear instrumental variables (IV) models. 
 In the OLS versus TSLS example the FMSC takes a particularly transparent form, providing a risk-based justification for the Durbin-Hausman-Wu test, and leading to a novel ``minimum-AMSE'' averaging estimator that combines OLS and TSLS.
-It is important to note that both the FMSC and related minimum-AMSE averaging estimator considered here are derived for a \emph{scalar} parameter of interest, as this is the most common situation encountered in applied work.\footnote{The idea behind the FMSC is readily extended to case of a vector parameter of interest. For details see Appendix \ref{append:mult}.}
-As a consequence, Stein-type results do \emph{not} apply: it is impossible to construct an estimator -- post-selection, averaging or otherwise -- with uniformly lower risk than the ``valid'' estimator that uses only the baseline moment conditions in estimation.
-Nevertheless, it remains possible to achieve substantially lower risk than the valid estimator over large regions of the parameter space, particularly in settings where the additional moment conditions are highly informative and \emph{nearly} correct.
-This is precisely the situation for which the FMSC is designed.
-Selection and averaging are not a panacea, but the methods presented in this paper can provide substantial gains in realistic settings, as demonstrated in the simulation results presented below.
+The FMSC, averaging estimator, and related confidence interval procedures work well in practice, as I demonstrate in a series of simulation experiments and an empirical example from development economics.
+
+The FMSC and minimum-AMSE averaging estimator considered here are derived for a scalar parameter interest, as this is the most common situation encountered in applied work.\footnote{For an extension of the FMSC to vector target parameters, see Appendix \ref{append:mult}.}
+As a consequence, Stein-type results do not apply: it is impossible to construct an estimator with uniformly lower risk than the ``valid'' estimator that uses only the baseline moment conditions.
+Nevertheless, as my simulation results show, selection and averaging can substantially outperform the valid estimator over large regions of the parameter space, particularly when the ``suspect'' moment conditions are highly informative and \emph{nearly} correct.
+This is precisely the situation for which the FMSC is intended.
+
+A limitation of the results presented here is that they are based upon the assumption of strong identification and a fixed number of moment conditions.
+Extending the idea behind the FMSC to allow for weak identification or a large number of moment conditions is a challenging topic that I leave for future research.
 
 My approach to moment selection is inspired by the focused information criterion of \citet{ClaeskensHjort2003}, a model selection criterion for maximum likelihood estimation. 
 Like \citet{ClaeskensHjort2003}, I study AMSE-based selection under mis-specification in a drifting asymptotic framework. 
 In contradistinction, however, I consider moment rather than model selection, and general GMM rather than maximum likelihood estimation.
 \cite{Schorfheide2005} uses a similar approach to select over forecasts constructed from mis-specified vector autoregression models, developed independently of the FIC. 
-Mine is by no means the first paper to consider GMM asymptotics under locally mis-specified moment conditions, an idea that dates at least as far back as \cite{Newey1985}.
-The idea of using this framework for AMSE-based moment selection, however, is novel.
+While the use of locally mis-specified moment conditions dates back at least as far as \cite{Newey1985}, the idea of using this framework for AMSE-based moment selection, however, is novel.
 
-The existing literature on moment selection under mis-specification is primarily concerned with consistent selection: the goal is to select all correctly specified moment conditions while eliminating all invalid ones with probability approaching one in the limit.\footnote{Under the local mis-specification asymptotics considered below, consistent moment selection criteria simply choose \emph{all} available moment conditions. For details, see Theorem \ref{pro:andrews}.}
+The existing literature on moment selection primarily aims to consistently select all correctly specified moment conditions while eliminating all invalid ones\footnote{Under the local mis-specification asymptotics considered below, consistent moment selection criteria simply choose \emph{all} available moment conditions. For details, see Theorem \ref{pro:andrews}.}
 This idea begins with \cite{Andrews1999} and is extended by  \cite{AndrewsLu} and \cite{HongPrestonShum}.
 More recently, \cite{Liao} proposes a shrinkage procedure for consistent GMM moment selection and estimation. 
 In a similar vein, \cite{CanerHanLee} extend and generalize earlier work by \cite{Caner2009} on LASSO-type model selection for GMM to carry out simultaneous model and moment selection via an adaptive elastic net penalty. 
-In contrast to these proposals, which examine only the validity of the moment conditions under consideration, the FMSC balances validity against relevance to minimize AMSE.
+Whereas these proposals examine only the validity of the moment conditions under consideration, the FMSC balances validity against relevance to minimize AMSE.
 Although \cite{HallPeixe2003} and \cite{ChengLiao} do consider relevance, their aim is to avoid including redundant moment conditions after consistently eliminating invalid ones.
 Some other papers that propose choosing, or combining, instruments to minimize MSE include \cite{DonaldNewey2001}, \cite{DonaldImbensNewey2009}, and \cite{KuersteinerOkui2010}.
-Unlike the FMSC, however, these proposals consider the \emph{higher-order} bias that arises from including many valid instruments rather than the first-order bias that arises from the use of invalid instruments.
+Unlike the FMSC, however, these papers consider the \emph{higher-order} bias that arises from including many valid instruments rather than the first-order bias that arises from the use of invalid instruments.
 
-Another important difference between the FMSC and the other proposals from the literature is the ``F'' -- focus: rather than a single moment selection criterion, the FMSC is really a method of constructing application-specific moment selection criteria.
-To see the potential benefits of this approach consider, for example, a simple dynamic panel model.
+Another distinguishing feature of the FMSC is focus: rather than a one-size-fits-all criterion, the FMSC is really a method of constructing application-specific moment selection criteria.
+Consider, for example, a dynamic panel model.
 If your target parameter is a long-run effect while mine is a contemporaneous effect, there is no reason to suppose \emph{a priori} that we should use the same moment conditions in estimation, even if we share the same model and dataset.
 The FMSC explicitly takes this difference of research goals into account.
 
-Like Akaike's Information Criterion (AIC), the FMSC is a \emph{conservative} rather than consistent selection procedure, as it \emph{remains random} even in the limit.	
-Although consistency is a crucial minimal property in many settings, the situation is more complex for model and moment selection: consistent and conservative selection procedures have different strengths, but these strengths cannot be combined \citep{Yang2005}.
-The motivation behind the FMSC is minimum-risk estimation.
-From this perspective, consistent selection criteria suffer from a serious defect: in general, unlike conservative criteria, they exhibit \emph{unbounded} minimax risk \citep{LeebPoetscher2008}.
+Like Akaike's Information Criterion (AIC), the FMSC is a \emph{conservative} rather than consistent selection procedure, as it remains random even in the limit.	
+While consistency is a desirable property in many settings, the situation is more complex for model and moment selection: consistent and conservative selection procedures have different strengths, but these strengths cannot be combined \citep{Yang2005}.
+The goal of this paper is estimators with low risk.
+Viewed from this perspective consistent selection criteria suffer from a serious defect: they exhibit unbounded minimax risk \citep{LeebPoetscher2008}.  
+Conservative criteria such as the FMSC do not suffer from this shortcoming.
 Moreover, as discussed in more detail below, the asymptotics of consistent selection paint a misleading picture of the effects of moment selection on inference.
 For these reasons, the fact that the FMSC is conservative rather than consistent is an asset in the present context.
 
@@ -63,17 +68,10 @@ While I developed the simulation-based, two-stage confidence interval procedure 
 The framework within which I study moment averaging is related to the frequentist model average estimators of \cite{HjortClaeskens}.
 Two other papers that consider weighting estimators based on different moment conditions are \cite{Xiao} and \cite{ChenChavezLinton}.
 Whereas these papers combine estimators computed using valid moment conditions to achieve a minimum variance estimator, I combine estimators computed using potentially invalid conditions with the aim of reducing estimator AMSE.
-A similar idea uderlies the combined moments (CM) estimator of \cite{Judge2007}, who emphasize that incorporating the information from an incorrect specification could lead to favorable bias-variance tradeoff. 
-Unlike the FMSC, however, the CM estimator is not targeted to a particular research goal and does not explicitly aim to minimize AMSE.
+A related idea underlies the combined moments (CM) estimator of \cite{Judge2007}.
 For a different approach to combining OLS and TSLS estimators, similar in spirit to the Stein-estimator and developed independently of the work presented here, see \cite{HansenStein}. 
 \cite{ChengLiaoShi} provide related results for Stein-type moment averaging in a GMM context with potentially mis-specified moment conditions.
-Both of these papers consider settings in which the parameter of interest is of sufficiently high dimension that averaging can yield uniform risk improvements.
-In contrast, I consider a setting with a scalar target parameter in which uniform improvements are unavailable.
 
-A limitation of the results presented here is that they are based upon the assumption of strong identification and a fixed number of moment conditions.
-When I refer to a bias-variance tradeoff below, either in finite samples or asymptotically, I abstract from weak-- and many--instruments considerations.
-In particular, my asymptotics are based on a classical first-order approximation with the addition of locally invalid moment conditions.
-Extending the idea behind the FMSC to allow for weak identification or a large number of moment conditions is a challenging topic that I leave for future research.
 
 The remainder of the paper is organized as follows.
 Section \ref{sec:asymp} describes the asymptotic framework and Section \ref{sec:FMSC} derives the FMSC, both in general and for two specific examples: OLS versus TSLS and choosing instrumental variables.
