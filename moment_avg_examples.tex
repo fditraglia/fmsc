@@ -1,28 +1,10 @@
 %!TEX root = main.tex
 \subsection{Moment Averaging for the OLS versus TSLS Example}
 \label{sec:momentavgexample}
-Moment selection is a somewhat crude procedure: it gives full weight to the estimator that minimizes the moment selection criterion no matter how close its nearest competitor lies. 
-Accordingly, when competing moment sets have similar criterion values in the population, sampling variation can be \emph{magnified} in the selected estimator.
+When competing moment sets have similar criterion values in the population, sampling variation can be \emph{magnified} in the selected estimator.
 This motivates the idea of averaging estimators based on different moment conditions rather than selecting them.
-Indeed, in some settings it is possible to derive averaging estimators with uniformly lower risk than the ``valid'' estimator via Stein-type arguments (e.g.\ \cite{HansenStein} and \cite{ChengLiaoShi}).
-In the case of a scalar target parameter, however, such results are unavailable and hence cannot be used to guide the construction of moment averaging weights for the setting considered in this paper.
+To illustrate this idea, I now briefly revisit the OLS versus TSLS example from Section \ref{sec:OLSvsIVExample} and derive an AMSE-optimal weighted average of the two estimators.
 
-So how should one construct weights for a scalar target parameter?
-One possibility is to adapt a proposal from \cite{Burnhametal}, who suggest averaging a collection of competing maximum likelihood estimator with weights of the form 
-$w_k =\left. \exp(-I_k/2)\right/\sum_{i=1}^K \exp(-I_i/2)$
-where $I_k$ is an information criterion evaluated for model $k$, and $i$ indexes the set of $K$ candidate models. 
-This expression, constructed by an analogy with Bayesian model averaging, gives more weight to models with lower values of the information criterion but non-zero weight to all models. 
-Applying a slightly more general form of this idea, suggested by \cite{ClaeskensHjortbook}, to the moment selection criteria examined above we might consider weights of the form 
-\[		\widehat{\omega}_S = \left.\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S)\right\}\right/\sum_{S' \in \mathscr{S}}\exp\left\{-\frac{\kappa}{2} \mbox{MSC}(S')\right\}\]
-where MSC$(\cdot)$ is a moment selection criterion and the parameter $\kappa \geq 0$ varies the uniformity of the weighting. 
-As $\kappa \rightarrow 0$ the weights become more uniform; as $\kappa \rightarrow \infty$ they approach the moment selection procedure given by minimizing the corresponding criterion. 
-Setting $\kappa = 1$ gives the \cite{Burnhametal} weights.
-
-Some preliminary simulation results, reported in an earlier draft of this paper, suggest that exponential weighting can indeed provide MSE improvements.
-The difficulty, however, lies in choosing an appropriate value for $\kappa$.
-In at least some applications, however, there is a compelling alternative to the exponential weighting scheme: one can instead derive weights \emph{analytically} to minimize AMSE within the FMSC framework.
-This immediately suggests a plug-in estimator of the optimal weights along the lines of the FMSC estimate of AMSE.
-To illustrate this idea, I revisit the OLS versus TSLS example from Section \ref{sec:OLSvsIVExample}.
 Let $\widetilde{\beta}(\omega)$ be a convex combination of the OLS and TSLS estimators, namely  
 \begin{equation}
 	\widetilde{\beta}(\omega) = \omega \widehat{\beta}_{OLS} + (1 - \omega) \widetilde{\beta}_{TSLS}
@@ -41,7 +23,7 @@ as measured by $\tau$, we should always give some weight to the OLS estimator.
 Second, when $\tau = 0$ the optimal value of $\omega$ is one. If $x$ is exogenous, OLS is strictly preferable to TSLS. 
 Third, the optimal weights depend on the strength of the instruments $\mathbf{z}$ as measured by $\gamma$.
 All else equal, the stronger the instruments, the less weight we should give to OLS.
-To operationalize the AMSE-optimal averaging estimator suggested from Theorem \ref{thm:OLSvsIVavg}, I define the plug-in estimator 
+To operationalize the AMSE-optimal averaging estimator suggested from Theorem \ref{thm:OLSvsIVavg}, I propose the plug-in estimator 
 \begin{equation}
 	\widehat{\beta}^*_{AVG} = \widehat{\omega}^* \widehat{\beta}_{OLS} + (1 - \widehat{\omega}^*)\widetilde{\beta}_{TSLS}
 	\label{eq:OLSvsIV_AVG1}

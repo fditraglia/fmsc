@@ -43,12 +43,12 @@ A generic moment average estimator takes the form
 where $\widehat{\mu}_S = \mu(\widehat{\theta}_S)$ is the estimator of the target parameter $\mu$ under moment set $S$, $\mathscr{S}$ is the collection of all moment sets under consideration, and $\widehat{\omega}_S$ is shorthand for the value of a data-dependent weight function $\widehat{\omega}_S=\omega(\cdot, \cdot)$ evaluated at moment set $S$ and the sample observations $Z_{n1}, \hdots, Z_{nn}$.  
 As above $\mu(\cdot)$ is a $\mathbb{R}$-valued, $Z$-almost surely continuous function of $\theta$ that is differentiable in an open neighborhood of $\theta_0$. 
 When $\widehat{\omega}_S$ is an indicator, taking on the value one at the moment set moment set that minimizes some moment selection criterion, $\widehat{\mu}$ is a post-moment selection estimator. 
-To characterize the limit distribution of $\widehat{\mu}$, I impose the following conditions on $\widehat{\omega}_S$.
+To characterize the limit distribution of $\widehat{\mu}$, I impose the following mild conditions on $\widehat{\omega}_S$, requiring that they sum to one and are ``well-behaved'' in the limit so that I may apply the continuous mapping theorem.
 \begin{assump}[Conditions on the Weights]\mbox{}
 \label{assump:weights}
 \begin{enumerate}[(a)]
 	\item $\sum_{S \in \mathscr{S}} \widehat{\omega}_S = 1$, almost surely 
-	\item For each $S\in \mathscr{S}$, $\widehat{\omega}_S \rightarrow_d\varphi_S(\tau, M)$, an almost-surely continuous function of $\tau$, $M$ and consistently estimable constants only.
+	\item For each $S\in \mathscr{S}$, $\widehat{\omega}_S \rightarrow_d\varphi_S(\tau, M)$, a function of $\tau$, $M$ and consistently estimable constants with at most countably many discontinuities.
 \end{enumerate}
 \end{assump}
 
