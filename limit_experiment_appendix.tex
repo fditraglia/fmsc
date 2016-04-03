@@ -1,9 +1,9 @@
 %!TEX root = main.tex
 \section{A Special Case of Post-FMSC Inference}
-\label{append:limitexperiment}
-This appendix presents some details and additional results to supplement Section \ref{sec:limitexperiment}.
+This appendix presents calculations and numerical results to supplement Section \ref{sec:limitexperiment}.
 
 \subsection{The Limit Experiment}
+\label{append:limitexperiment}
 The joint limit distribution for the OLS versus TSLS example from Section \ref{sec:OLSvsIVExample} is as follows
 \begin{equation*}
   \left[ 
@@ -123,3 +123,44 @@ Using the form of the conditional distributions we can express the distribution 
   V &=& \eta Z_2 - c\sigma Z_1
 \end{eqnarray*}
 where $Z_1, Z_2$ are independent standard normal random variables.
+
+\subsection{Numerical Results for the 2-Step Interval}
+\label{append:limitexperiment_2step}
+For the two-step procedure I take lower and upper bounds over a collection of equal-tailed intervals. 
+It does not necessarily follow that the bounds over these intervals would be tighter if each interval in the collection were constructed to be a short as possible.
+As we are free when using the 2-Step interval to choose any pair $(\alpha_1, \alpha_2)$ such that $\alpha_1 + \alpha_2 = \alpha$ I experimented with three possibilities: $\alpha_1 = \alpha_2 = \alpha/2$, followed by $\alpha_1 = \alpha/4, \alpha_2 = 3\alpha/4$ and $\alpha_1 = 3\alpha/4, \alpha_2 = \alpha/4$.
+Setting $\alpha_1 = \alpha/4$ produced the shortest intervals so I discuss only results for the middle configuration here.
+Additional results are available on request.
+As we see from Table \ref{tab:Limit2StepWideTauOLSvsIV} for the OLS versus TSLS example and Table \ref{tab:Limit2StepWideTauChooseIVs} for the choosing IVs example, this procedure delivers on its promise that asymptotic coverage will never fall below $1-\alpha$ but this comes at the cost of extreme conservatism and correspondingly wider intervals.
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/LimitSimResults/c_2widetau_OLSvsIV.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./AdditionalSimulations/LimitSimResults/w_2widetau_OLSvsIV.tex}
+  \end{subtable}
+  \caption{OLS versus TSLS Example: Asymptotic coverage and expected relative width of two-step confidence interval with $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$.}
+  \label{tab:Limit2StepWideTauOLSvsIV}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/LimitSimResults/c_2widetau_chooseIVs.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Relative Width}
+    \input{./AdditionalSimulations/LimitSimResults/w_2widetau_chooseIVs.tex}
+  \end{subtable}
+  \caption{Choosing IVs Example: Asymptotic coverage and expected relative width of two-step confidence interval with $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$.}
+  \label{tab:Limit2StepWideTauChooseIVs}
+\end{table}

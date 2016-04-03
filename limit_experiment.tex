@@ -39,19 +39,19 @@ While these expressions lack a closed form $G$, $H_1$ and $H_2$ are easy to comp
 I provide numerical routines to evaluate both $F_{FMSC}$ and the corresponding quantile function $Q_{FMSC}$ 
 in my R package \texttt{fmscr}.\footnote{This package is open-source and freely available from \url{https://github.com/fditraglia/fmscr}.}
 
-The ability to compute $F_{FMSC}$ and $Q_{FMSC}$ allows us to answer a number of important questions about post-FMSC inference for the two examples considered in this paper.
+The ability to compute $F_{FMSC}$ and $Q_{FMSC}$ allows us to answer a number of important questions about post-FMSC inference.
 First, suppose that we were to carry out FMSC selection and then construct a $(1 - \alpha) \times 100\%$ confidence interval \emph{conditional} in the selected estimator, completely ignoring the effects of the moment selection step.
 What would be the resulting asymptotic coverage probability and width of such a ``na\"{i}ve'' confidence interval procedure?
 Using calculations similar to those used above in the expression for $F_{FMSC}$, we find that the coverage probability of this na\"{i}ve interval is given by
 \begin{eqnarray*}
-  \mbox{CP}_{\mbox{Na\"{i}ve}}(\alpha) &=& G(u_\alpha) - G(-u_\alpha) +  H_1(\ell_\alpha) - H_2(-\ell_\alpha) +  H_2(\ell_\alpha) - H_2(-\ell_\alpha) \\
-  u_\alpha &=& z_{1-\alpha/2}\; \eta\\
-  \ell_{\alpha} &=& z_{1-\alpha/2} \sqrt{\eta^2 + c^2\sigma^2}
+  \mbox{CP}_{Naive}(\alpha) &=& G(u_\alpha) - G(-u_\alpha) +  H_1(\ell_\alpha) - H_2(-\ell_\alpha) +  H_2(\ell_\alpha) - H_2(-\ell_\alpha) \\
+  u_\alpha &=& \Phi(1 - \alpha/2)\; \eta\\
+  \ell_{\alpha} &=& \Phi(1 - \alpha/2) \sqrt{\eta^2 + c^2\sigma^2}
 \end{eqnarray*}
-where $z_{1-\alpha/2} = \Phi^{-1}(1 -\alpha/2)$ and $G$, $H_1$, $H_2$ are as defined in Equations \ref{eq:GFMSC}--\ref{eq:H2FMSC}.
+where $G$, $H_1$, $H_2$ are as defined in Equations \ref{eq:GFMSC}--\ref{eq:H2FMSC}.
 And since the width of this na\"{i}ve CI equals that of the textbook interval for $\widehat{\beta}$ when $|\widehat{\tau}|<\sigma\sqrt{2}$ and that of the textbook interval for $\widetilde{\beta}$ otherwise, we have
 \begin{equation*}
-  \frac{E\left[ \mbox{Width}_{\mbox{Na\"{i}ve}}(\alpha) \right]}{\mbox{Width}_{Valid}(\alpha)} = 1 + \left[ \Phi( \sqrt{2} - \tau/\sigma) -  \Phi( -\sqrt{2} - \tau/\sigma )\right]\left( \sqrt{\frac{\eta^2}{\eta^2 + c^2 \sigma^2}} - 1 \right)
+  \frac{E\left[ \mbox{Width}_{Naive}(\alpha) \right]}{\mbox{Width}_{Valid}(\alpha)} = 1 + \left[ \Phi( \sqrt{2} - \tau/\sigma) -  \Phi( -\sqrt{2} - \tau/\sigma )\right]\left( \sqrt{\frac{\eta^2}{\eta^2 + c^2 \sigma^2}} - 1 \right)
 \end{equation*}
 where $\mbox{Width}_{Valid}(\alpha)$ is the width of a standard, textbook confidence interval for $\widetilde{\beta}$.
 
@@ -124,53 +124,19 @@ The question remains: is there any way to capture these gains using a \emph{feas
   \label{tab:WidthInfeasible}
 \end{table}
 
-Although no consistent estimator of $\tau$ exists, $\widehat{\tau}$ provides an asymptotically unbiased estimator.
-I now consider two different ways to use $\widehat{\tau}$ to construct a post-FMSC confidence interval.
-The first is equivalent to the two-step procedure given in Algorithm \ref{alg:conf} but uses exact calculations rather than simulations to evaluate $Q_{FMSC}$, following the derivations given above.
-This procedure first constructs a $(1-\alpha_1)\times 100\%$ confidence interval for $\widehat{\tau}$.
-For each $\tau^*$ in this interval it then constructs a $(1-\alpha_2)\times 100\%$ based on $Q_{FMSC}$ and then takes the upper and lower bounds over all of the resulting intervals.
+Now, consider the 2-Step confidence interval procedure from Algorithm \ref{alg:conf}.
+We can implement an equivalent procedure without simulation as follows.
+First we construct a $(1-\alpha_1)\times 100\%$ confidence interval for $\widehat{\tau}$ using $T = \sigma Z_1 + \tau$ where $Z_1$ is standard normal.
+Next we construct a $(1-\alpha_2)\times 100\%$ based on $Q_{FMSC}$ for each $\tau^*$ in this interval.
+Finally we take the upper and lower bounds over all of the resulting intervals.
 This interval is guaranteed to have asymptotic coverage probability of at least $1 - (\alpha_1 + \alpha_2)$ by an argument essentially identical to the proof of Theorem \ref{thm:sim}.
-As we are free when using this method to choose any pair $(\alpha_1, \alpha_2)$ such that $\alpha_1 + \alpha_2 = \alpha$, I experimented with three possibilities: $\alpha_1 = \alpha_2 = \alpha/2$, followed by $\alpha_1 = \alpha/4, \alpha_2 = 3\alpha/4$ and $\alpha_1 = 3\alpha/4, \alpha_2 = \alpha/4$.
-Setting $\alpha_1 = \alpha/4$ produced the shortest intervals so I report only results for the middle configuration here.\footnote{For the two-step procedure I take lower and upper bounds over a collection of equal-tailed intervals. It does not necessarily follow that the bounds over these intervals would be tigher if each interval in the collection were constructed to be a short as possible.}
-Additional results are available on request.
-As we see from Table \ref{tab:Limit2StepWideTauOLSvsIV} for the OLS versus TSLS example and Table \ref{tab:Limit2StepWideTauChooseIVs} for the choosing IVs example, this procedure delivers on its promise that asymptotic coverage will never fall below $1-\alpha$.
 Protection against under-coverage, however, comes at the expense of extreme conservatism, particularly for larger values of $\alpha$.
-The two-step procedure yields asymptotic coverage that is systematically \emph{too large} and hence \emph{cannot} produce an interval shorter than the textbook CI for the valid estimator.
+Numerical values for the coverage and median expected with of this interval appear in Appendix \ref{append:limitexperiment_2step}. 
+From both the numerical calculations and the theoretical result given in Theorem \ref{thm:sim} and these numerical calculations we see that the 2-Step systematically \emph{over-covers} and hence \emph{cannot} produce an interval shorter than the textbook CI for the valid estimator.
 
-
-\begin{table}[h]
-  \centering
-  \begin{subtable}{0.48\textwidth}
-    \caption{Coverage Probability}
-    \input{./AdditionalSimulations/LimitSimResults/c_2widetau_OLSvsIV.tex}
-  \end{subtable}
-  ~
-  \begin{subtable}{0.48\textwidth}
-    \caption{Relative Width}
-    \input{./AdditionalSimulations/LimitSimResults/w_2widetau_OLSvsIV.tex}
-  \end{subtable}
-  \caption{OLS versus TSLS Example: Asymptotic coverage and expected relative width of two-step confidence interval with $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$.}
-  \label{tab:Limit2StepWideTauOLSvsIV}
-\end{table}
-
-\begin{table}[h]
-  \centering
-  \begin{subtable}{0.48\textwidth}
-    \caption{Coverage Probability}
-    \input{./AdditionalSimulations/LimitSimResults/c_2widetau_chooseIVs.tex}
-  \end{subtable}
-  ~
-  \begin{subtable}{0.48\textwidth}
-    \caption{Relative Width}
-    \input{./AdditionalSimulations/LimitSimResults/w_2widetau_chooseIVs.tex}
-  \end{subtable}
-  \caption{Choosing IVs Example: Asymptotic coverage and expected relative width of two-step confidence interval with $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$.}
-  \label{tab:Limit2StepWideTauChooseIVs}
-\end{table}
-
-To address this problem, I now consider an alternative one-step procedure.
-Rather than first constructing a confidence region for $\tau$ and then taking upper and lower bounds, this method simply assumes that $\widehat{\tau}$ is exactly equal to $\tau$ and then constructs a confidence interval from $Q_{FMSC}$ exactly as in the infeasible interval described above.\footnote{As in the construction of the na\"{i}ve interval, I take the shortest possible interval based on $Q_{FMSC}$ rather than an equal-tailed interval. Additional results for an equal-tailed version of this one-step procedure are available upon request. Their performance is similar.}
-Note that Theorem \ref{thm:sim} does \emph{not} apply to this one-step interval: it comes with no generic guarantee of uniform coverage performance.
+Now consider the 1-Step confidence interval from Algorithm \ref{alg:1step}. 
+Unlike its 2-Step counterpart, this interval comes with no generic theoretical guarantees, so I use the characterization from above to study its limiting behavior. 
+Rather than first constructing a confidence region for $\tau$ and then taking upper and lower bounds, 1-Step interval simply takes $\widehat{\tau}$ in place of $\tau$ and then constructs a confidence interval from $Q_{FMSC}$ exactly as in the infeasible interval described above.\footnote{As in the construction of the na\"{i}ve interval, I take the shortest possible interval based on $Q_{FMSC}$ rather than an equal-tailed interval. Additional results for an equal-tailed version of this one-step procedure are available upon request. Their performance is similar.}
 For any example that take the form of Equation ???, however, we can directly calculate the asymptotic coverage and expected relative width of this procedure to determine precisely how it performs over relevant regions of the parameter space.
 Tables \ref{tab:Limit1StepShortOLSvsIV} and \ref{tab:Limit1StepShortChooseIVs} do exactly this.
 We see that the one-step interval effectively ``splits the difference'' between the two-step interval and the na\"{i}ve procedure. 
