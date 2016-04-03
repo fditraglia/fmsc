@@ -49,7 +49,8 @@ $ \widehat{\mbox{CI}}_{1}=\left[ \widehat{\mu} - \widehat{b}(\widehat{\tau})/\sq
 
 The 1-Step interval defined in Algorithm \ref{alg:1step} is conceptually simple, easy to compute, and can perform well in practice, as I explore below.
 But as it fails to account for sampling uncertainty in $\widehat{\tau}$,  it does \emph{not} necessarily yield asymptotically valid inference for $\mu$.
-Fully valid inference requires the addition of a second step to the algorithm:
+Fully valid inference requires the addition of a second step to the algorithm and comes at a cost: conservative rather than exact inference.
+In particular, the following procedure is guaranteed to yield an interval with asymptotic coverage probability of \emph{at least} $(1-\alpha-\delta)\times 100\%$.
 
 \begin{alg}[2-Step CI]
 \label{alg:conf}
@@ -63,7 +64,6 @@ Fully valid inference requires the addition of a second step to the algorithm:
 \end{enumerate}
 \end{alg}
 
-The 2-Step interval defined in Algorithm \ref{alg:conf} has asymptotic coverage probability of \emph{at least} $(1-\alpha-\delta)\times 100\%$.
 
 \begin{thm}[2-Step CI]
 \label{thm:sim}
