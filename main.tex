@@ -39,8 +39,24 @@ Brown, Cambridge, Columbia, George Washington, Oxford, Queen Mary, Rutgers, St A
 \input{empirical_example.tex}
 \input{conclusion.tex}
 
-\appendix
 \input{proofs.tex}
+
+\bibliographystyle{elsarticle-harv}
+\small
+\bibliography{fmsc_refs}
+
+%Web Appendix
+\appendix
+\normalsize
+\clearpage
+\pagenumbering{arabic}% resets `page` counter to 1
+\renewcommand*{\thepage}{A-\arabic{page}}
+
+\begin{center}
+  {\Huge \textbf{Online Appendix}}
+\end{center}
+
+
 \input{computational_details.tex}
 \input{identification_appendix.tex}
 \input{trimmed_MSE_appendix.tex}
@@ -50,9 +66,6 @@ Brown, Cambridge, Columbia, George Washington, Oxford, Queen Mary, Rutgers, St A
 %Supplementary simulation results
 %\input{simulations_supplement.tex}
 %\singlespacing
-%References
 
-\bibliographystyle{elsarticle-harv}
-\bibliography{fmsc_refs}
 
 \end{document}
