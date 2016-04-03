@@ -67,7 +67,20 @@ In terms of coverage probability, the na\"{i}ve interval performs very poorly: i
 These striking size distortions, which echo the findings of \cite{Guggenberger2010} and \cite{Guggenberger2012}, provide a strong argument against the use of the na\"{i}ve interval.
 Its attraction, of course, is width: the na\"{i}ve interval can be dramatically shorter than the corresponding ``textbook'' confidence interval for the valid estimator.
 
+
+Is there any way to construct a post-FMSC confidence interval that does not suffer from the egregious size distortions of the na\"{i}ve interval but is still shorter than the textbook interval for the valid estimator?
+As a first step towards answering this question, Table \ref{tab:WidthInfeasible} presents the relative width of the shortest possible \emph{infeasible} post-FMSC confidence interval constructed directly from $Q_{FMSC}$.
+This interval has asymptotic coverage probability \emph{exactly} equal to its nominal level as it correctly accounts for the effect of moment selection on the asymptotic distribution of the estimators.
+Unfortunately it cannot be used in practice because it requires knowledge of $\tau$, for which no consistent estimator exists.
+As such, this interval serves as a benchmark against which to judge various feasible procedures that do not require knowledge of $\tau$.
+For certain parameter values this interval is indeed shorter than the valid interval but the improvement is not uniform.
+Just as the FMSC itself cannot provide a uniform reduction in AMSE relative to the valid estimator, the infeasible post-FMSC cannot provide a corresponding reduction in width.
+In both cases, however, improvements are possible when $\tau$ is expected to be small, the setting in which this paper assumes that an applied researcher finds herself. 
+The potential reductions in width can be particularly dramatic for larger values of $\alpha$.
+The question remains: is there any way to capture these gains using a \emph{feasible} procedure?
+
 \begin{table}[h]
+  \footnotesize
   \centering
   \begin{subtable}{0.48\textwidth}
     \caption{OLS versus TSLS}
@@ -83,6 +96,7 @@ Its attraction, of course, is width: the na\"{i}ve interval can be dramatically 
 \end{table}
 
 \begin{table}[h]
+  \footnotesize
   \centering
   \begin{subtable}{0.48\textwidth}
     \caption{OLS versus TSLS}
@@ -97,19 +111,8 @@ Its attraction, of course, is width: the na\"{i}ve interval can be dramatically 
   \label{tab:LimitNaiveWidth}
 \end{table}
 
-Is there any way to construct a post-FMSC confidence interval that does not suffer from the egregious size distortions of the na\"{i}ve interval but is still shorter than the textbook interval for the valid estimator?
-As a first step towards answering this question, Table \ref{tab:WidthInfeasible} presents the relative width of the shortest possible \emph{infeasible} post-FMSC confidence interval constructed directly from $Q_{FMSC}$.
-This interval has asymptotic coverage probability \emph{exactly} equal to its nominal level as it correctly accounts for the effect of moment selection on the asymptotic distribution of the estimators.
-Unfortunately it cannot be used in practice because it requires knowledge of $\tau$, for which no consistent estimator exists.
-As such, this interval serves as a benchmark against which to judge various feasible procedures that do not require knowledge of $\tau$.
-For certain parameter values this interval is indeed shorter than the valid interval but the improvement is not uniform.
-Just as the FMSC itself cannot provide a uniform reduction in AMSE relative to the valid estimator, the infeasible post-FMSC cannot provide a corresponding reduction in width.
-In both cases, however, improvements are possible when $\tau$ is expected to be small, the setting in which this paper assumes that an applied researcher finds herself. 
-The potential reductions in width can be particularly dramatic for larger values of $\alpha$.
-The question remains: is there any way to capture these gains using a \emph{feasible} procedure?
-
-
 \begin{table}[h]
+  \footnotesize
   \centering
   \begin{subtable}{0.48\textwidth}
     \caption{OLS versus TSLS}
@@ -120,7 +123,7 @@ The question remains: is there any way to capture these gains using a \emph{feas
     \caption{Choosing IVs}
     \input{./AdditionalSimulations/LimitSimResults/w_infeas_chooseIVs.tex}
   \end{subtable}
-  \caption{Width of shortest possible $(1-\alpha)\times 100\%$ post-FMSC confidence interval constructed directly from $Q_{FMSC}$ using knowledge of $\tau$. This interval is infeasible as no consistent estimator of $\tau$ exists. Values are given in percentage points.}
+  \caption{Width of shortest possible $(1-\alpha)\times 100\%$ post-FMSC confidence interval constructed directly from $Q_{FMSC}$ using knowledge of $\tau$. Values are given in percentage points.}
   \label{tab:WidthInfeasible}
 \end{table}
 
@@ -150,6 +153,7 @@ It would also be interesting to pursue analogous calculations for the minimum AM
 
 
 \begin{table}[h]
+  \footnotesize
   \centering
   \begin{subtable}{0.48\textwidth}
     \caption{Coverage Probability}
@@ -160,12 +164,13 @@ It would also be interesting to pursue analogous calculations for the minimum AM
     \caption{Relative Width}
     \input{./AdditionalSimulations/LimitSimResults/w_1short_OLSvsIV.tex}
   \end{subtable}
-  \caption{OLS vs TSLS Example: Asymptotic coverage probability and expected relative width of 1-step confidence interval constructed by substituting $\tau =\widehat{\tau}$ into $Q_{FMSC}$. Results are for the shortest possible interval, as in the infeasible procedure.}
+  \caption{OLS vs TSLS Example: shortest 1-Step CI} 
   \label{tab:Limit1StepShortOLSvsIV}
 \end{table}
 
 
 \begin{table}[h]
+  \footnotesize
   \centering
   \begin{subtable}{0.48\textwidth}
     \caption{Coverage Probability}
@@ -176,7 +181,7 @@ It would also be interesting to pursue analogous calculations for the minimum AM
     \caption{Relative Width}
     \input{./AdditionalSimulations/LimitSimResults/w_1short_chooseIVs.tex}
   \end{subtable}
-  \caption{Choosing IVs Example: Asymptotic coverage probability and expected relative width of 1-step confidence interval constructed by substituting $\tau =\widehat{\tau}$ into $Q_{FMSC}$. Results are for the shortest possible interval, as in the infeasible procedure.}
+  \caption{Choosing IVs Example: shortest 1-Step CI.} 
   \label{tab:Limit1StepShortChooseIVs}
 \end{table}
 

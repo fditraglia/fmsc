@@ -36,3 +36,43 @@ Combined HQ and AIC-type procedures can be defined analogously.
 In the simulation design from this paper, however, \emph{each} of these combined criteria gives results that are practically identical to those of the valid estimator.
 This hold true across all parameter values and sample sizes.
 Full details are available upon request.
+
+\subsection{Simulation Results for the 2-Step Confidence Interval}
+\label{append:conf_sim}
+
+This appendix presents results for the 2-Step confidence interval in the simulation experiment described in Section \ref{sec:CIsim}.
+Tables \ref{tab:CISim100_2stepWideTau_OLSvsIV} and \ref{tab:CISim100_2stepWideTau_ChooseIVs} 
+present coverage probabilities and average relative width of the two-step confidence interval procedure with $\alpha_1 = \alpha/4$ and $\alpha_2 = 3\alpha/4$, the finite sample analogues to Tables \ref{tab:Limit2StepWideTauOLSvsIV} and \ref{tab:Limit2StepWideTauChooseIVs}. 
+Results for other configurations of $\alpha_1, \alpha_2$, available upon request, result in even wider intervals.
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/CISimResults/c_2tauwide_OLSvsIV_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Average Relative Width}
+    \input{./AdditionalSimulations/CISimResults/w_2tauwide_OLSvsIV_100.tex}
+  \end{subtable}
+  \caption{2-step CI, $\alpha_1 = \alpha/4,\alpha_2 = 3\alpha/4$, OLS vs IV Example, $N=100$}
+  \label{tab:CISim100_2stepWideTau_OLSvsIV}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{subtable}{0.48\textwidth}
+    \caption{Coverage Probability}
+    \input{./AdditionalSimulations/CISimResults/c_2tauwide_chooseIVs_100.tex}
+  \end{subtable}
+  ~
+  \begin{subtable}{0.48\textwidth}
+    \caption{Average Relative Width}
+    \input{./AdditionalSimulations/CISimResults/w_2tauwide_chooseIVs_100.tex}
+  \end{subtable}
+  \caption{2-step CI, $\alpha_1 = \alpha/4,  \alpha_2 = 3\alpha/4$, Choosing IVs Example, $N=100$}
+  \label{tab:CISim100_2stepWideTau_ChooseIVs}
+\end{table}
+
+
