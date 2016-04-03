@@ -1,12 +1,11 @@
 %!TEX root = main.tex
 \subsection{A Special Case of Post-FMSC Inference}
 \label{sec:limitexperiment}
-Corollary \ref{cor:momentavg} is sufficiently general to cover a wide range of moment selection and averaging procedures, but this same generality makes the confidence interval procedure given in Algorithm \ref{alg:conf} somewhat less than intuitive.
-In this section I specialize the results on moment average estimators from above to the two examples of FMSC selection that appear in the simulation studies described below in Section \ref{sec:simulations}: OLS versus TSLS and choosing instrumental variables.
-The structure of these examples allows us to bypass Algorithm \ref{alg:conf} and characterize the asymptotic properties of various proposals for post-FMSC inference \emph{directly}, clearly illustrating the relevant trade-offs between coverage and width.
+The preceding section presented two confidence interval that account for the effects of moment selection on subsequent inference.
+The 1-Step interval is intuitive and computationally straightforward but lacks theoretical guarantees, while the 2-Step interval guarantees asymptotically valid inference at the cost of greater computational complexity and conservatism.
+To better understand these methods and the tradeoffs involved in deciding between them, I now specialize them to the two examples of FMSC selection that appear in the simulation studies described below in Section \ref{sec:simulations}: OLS versus TSLS and choosing instrumental variables.
+The structure of these examples allows us to bypass Algorithm \ref{alg:conf} and characterize the asymptotic properties of various proposals for post-FMSC inference \emph{directly}.
 Because this section presents asymptotic results, I treat any consistently estimable quantity that appears in a limit distribution as known.
-Unfortunately the bias parameter $\tau$ remains unknown \emph{even in the limit}.
-This is the main complication of post-FMSC inference and the focus of this section.
 
 First recall the OLS versus TSLS example from Section \ref{sec:OLSvsIVExample}.
 The joint limit distribution for this case is as follows
