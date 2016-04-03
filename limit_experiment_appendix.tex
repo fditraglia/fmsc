@@ -32,7 +32,7 @@ Now consider a slightly simplified version of the choosing instrumental variable
 \end{eqnarray*}
 where $x$ is the endogenous regressor of interest, $\mathbf{z}$ is a vector of exogenous instruments, and $w$ is a single potentially endogenous instrument.
 Without loss of generality assume that $w$ and $\mathbf{z}$ are uncorrelated and that all random variables are mean zero.
-For simplicity,further assume that the errors satisfy the same kind of asymptotic homoskedasticity condition used in the OLS versus TSLS example so that TSLS is the efficient GMM estimator.
+For simplicity, further assume that the errors satisfy the same kind of asymptotic homoskedasticity condition used in the OLS versus TSLS example so that TSLS is the efficient GMM estimator.
 Let the ``Full'' estimator denote the TSLS estimator using $w$ and $\mathbf{z}$ and the ``Valid'' estimator denote the TSLS estimator using only $\mathbf{z}$.
 Then we have,
 \begin{equation*}
@@ -58,6 +58,7 @@ Then we have,
 where $q^2_{F} = \gamma^2 \sigma_w^2 + q^2_{V}$, $q^2_{V} = \boldsymbol{\pi}'\Sigma_{zz}\boldsymbol{\pi}$, $\Sigma_{zz}$ is the covariance matrix of the valid instruments $\mathbf{z}$, and $\sigma_w^2$ is the variance of the ``suspect'' instrument $w$.
 After some algebraic manipulations we see that both of these examples share the same structure, namely
 \begin{equation}
+  \label{eq:limitExperiment}
   \left[ 
   \begin{array}{c}
     \sqrt{n} \left( \widehat{\beta} - \beta \right)\\
@@ -89,14 +90,11 @@ For any example with a limit distribution that takes this form, simple algebra s
   \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) = \mathbf{1}\left\{ |\widehat{\tau}|<\sigma \sqrt{2} \right\} \sqrt{n}(\widehat{\beta} - \beta) +  \mathbf{1}\left\{ |\widehat{\tau}|\geq\sigma \sqrt{2} \right\}\sqrt{n}(\widetilde{\beta} - \beta)
 \end{eqnarray*}
 and so by the Continuous Mapping Theorem,
-\begin{equation}
+\begin{equation*}
   \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) \overset{d}{\rightarrow}  \mathbf{1}\left\{ |T|<\sigma \sqrt{2} \right\} U +  \mathbf{1}\left\{ |T|\geq\sigma \sqrt{2} \right\} V.
-\end{equation}
-
-To better understand the implications of Equation ???
- it is helpful to re-express the limit distribution from Equation ??? in terms of the marginal distribution of $T$ and the conditional distribution of $U$ and $V$ given $T$. 
-We have $T \sim N(\tau, \sigma^2)$ and by direct calculation
-\begin{equation}
+\end{equation*}
+Re-expressing Equation \ref{eq:limitExperiment} in terms of the marginal distribution of $T$ and the conditional distribution of $U$ and $V$ given $T$, we find that $T \sim N(\tau, \sigma^2)$ and 
+\begin{equation*}
   \left.\left[
   \begin{array}{c}
    U \\ V 
@@ -113,15 +111,15 @@ We have $T \sim N(\tau, \sigma^2)$ and by direct calculation
 \end{array}
 \right]
 \right)
-\end{equation}
+\end{equation*}
 which is a \emph{singular distribution}.
-Crucially $U$ is independent of $T$, but conditional on $T$ the random variables $U$ and $V$ are perfectly correlated with the same variance.
+While $U$ is independent of $T$, but conditional on $T$ the random variables $U$ and $V$ are perfectly correlated with the same variance.
 Given $T$, the only difference between $U$ and $V$ is that the mean of $V$ is shifted by a distance that depends on the realization $t$ of $T$.
 Thus, the conditional distribution of $V$ shows a \emph{random bias}: on average $V$ has mean zero because the mean of $T$ is $\tau$ but any particular realization $t$ of $T$ will not in general equal $\tau$.
-Using the form of the conditional distributions we can express the distribution of $(U,V,T)'$ from Equation ??? in a more transparent form as
+Using the form of the conditional distributions we can express the distribution of $(U,V,T)'$ in a more transparent form as
 \begin{eqnarray*}
   T &=& \sigma Z_1 + \tau\\
   U &=& \eta Z_2 + c\tau\\
   V &=& \eta Z_2 - c\sigma Z_1
 \end{eqnarray*}
-where $Z_1, Z_2$ are iid standard normal random variables.
+where $Z_1, Z_2$ are independent standard normal random variables.
