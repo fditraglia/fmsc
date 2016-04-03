@@ -3,135 +3,24 @@
 \label{sec:limitexperiment}
 The preceding section presented two confidence interval that account for the effects of moment selection on subsequent inference.
 The 1-Step interval is intuitive and computationally straightforward but lacks theoretical guarantees, while the 2-Step interval guarantees asymptotically valid inference at the cost of greater computational complexity and conservatism.
-To better understand these methods and the tradeoffs involved in deciding between them, I now specialize them to the two examples of FMSC selection that appear in the simulation studies described below in Section \ref{sec:simulations}: OLS versus TSLS and choosing instrumental variables.
-The structure of these examples allows us to bypass Algorithm \ref{alg:conf} and characterize the asymptotic properties of various proposals for post-FMSC inference \emph{directly}.
+To better understand these methods and the tradeoffs involved in deciding between them, I now specialize them to the two examples of FMSC selection that appear in the simulation studies described below.
+The structure of these examples allows us to bypass Algorithm \ref{alg:conf} and characterize the asymptotic properties of various proposals for post-FMSC without resorting to Monte Carlo simulations.
 Because this section presents asymptotic results, I treat any consistently estimable quantity that appears in a limit distribution as known.
 
-First recall the OLS versus TSLS example from Section \ref{sec:OLSvsIVExample}.
-The joint limit distribution for this case is as follows
-\begin{equation*}
-  \left[ 
-  \begin{array}{c}
-    \sqrt{n} \left( \widehat{\beta}_{OLS} - \beta \right)\\
-    \sqrt{n} \left( \widetilde{\beta}_{TSLS} - \beta \right)\\
-    \widehat{\tau}
-\end{array}
-\right] \overset{d}{\rightarrow} N\left( \left[
-\begin{array}{c}
-  \tau/\sigma_x^2 \\ 0 \\ \tau
-\end{array}
-\right], \sigma_{\epsilon}^2 
-\left[
-\begin{array}{ccc}
-  1/\sigma_x^2 & 1/\sigma_x^2 & 0\\
-  1/\sigma_x^2 & 1/\gamma^2 & -\sigma_v^2/\gamma^2\\
-  0 & -\sigma_v^2/\gamma^2 & \sigma_x^2 \sigma_v^2/\gamma^2
-\end{array}
-\right]\right).
-\end{equation*}
-Second, consider a slightly simplified version of the choosing instrumental variables example from Section \ref{sec:chooseIVexample}, namely
-\begin{eqnarray*}
-  y_{ni} &=& \beta x_{ni} + \epsilon_{ni}\\
-  x_{ni} &=& \gamma w_{ni} + \mathbf{z}_{ni}' \boldsymbol{\pi} + v_{ni}
-\end{eqnarray*}
-where $x$ is the endogenous regressor of interest, $\mathbf{z}$ is a vector of exogenous instruments, and $w$ is a single potentially endogenous instrument.
-Without loss of generality I assume that $w$ and $\mathbf{z}$ are uncorrelated and that all random variables are mean zero.
-For simplicity, I further assume that the errors satisfy the same kind of asymptotic homoskedasticity condition used in the OLS versus TSLS example so that TSLS is the efficient GMM estimator.
-Let the ``Full'' estimator denote the TSLS estimator using $w$ and $\mathbf{z}$ and the ``Valid'' estimator denote the TSLS estimator using only $\mathbf{z}$.
-Then we have,
-\begin{equation*}
-  \left[ 
-  \begin{array}{c}
-    \sqrt{n} \left( \widehat{\beta}_{Full} - \beta \right)\\
-    \sqrt{n} \left( \widetilde{\beta}_{Valid} - \beta \right)\\
-    \widehat{\tau}
-\end{array}
-\right] \overset{d}{\rightarrow} N\left( \left[
-\begin{array}{c}
-  \tau\gamma/q^2_{F} \\ 0 \\ \tau
-\end{array}
-\right], \sigma_{\epsilon}^2 
-\left[
-\begin{array}{ccc}
-  1/q_{F}^2 & 1/q_{F}^2 & 0\\
-  1/q_{F}^2 & 1/q_{V}^2 & -\gamma\sigma_w^2/q^2_{V}\\ 
-  0 & -\gamma\sigma_w^2/q^2_{V} & \sigma_w^2 q^2_{F}/q^2_{V}
-\end{array}
-\right]\right)
-\end{equation*}
-where $q^2_{F} = \gamma^2 \sigma_w^2 + q^2_{V}$, $q^2_{V} = \boldsymbol{\pi}'\Sigma_{zz}\boldsymbol{\pi}$, $\Sigma_{zz}$ is the covariance matrix of the valid instruments $\mathbf{z}$, and $\sigma_w^2$ is the variance of the ``suspect'' instrument $w$.
-After some algebraic manipulations we see that both of these examples share the same structure, namely
-\begin{equation}
-  \left[ 
-  \begin{array}{c}
-    \sqrt{n} \left( \widehat{\beta} - \beta \right)\\
-    \sqrt{n} \left( \widetilde{\beta} - \beta \right)\\
-    \widehat{\tau}
-\end{array}
-\right] \overset{d}{\rightarrow} 
-\left[
-\begin{array}{c}
-  U \\ V \\ T
-\end{array}
-\right] \sim
-N\left( \left[
-\begin{array}{c}
-  c\tau\\ 0 \\ \tau
-\end{array}
-\right], 
-\left[
-\begin{array}{ccc}
-  \eta^2 & \eta^2 & 0\\
-  \eta^2 & \eta^2 + c^2 \sigma^2 & -c\sigma^2\\ 
-  0 & -c\sigma^2 & \sigma^2 
-\end{array}
-\right]\right)
-\label{eq:LimitExperiment}
-\end{equation}
-where $\widehat{\beta}$ denotes the low variance but possibly biased estimator, and $\widetilde{\beta}$ denotes the higher variance but unbiased estimator.
-For any example with a limit distribution that takes this form, simple algebra shows that FMSC selection amounts to choosing $\widehat{\beta}$ whenever $|\widehat{\tau}|<\sqrt{2}\sigma$, and choosing $\widetilde{\beta}$ otherwise, in other words
-\begin{eqnarray*}
-  \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) = \mathbf{1}\left\{ |\widehat{\tau}|<\sigma \sqrt{2} \right\} \sqrt{n}(\widehat{\beta} - \beta) +  \mathbf{1}\left\{ |\widehat{\tau}|\geq\sigma \sqrt{2} \right\}\sqrt{n}(\widetilde{\beta} - \beta)
-\end{eqnarray*}
-and so by the Continuous Mapping Theorem,
+In both the OLS versus IV example from Section \ref{sec:OLSvsIVExample} and the slightly simplified version of the choosing instrument variables example implemented in Section \ref{sec:chooseIVsim}, the post-FMSC estimator $\widehat{\beta}_{FMSC}$ converges to a very convenient limit experiment.
+In particular, 
 \begin{equation}
   \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) \overset{d}{\rightarrow}  \mathbf{1}\left\{ |T|<\sigma \sqrt{2} \right\} U +  \mathbf{1}\left\{ |T|\geq\sigma \sqrt{2} \right\} V.
   \label{eq:FMSCLimitExperiment}
 \end{equation}
-
-To better understand the implications of Equation \ref{eq:FMSCLimitExperiment}, it is helpful to re-express the limit distribution from Equation \ref{eq:LimitExperiment} in terms of the marginal distribution of $T$ and the conditional distribution of $U$ and $V$ given $T$. 
-We have $T \sim N(\tau, \sigma^2)$ and by direct calculation
-\begin{equation}
-  \left.\left[
-  \begin{array}{c}
-   U \\ V 
-  \end{array}
-\right]\right| (T = t) \sim N\left(
-\left[
-\begin{array}{c}
-  c \tau \\ c\tau - ct
-\end{array}
-\right], \eta^2
-\left[
-\begin{array}{cc}
-  1 & 1 \\ 1 & 1
-\end{array}
-\right]
-\right)
-\label{eq:LimitExperimentConditional}
-\end{equation}
-which is a \emph{singular distribution}.
-Crucially $U$ is independent of $T$, but conditional on $T$ the random variables $U$ and $V$ are perfectly correlated with the same variance.
-Given $T$, the only difference between $U$ and $V$ is that the mean of $V$ is shifted by a distance that depends on the realization $t$ of $T$.
-Thus, the conditional distribution of $V$ shows a \emph{random bias}: on average $V$ has mean zero because the mean of $T$ is $\tau$ but any particular realization $t$ of $T$ will not in general equal $\tau$.
-Using the form of the conditional distributions we can express the distribution of $(U,V,T)'$ from Equation \ref{eq:LimitExperiment} in a more transparent form as
+with
 \begin{eqnarray*}
   T &=& \sigma Z_1 + \tau\\
   U &=& \eta Z_2 + c\tau\\
   V &=& \eta Z_2 - c\sigma Z_1
 \end{eqnarray*}
-where $Z_1, Z_2$ are iid standard normal random variables.
-Combined with Equation \ref{eq:FMSCLimitExperiment}, this representation allows us to tabulate the asymptotic distribution, $F_{FMSC}$, of the post-FMSC estimator \emph{directly} for any example that takes the form of Equation \ref{eq:LimitExperiment} rather than approximating it by simulation as in Algorithm \ref{alg:conf}.
+where $Z_1, Z_2$ are independent standard normal random variables, $\eta$, $\sigma$ and $c$ are consistently estimable constants, and $\tau$ is the local mis-specification parameter.
+This representation allows us to tabulate the asymptotic distribution, $F_{FMSC}$ without resorting to simulation.
 We have:
 \begin{eqnarray}
   F_{FMSC}(x) &=& G(x) + H_1(x) + H_2(x) \\
@@ -144,12 +33,12 @@ We have:
   \label{eq:H2FMSC}
 \end{eqnarray}
 where $\Phi$ is the CDF and $\varphi$ the pdf of a standard normal random variable.
-Note that the limit distribution of the post-FMSC distribution depends on $\tau$ in addition to the consistently estimable quantities $\sigma, \eta, c$ although I supress this dependence to simplify the notation.
-While these expressions lack a closed form, there are various fast and extremely accurate numerical routines for evaluating integrals of the form taken by $H_1$ and $H_2$.
-Armed with a numerical routine to evaluate $F_{FMSC}$ it is straightforward to evaluate the corresponding quantile function $Q_{FMSC}$ using a root-finder by analytically bounding $G$, $H_1$ and $H_2$.
-I provide numerical routines to evaluate both $F_{FMSC}$ and $Q_{FMSC}$ along with various related quantities in my R package \texttt{fmscr}.\footnote{This package is open-source and freely available from \url{https://github.com/fditraglia/fmscr}.}
+Note that the limit distribution of the post-FMSC distribution depends on $\tau$ in addition to the consistently estimable quantities $\sigma, \eta, c$ although I suppress this dependence to simplify the notation.
+While these expressions lack a closed form $G$, $H_1$ and $H_2$ are easy to compute.
+I provide numerical routines to evaluate both $F_{FMSC}$ and the corresponding quantile function $Q_{FMSC}$ 
+in my R package \texttt{fmscr}.\footnote{This package is open-source and freely available from \url{https://github.com/fditraglia/fmscr}.}
 
-The ability to compute $F_{FMSC}$ and $Q_{FMSC}$ allows us to answer a number of important questions about post-FMSC inference for any example of the form given in Equation \ref{eq:LimitExperiment}.
+The ability to compute $F_{FMSC}$ and $Q_{FMSC}$ allows us to answer a number of important questions about post-FMSC inference for any example of the form given in Equation ???. 
 To begin, suppose that we were to carry out FMSC selection and then construct a $(1 - \alpha) \times 100\%$ confidence interval \emph{conditional} in the selected estimator, completely ignoring the effects of the moment selection step.
 What would be the resulting asymptotic coverage probability and width of such a ``na\"{i}ve'' confidence interval procedure?
 Using calculations similar to those used above in the expression for $F_{FMSC}$, we find that the coverage probability of this na\"{i}ve interval is given by
@@ -281,7 +170,7 @@ The two-step procedure yields asymptotic coverage that is systematically \emph{t
 To address this problem, I now consider an alternative one-step procedure.
 Rather than first constructing a confidence region for $\tau$ and then taking upper and lower bounds, this method simply assumes that $\widehat{\tau}$ is exactly equal to $\tau$ and then constructs a confidence interval from $Q_{FMSC}$ exactly as in the infeasible interval described above.\footnote{As in the construction of the na\"{i}ve interval, I take the shortest possible interval based on $Q_{FMSC}$ rather than an equal-tailed interval. Additional results for an equal-tailed version of this one-step procedure are available upon request. Their performance is similar.}
 Note that Theorem \ref{thm:sim} does \emph{not} apply to this one-step interval: it comes with no generic guarantee of uniform coverage performance.
-For any example that take the form of Equation \ref{eq:LimitExperiment}, however, we can directly calculate the asymptotic coverage and expected relative width of this procedure to determine precisely how it performs over relevant regions of the parameter space.
+For any example that take the form of Equation ???, however, we can directly calculate the asymptotic coverage and expected relative width of this procedure to determine precisely how it performs over relevant regions of the parameter space.
 Tables \ref{tab:Limit1StepShortOLSvsIV} and \ref{tab:Limit1StepShortChooseIVs} do exactly this.
 We see that the one-step interval effectively ``splits the difference'' between the two-step interval and the na\"{i}ve procedure. 
 While it can under-cover, the size distortions are fairly small, particularly for $\alpha=0.1$ and $0.05$.
