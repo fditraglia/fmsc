@@ -23,53 +23,49 @@ Combining this with Equation \ref{eq:FMSCindicate},
 \end{equation*}
 For GMM-AIC moment selection or selection based on a downward $J$-test, $\varphi_S(\cdot,\cdot)$ may be estimated analogously, following  Theorem \ref{pro:jstat}. 
 Continuing to assume for the moment that $\tau$ is known, consider the following algorithm:
-\begin{alg}[Simulation-based Confidence Interval for $\widehat{\mu}$ given $\tau$.]
+\begin{alg}[Simulation-based CI for $\widehat{\mu}$ given $\tau$]
 \mbox{}
 		\begin{enumerate}
 \label{alg:conf_tau_known}
-			\item Generate $J$ independent draws $M_j \sim N_{p+q}( 0, \widehat{\Omega} )$
-			\item Set $\Lambda_j(\tau) = -\nabla_\theta\mu(\widehat{\theta})'\left[\sum_{S \in \mathscr{S}} \widehat{\varphi}_S(\tau,M_j) \widehat{K}_S\Xi_S\right] (M_j + \tau)$
-			\item Using the draws $\{\Lambda_j(\tau)\}_{j=1}^J$, calculate $\widehat{a}(\tau)$, $\widehat{b}(\tau)$ such that
-		$$P\left\{ \widehat{a}(\tau) \leq\Lambda(\tau)\leq \widehat{b}(\tau) \right\} = 1 - \alpha$$
+			\item Generate $J$ independent draws $M_j \sim N_{p+q}(0, \widehat{\Omega})$.
+			\item Set $\Lambda_j(\tau) = -\nabla_\theta\mu(\widehat{\theta})'\left[\sum_{S \in \mathscr{S}} \widehat{\varphi}_S(\tau,M_j) \widehat{K}_S\Xi_S\right] (M_j + \tau)$.
+			\item Using $\{\Lambda_j(\tau)\}_{j=1}^J$, calculate $\widehat{a}(\tau)$, $\widehat{b}(\tau)$ such that
+		$P\left\{ \widehat{a}(\tau) \leq\Lambda(\tau)\leq \widehat{b}(\tau) \right\} = 1 - \alpha$.
   \item Define the interval 
-    $ \mbox{CI}_{sim}=\left[ \widehat{\mu} - \widehat{b}(\tau)/\sqrt{n}, \quad \widehat{\mu} - \widehat{a}(\tau)/\sqrt{n} \right]$
+    $ \mbox{CI}_{sim}=\left[ \widehat{\mu} - \widehat{b}(\tau)/\sqrt{n}, \quad \widehat{\mu} - \widehat{a}(\tau)/\sqrt{n} \right]$.
 		\end{enumerate}
 \end{alg}
 
-Clearly, given knowledge of $\tau$ the preceding steps would lead to valid inference for $\mu$.
-The problem of course is that $\tau$ is unknown and cannot even be consistently estimated.
-One idea would be to substitute the asymptotically unbiased estimator $\widehat{\tau}$ from \ref{thm:tau} in place of the unknown $\tau$ this gives rise to a procedure that I call the ``1-Step'' confidence interval:
-\begin{alg}[1-Step Confidence Interval for $\widehat{\mu}$.] 
-Carry out of Algorithm \ref{alg:conf_tau_known} with $\tau = \widehat{\tau}$, defined in \ref{thm:tau}, leading to the interval
-$ \widehat{\mbox{CI}}_{1}=\left[ \widehat{\mu} - \widehat{b}_{max}(\widehat{\tau})/\sqrt{n}, \quad \widehat{\mu} - \widehat{a}_{min}(\widehat{\tau})/\sqrt{n} \right]$.
+Given knowledge of $\tau$, Algorithm \ref{alg:conf_tau_known} yields valid inference for $\mu$.
+The problem, of course, is that $\tau$ is unknown and cannot even be consistently estimated.
+One idea would be to substitute the asymptotically unbiased estimator $\widehat{\tau}$ from \ref{thm:tau} in place of the unknown $\tau$.
+This gives rise to a procedure that I call the ``1-Step'' confidence interval:
+
+\begin{alg}[1-Step CI] 
+  \label{alg:1step}
+Carry out of Algorithm \ref{alg:conf_tau_known} with $\tau$ set equal to the estimator $\widehat{\tau}$ from Theorem \ref{thm:tau}, yielding 
+$ \widehat{\mbox{CI}}_{1}=\left[ \widehat{\mu} - \widehat{b}(\widehat{\tau})/\sqrt{n}, \quad \widehat{\mu} - \widehat{a}(\widehat{\tau})/\sqrt{n} \right]$.
 \end{alg}
 
+The 1-Step interval defined in Algorithm \ref{alg:1step} is conceptually simple, easy to compute, and can perform well in practice, as I explore below.
+But as it fails to account for sampling uncertainty in $\widehat{\tau}$,  it does \emph{not} necessarily yield asymptotically valid inference for $\mu$.
+Fully valid inference requires the addition of a second step to the algorithm:
 
-Thus, substituting $\widehat{\tau}$ for $\tau$ could give erroneous results by failing to account for the uncertainty that enters through $\widehat{\tau}$. 
-The solution is to use a two-stage procedure. 
-First construct a  $100(1-\delta)\%$ confidence region $\mathscr{T}(\widehat{\tau},\delta)$ for $\tau$ using Theorem \ref{thm:tau}. 
-Then, for each $\tau^* \in \mathscr{T}(\widehat{\tau},\delta)$ simulate from the distribution of $\Lambda(\tau^*)$, defined in Corollary \ref{cor:momentavg}, to obtain a \emph{collection} of $(1-\alpha)\times 100\%$ confidence intervals indexed by $\tau^*$. 
-Taking the lower and upper bounds of these yields a \emph{conservative} confidence interval for $\widehat{\mu}$, as defined in Equation \ref{eq:avg}. 
-This interval has asymptotic coverage probability of \emph{at least} $(1-\alpha-\delta)\times 100\%$.
-The precise algorithm is as follows.
-\begin{alg}[Simulation-based Confidence Interval for $\widehat{\mu}$]
+\begin{alg}[2-Step CI]
 \label{alg:conf}
 \mbox{}
 \begin{enumerate}
-	\item For each $\tau^* \in \mathscr{T}(\widehat{\tau},\delta)$ 
-		\begin{enumerate}[(i)]
-			\item Generate $J$ independent draws $M_j \sim N_{p+q}( 0, \widehat{\Omega} )$
-			\item Set $\Lambda_j(\tau^*) = -\nabla_\theta\mu(\widehat{\theta})'\left[\sum_{S \in \mathscr{S}} \widehat{\varphi}_S(\tau^*,M_j) \widehat{K}_S\Xi_S\right] (M_j + \tau^*)$
-			\item Using the draws $\{\Lambda_j(\tau^*)\}_{j=1}^J$, calculate $\widehat{a}(\tau^*)$, $\widehat{b}(\tau^*)$ such that
-		$$P\left\{ \widehat{a}(\tau^*) \leq\Lambda(\tau^*)\leq \widehat{b}(\tau^*) \right\} = 1 - \alpha$$
-		\end{enumerate}
-	\item Set $\displaystyle \widehat{a}_{min}(\widehat{\tau})=\min_{\tau^* \in \mathscr{T}(\widehat{\tau},\delta)} \widehat{a}(\tau^*)$ and $\displaystyle \widehat{b}_{max}(\widehat{\tau})= \max_{\tau^* \in \mathscr{T}(\widehat{\tau},\delta)} \widehat{b}(\tau^*)$ \vspace{0.5em}
-	\item The confidence interval for $\mu$ is
-				$ \mbox{CI}_{sim}=\left[ \widehat{\mu} - \widehat{b}_{max}(\widehat{\tau})/\sqrt{n}, \quad \widehat{\mu} - \widehat{a}_{min}(\widehat{\tau})/\sqrt{n} \right]$
+  \item Construct a $(1-\delta)\times 100\%$ confidence region $\mathscr{T}$ for $\tau$ using Theorem \ref{thm:tau}. 
+  \item For each $\tau^* \in \mathscr{T}$ carry out Algorithm \ref{alg:conf_tau_known}, yielding a $(1 - \alpha)\times 100\%$ confidence interval $\left[\widehat{a}(\tau^*),\widehat{b}(\tau^*)\right]$ for $\Lambda(\tau^*)$.  
+	\item Set $\displaystyle \widehat{a}_{min}=\min_{\tau^* \in \mathscr{T}} \widehat{a}(\tau^*)$ and $\displaystyle \widehat{b}_{max}= \max_{\tau^* \in \mathscr{T}} \widehat{b}(\tau^*)$. 
+	\item Construct the interval 
+    $ \widehat{\mbox{CI}}_{2}=\left[ \widehat{\mu} - \widehat{b}_{max}/\sqrt{n}, \quad \widehat{\mu} - \widehat{a}_{min}/\sqrt{n} \right]$
 \end{enumerate}
 \end{alg}
 
-\begin{thm}[Simulation-based Confidence Interval for $\widehat{\mu}$]
+The 2-Step interval defined in Algorithm \ref{alg:conf} has asymptotic coverage probability of \emph{at least} $(1-\alpha-\delta)\times 100\%$.
+
+\begin{thm}[2-Step CI]
 \label{thm:sim}
 Let $\widehat{\Psi}$, $\widehat{\Omega}$, $\widehat{\theta}$, $\widehat{K}_S$, $\widehat{\varphi}_S$ be consistent estimators of $\Psi$, $\Omega$, $\theta_0$, $K_S$, $\varphi_S$ and define 
 $\Delta_n(\widehat{\tau},\tau^*) = \left(\widehat{\tau} - \tau^*\right)' (\widehat{\Psi}\widehat{\Omega}\widehat{\Psi}')^{-1} \left(\widehat{\tau} - \tau^*\right)$ 
@@ -78,3 +74,4 @@ $\mathscr{T}(\widehat{\tau},\delta) = \left\{\tau^* \colon  \Delta_n(\widehat{\t
 where $\chi^2_q(\delta)$ denotes the $1-\delta$ quantile of a $\chi^2$ distribution with $q$ degrees of freedom.
 Then, the interval $\mbox{CI}_{sim}$ defined in Algorithm \ref{alg:conf} has asymptotic coverage probability no less than $1-(\alpha + \delta)$ as $J,n\rightarrow \infty$.
 \end{thm}
+
