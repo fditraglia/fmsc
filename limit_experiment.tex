@@ -135,18 +135,19 @@ Numerical values for the coverage and median expected with of this interval appe
 From both the numerical calculations and the theoretical result given in Theorem \ref{thm:sim} and these numerical calculations we see that the 2-Step systematically \emph{over-covers} and hence \emph{cannot} produce an interval shorter than the textbook CI for the valid estimator.
 
 Now consider the 1-Step confidence interval from Algorithm \ref{alg:1step}. 
-Unlike its 2-Step counterpart, this interval comes with no generic theoretical guarantees, so I use the characterization from above to study its limiting behavior. 
 Rather than first constructing a confidence region for $\tau$ and then taking upper and lower bounds, 1-Step interval simply takes $\widehat{\tau}$ in place of $\tau$ and then constructs a confidence interval from $Q_{FMSC}$ exactly as in the infeasible interval described above.\footnote{As in the construction of the na\"{i}ve interval, I take the shortest possible interval based on $Q_{FMSC}$ rather than an equal-tailed interval. Additional results for an equal-tailed version of this one-step procedure are available upon request. Their performance is similar.}
-For any example that take the form of Equation ???, however, we can directly calculate the asymptotic coverage and expected relative width of this procedure to determine precisely how it performs over relevant regions of the parameter space.
-Tables \ref{tab:Limit1StepShortOLSvsIV} and \ref{tab:Limit1StepShortChooseIVs} do exactly this.
-We see that the one-step interval effectively ``splits the difference'' between the two-step interval and the na\"{i}ve procedure. 
-While it can under-cover, the size distortions are fairly small, particularly for $\alpha=0.1$ and $0.05$.
+Unlike its 2-Step counterpart, this interval comes with no generic theoretical guarantees, so I use the characterization from above to directly calculate its asymptotic coverage and expected relative width.
+The results appear in Tables \ref{tab:Limit1StepShortOLSvsIV} and \ref{tab:Limit1StepShortChooseIVs}.
+The 1-Step interval effectively ``splits the difference'' between the two-step interval and the na\"{i}ve procedure. 
+While it can under-cover, the size distortions are quite small, particularly for $\alpha=0.1$ and $0.05$.
 At the same time, when $\tau$ is relatively small this procedure can yield shorter intervals.
 While a full investigation of this phenomenon is beyond the scope of the present paper, these calculations suggest a plausible way forward for post-FMSC inference that is less conservative than the two-step procedure from Algorithm \ref{alg:conf} by directly calculating the relevant quantities from the limit distribution of interest.
-One could imagine specifying a maximum allowable size distortion over some relevant region of the parameter space and then designing a confidence interval to minimize width.
-This could be a one-step interval or possibly a two-step interval in which one allows the sum $\alpha_1 + \alpha_2$ to be \emph{less than} $\alpha$.
+This is possible because $\pi$ and $\gamma^2$ are both consistently estimable.
+And for any particular value of these parameters, the worst-case value of $\tau$ is \emph{interior}.
+Using this idea, one could imagine specifying a maximum allowable size distortion and then designing a confidence interval to minimize width, possibly incorporating some prior restriction on the likely magnitude of $\tau$.
 Just as the FMSC aims to achieve a favorable trade-off between bias and variance, such a confidence interval procedure could aim to achieve a favorable trade-off between width and coverage.
 It would also be interesting to pursue analogous calculations for the minimum AMSE averaging estimator from Section \ref{sec:momentavgexample}.
+
 
 \begin{table}[h]
   \centering
