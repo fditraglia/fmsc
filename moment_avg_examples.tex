@@ -1,10 +1,9 @@
 %!TEX root = main.tex
-\subsection{Digression: Moment Averaging in the OLS vs.\ TSLS Example}
+\subsection{Digression: Minimum-AMSE Averaging for OLS and TSLS}
 \label{sec:momentavgexample}
 When competing moment sets have similar criterion values in the population, sampling variation can be \emph{magnified} in the selected estimator.
 This motivates the idea of averaging estimators based on different moment conditions rather than selecting them.
 To illustrate this idea, I now briefly revisit the OLS versus TSLS example from Section \ref{sec:OLSvsIVExample} and derive an AMSE-optimal weighted average of the two estimators.
-
 Let $\widetilde{\beta}(\omega)$ be a convex combination of the OLS and TSLS estimators, namely  
 \begin{equation}
 	\widetilde{\beta}(\omega) = \omega \widehat{\beta}_{OLS} + (1 - \omega) \widetilde{\beta}_{TSLS}

@@ -6,33 +6,32 @@ Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} gives the follo
 \begin{cor}[Limit Distribution of FMSC]
 \label{cor:FMSClimit}
 	Under Assumptions \ref{assump:drift}, \ref{assump:highlevel} and \ref{assump:Identification}, we have $FMSC_n(S) \rightarrow_d FMSC_S(\tau, M)$, where
-	\begin{eqnarray*}
-		\mbox{FMSC}_S(\tau,M) &=& \nabla_\theta\mu(\theta_0)'K_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0& B(\tau,M) \end{array}\right] + \Omega\right\}\Xi_S'K_S'\nabla_\theta\mu(\theta_0)\\
-		B(\tau,M) &=& (\Psi M + \tau)(\Psi M + \tau)' - \Psi \Omega \Psi'.
-	\end{eqnarray*}
+		$B(\tau,M) = (\Psi M + \tau)(\Psi M + \tau)' - \Psi \Omega \Psi'$ and 
+	\begin{equation*}
+		\mbox{FMSC}_S(\tau,M) = \nabla_\theta\mu(\theta_0)'K_S\Xi_S \left\{\left[\begin{array}{cc}0&0\\0& B(\tau,M) \end{array}\right] + \Omega\right\}\Xi_S'K_S'\nabla_\theta\mu(\theta_0).
+	\end{equation*}
 \end{cor}
 This corollary implies that the FMSC is a ``conservative'' rather than ``consistent'' selection procedure.
-While this lack of consistency may sound like serious defect, it is in fact a desirable feature of the FMSC for two reasons.
+This lack of consistency is a desirable feature of the FMSC for two reasons.
 First, as discussed above, the goal of the FMSC is not to select only correctly specified moment conditions: it is to choose an estimator with a low finite-sample MSE as approximated by AMSE.
-In fact, the goal of consistent selection is very much at odds with that of controlling estimator risk.
+The goal of consistent selection is very much at odds with that of controlling estimator risk.
 As explained by \cite{Yang2005} and \cite{LeebPoetscher2008}, the worst-case risk of a consistent selection procedure \emph{diverges} with sample size.\footnote{This fact is readily apparent from the results of the simulation study from Section \ref{sec:chooseIVsim}: the consistent criteria, GMM-BIC and HQ, have the highest worst-case RMSE, while the conservative criteria, FMSC and GMM-AIC, have the lowest.}
 Second, while we know from both simulation studies \citep{Demetrescu} and analytical examples \citep{LeebPoetscher2005} that selection can dramatically change the sampling distribution of our estimators, invalidating traditional confidence intervals, the asymptotics of consistent selection give the misleading impression that this problem can be ignored.
 
 
-There are two main problems with applying traditional confidence intervals post-moment selection.
-The first is model selection uncertainty.
-If the data had been slightly different, we would have chosen a different set of moment conditions.
-Any confidence interval that \emph{conditions} on the selected model must be too short.
-Second, traditional confidence intervals ignore the fact that selection is carried out over potentially invalid moment conditions.
-Even if our goal were to eliminate all mis-specified moment conditions, for example by using a consistent criterion such as the GMM-BIC of \cite{Andrews1999}, in finite-samples we would not always be successful.
+There are two main problems with applying ``textbook'' confidence intervals post-moment selection.
+First is model selection uncertainty: if the data had been slightly different, we would have chosen a different set of moment conditions.
+Accordingly, any any confidence interval that \emph{conditions} on the selected model must be too short.
+Second, textbook confidence intervals ignore the fact that selection is carried out over potentially invalid moment conditions.
+Even if our goal were to consistently eliminate such moment conditions, for example by using a consistent criterion such as the GMM-BIC of \cite{Andrews1999}, in finite-samples we would not always be successful.
 Because of this, our intervals will be incorrectly centered.
-To account for these two effects, we need a way to represent a \emph{mixture} distribution in our limit theory: post-selection estimators are randomly-weighted averages of the individual candidate estimators.
+Accounting for these two effects requires a limit theory that accommodates \emph{mixture distributions}: post-selection estimators are randomly-weighted averages of the individual candidate estimators.
 Because they choose a single candidate with probability approaching one in the limit, consistent selection procedures make it impossible to represent this phenomenon.
 In contrast, conservative selection procedures remain random even as the sample size goes to infinity, allowing us to derive a mixture-of-normals limit distribution and, ultimately, to carry out valid inference post-moment selection.
 In the remainder of this section, I derive the asymptotic distribution of generic ``moment average'' estimators and use them to propose simulation-based procedures for post-moment selection estimators. 
 For certain examples it is possible to analytically characterize the limit distribution of a post-FMSC estimator without resorting to simulation-based methods.
 I explore this possibility in detail for my two running examples: OLS versus TSLS and choosing instrumental variables.
-I also briefly consider genuine moment average estimators which may have important advantages over selection.
+I also briefly consider a minimum-AMSE averaging estimator that combines OLS and TSLS. 
 
 \subsection{Moment Average Estimators}
 A generic moment average estimator takes the form
@@ -66,28 +65,26 @@ The conditions of Assumption \ref{assump:weights} are fairly mild.
 Requiring that the weights sum to one ensures that $\widehat{\mu}$ is a consistent estimator of $\mu_0$ and leads to a simpler expression for the limit distribution. 
 While somewhat less transparent, the second condition is satisfied by weighting schemes based on a number of familiar moment selection criteria.
 It follows immediately from Corollary \ref{cor:FMSClimit}, for example, that the FMSC converges in distribution to a function of $\tau$, $M$ and consistently estimable constants only. 
-The same is true for the $J$-test statistic, as seen from the following result.
+The same is weights based on the $J$-test statistic, as seen from the following result.
 \begin{thm}[Distribution of $J$-Statistic under Local Mis-Specification] 
 \label{pro:jstat}
 	Define the J-test statistic as per usual by $J_n(S)  = n \left[\Xi_S f_n(\widehat{\theta}_S)\right]' \widehat{\Omega}^{-1}\left[\Xi_S f_n(\widehat{\theta}_S)\right]$ where $\widehat{\Omega}^{-1}_S$ is a consistent estimator of $\Omega_S^{-1}$. Then, under the conditions of Theorem \ref{thm:normality}, we have $J_n(S) \rightarrow_dJ_S(\tau, M)$ where
 		$$J_S(\tau, M)=[\Omega_S^{-1/2}(M_S + \tau_S)]' (I - P_S)[\Omega_S^{-1/2}\Xi_S(M_S + \tau_S)],$$
 $M_S = \Xi_S M$, $\tau_S' = (0', \tau')\Xi_S'$, and $P_S$ is the projection matrix formed from the GMM identifying restrictions $\Omega^{-1/2}_S F_S$.
 \end{thm}
-Hence, normalized weights constructed from almost-surely continuous functions of either the FMSC or the $J$-test statistic satisfy Assumption \ref{assump:weights}. 
 
 Post-selection estimators are merely a special case of moment average estimators.
 To see why, consider the weight function
 $$\widehat{\omega}_S^{MSC} = \mathbf{1}\left\{\mbox{MSC}_n(S) = \min_{S'\in \mathscr{S}} \mbox{MSC}_n(S')\right\}$$where $\mbox{MSC}_n(S)$ is the value of some moment selection criterion evaluated at the sample observations $Z_{n1}\hdots, Z_{nn}$. 
 Now suppose $\mbox{MSC}_n(S) \rightarrow_d\mbox{MSC}_S(\tau,M)$, a function of $\tau$, $M$ and consistently estimable constants only. 
-Then, so long as the probability of ties, $P\left\{\mbox{MSC}_S(\tau,M) = \mbox{MSC}_{S'}(\tau,M) \right\}$, is zero for all $S\neq S'$, the continuous mapping theorem gives 
+Then, so long as the probability of ties, $P\left\{\mbox{MSC}_S(\tau,M) = \mbox{MSC}_{S'}(\tau,M) \right\}$, is zero for all $S\neq S'$, we have 
 	$$\widehat{\omega}_S^{MSC} \rightarrow_d \mathbf{1}\left\{\mbox{MSC}_S(\tau,M) = \min_{S'\in \mathscr{S}} \mbox{MSC}_{S'}(\tau,M)\right\}$$ 
 satisfying Assumption \ref{assump:weights} (b). 
 Thus, post-selection estimators based on the FMSC, a downward $J$-test procedure, or the GMM moment selection criteria of \cite{Andrews1999} all fall within the ambit of \ref{cor:momentavg}. 
 The consistent criteria of \cite{Andrews1999}, however, are not particularly interesting under local mis-specification.\footnote{For more discussion of these criteria, see Section \ref{sec:chooseIVsim} below.}
-Intuitively, because they aim to select all valid moment conditions w.p.a.1, we would expect that under Assumption \ref{assump:drift} they simply choose the full moment set in the limit. 
-The following result shows that this intuition is correct. 
+Intuitively, because they aim to select all valid moment conditions w.p.a.1, we would expect that under Assumption \ref{assump:drift} they choose the full moment set in the limit. 
+The following result shows that this intuition is correct.\footnote{This result is a special case of a more general phenomenon: consistent selection procedures cannot detect model violations of order $O(n^{-1/2})$.}
 \begin{thm}[Consistent Criteria under Local Mis-Specification]
 \label{pro:andrews}
 Consider a moment selection criterion of the form $MSC(S) = J_n(S) - h(|S|)\kappa_n$, where $h$ is strictly increasing,  $\lim_{n\rightarrow \infty}\kappa_n = \infty$, and $\kappa_n = o(n)$. Under the conditions of Theorem \ref{thm:normality}, $MSC(S)$ selects the full moment set with probability approaching one.
 \end{thm}
-The preceding result is a special case of a more general phenomenon: consistent selection procedures cannot detect model violations of order $O(n^{-1/2})$.
