@@ -3,7 +3,7 @@
 \label{sec:limitexperiment}
 The preceding section presented two confidence interval that account for the effects of moment selection on subsequent inference.
 The 1-Step interval is intuitive and computationally straightforward but lacks theoretical guarantees, while the 2-Step interval guarantees asymptotically valid inference at the cost of greater computational complexity and conservatism.
-To better understand these methods and the tradeoffs involved in deciding between them, I now specialize them to the two examples of FMSC selection that appear in the simulation studies described below.
+To better understand these methods and the trade-offs involved in deciding between them, I now specialize them to the two examples of FMSC selection that appear in the simulation studies described below.
 The structure of these examples allows us to bypass Algorithm \ref{alg:conf} and characterize the asymptotic properties of various proposals for post-FMSC without resorting to Monte Carlo simulations.
 Because this section presents asymptotic results, I treat any consistently estimable quantity that appears in a limit distribution as known.
 
@@ -15,14 +15,13 @@ In particular,
   \label{eq:FMSCLimitExperiment}
 \end{equation}
 with
-\begin{eqnarray*}
-  T &=& \sigma Z_1 + \tau\\
-  U &=& \eta Z_2 + c\tau\\
-  V &=& \eta Z_2 - c\sigma Z_1
-\end{eqnarray*}
+\begin{equation}
+  T = \sigma Z_1 + \tau, \quad
+  U = \eta Z_2 + c\tau, \quad
+  V = \eta Z_2 - c\sigma Z_1
+\end{equation}
 where $Z_1, Z_2$ are independent standard normal random variables, $\eta$, $\sigma$ and $c$ are consistently estimable constants, and $\tau$ is the local mis-specification parameter.
-This representation allows us to tabulate the asymptotic distribution, $F_{FMSC}$ without resorting to simulation.
-We have:
+This representation allows us to tabulate the asymptotic distribution, $F_{FMSC}$ as follows: 
 \begin{eqnarray}
   F_{FMSC}(x) &=& G(x) + H_1(x) + H_2(x) \\
   \label{eq:FFMSC}
@@ -35,9 +34,7 @@ We have:
 \end{eqnarray}
 where $\Phi$ is the CDF and $\varphi$ the pdf of a standard normal random variable.
 Note that the limit distribution of the post-FMSC distribution depends on $\tau$ in addition to the consistently estimable quantities $\sigma, \eta, c$ although I suppress this dependence to simplify the notation.
-While these expressions lack a closed form $G$, $H_1$ and $H_2$ are easy to compute.
-I provide numerical routines to evaluate both $F_{FMSC}$ and the corresponding quantile function $Q_{FMSC}$ 
-in my R package \texttt{fmscr}.\footnote{This package is open-source and freely available from \url{https://github.com/fditraglia/fmscr}.}
+While these expressions lack a closed form $G$, $H_1$ and $H_2$ are easy to compute, allowing us to calculate both $F_{FMSC}$ and the corresponding quantile function $Q_{FMSC}$\footnote{I provide code to evaluate both $F_{FMSC}$ and $Q_{FMSC}$ in my R package \texttt{fmscr}, available at \url{https://github.com/fditraglia/fmscr}.}
 
 The ability to compute $F_{FMSC}$ and $Q_{FMSC}$ allows us to answer a number of important questions about post-FMSC inference.
 First, suppose that we were to carry out FMSC selection and then construct a $(1 - \alpha) \times 100\%$ confidence interval \emph{conditional} in the selected estimator, completely ignoring the effects of the moment selection step.
