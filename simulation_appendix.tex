@@ -75,4 +75,23 @@ Results for other configurations of $\alpha_1, \alpha_2$, available upon request
   \label{tab:CISim100_2stepWideTau_ChooseIVs}
 \end{table}
 
+\subsection{Weak Instrument Simulations}
 
+\subsubsection{OLS versus IV}
+
+
+\begin{figure}
+\centering
+	\input{./WeakOLSvsIV/Results/RMSE_coarse_pi_baseline.tex}
+	\caption{RMSE values for the two-stage least squares (TSLS) estimator, the ordinary least squares (OLS) estimator, and the post-Focused Moment Selection Criterion (FMSC) estimator based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas described in Section \ref{sec:OLSvsIVExample}.}
+	\label{fig:OLSvsIV_RMSEbaseline_weak}
+\end{figure}
+
+\begin{figure}
+\centering
+	\input{./WeakOLSvsIV/Results/RMSE_coarse_pi_relative_all.tex}
+	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator, Durbin-Hausman-Wu pre-test estimators with $\alpha = 0.1$ (DWH90) and $\alpha = 0.05$ (DHW95), and the minmum-AMSE averaging estimator, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas described in Sections \ref{sec:OLSvsIVExample} and \ref{sec:momentavgexample}.}
+	\label{fig:OLSvsIV_AVG_weak}
+\end{figure}
+
+\subsubsection{Choosing Instrumental Variables}
