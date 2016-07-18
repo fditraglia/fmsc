@@ -1,6 +1,5 @@
 load("./Results/mse_results.Rdata")
 coarse.gamma <- results$coarse.gamma
-coarse.rho <- results$coarse.rho
 rm(results)
 
 #Set parameters defining plot layout, etc.
@@ -77,14 +76,6 @@ coarse.gamma <- mapply(function(x, y)
                     y = coarse.gamma.params$g, 
                     SIMPLIFY = FALSE)
 
-coarse.rho.params <- expand.grid(n = unique(coarse.rho$n), 
-                                 r = unique(coarse.rho$r))
-coarse.rho <- mapply(function(x, y) 
-                     subset(coarse.rho, n == x & r == y),
-                     x = coarse.rho.params$n,
-                     y = coarse.rho.params$r, 
-                     SIMPLIFY = FALSE)
-
 
 #This function takes a list of panels and repeatedly calls
 #rmse.plot to construct a grid of plots. We can pass it 
@@ -138,37 +129,10 @@ dev.off()
 
 
 
-#Coarse Grid for Rho
-tikz('./Results/RMSE_coarse_rho_baseline.tex',
-     width = plot.width, height = plot.height)
-  plot.grid(coarse.rho, nRows, nCols, baseline, 
-            legend.pos = "topleft")
-dev.off()
- 
-tikz('./Results/RMSE_coarse_rho_rel_pos.tex',
-     width = plot.width, height = plot.height)
-plot.grid(coarse.rho, nRows, nCols, rel.pos)
-dev.off()
-
-tikz('./Results/RMSE_coarse_rho_rel_J.tex',
-     width = plot.width, height = plot.height)
-plot.grid(coarse.rho, nRows, nCols, rel.J)
-dev.off()
-
-tikz('./Results/RMSE_coarse_rho_rel_MSC.tex',
-     width = plot.width, height = plot.height)
-plot.grid(coarse.rho, nRows, nCols, rel.MSC)
-dev.off()
-
-tikz('./Results/RMSE_coarse_rho_rel_combMSC.tex',
-     width = plot.width, height = plot.height)
-plot.grid(coarse.rho, nRows, nCols, rel.combMSC)
-dev.off()
-
 #Clean up
-rm(coarse.gamma, coarse.rho, nRows, nCols)
+rm(coarse.gamma, nRows, nCols)
 rm(line.colors, line.types, line.width)
 rm(rmse.plot, plot.grid)
 rm(baseline, rel.pos, rel.J, rel.MSC, rel.combMSC)
 rm(plot.width, plot.height, legend.inset)
-rm(coarse.gamma.params, coarse.rho.params)
+rm(coarse.gamma.params)
