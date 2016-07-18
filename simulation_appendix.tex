@@ -95,3 +95,17 @@ Results for other configurations of $\alpha_1, \alpha_2$, available upon request
 \end{figure}
 
 \subsubsection{Choosing Instrumental Variables}
+
+\begin{figure}
+\centering
+	\input{./WeakChooseIVs/Results/RMSE_coarse_gamma_baseline.tex}
+	\caption{RMSE values for the valid estimator, including only $(z_1, z_2, z_3)$, the full estimator, including $(z_1, z_2, z_3, w)$, and the post-Focused Moment Selection Criterion (FMSC) estimator based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVexample}.}
+	\label{fig:chooseIVsim_RMSEbaseline_weak}
+\end{figure}
+
+\begin{figure}
+\centering
+	\input{./WeakChooseIVs/Results/RMSE_coarse_gamma_rel_MSC.tex}
+	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator and the GMM-BIC, HQ, and AIC estimators based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVexample}.}
+	\label{fig:chooseIVsim_RMSErelMSC_weak}
+\end{figure}
