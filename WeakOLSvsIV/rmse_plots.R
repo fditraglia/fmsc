@@ -1,6 +1,5 @@
 load("./Results/mse_results.Rdata")
 coarse.pi <- results$coarse.pi
-coarse.rho <- results$coarse.rho
 rm(results)
 
 #Set parameters defining plot layout, etc.
@@ -78,14 +77,6 @@ coarse.pi <- mapply(function(x, y)
                     y = coarse.pi.params$p, 
                     SIMPLIFY = FALSE)
 
-coarse.rho.params <- expand.grid(n = unique(coarse.rho$n), 
-                                 r = unique(coarse.rho$r))
-coarse.rho <- mapply(function(x, y) 
-                     subset(coarse.rho, n == x & r == y),
-                     x = coarse.rho.params$n,
-                     y = coarse.rho.params$r, 
-                     SIMPLIFY = FALSE)
-
 
 #This function takes a list of panels and repeatedly calls
 #rmse.plot to construct a grid of plots. We can pass it 
@@ -123,27 +114,11 @@ plot.grid(coarse.pi, nRows, nCols, relative.all,
           legend.pos = "bottomright")
 dev.off()
 
-tikz('./Results/RMSE_coarse_rho_baseline.tex',
-     width = plot.width, height = plot.height)
-plot.grid(coarse.rho, nRows, nCols, baseline)
-dev.off()
-
-tikz('./Results/RMSE_coarse_rho_relative_DHW.tex',
-     width = plot.width, height = plot.height)
-plot.grid(coarse.rho, nRows, nCols, relative.DHW, 
-          legend.pos = "topleft")
-dev.off()
-
-tikz('./Results/RMSE_coarse_rho_relative_all.tex',
-     width = plot.width, height = plot.height)
-plot.grid(coarse.rho, nRows, nCols, relative.all)
-dev.off()
-
 
 #Clean up
-rm(coarse.pi, coarse.rho, nRows, nCols)
+rm(coarse.pi, nRows, nCols)
 rm(line.colors, line.types, line.width)
 rm(rmse.plot, plot.grid)
 rm(baseline, relative.DHW, relative.all)
 rm(plot.width, plot.height, legend.inset)
-rm(coarse.pi.params, coarse.rho.params)
+rm(coarse.pi.params)
