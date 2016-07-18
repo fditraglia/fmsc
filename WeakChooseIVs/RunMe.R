@@ -15,7 +15,7 @@ set.seed(1928)
 #you can use mclapply. If you have k 
 #cores, set nCores to k + 1 for best 
 #performance.
-nCores <- 5
+nCores <- detectCores()
 
 #Calculate RMSE results for the simulation
 #and store them in ./Results/rmse_results.Rdata
