@@ -14,7 +14,7 @@ For larger sample sizes, the relative performance of the FMSC and the $J$-test i
 \begin{figure}
 \centering
 	\input{./SimulationChooseIVs/Results/RMSE_coarse_gamma_rel_J.tex}
-	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator and the downward $J$-test estimator with $\alpha = 0.1$ (J90) and $\alpha = 0.05$ (J95) based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVexample}.}
+	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator and the downward $J$-test estimator with $\alpha = 0.1$ (J90) and $\alpha = 0.05$ (J95) based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas from Sections \ref{sec:chooseIVexample}.}
 	\label{fig:chooseIVsim_RMSErelJ}
 \end{figure}
 These results are broadly similar to those for the GMM moment selection criteria of \cite{Andrews1999} considered in Section \ref{sec:chooseIVsim}, which should not come as a surprise since the J-test statistic is an ingredient in the construction of the GMM-AIC, BIC and HQ. 
@@ -40,7 +40,7 @@ Full details are available upon request.
 \subsection{Simulation Results for the 2-Step Confidence Interval}
 \label{append:conf_sim}
 
-This appendix presents results for the 2-Step confidence interval in the simulation experiment described in Section \ref{sec:CIsim}.
+This appendix presents results for the 2-Step confidence interval in the simulation experiment from Section \ref{sec:CIsim}.
 Tables \ref{tab:CISim100_2stepWideTau_OLSvsIV} and \ref{tab:CISim100_2stepWideTau_ChooseIVs} 
 present coverage probabilities and average relative width of the two-step confidence interval procedure with $\alpha_1 = \alpha/4$ and $\alpha_2 = 3\alpha/4$, the finite sample analogues to Tables \ref{tab:Limit2StepWideTauOLSvsIV} and \ref{tab:Limit2StepWideTauChooseIVs}. 
 Results for other configurations of $\alpha_1, \alpha_2$, available upon request, result in even wider intervals.
@@ -88,36 +88,67 @@ All other parameters values are identical to those in the corresponding figures 
 We see from Figure \ref{fig:OLSvsIV_RMSEbaseline_weak} that the post-FMSC estimator dramatically outperforms the TSLS estimator in the presence of a weak instrument.
 Indeed, the RMSE curves for the these two estimators only cross in the bottom right panel where $\pi = 0.1$ and $N = 500$. 
 Turning our attention to Figure \ref{fig:OLSvsIV_AVG_weak}, the minimum-AMSE averaging estimator provides a uniform improvement over the post-FMSC estimator although the advantage is relatively small unless $\pi = 0.1$ and $N=500$. 
-Moreover, the DHW test with $\alpha = 0.05$ performs extremely well unless $\rho$ is fairly large.
-This is because it selects the OLS estimator with a higher probability than any of the other methods by construction.
-When the weak instrument problem is sufficiently severe, this is indeed the optimal decision.
+Moreover, the DHW test with $\alpha = 0.05$ performs extremely well unless $\rho$ is large.
+This is because, by construction, it is more likely to choose OLS than the other methods -- the correct decision if the instrument is sufficiently weak.
 
 
 \begin{figure}[h]
 \centering
 	\input{./WeakOLSvsIV/Results/RMSE_coarse_pi_baseline.tex}
-	\caption{RMSE values for the two-stage least squares (TSLS) estimator, the ordinary least squares (OLS) estimator, and the post-Focused Moment Selection Criterion (FMSC) estimator based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas described in Section \ref{sec:OLSvsIVExample}.}
+	\caption{RMSE values for the two-stage least squares (TSLS) estimator, the ordinary least squares (OLS) estimator, and the post-Focused Moment Selection Criterion (FMSC) estimator based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas from Section \ref{sec:OLSvsIVExample}.}
 	\label{fig:OLSvsIV_RMSEbaseline_weak}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 	\input{./WeakOLSvsIV/Results/RMSE_coarse_pi_relative_all.tex}
-	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator, Durbin-Hausman-Wu pre-test estimators with $\alpha = 0.1$ (DWH90) and $\alpha = 0.05$ (DHW95), and the minmum-AMSE averaging estimator, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas described in Sections \ref{sec:OLSvsIVExample} and \ref{sec:momentavgexample}.}
+	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator, Durbin-Hausman-Wu pre-test estimators with $\alpha = 0.1$ (DWH90) and $\alpha = 0.05$ (DHW95), and the minmum-AMSE averaging estimator, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas from Sections \ref{sec:OLSvsIVExample} and \ref{sec:momentavgexample}.}
 	\label{fig:OLSvsIV_AVG_weak}
 \end{figure}
 
+Figures \ref{fig:chooseIVsim_RMSErelMSC_weak} and \ref{fig:chooseIVsim_RMSEbaseline_weak} present RMSE comparisons for a slightly more general version of the simulation experiment from Section \ref{sec:chooseIVsim} in which the strength of the valid instruments can vary according to a scalar parameter $\pi$, specifically
+\begin{eqnarray}
+		y_i &=& 0.5 x_i + \epsilon_i\\ 
+		\label{eq:chooseIVDGP1_weak}
+		x_i &=& \pi (z_{1i} + z_{2i} + z_{3i}) + \gamma w_i + v_i 
+		\label{eq:chooseIVDGP2_weak}
+	\end{eqnarray}
+for $i=1, 2, \hdots, N$ where $(\epsilon_i, v_i, w_i, z_{i1}, z_{2i}, z_{3i})' \sim \mbox{ iid  } N(0,\mathcal{V})$ with
+\begin{equation}	
+	\mathcal{V} = \left[  \begin{array}
+		{cc} \mathcal{V}_1 & 0 \\ 0 & \mathcal{V}_2
+	\end{array}\right], \quad
+	\mathcal{V}_1 = \left[ \begin{array}
+		{ccc} 
+		1 & (0.5 - \gamma \rho) & \rho \\
+		(0.5 - \gamma \rho) & (1 - \pi^2 - \gamma^2) & 0\\ 
+		\rho & 0 & 1 \\ 
+	\end{array} \right], \quad \mathcal{V}_2 = I_3 / 3
+	\label{eq:chooseIVDGP3_weak}
+\end{equation}
+As in Section \ref{sec:chooseIVsim}, this setup keeps the variance of $x$ fixed at one and the endogeneity of $x$, $Cor(x, \epsilon)$, fixed at $0.5$ while allowing the relevance, $\gamma = Cor(x,w)$, and endogeneity, $\rho = Cor(w, \epsilon)$, of the instrument $w$ to vary.
+Moreover, the instruments $z_1, z_2, z_3$ remain valid and exogenous and the meaning of the parameters $\rho$ and $\gamma$ is unchanged.
+Whereas the design from Section \ref{sec:chooseIVsim} of the paper fixed $\pi$ equal to 1/3, however, the present design allows this parameter to vary.
+The first-stage R-squared for this more general design is $1 - \sigma_v^2 = \pi^2 + \gamma^2$.
+
+Setting $\pi$ to be small creates a weak instrument problem for the ``valid'' estimator that uses only $z_1, z_2$ and $z_3$ for estimation.
+Figures \ref{fig:chooseIVsim_RMSEbaseline_weak} and \ref{fig:chooseIVsim_RMSErelMSC_weak} present results for $\pi = 0.01$.
+The results are qualitatively similar to those of Figures \ref{fig:chooseIVsim_RMSEbaseline} and \ref{fig:chooseIVsim_RMSErelMSC} although somewhat starker.
+When the valid estimator suffers from a weak instruments problem, the post-FMSC estimator in general dramatically outperforms both the valid estimator and the GMM moment selection criteria of \cite{Andrews1999}.
+There are only two exceptions to this overall result.
+First when $N = 500$ and $\gamma = 0.2$, the valid estimator outperforms FMSC for $\rho$ greater than $0.25$.
+Second, when $N = 500$, GMM-BIC outperforms FMSC for the smallest values of $\rho$.
 
 \begin{figure}[h]
 \centering
 	\input{./WeakChooseIVs/Results/RMSE_coarse_gamma_baseline.tex}
-	\caption{RMSE values for the valid estimator, including only $(z_1, z_2, z_3)$, the full estimator, including $(z_1, z_2, z_3, w)$, and the post-Focused Moment Selection Criterion (FMSC) estimator based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVexample}.}
+	\caption{RMSE values for the valid estimator, including only $(z_1, z_2, z_3)$, the full estimator, including $(z_1, z_2, z_3, w)$, and the post-Focused Moment Selection Criterion (FMSC) estimator based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1_weak}--\ref{eq:chooseIVDGP3_weak} with $\pi = 0.01$ using the formulas from Section \ref{sec:chooseIVexample}.}
 	\label{fig:chooseIVsim_RMSEbaseline_weak}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 	\input{./WeakChooseIVs/Results/RMSE_coarse_gamma_rel_MSC.tex}
-	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator and the GMM-BIC, HQ, and AIC estimators based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVexample}.}
+	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator and the GMM-BIC, HQ, and AIC estimators based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1_weak}--\ref{eq:chooseIVDGP3_weak} with $\pi = 0.01$ using the formulas from Section \ref{sec:chooseIVexample}.}
 	\label{fig:chooseIVsim_RMSErelMSC_weak}
 \end{figure}
