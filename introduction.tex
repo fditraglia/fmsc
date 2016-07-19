@@ -9,7 +9,7 @@ The idea behind the FMSC is to trade off these two effects in the limit as an ap
 
  
 I suppose that two blocks of moment conditions are available: one that is assumed correctly specified, and another that may not be.
-This mimics the situation faced by an applied researcher who begins with a ``baseline'' set of relatively weak maintained assumptions and must decide whether to impose any of a collection of stronger but also more controversial ``suspect'' assumptions.
+This mimics the situation faced by an applied researcher who begins with a ``baseline'' set of relatively mild maintained assumptions and must decide whether to impose any of a collection of stronger but also more controversial ``suspect'' assumptions.
 When the (correctly specified) baseline moment conditions identify the model, the FMSC provides an asymptotically unbiased estimator of AMSE, allowing us select over the suspect moment conditions.\footnote{When this is not the case, it remains possible to use the AMSE framework to carry out a sensitivity analysis: see Appendix \ref{sec:digress}.}
 
 Continuing under the local mis-specification framework, I go on to derive the limit distribution of ``moment average estimators,'' data-dependent weighted averages of estimators based on different moment conditions.
@@ -70,9 +70,9 @@ A related idea underlies the combined moments (CM) estimator of \cite{Judge2007}
 For a different approach to combining OLS and TSLS estimators, similar in spirit to the Stein-estimator and developed independently of the work presented here, see \cite{HansenStein}. 
 \cite{ChengLiaoShi} provide related results for Stein-type moment averaging in a GMM context with potentially mis-specified moment conditions.
 
-A limitation of the results presented here is that they are based upon the assumption of strong identification and a fixed number of moment conditions.
-Extending the idea behind the FMSC to allow for weak identification or a large number of moment conditions is a challenging topic that I leave for future research.
-
+The results presented here are derived under strong identification and abstract from the many instruments problem. 
+Supplementary simulation results presented in Appendix \ref{sec:appendWeak}, however, suggest that can nevertheless perform quite well when the ``baseline'' assumptions only weakly identify the parameter of interest. 
+Extending the idea behind the FMSC to allow for weak identification and possibly a large number of moment conditions is a challenging topic that I leave for future research.
 
 The remainder of the paper is organized as follows.
 Section \ref{sec:asymp} describes the asymptotic framework and Section \ref{sec:FMSC} derives the FMSC, both in general and for two specific examples: OLS versus TSLS and choosing instrumental variables.

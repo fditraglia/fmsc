@@ -1,6 +1,9 @@
 %!TEX root = main.tex
-In finite samples, the use of a slightly endogenous but highly relevant instrument can reduce mean-squared error (MSE). Building on this observation, I propose a moment selection criterion for GMM in which moment conditions are chosen based on the MSE of their associated estimators rather than their validity: the focused moment selection criterion (FMSC). 
-I then show how the framework used to derive the FMSC can address the problem of inference post-moment selection.
+In finite samples, the use of a slightly endogenous but highly relevant instrument can reduce mean-squared error (MSE). 
+Building on this observation, I propose a novel moment selection procedure for GMM -- the Focused Moment Selection Criterion (FMSC) -- in which moment conditions are chosen not based on their validity but on the MSE of their associated estimator of a user-specified target parameter.
+The FMSC mimics the situation faced by an applied researcher who begins with a set of relatively mild ``baseline'' assumptions and must decide whether to impose any of a collection of stronger but more controversial ``suspect'' assumptions.
+When the (correctly specified) baseline moment conditions identify the model, the FMSC provides an asymptotically unbiased estimator of asymptotic MSE, allowing us to select over the suspect moment conditions.
+I go on to show how the framework used to derive the FMSC can address the problem of inference post-moment selection.
 Treating post-selection estimators as a special case of moment-averaging, in which estimators based on different moment sets are given data-dependent weights, I propose  simulation-based procedures for inference that can be applied to a variety of formal and informal moment-selection and averaging procedures.
 Both the FMSC and confidence interval procedures perform well in simulations.
 I conclude with an empirical example examining the effect of instrument selection on the estimated relationship between malaria and income.

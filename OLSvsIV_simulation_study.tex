@@ -41,7 +41,6 @@ Because the FMSC is itself a random variable, however, it sometimes makes moment
 For this reason it does not attain an RMSE equal to the lower envelope of the OLS and TSLS estimators.
 The larger the RMSE difference between OLS and TSLS, however, the closer the FMSC comes to this lower envelope: costly mistakes are rare.
 
-
 \begin{figure}
 \centering
 	\input{./SimulationOLSvsIV/Results/RMSE_coarse_pi_baseline.tex}
@@ -70,3 +69,7 @@ The performance of the moment average estimator is very strong: it provides the 
 Because this example involves a scalar target parameter, no selection or averaging scheme can provide a \emph{uniform} improvement over the minimax estimator, namely TSLS. 
 But the cost of protection against the worst case is extremely poor performance when $\pi$ and $N$ are small.
 When this is the case, there is a strong argument for preferring the FMSC or minimum-AMSE estimator: we can reap the benefits of OLS when $\rho$ is small without risking the extremely large biases that could result if $\rho$ is in fact large.
+
+Further simulation results for $\pi \in \left\{ 0.01, 0.05, 0.1 \right\}$ appear in Appendix \ref{sec:appendWeak}.
+For these parameter values the TSLS estimator suffers from a weak instrument problem leading the FMSC to substantially outperform the TSLS estimator.
+See \ref{sec:appendWeak} Appendix for a more detailed discussion.
