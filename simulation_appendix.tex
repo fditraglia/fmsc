@@ -1,12 +1,12 @@
 %!TEX root = main.tex
 \section{Supplementary Simulation Results}
 \label{sec:simsupplement}
-This section discusses additional simulation results for the choosing instrumental variables example, as a supplement to those given in Section \ref{sec:chooseIVsim}.
+This section discusses additional simulation results for the OLS versus IV example and the choosing instrumental variables example, as a supplement to the results given in Sections \ref{sec:OLSvsIVsim}--\ref{sec:CIsim} of the paper.
 
 \subsection{Downward J-Test}
 \label{sec:downwardJ}
-The downward $J$-test is an informal but fairly common procedure for moment selection in practice.
-In the context of the simulation example from Section \ref{sec:chooseIVsim} it amounts to simply using the full estimator unless it is rejected by a $J$-test.
+This appendix presents simulation results for the downward $J$-test -- an informal moment selection method that is fairly common in applied work -- for the example from Section \ref{sec:chooseIVsim}.
+In this simulation design the downward J-test amounts to simply using the full estimator unless it is rejected by a $J$-test.
 Table \ref{fig:chooseIVsim_RMSErelJ} compares the RMSE of the post-FMSC estimator to that of the downward $J$-test with $\alpha = 0.1$ (J90), and $\alpha = 0.05$ (J95).
 For robustness, I calculate the $J$-test statistic using a centered covariance matrix estimator, as in the FMSC formulas from section \ref{sec:chooseIVexample}.
 Unlike the FMSC, the downward $J$-test is very badly behaved for small sample sizes, particularly for the smaller values of $\gamma$.
@@ -75,35 +75,47 @@ Results for other configurations of $\alpha_1, \alpha_2$, available upon request
   \label{tab:CISim100_2stepWideTau_ChooseIVs}
 \end{table}
 
-\subsection{Weak Instrument Simulations}
+\newpage
 
-\subsubsection{OLS versus IV}
+\subsection{Weak Instruments} 
+The FMSC is derived under an asymptotic sequence that assumes strong identification.
+But what if this assumption fails? 
+The following simulation results provide a partial answer to this question by extending the RMSE comparisons from Sections \ref{sec:OLSvsIVsim} and \ref{sec:chooseIVsim} to the case in which the ``valid'' estimator suffers from a weak instruments problem.
+
+Figures \ref{fig:OLSvsIV_RMSEbaseline_weak} and \ref{fig:OLSvsIV_AVG_weak} present further results for the OLS versus IV example from \ref{sec:OLSvsIVsim} with $\pi = 0.1, 0.05,$ and $0.01$.
+These values correspond to a mild, moderate, and severe weak instrument problem for the TSLS estimator.
+All other parameters values are identical to those in the corresponding figures from the body of the paper (Figures \ref{fig:OLSvsIV_RMSEbaseline} and \ref{fig:OLSvsIV_AVG}).
+We see from Figure \ref{fig:OLSvsIV_RMSEbaseline_weak} that the post-FMSC estimator dramatically outperforms the TSLS estimator in the presence of a weak instrument.
+Indeed, the RMSE curves for the these two estimators only cross in the bottom right panel where $\pi = 0.1$ and $N = 500$. 
+Turning our attention to Figure \ref{fig:OLSvsIV_AVG_weak}, the minimum-AMSE averaging estimator provides a uniform improvement over the post-FMSC estimator although the advantage is relatively small unless $\pi = 0.1$ and $N=500$. 
+Moreover, the DHW test with $\alpha = 0.05$ performs extremely well unless $\rho$ is fairly large.
+This is because it selects the OLS estimator with a higher probability than any of the other methods by construction.
+When the weak instrument problem is sufficiently severe, this is indeed the optimal decision.
 
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 	\input{./WeakOLSvsIV/Results/RMSE_coarse_pi_baseline.tex}
 	\caption{RMSE values for the two-stage least squares (TSLS) estimator, the ordinary least squares (OLS) estimator, and the post-Focused Moment Selection Criterion (FMSC) estimator based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas described in Section \ref{sec:OLSvsIVExample}.}
 	\label{fig:OLSvsIV_RMSEbaseline_weak}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 	\input{./WeakOLSvsIV/Results/RMSE_coarse_pi_relative_all.tex}
 	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator, Durbin-Hausman-Wu pre-test estimators with $\alpha = 0.1$ (DWH90) and $\alpha = 0.05$ (DHW95), and the minmum-AMSE averaging estimator, based on 10,000 simulation draws from the DGP given in Equations \ref{eq:OLSvsIVDGP1}--\ref{eq:OLSvsIVDGP3} using the formulas described in Sections \ref{sec:OLSvsIVExample} and \ref{sec:momentavgexample}.}
 	\label{fig:OLSvsIV_AVG_weak}
 \end{figure}
 
-\subsubsection{Choosing Instrumental Variables}
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 	\input{./WeakChooseIVs/Results/RMSE_coarse_gamma_baseline.tex}
 	\caption{RMSE values for the valid estimator, including only $(z_1, z_2, z_3)$, the full estimator, including $(z_1, z_2, z_3, w)$, and the post-Focused Moment Selection Criterion (FMSC) estimator based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVexample}.}
 	\label{fig:chooseIVsim_RMSEbaseline_weak}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 	\input{./WeakChooseIVs/Results/RMSE_coarse_gamma_rel_MSC.tex}
 	\caption{RMSE values for the post-Focused Moment Selection Criterion (FMSC) estimator and the GMM-BIC, HQ, and AIC estimators based on 20,000 simulation draws from the DGP given in Equations \ref{eq:chooseIVDGP1}--\ref{eq:chooseIVDGP3} using the formulas described in Sections \ref{sec:chooseIVexample}.}
