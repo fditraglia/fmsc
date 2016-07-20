@@ -52,7 +52,7 @@ To estimate the unknowns required to turn this inequality into a moment selectio
   $$\widehat{\sigma}_x^2 = n^{-1}\mathbf{x}'\mathbf{x}, \quad \widehat{\gamma}^2 = n^{-1}\mathbf{x}'Z(Z'Z)^{-1}Z'\mathbf{x}, \quad \widehat{\sigma}_v^2 =  \widehat{\sigma}_x^2 - \widehat{\gamma}^2$$
 and define
 $$\widehat{\sigma}_\epsilon^2 = n^{-1}\left(\textbf{y} - \textbf{x}\widetilde{\beta}_{TSLS} \right)'\left(\textbf{y} - \textbf{x}\widetilde{\beta}_{TSLS} \right)$$
-Under local mis-specification each of these estimators is consistent for its population counterpart.\footnote{While using the OLS residuals to estimate $\sigma_\epsilon^2$ \emph{also} provides a consistent estimate under local mis-specification, the estimator based on the TSLS residuals should be more robust unless the instruments are quite weak.}
+Under local mis-specification each of these estimators is consistent for its population counterpart.\footnote{While using the OLS residuals to estimate $\sigma_\epsilon^2$ \emph{also} provides a consistent estimate under local mis-specification, the estimator based on the TSLS residuals should be more robust.} 
 All that remains is to estimate $\tau^2$. Specializing Theorem \ref{thm:tau} and Corollary \ref{cor:tautau} to the present example gives the following result.
 \begin{thm}
 	\label{thm:tauOLSvsIV}
@@ -73,4 +73,4 @@ It turns out that in this particular example, although not in general, the FMSC 
 The equivalence between FMSC selection and a DHW test in this example is helpful for two reasons. 
 First, it provides a novel justification for the use of the DHW test to select between OLS and TSLS. So long as it is carried out with $\alpha \approx 16\%$, the DHW test is equivalent to selecting the estimator that minimizes an asymptotically unbiased estimator of AMSE. 
 Note that this significance level differs from the more usual values of 5\% or 10\% in that it leads us to select TSLS \emph{more often}: OLS should indeed be given the benefit of the doubt, but not by so wide a margin as traditional practice suggests. 
-Second, this equivalence shows that the FMSC can be viewed as an \emph{extension} of the idea behind the familiar DHW test to more general GMM environments. 
+Second, this equivalence shows that the FMSC can be viewed as an \emph{extension} of the idea behind the familiar DHW test to more general GMM environments.\footnote{Note that the FMSC in this example, characterized in Theorem \ref{thm:DHW}, chooses between OLS and IV to minimize estimator AMSE. If one wishes to carry out inference post-selection one must contend with the size distortions of the familiar ``textbook'' confidence interval procedure, as pointed out by \cite{Guggenberger2010}. I discuss this point extensively below in Section \ref{sec:avg} ans propose possible remedies.}
