@@ -34,7 +34,7 @@ This can be seend from the simulation results: even with 10,000 replications, th
 For any values of $N$ and $\pi$ there is a value of $\rho$ below which OLS outperforms TSLS: as $N$ and $\pi$ increase this value approaches zero; as they decrease it approaches one.
 In practice, of course, $\rho$ in unknown so we cannot tell which of OLS and TSLS is to be preferred \emph{a priori}.
 If we make it our policy to always use TSLS we will protect ourselves against bias at the potential cost of very high variance.
-On the other hand, we make it our policy to always use OLS we protect ourselves against high variance at the potential cost of severe bias. 
+If, on the other hand, we make it our policy to always use OLS then we protect ourselves against high variance at the potential cost of severe bias. 
 FMSC represents a compromise between these two extremes that does not require advance knowledge of $\rho$. 
 When the RMSE of TSLS is high, the FMSC behaves more like OLS; when the RMSE of OLS is high it behaves more like TSLS.
 Because the FMSC is itself a random variable, however, it sometimes makes moment selection mistakes.\footnote{For more discussion of this point, see Section \ref{sec:avg}.} 
