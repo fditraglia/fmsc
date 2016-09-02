@@ -2,10 +2,10 @@
 \subsection{OLS versus TSLS Example}
 \label{sec:OLSvsIVExample}
 The simplest interesting application of the FMSC is choosing between ordinary least squares (OLS) and two-stage least squares (TSLS) estimators of the effect $\beta$ of a single endogenous regressor $x$ on an outcome of interest $y$.
-The intuition is straightforward: because TSLS is a high-variance estimator, OLS will have a lower mean-squared error provided that $x$ isn't \emph{too} endogenous.\footnote{Because the moments of the TSLS estimator only exist up to the order of overidentificiation \citep{Phillips1980, Kinal} mean-squared error should be understood to refer to ``trimmed'' mean-squared error when the number of instruments is two or fewer. For details, see Appendix \ref{append:trim}.}
-To keep the presentation transparent, I work within an iid, homoskedastic setting for this example and assume, without loss of generality, that there are no exogenous regressors.\footnote{The homoskedasticity assumption concerns the \emph{limit} random variables: under local mis-specification there will be heteroskedasticity for fixed $n$. See Assumption \ref{assump:OLSvsIV} in Appendix \ref{sec:sufficient_conditions} for details.}
+The intuition is straightforward: because TSLS is a high-variance estimator, OLS will have a lower mean-squared error provided that $x$ isn't \emph{too} endogenous.\footnote{Because the moments of the TSLS estimator only exist up to the order of overidentificiation \citep{Phillips1980, Kinal} mean-squared error should be understood to refer to ``trimmed'' mean-squared error when the number of instruments is two or fewer. For details, see Online Appendix \ref{append:trim}.}
+To keep the presentation transparent, I work within an iid, homoskedastic setting for this example and assume, without loss of generality, that there are no exogenous regressors.\footnote{The homoskedasticity assumption concerns the \emph{limit} random variables: under local mis-specification there will be heteroskedasticity for fixed $n$. See Assumption \ref{assump:OLSvsIV} in Online Appendix \ref{sec:sufficient_conditions} for details.}
 Equivalently we may suppose that any exogenous regressors, including a constant, have been ``projected out.''
-Low-level sufficient conditions for all of the results in this section appear in Assumption \ref{assump:OLSvsIV} of Appendix \ref{sec:sufficient_conditions}.
+Low-level sufficient conditions for all of the results in this section appear in Assumption \ref{assump:OLSvsIV} of Online Appendix \ref{sec:sufficient_conditions}.
 The data generating process is
     \begin{eqnarray}
 			y_{ni} &=& \beta x_{ni}  + \epsilon_{ni}\\
@@ -18,7 +18,7 @@ $\widetilde{\beta}_{TSLS} = \left(\mathbf{x}'P_Z\mathbf{x}\right)^{-1}\mathbf{x}
 
 \begin{thm}[OLS and TSLS Limit Distributions]
 	\label{thm:OLSvsIV} 
-		Let $(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})$ be a triangular array of random variables such that $E[\mathbf{z}_{ni} \epsilon_{ni}]=\mathbf{0}$, $E[\mathbf{z}_{ni} v_{ni}]=\mathbf{0}$, and $E[\epsilon_{ni}v_{ni}] = \tau/\sqrt{n}$ for all $n$. Then, under standard regularity conditions, e.g. Assumption \ref{assump:OLSvsIV}, 
+  Let $(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})$ be a triangular array of random variables such that $E[\mathbf{z}_{ni} \epsilon_{ni}]=\mathbf{0}$, $E[\mathbf{z}_{ni} v_{ni}]=\mathbf{0}$, and $E[\epsilon_{ni}v_{ni}] = \tau/\sqrt{n}$ for all $n$. Then, under standard regularity conditions, e.g. Assumption \ref{assump:OLSvsIV} in Online Appendix \ref{sec:sufficient_conditions}, 
 	$$
 \left[
 \begin{array}{c}

@@ -1,5 +1,5 @@
 %!TEX root = main.tex
-\section{Moment Averaging \& Post-Selection Estimators}
+\section{Moment Averaging and Post-Selection Estimators}
 \label{sec:avg}
 Because it is constructed from $\widehat{\tau}$, the FMSC is a random variable, even in the limit.
 Combining Corollary \ref{cor:tautau} with Equation \ref{eq:fmsc} gives the following.
@@ -65,7 +65,7 @@ The conditions of Assumption \ref{assump:weights} are fairly mild.
 Requiring that the weights sum to one ensures that $\widehat{\mu}$ is a consistent estimator of $\mu_0$ and leads to a simpler expression for the limit distribution. 
 While somewhat less transparent, the second condition is satisfied by weighting schemes based on a number of familiar moment selection criteria.
 It follows immediately from Corollary \ref{cor:FMSClimit}, for example, that the FMSC converges in distribution to a function of $\tau$, $M$ and consistently estimable constants only. 
-The same is weights based on the $J$-test statistic, as seen from the following result.
+The same is true for weights based on the $J$-test statistic, as seen from the following result.
 \begin{thm}[Distribution of $J$-Statistic under Local Mis-Specification] 
 \label{pro:jstat}
 	Define the J-test statistic as per usual by $J_n(S)  = n \left[\Xi_S f_n(\widehat{\theta}_S)\right]' \widehat{\Omega}^{-1}\left[\Xi_S f_n(\widehat{\theta}_S)\right]$ where $\widehat{\Omega}^{-1}_S$ is a consistent estimator of $\Omega_S^{-1}$. Then, under the conditions of Theorem \ref{thm:normality}, we have $J_n(S) \rightarrow_dJ_S(\tau, M)$ where

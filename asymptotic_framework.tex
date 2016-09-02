@@ -20,7 +20,7 @@ For any fixed sample size $n$, the expectation of $h$ evaluated at the true para
 Unless all components of $\tau$ are zero, some of the moment conditions contained in $h$ are mis-specified. 
 In the limit however, this mis-specification vanishes, as $\tau/\sqrt{n}$ converges to zero. 
 Uniform integrability combined with weak convergence implies convergence of expectations, so that $E[g(Z_i, \theta_0)]=0$ and $E[h(Z_i, \theta_0)]=0$. Because the limiting random vectors $Z_i$ are identically distributed, I suppress the $i$ subscript and simply write $Z$ to denote their common marginal law, e.g.\ $E[h(Z,\theta_0)]=0$. 
-Local mis-specification is \emph{not} intended as a literal description of real-world datasets: it is merely a device that gives asymptotic bias-variance trade-off that mimics the finite-sample intuition.
+Local mis-specification is \emph{not} intended as a literal description of real-world datasets: it is merely a device that gives an asymptotic bias-variance trade-off that mimics the finite-sample intuition.
 Moreover, while I work with an iid triangular array for simplicity, the results presented here can be adapted to handle dependent random variables.
 
 \subsection{Candidate GMM Estimators}
@@ -61,7 +61,7 @@ The following high level assumptions are sufficient for the consistency and asym
 \end{assump}
 
 Although Assumption \ref{assump:highlevel} closely approximates the standard regularity conditions for GMM estimation, establishing primitive conditions for Assumptions \ref{assump:highlevel} (d), (e), (g) and (h) is slightly more involved under local mis-specification. 
-Low-level sufficient conditions for the two running examples considered in this paper appear in Appendix \ref{sec:sufficient_conditions}.
+Low-level sufficient conditions for the two running examples considered in this paper appear in Online Appendix \ref{sec:sufficient_conditions}.
 For more general results, see \cite{Andrews1988} Theorem 2 and \cite{Andrews1992} Theorem 4.  
 Notice that identification, (c), and continuity, (d), are conditions on the distribution of $Z$, the marginal law to which each $Z_{ni}$ converges. 
 
@@ -107,7 +107,7 @@ An advantage of Assumption \ref{assump:Andrews} is that, under fixed mis-specifi
 In the notation of the present paper this corresponds to having no moment conditions in the $g$ block. As \citet[p.\ 254]{Hallbook} points out, however, the second part of Assumption \ref{assump:Andrews} can fail even in very simple settings.
 When it does fail, the selected GMM estimator may no longer be consistent for $\theta_0$. 
 A different approach to identification is to assume that there is a minimal set of at least $r$ moment conditions \emph{known} to be correctly specified.
-This is the approach I follow here, as do \cite{Liao} and \cite{ChengLiao}.\footnote{For a dicussion of why Assumption \ref{assump:Identification} is necessary and how to proceed when it fails, see Appendix \ref{sec:digress}.}
+This is the approach I follow here, as do \cite{Liao} and \cite{ChengLiao}.\footnote{For a dicussion of why Assumption \ref{assump:Identification} is necessary and how to proceed when it fails, see Online Appendix \ref{sec:digress}.}
 
 \begin{assump}[FMSC Identification Condition] 
 \label{assump:Identification}
@@ -126,7 +126,7 @@ Assumption \ref{assump:Identification} and Theorem \ref{thm:normality} immediate
 \end{cor}
 
 Both Assumptions \ref{assump:Andrews} and \ref{assump:Identification} are strong, and neither fully nests the other. 
-In the context of the present paper, Assumption \ref{assump:Identification} is meant to represent a situation in which an applied research chooses between two groups of assumptions.
+In the context of the present paper, Assumption \ref{assump:Identification} is meant to represent a situation in which an applied researcher chooses between two groups of assumptions.
 The $g$--block contains the ``baseline'' assumptions while the $h$--block contains a set of stronger, more controversial ``suspect'' assumptions.
 The FMSC is designed for settings in which the $h$--block is expected to contain a substantial amount of information beyond that already contained in the $g$--block. 
 The idea is that, if we knew the $h$--block was correctly specified, we would expect a large gain in efficiency by including it in estimation. 

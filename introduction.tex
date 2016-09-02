@@ -5,10 +5,10 @@ Building on this observation, I propose a novel moment selection criterion for g
 Rather than selecting only valid moment conditions, the FMSC chooses from a set of potentially mis-specified moment conditions based on the asymptotic mean squared error (AMSE) of their associated GMM estimators of a user-specified scalar target parameter $\mu$.
 To ensure a meaningful bias-variance tradeoff in the limit, I employ a drifting asymptotic framework in which mis-specification, while present for any fixed sample size, vanishes asymptotically.
 In the presence of such \emph{locally mis-specified} moment conditions, GMM remains consistent although, centered and rescaled, its limiting distribution displays an asymptotic bias. Adding an additional mis-specified moment condition introduces a further source of bias while reducing asymptotic variance. 
-The idea behind the FMSC is to trade off these two effects in the limit as an approximation to finite sample behavior.\footnote{When finite-sample MSE is undefined, AMSE comparisons remain meaningful: see Appendix \ref{append:trim}.}
+The idea behind the FMSC is to trade off these two effects in the limit as an approximation to finite sample behavior.\footnote{When finite-sample MSE is undefined, AMSE comparisons remain meaningful: see Online Appendix \ref{append:trim}.}
 I suppose that two blocks of moment conditions are available: one that is assumed correctly specified, and another that may not be.
 This mimics the situation faced by an applied researcher who begins with a ``baseline'' set of relatively mild maintained assumptions and must decide whether to impose any of a collection of stronger but also more controversial ``suspect'' assumptions.
-When the (correctly specified) baseline moment conditions identify the model, the FMSC provides an asymptotically unbiased estimator of AMSE, allowing us select over the suspect moment conditions.\footnote{When this is not the case, it remains possible to use the AMSE framework to carry out a sensitivity analysis: see Appendix \ref{sec:digress}.}
+When the (correctly specified) baseline moment conditions identify the model, the FMSC provides an asymptotically unbiased estimator of AMSE, allowing us select over the suspect moment conditions.\footnote{When this is not the case, it remains possible to use the AMSE framework to carry out a sensitivity analysis: see Online Appendix \ref{sec:digress}.}
 
 The primary goal of the FMSC is to select estimators with low AMSE, but researchers typically wish to report confidence intervals along with parameter estimates.
 Unfortunately the usual procedures for constructing asymptotic confidence intervals for GMM fail when applied to estimators chosen using a moment selection procedure.
@@ -27,7 +27,7 @@ While my methods apply to general GMM models, I focus on two simple but empirica
 In the OLS versus TSLS example the FMSC takes a particularly transparent form, providing a risk-based justification for the Durbin-Hausman-Wu test, and leading to a novel ``minimum-AMSE'' averaging estimator that combines OLS and TSLS.
 The FMSC, averaging estimator, and related confidence interval procedures work well in practice, as I demonstrate in a series of simulation experiments and an empirical example from development economics.
 
-The FMSC and minimum-AMSE averaging estimator considered here are derived for a scalar parameter interest, as this is the most common situation encountered in applied work.\footnote{For an extension of the FMSC to vector target parameters, see Appendix \ref{append:mult}.}
+The FMSC and minimum-AMSE averaging estimator considered here are derived for a scalar parameter interest, as this is the most common situation encountered in applied work.\footnote{For an extension of the FMSC to vector target parameters, see Online Appendix \ref{append:mult}.}
 As a consequence, Stein-type results do not apply: it is impossible to construct an estimator with uniformly lower risk than the ``valid'' estimator that uses only the baseline moment conditions.
 Nevertheless, as my simulation results show, selection and averaging can substantially outperform the valid estimator over large regions of the parameter space, particularly when the ``suspect'' moment conditions are highly informative and \emph{nearly} correct.
 This is precisely the situation for which the FMSC is intended.
@@ -75,11 +75,11 @@ For a different approach to combining OLS and TSLS estimators, similar in spirit
 \cite{ChengLiaoShi} provide related results for Stein-type moment averaging in a GMM context with potentially mis-specified moment conditions.
 
 The results presented here are derived under strong identification and abstract from the many instruments problem. 
-Supplementary simulation results presented in Appendix \ref{sec:appendWeak}, however, suggest that the FMSC can nevertheless perform well when the ``baseline'' assumptions only weakly identify the target parameter. 
+Supplementary simulation results presented in Online Appendix \ref{sec:appendWeak}, however, suggest that the FMSC can nevertheless perform well when the ``baseline'' assumptions only weakly identify the target parameter. 
 Extending the idea behind the FMSC to allow for weak identification and possibly a large number of moment conditions is a challenging topic that I leave for future research.
 
 The remainder of the paper is organized as follows.
 Section \ref{sec:asymp} describes the asymptotic framework and Section \ref{sec:FMSC} derives the FMSC, both in general and for two specific examples: OLS versus TSLS and choosing instrumental variables.
 Section \ref{sec:avg} studies moment average estimators and shows how they can be used to construct valid confidence intervals post-moment selection.
 Section \ref{sec:simulations} presents simulation results and Section \ref{sec:application} considers an empirical example from development economics.
-Proofs appear at the end of the document; computational details and additional material appear in a Supplementary Appendix. 
+Proofs appear at the end of the document; computational details and additional material appear in an Online Appendix. 

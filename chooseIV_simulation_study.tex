@@ -28,13 +28,13 @@ The additional instrument $w$ is only relevant if $\gamma \neq 0$ and is only ex
 Since $x$ has unit variance, the first-stage R-squared for this simulation design is simply $1 - \sigma_v^2 = 1/9 + \gamma^2$.
 Hence, when  $\gamma = 0$, so that $w$ is irrelevant, the first-stage R-squared is just over 0.11.
 Increasing $\gamma$ increases the R-squared of the first-stage.
-This design satisfies the sufficient conditions for Theorem \ref{thm:chooseIV} given in Assumption \ref{assump:chooseIV}.
+This design satisfies the sufficient conditions for Theorem \ref{thm:chooseIV} given in Assumption \ref{assump:chooseIV} from Online Appendix \ref{sec:sufficient_conditions}.
 When $\gamma = 0$, it is a special case of the DGP from Section \ref{sec:OLSvsIVsim}.
 
 As in Section \ref{sec:OLSvsIVsim}, the goal of moment selection in this exercise is to estimate the effect of $x$ on $y$, as before 0.5, with minimum MSE.
 In this case, however, the choice is between two TSLS estimators rather than OLS and TSLS: the \emph{valid} estimator uses only $z_1, z_2,$ and $z_3$ as instruments, while the \emph{full} estimator uses $z_1, z_2, z_3,$ and $w$.
 The inclusion of $z_1, z_2$ and $z_3$ in both moment sets means that the order of over-identification is two for the valid estimator and three for the full estimator. 
-Because the moments of the TSLS estimator only exist up to the order of over-identification \citep{Phillips1980}, this ensures that the small-sample MSE is well-defined.\footnote{Alternatively, one could use fewer instruments for the valid estimator and compare the results using \emph{trimmed} MSE. For details, see Appendix \ref{append:trim}.}
+Because the moments of the TSLS estimator only exist up to the order of over-identification \citep{Phillips1980}, this ensures that the small-sample MSE is well-defined.\footnote{Alternatively, one could use fewer instruments for the valid estimator and compare the results using \emph{trimmed} MSE. For details, see Online Appendix \ref{append:trim}.}
 All estimators in this section are calculated via TSLS without a constant term using the expressions from Section \ref{sec:chooseIVexample} and 20,000 simulation replications.
  
 Figure \ref{fig:chooseIVsim_RMSEbaseline} presents RMSE values for the valid estimator, the full estimator, and the post-FMSC estimator for various combinations of $\gamma$, $\rho$, and $N$.
@@ -62,13 +62,13 @@ Like the maximum likelihood model selection criteria upon which they are based, 
 Figure \ref{fig:chooseIVsim_RMSErelMSC} gives the RMSE values for the post-FMSC estimator alongside those of the post-GMM-BIC, HQ and AIC estimators.
 I calculate the $J$-test statistic using a centered covariance matrix estimator, following the recommendation of \cite{Andrews1999}.
 For small sample sizes, the GMM-BIC, AIC and HQ are quite erratic: indded for $N = 50$ the FMSC has a uniformly smaller RMSE.
-This problem comes from the fact that the $J$-test statistic can be very badly behaved in small samples.\footnote{For more details, see Appendix \ref{sec:downwardJ}.}
+This problem comes from the fact that the $J$-test statistic can be very badly behaved in small samples.\footnote{For more details, see Online Appendix \ref{sec:downwardJ}.}
 As the sample size becomes larger, the classic tradeoff between consistent and conservative selection emerges.
 For the smallest values of $\rho$ the consistent criteria outperform the conservative criteria; for moderate values the situation is reversed.
 The consistent criteria, however, have the highest worst-case RMSE.
-For a discussion of a combined strategy based on the GMM information criteria of \cite{Andrews1999} and the canonical correlations information criteria of \cite{HallPeixe2003}, see Appendix \ref{sec:CCIC}.
-For a comparison with the downward $J$-test, see Appendix \ref{sec:downwardJ}.
-Appendix \ref{sec:appendWeak} presents results for a modified simulation experiment in which the valid estimator suffers from a weak instrument problem. 
+For a discussion of a combined strategy based on the GMM information criteria of \cite{Andrews1999} and the canonical correlations information criteria of \cite{HallPeixe2003}, see Online Appendix \ref{sec:CCIC}.
+For a comparison with the downward $J$-test, see Online Appendix \ref{sec:downwardJ}.
+Online Appendix \ref{sec:appendWeak} presents results for a modified simulation experiment in which the valid estimator suffers from a weak instrument problem. 
 The FMSC performs very well in this case.
 
 \begin{figure}

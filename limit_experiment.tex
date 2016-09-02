@@ -8,7 +8,7 @@ The structure of these examples allows us to bypass Algorithm \ref{alg:conf} and
 Because this section presents asymptotic results, I treat any consistently estimable quantity that appears in a limit distribution as known.
 
 In both the OLS versus IV example from Section \ref{sec:OLSvsIVExample} and the slightly simplified version of the choosing instrument variables example implemented in Section \ref{sec:chooseIVsim}, the post-FMSC estimator $\widehat{\beta}_{FMSC}$ converges to a very convenient limit experiment.\footnote{The simplified version of the choosing instrumental variables example considers a single potentially endogenous instrument and imposes homoskedasticity.
-  For more details see Section \ref{sec:chooseIVsim} and Appendix \ref{append:limitexperiment}.}
+  For more details see Section \ref{sec:chooseIVsim} and Online Appendix \ref{append:limitexperiment}.}
 In particular, 
 \begin{equation}
   \sqrt{n}(\widehat{\beta}_{FMSC} - \beta) \overset{d}{\rightarrow}  \mathbf{1}\left\{ |T|<\sigma \sqrt{2} \right\} U +  \mathbf{1}\left\{ |T|\geq\sigma \sqrt{2} \right\} V.
@@ -70,7 +70,7 @@ As a first step towards answering this question, Table \ref{tab:WidthInfeasible}
 This interval has asymptotic coverage probability \emph{exactly} equal to its nominal level as it correctly accounts for the effect of moment selection on the asymptotic distribution of the estimators.
 Unfortunately it cannot be used in practice because it requires knowledge of $\tau$, for which no consistent estimator exists.
 As such, this interval serves as a benchmark against which to judge various feasible procedures that do not require knowledge of $\tau$.
-For certain parameter values this interval is indeed shorter than the valid interval but the improvement is not uniform and indeed cannot be.
+For certain parameter values this interval is shorter than the valid interval but the improvement is not uniform and indeed cannot be.
 Just as the FMSC itself cannot provide a uniform reduction in AMSE relative to the valid estimator, the infeasible post-FMSC cannot provide a corresponding reduction in width.
 In both cases, however, improvements are possible when $\tau$ is expected to be small, the setting in which this paper assumes that an applied researcher finds herself. 
 The potential reductions in width can be particularly dramatic for larger values of $\alpha$.
@@ -131,8 +131,8 @@ Next we construct a $(1-\alpha_2)\times 100\%$ based on $Q_{FMSC}$ for each $\ta
 Finally we take the upper and lower bounds over all of the resulting intervals.
 This interval is guaranteed to have asymptotic coverage probability of at least $1 - (\alpha_1 + \alpha_2)$ by an argument essentially identical to the proof of Theorem \ref{thm:sim}.
 Protection against under-coverage, however, comes at the expense of extreme conservatism, particularly for larger values of $\alpha$.
-Numerical values for the coverage and median expected with of this interval appear in Appendix \ref{append:limitexperiment_2step}. 
-From both the numerical calculations and the theoretical result given in Theorem \ref{thm:sim} and these numerical calculations we see that the 2-Step systematically \emph{over-covers} and hence \emph{cannot} produce an interval shorter than the textbook CI for the valid estimator.
+Numerical values for the coverage and median expected with of this interval appear in Online Appendix \ref{append:limitexperiment_2step}. 
+From both the numerical calculations and the theoretical result given in Theorem \ref{thm:sim} we see that the 2-Step systematically \emph{over-covers} and hence \emph{cannot} produce an interval shorter than the textbook CI for the valid estimator.
 
 Now consider the 1-Step confidence interval from Algorithm \ref{alg:1step}. 
 Rather than first constructing a confidence region for $\tau$ and then taking upper and lower bounds, 1-Step interval simply takes $\widehat{\tau}$ in place of $\tau$ and then constructs a confidence interval from $Q_{FMSC}$ exactly as in the infeasible interval described above.\footnote{As in the construction of the na\"{i}ve interval, I take the shortest possible interval based on $Q_{FMSC}$ rather than an equal-tailed interval. Additional results for an equal-tailed version of this one-step procedure are available upon request. Their performance is similar.}

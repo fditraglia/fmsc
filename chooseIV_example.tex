@@ -25,7 +25,7 @@ where $S$ indexes the instruments used in estimation, $Z_S'  = \Xi_S Z'$ is the 
 \begin{thm}[Choosing IVs Limit Distribution]
 \label{thm:chooseIV} 
 Let $(\mathbf{z}_{ni}, v_{ni}, \epsilon_{ni})$ be a triangular array of random variables such that $E[\mathbf{z}_{ni} \epsilon_{ni}]=\mathbf{0}$, $E[\mathbf{z}_{ni} v_{ni}]=\mathbf{0}$, and $E[\epsilon_{ni}v_{ni}] = \tau/\sqrt{n}$ for all $n$. Suppose further that $\widetilde{W}_S \rightarrow_p W_S >0$. 
-Then, under standard regularity conditions, e.g.\ Assumption \ref{assump:chooseIV}, 
+Then, under standard regularity conditions, e.g.\ Assumption \ref{assump:chooseIV} in Online Appendix \ref{sec:sufficient_conditions}, 
 $$\sqrt{n}\left(\widehat{\beta}_S - \beta \right) \overset{d}{\rightarrow} -K_S \Xi_S \left(\left[\begin{array}
            {c} \mathbf{0} \\ \boldsymbol{\tau}
          \end{array}\right] + M \right)$$
@@ -37,12 +37,12 @@ To implement the FMSC for this example, we simply need to specialize Equation \r
 To simplify the notation, let
 \begin{equation}
 \label{eq:xi12}
-\Xi_1 = \left[\begin{array}{cc} I_{p} & 0_{p \times q}  \end{array}\right], \quad
+\Xi_1 = \left[\begin{array}{cc} \mathbf{I}_{p} & 0_{p \times q}  \end{array}\right], \quad
     \Xi_2 = \left[ \begin{array}{cc}
-              0_{q \times p}& I_{q}
+        0_{q \times p}& \mathbf{I}_{q}
             \end{array}\right]	
 \end{equation}
-where $0_{m\times n}$ denotes an $m\times n$ matrix of zeros and $I_m$ denotes the $m\times m$ identity matrix.
+where $0_{p\times q}$ denotes a $p\times q$ matrix of zeros and $\mathbf{I}_q$ denotes the $q\times q$ identity matrix.
 Using this convention, $Z_1 = Z \Xi_1'$ and $Z_2 = Z \Xi_2'$.
 In this example the valid estimator, defined in Assumption \ref{assump:Identification}, is given by
 \begin{equation}

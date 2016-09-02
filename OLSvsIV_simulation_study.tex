@@ -24,13 +24,13 @@ with $(\epsilon_i, v_i, z_{1i}, z_{2i}, z_{3i}) \sim \mbox{ iid } N(0, \mathcal{
 \end{equation}
 for $i= 1, \hdots, N$ where $N$, $\rho$ and $\pi$ vary over a grid.
 The goal is to estimate the effect of $x$ on $y$, in this case 0.5, with minimum MSE either by choosing between OLS and TSLS estimators or by averaging them.
-To ensure that the finite-sample MSE of the TSLS estimator exists, this DGP includes three instruments leading to two overidentifying restrictions \citep{Phillips1980}.\footnote{Alternatively, one could use fewer instruments in the DGP and use work with trimmed MSE, as described in Appendix \ref{append:trim}.}
-This design satisfies regularity conditions that are sufficient for Theorem \ref{thm:OLSvsIV} -- in particular it satisfies Assumption \ref{assump:OLSvsIV} -- and keeps the variance of $x$ fixed at one so that $\pi = Cor(x_i, z_{1i} + z_{2i} + z_{3i})$ and $\rho = Cor(x_i,\epsilon_i)$.
+To ensure that the finite-sample MSE of the TSLS estimator exists, this DGP includes three instruments leading to two overidentifying restrictions \citep{Phillips1980}.\footnote{Alternatively, one could use fewer instruments in the DGP and work with trimmed MSE, as described in Online Appendix \ref{append:trim}.}
+This design satisfies regularity conditions that are sufficient for Theorem \ref{thm:OLSvsIV} -- in particular it satisfies Assumption \ref{assump:OLSvsIV} from Online Appendix \ref{sec:sufficient_conditions} -- and keeps the variance of $x$ fixed at one so that $\pi = Cor(x_i, z_{1i} + z_{2i} + z_{3i})$ and $\rho = Cor(x_i,\epsilon_i)$.
 The first-stage R-squared is simply $1 - \sigma_v^2/\sigma_x^2 = \pi^2$ so that larger values of $|\pi|$ \emph{reduce} the variance of the TSLS estimator.
 Since $\rho$ controls the endogeneity of $x$, larger values of $|\rho|$ \emph{increase} the bias of the OLS estimator.
 
 Figure \ref{fig:OLSvsIV_RMSEbaseline} compares the root mean-squared error (RMSE) of the post-FMSC estimator to those of the OLS and TSLS estimators.\footnote{Note that, while the first two moments of the TSLS estimator exist in this simulation design, none of its higher moments do.
-This can be seend from the simulation results: even with 10,000 replications, the RMSE of the TSLS estimator shows a noticeable degree of simulation error.}
+This can be seen from the simulation results: even with 10,000 replications, the RMSE of the TSLS estimator shows a noticeable degree of simulation error.}
 For any values of $N$ and $\pi$ there is a value of $\rho$ below which OLS outperforms TSLS: as $N$ and $\pi$ increase this value approaches zero; as they decrease it approaches one.
 In practice, of course, $\rho$ in unknown so we cannot tell which of OLS and TSLS is to be preferred \emph{a priori}.
 If we make it our policy to always use TSLS we will protect ourselves against bias at the potential cost of very high variance.
@@ -70,6 +70,6 @@ Because this example involves a scalar target parameter, no selection or averagi
 But the cost of protection against the worst case is extremely poor performance when $\pi$ and $N$ are small.
 When this is the case, there is a strong argument for preferring the FMSC or minimum-AMSE estimator: we can reap the benefits of OLS when $\rho$ is small without risking the extremely large biases that could result if $\rho$ is in fact large.
 
-Further simulation results for $\pi \in \left\{ 0.01, 0.05, 0.1 \right\}$ appear in Appendix \ref{sec:appendWeak}.
+Further simulation results for $\pi \in \left\{ 0.01, 0.05, 0.1 \right\}$ appear in Online Appendix \ref{sec:appendWeak}.
 For these parameter values the TSLS estimator suffers from a weak instrument problem leading the FMSC to substantially outperform the TSLS estimator.
-See \ref{sec:appendWeak} Appendix for a more detailed discussion.
+See Online Appendix \ref{sec:appendWeak} for a more detailed discussion.
